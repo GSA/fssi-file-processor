@@ -1,4 +1,4 @@
-/working/logs/*
-/working/srcfiles/*
-/working/schemas/*
-/working/staged/*
+/working/logs/*.log
+/working/srcfiles/*.csv
+/working/schemas/*.csvs
+/working/staged/*.csv
