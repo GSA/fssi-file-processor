@@ -1,6 +1,6 @@
 package gov.gsa.fssi;
 
-import gov.gsa.fssi.contracts.Contract;
+import gov.gsa.fssi.sources.Source;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,67 +31,12 @@ public class Main {
 	
 	public static void main(String[] args) {
 
-		Workbook wb;
-	    int solutionNameColumn = 0;
-	    int contractNameColumn = 0;
-	    ArrayList<Contract> contracts = new ArrayList<Contract>();
-	    Contract contract;
-	    
-		try {
-			wb = WorkbookFactory.create(new File(CONFIG_DIRECTORY + "FSSI_CONTRACT_XREF.xlsx"));
-			Sheet sheet1 = wb.getSheetAt(0);
-		    
-		    for (Row row : sheet1) {
-		    	//If this is the header row, we need to figure out where the columns we need are
-		    	if (row.getRowNum() == 0){
-		    		for (Cell cell : row) {
-		    			if (cell.getCellType() ==Cell.CELL_TYPE_STRING){
-		    				//System.out.println(cell.getStringCellValue().toUpperCase()) ;
-		    				if ((cell.getStringCellValue().toUpperCase().equals("CONTRACT_NUMBER"))){
-		    					 System.out.println("I found the Contract Number!!!") ;
-		    					 contractNameColumn = cell.getColumnIndex();
-		    				}else if ((cell.getStringCellValue().toUpperCase().equals("SOLUTION_NAME"))) {
-		    					solutionNameColumn = cell.getColumnIndex();								
-							}
-		    			}
-					}
-		    	}else{
-		    		
-		    		try {
-		    			if (!(row.getCell(contractNameColumn) == null) && !(row.getCell(solutionNameColumn) == null)){
-		    				if (!(row.getCell(contractNameColumn).getStringCellValue().isEmpty()) && !(row.getCell(solutionNameColumn).getStringCellValue().isEmpty())){
-		    					
-		    				contracts.add(contract);
-		    				//contractMap.put(row.getCell(contractNameColumn).getStringCellValue(), row.getCell(solutionNameColumn).getStringCellValue());
-		    				//System.out.println(row.getCell(contractNameColumn).getStringCellValue() + " - " + row.getCell(solutionNameColumn).getStringCellValue()) ;
-		    				}
-		    			}
-		    		} catch (java.lang.NullPointerException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-		    		
-		    	}
-		    }
-	            
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		ArrayList<Source> sources= sourceBuilder();
+		
+		for (Source source : sources) {
+			System.out.println(source.getName() + " - " + source.getSourceIdentifier());
 		}
-		
-
-		//System.out.println(contractMap);;
-		
-		//TODO: Read source csv files and format them
-		//TODO: create object model for 
-		
-		
 		
 		
 		
@@ -115,5 +60,66 @@ public class Main {
 		//System.out.println("Hello World");
 		
 	}
+
+	
+	private static ArrayList<Source> sourceBuilder() {
+		ArrayList<Source> sources = new ArrayList<Source>();
+
+		Workbook wb;
+	    int sourceIdentifierColumn = 0;
+	    int sourceNameColumn = 0;
+
+	    
+		try {
+			wb = WorkbookFactory.create(new File(CONFIG_DIRECTORY + "FSSI_CONTRACT_XREF.xlsx"));
+			Sheet sheet1 = wb.getSheetAt(0);
+		    
+		    for (Row row : sheet1) {
+		    	Source source = new Source();	
+		    	//If this is the header row, we need to figure out where the columns we need are
+		    	if (row.getRowNum() == 0){
+		    		for (Cell cell : row) {
+		    			if (cell.getCellType() ==Cell.CELL_TYPE_STRING){
+		    				//If we find the contract number
+		    				if ((cell.getStringCellValue().toUpperCase().equals("CONTRACT_NUMBER"))){
+		    					sourceIdentifierColumn = cell.getColumnIndex();
+		    				}else if ((cell.getStringCellValue().toUpperCase().equals("SOLUTION_NAME"))) {
+		    					sourceNameColumn = cell.getColumnIndex();								
+							}
+		    			}
+					}
+		    	}else{
+		    		
+		    		try {
+		    			if (!(row.getCell(sourceNameColumn) == null) && !(row.getCell(sourceIdentifierColumn) == null)){
+		    				if (!(row.getCell(sourceNameColumn).getStringCellValue().isEmpty()) && !(row.getCell(sourceIdentifierColumn).getStringCellValue().isEmpty())){
+		    					source.setName(row.getCell(sourceNameColumn).getStringCellValue());	
+		    					source.setSourceIdentifier(row.getCell(sourceIdentifierColumn).getStringCellValue());
+		    					sources.add(source);
+		    				}
+		    			}
+		    		} catch (java.lang.NullPointerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		    		
+		    	}
+		    }
+	            
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return sources;
+	}
+	
+	
 	
 }
