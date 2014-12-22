@@ -2,3 +2,4 @@
 /working/srcfiles/*.csv
 /working/schemas/*.csvs
 /working/staged/*.csv
+/working/datamaps/*

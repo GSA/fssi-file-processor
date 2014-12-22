@@ -111,9 +111,9 @@ public class ProviderManager {
 			    			}
 			    				    			
 			    			if (!(row.getCell(providerNameColumn) == null) && !(row.getCell(providerNameColumn).getStringCellValue().isEmpty())){
-			    				newProvider.setProviderIdentifier(row.getCell(providerIdentifierColumn).getStringCellValue());
+			    				newProvider.setProviderName(row.getCell(providerNameColumn).getStringCellValue());
 			    			}else{
-			    				newProvider.setProviderIdentifier(null);
+			    				newProvider.setProviderName(null);
 			    			}
 			    			
 			    			if (!(row.getCell(providerIdentifierColumn) == null) && !(row.getCell(providerIdentifierColumn).getStringCellValue().isEmpty())){
@@ -158,8 +158,15 @@ public class ProviderManager {
 			    				newProvider.setSchemaValidation(null);
 			    			}					    			
 			    			
-			    			this.providers.add(newProvider);
-		    			
+			    			
+			    			//Certain fields are required.
+			    			if (newProvider.getProviderId() == null || newProvider.getProviderName() == null || newProvider.getProviderIdentifier() == null){
+			    				System.out.println("     Found provider record on row " + row.getRowNum() + " without all of the required fields...ignoring");
+			    			}else{
+			    				System.out.println("     Added Provider: " + newProvider.getProviderName() + " - " + newProvider.getProviderIdentifier());
+			    				this.providers.add(newProvider);	
+			    			}
+
 		    			
 		    		} catch (java.lang.NullPointerException e) {
 						// TODO Auto-generated catch block

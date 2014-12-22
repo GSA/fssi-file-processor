@@ -7,6 +7,8 @@ import java.util.Properties;
  
 /**
  * This class loads and manages global configuration
+ * Currently, the config file (config.properties) needs to be in the 
+ * root directory of the class path (/src)
  * 
  * @author David Larrimore
  * 
