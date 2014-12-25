@@ -9,7 +9,7 @@ package gov.gsa.fssi.fileprocessor.providers;
  */
 public class Provider {
 	
-	private String providerId = "Contract";
+	private String providerId = null;
 	private String providerIdentifier = null;
 	private String providerName = null;
 	private String fileIdentifier = null;

@@ -1,10 +1,24 @@
 package gov.gsa.fssi.fileprocessor;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+
+import gov.gsa.fssi.filepreocessor.sourceFiles.FileManager;
+import gov.gsa.fssi.filepreocessor.sourceFiles.SourceFile;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.providers.ProviderManager;
+import gov.gsa.fssi.fileprocessor.schemas.Schema;
+import gov.gsa.fssi.fileprocessor.schemas.SchemaManager;
+import gov.gsa.fssi.fileprocessor.schemas.fields.Field;
 
 
 
@@ -25,33 +39,21 @@ public class Main {
 		System.out.println(" ");	
 		
 		//Next, we need to get all of our provider info. We currently do this up front to make multi-file processing faster
-		System.out.println("Setting up Providers...");
-		ProviderManager providerManager = new ProviderManager(config.getProperty("providers_directory"));
-		ArrayList<Provider> providers = providerManager.getProviders();
-	
-		for (Provider provider : providers) {
-			//System.out.println(provider.getProviderIdentifier() + " - " + provider.getProviderId() + " - " + provider.getProviderName());
+		ArrayList<Provider> providers = ProviderManager.initializeProviders(config.getProperty("providers_directory"));
+		
+		//Next, we need to get all of our provider info. We currently do this up front to make multi-file processing faster
+		ArrayList<Schema> schemas = SchemaManager.initializeSchemas(config.getProperty("schemas_directory"));
+
+		for ( Schema schema : schemas) {
+			schema.printlnSchema();
 		}
-		System.out.println("...Completed Provider setup.");	
 		
-		System.out.println(" ");	
 		
-		System.out.println("Finding files to process...");			
-		File folder = new File(config.getProperty("sourcefiles_directory"));
-		File[] listOfFiles = folder.listFiles();
-		int fileCount = 0;
-		    for (int i = 0; i < listOfFiles.length; i++) {
-		      if (listOfFiles[i].isFile()) {
-			    fileCount++;
-		        System.out.println("     File " + listOfFiles[i].getName());
-		      } else if (listOfFiles[i].isDirectory()) {
-		        System.out.println("     Directory " + listOfFiles[i].getName());
-		      }
-		    }
-	    System.out.println("...found " + fileCount + " files in sourcefiles directory.");			    
+		//Next, we need to get all of our provider info. We currently do this up front to make multi-file processing faster
+		ArrayList<SourceFile> sourceFiles = FileManager.initializeSourceFiles(config.getProperty("sourcefiles_directory"));
+
 		
-		System.out.println(" ");	
-	    
+		
 		//TODO: Read source csv
 //		try {
 //			Reader reader = new FileReader(SOURCEFILES_DIRECTORY +"GS07FBA394_usg_102014_002.csv");
@@ -72,7 +74,6 @@ public class Main {
 		
 		
 	}
-	
 	
 	
 }

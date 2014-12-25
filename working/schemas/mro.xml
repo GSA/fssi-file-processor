@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema>
+	<name>MRO</name>
+	<provider>MRO</provider>
+	<version>1.0</version>
+	<effectiveReportingPeriod>201410</effectiveReportingPeriod>
+	<endingReportingPeriod></endingReportingPeriod>
+	<fields>
+		<field>
+			<name>ORDER_NUMBER</name>
+			<title>Order Number</title>
+			<description>Each order should be identified by a unique order identification number</description>         
+			<constraints>
+				<required>true</required>
+				<dataType>Number</dataType>
+			</constraints>
+			<alias>Ord_Num</alias>
+			<alias>Order_Num</alias>
+			<alias>Ord_Number</alias>				
+		</field>
+		<field>
+			<name>ORDER_DATE</name>
+			<title>Order Date</title>
+			<description>URI from ODC of publishing organization</description>
+			<constraints>
+				<required>true</required>
+			</constraints>
+			<alias>Ord_Date</alias>			
+		</field>
+	</fields>
+</schema>
