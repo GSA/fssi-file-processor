@@ -4,13 +4,15 @@ import gov.gsa.fssi.fileprocessor.schemas.fields.Field;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Schema {
-	
+	static Logger logger = LoggerFactory.getLogger(Schema.class);
 	private String name = null;
 	private String provider = null;	
 	private String version = null;
 	private String effectiveReportingPeriod = null;
-	private String endingReportingPeriod = null;	
 	private ArrayList<Field> fields = new ArrayList<Field>();	
 	
 	/**
@@ -62,18 +64,6 @@ public class Schema {
 		this.effectiveReportingPeriod = effectiveReportingPeriod;
 	}
 	/**
-	 * @return the endingReportingPeriod
-	 */
-	public String getEndingReportingPeriod() {
-		return endingReportingPeriod;
-	}
-	/**
-	 * @param endingReportingPeriod the endingReportingPeriod to set
-	 */
-	public void setEndingReportingPeriod(String endingReportingPeriod) {
-		this.endingReportingPeriod = endingReportingPeriod;
-	}
-	/**
 	 * @return the fields
 	 */
 	public ArrayList<Field> getFields() {
@@ -86,27 +76,20 @@ public class Schema {
 		this.fields = fields;
 	}
 
-	public void printlnSchema(){
+	public void printSchema(){
 		ArrayList<Field> fields = this.getFields();
-		
-		System.out.println("Printing out Schema \"" + this.getName() + "\"");
-		System.out.println("----------------------------");
-		System.out.println("Version: " + this.getVersion());
-		System.out.println("Provider: " + this.getProvider());
-		System.out.println("Effective Reporting Period: " + this.getEffectiveReportingPeriod());
-		System.out.println("Ending Reporting Period: " + this.getEndingReportingPeriod());
-		
-		System.out.println("Field List");
+		logger.debug("printSchema: '{}' Version: '{}' Provider: '{}' EffectiveReportingPeriod: '{}' ", this.getName(), this.getVersion(), this.getProvider(), this.getEffectiveReportingPeriod());
+		printSchemaFields(fields);	
+	}
+	
+	private void printSchemaFields(ArrayList<Field> fields) {
 		for (Field field : fields) {
-			System.out.println("     Name: " + field.getName());
-			System.out.println("     Description: " + field.getDescription());
-			System.out.println("     Alias: " + field.getAlias());
-			System.out.println("     Constraints: " + field.getConstraints());
-			System.out.println(" ");
-			
+			printSchemaField(field);
 		}
-		System.out.println(" ");
-		
+	}
+	
+	private void printSchemaField(Field field) {
+		logger.debug("printSchemaFields: {} Description: {} Alias: {}, Constraints{}",  field.getName(),  field.getDescription(), field.getAlias(), field.getConstraints());
 	}
 	
 }

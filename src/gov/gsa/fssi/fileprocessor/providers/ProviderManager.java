@@ -1,6 +1,7 @@
 package gov.gsa.fssi.fileprocessor.providers;
 
 import gov.gsa.fssi.fileprocessor.FileHelper;
+import gov.gsa.fssi.fileprocessor.Main;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +14,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -26,27 +29,28 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
  *
  */
 public class ProviderManager {
+	static Logger logger = LoggerFactory.getLogger(ProviderManager.class);
 	
 	public static ArrayList<Provider> initializeProviders(String providerDirectory) {	
 		ArrayList<Provider> providers = new ArrayList<Provider>();
 		Workbook wb;
-	    int providerIdentifierColumn = 0;
-	    int providerNameColumn = 0;
-	    int providerIdColumn = 0;	    
-	    int fileIdentifierColumn = 0;	
-	    int fileInputTypeColumn = 0;		    
-	    int fileOutputTypeColumn = 0;	
-	    int schemaColumn = 0;	    
-	    int dataMappingTemplateColumn = 0;	    
-	    int schemaValidationColumn = 0;	 
 	    
-		System.out.println("Setting up Providers");
-		System.out.println("----------------------------");
+	    logger.debug("Starting initializeProviders('{}')", providerDirectory);
 		
 		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(providerDirectory, ".xlsx");
 		
 		for (String fileName : fileNames) {		
 			try {
+			    int providerIdentifierColumn = 0;
+			    int providerNameColumn = 0;
+			    int providerIdColumn = 0;	    
+			    int fileIdentifierColumn = 0;	
+			    int fileInputTypeColumn = 0;		    
+			    int fileOutputTypeColumn = 0;	
+			    int schemaColumn = 0;	    
+			    int dataMappingTemplateColumn = 0;	    
+			    int schemaValidationColumn = 0;	
+			    int providerEmailColumn = 0;
 				wb = WorkbookFactory.create(new File(providerDirectory + fileName));
 				Sheet sheet1 = wb.getSheetAt(0);
 			    
@@ -73,7 +77,9 @@ public class ProviderManager {
 				    			case "DATA_MAPPING_TEMPLATE":
 				    				dataMappingTemplateColumn = cell.getColumnIndex();
 				    			case "SCHEMA_VALIDATION":
-				    				schemaValidationColumn = cell.getColumnIndex();		    				
+				    				schemaValidationColumn = cell.getColumnIndex();		
+				    			case "PROVIDER_EMAIL":
+				    				providerEmailColumn = cell.getColumnIndex();						    				
 				    			default:
 				    				break;
 			    			}
@@ -84,64 +90,49 @@ public class ProviderManager {
 			    			
 				    			if (!(row.getCell(providerIdColumn) == null) && !(row.getCell(providerIdColumn).getStringCellValue().isEmpty())){
 				    				newProvider.setProviderId(row.getCell(providerIdColumn).getStringCellValue());
-				    			}else{
-				    				newProvider.setProviderId(null);
 				    			}
 				    				    			
 				    			if (!(row.getCell(providerNameColumn) == null) && !(row.getCell(providerNameColumn).getStringCellValue().isEmpty())){
 				    				newProvider.setProviderName(row.getCell(providerNameColumn).getStringCellValue());
-				    			}else{
-				    				newProvider.setProviderName(null);
 				    			}
 				    			
 				    			if (!(row.getCell(providerIdentifierColumn) == null) && !(row.getCell(providerIdentifierColumn).getStringCellValue().isEmpty())){
 				    				newProvider.setProviderIdentifier(row.getCell(providerIdentifierColumn).getStringCellValue());
-				    			}else{
-				    				newProvider.setProviderIdentifier(null);
 				    			}
 				    			
 				    			if (!(row.getCell(fileIdentifierColumn) == null) && !(row.getCell(fileIdentifierColumn).getStringCellValue().isEmpty())){
 				    				newProvider.setFileIdentifier(row.getCell(fileIdentifierColumn).getStringCellValue());
-				    			}else{
-				    				newProvider.setFileIdentifier(null);
 				    			}	
 			    			
 				    			if (!(row.getCell(fileInputTypeColumn) == null) && !(row.getCell(fileInputTypeColumn).getStringCellValue().isEmpty())){
 				    				newProvider.setFileInputType(row.getCell(fileInputTypeColumn).getStringCellValue());
-				    			}else{
-				    				newProvider.setFileInputType(null);
 				    			}				    			
 				    			
 				    			if (!(row.getCell(fileOutputTypeColumn) == null) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().isEmpty())){
 				    				newProvider.setFileOutputType(row.getCell(fileOutputTypeColumn).getStringCellValue());
-				    			}else{
-				    				newProvider.setFileOutputType(null);
-				    			}				    			
+				    			}			    			
 				    			
 				    			if (!(row.getCell(schemaColumn) == null) && !(row.getCell(schemaColumn).getStringCellValue().isEmpty())){
 				    				newProvider.setSchema(row.getCell(schemaColumn).getStringCellValue());
-				    			}else{
-				    				newProvider.setSchema(null);
 				    			}				    						    			
 				    			
 				    			if (!(row.getCell(dataMappingTemplateColumn) == null) && !(row.getCell(dataMappingTemplateColumn).getStringCellValue().isEmpty())){
 				    				newProvider.setDataMappingTemplate(row.getCell(dataMappingTemplateColumn).getStringCellValue());
-				    			}else{
-				    				newProvider.setDataMappingTemplate(null);
-				    			}				    			
+				    			}			    			
 				    			
+				    			if (!(row.getCell(providerEmailColumn) == null) && !(row.getCell(providerEmailColumn).getStringCellValue().isEmpty())){
+				    				newProvider.setProviderEmail(row.getCell(providerEmailColumn).getStringCellValue());
+				    			}
 				    			if (!(row.getCell(schemaValidationColumn) == null) && !(row.getCell(schemaValidationColumn).getStringCellValue().isEmpty())){
 				    				newProvider.setSchemaValidation(row.getCell(schemaValidationColumn).getStringCellValue());
-				    			}else{
-				    				newProvider.setSchemaValidation(null);
 				    			}					    			
 				    			
 				    			
 				    			//Certain fields are required.
 				    			if (newProvider.getProviderId() == null || newProvider.getProviderName() == null || newProvider.getProviderIdentifier() == null){
-				    				//System.out.println("          Found provider record on row " + row.getRowNum() + " without all of the required fields...ignoring");
+				    				//logger.info("          Found provider record on row " + row.getRowNum() + " without all of the required fields...ignoring");
 				    			}else{
-				    				//System.out.println("          Added Provider: " + newProvider.getProviderName() + " - " + newProvider.getProviderIdentifier());
+				    				//logger.info("          Added Provider: " + newProvider.getProviderName() + " - " + newProvider.getProviderIdentifier());
 				    				providers.add(newProvider);	
 				    			}
 	
@@ -155,21 +146,20 @@ public class ProviderManager {
 			    }
 		            
 			} catch (FileNotFoundException e) {
-				System.out.println("Received FileNotFoundException while trying to load Providers");	
+				logger.error("Received FileNotFoundException while trying to load {}", fileName);		
 				e.printStackTrace();
 			} catch (InvalidFormatException e) {
-				System.out.println("Received InvalidFormatException while trying to load Providers");	
+				logger.error("Received InvalidFormatException while trying to load {}", fileName);	
 				e.printStackTrace();
 			} catch (IOException e) {
-				System.out.println("Received IOException while trying to load Providers");				
+				logger.error("Received IOException while trying to load {}", fileName);				
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("     Successfully Processed " + providers.size() + " Providers from " + fileName);
+			logger.info("Successfully Processed {} Providers from '{}'", providers.size(), fileName);
 		}
 						
-		System.out.println("Completed Provider setup. Added " + providers.size() + " Providers");	
-		System.out.println(" ");	
+		//logger.info("Completed Provider setup. Added " + providers.size() + " Providers");	
 		return providers;
 	}	
 }

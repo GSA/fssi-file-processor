@@ -1,8 +1,13 @@
 package gov.gsa.fssi.filepreocessor.sourceFiles;
 
 import gov.gsa.fssi.filepreocessor.sourceFiles.records.SourceFileRecord;
-
+import gov.gsa.fssi.fileprocessor.providers.Provider;
+import gov.gsa.fssi.fileprocessor.schemas.Schema;
 import java.util.ArrayList;
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -14,11 +19,64 @@ import java.util.ArrayList;
  * 
  */
 public class SourceFile{
+	static Logger logger = LoggerFactory.getLogger(SourceFile.class);
+	
 	private String fileName = null;
 	private String fileExtension = null;	
 	private String status = null;
+	private Schema schema = null;
+	private Provider provider = null;
+	private Date ReportingPeriod = null;
 	private ArrayList<String> headers = new ArrayList<String>();
 	private ArrayList<SourceFileRecord> records = new ArrayList<SourceFileRecord>();	
+	
+	/**
+	 * @return the reportingPeriod
+	 */
+	public Date getReportingPeriod() {
+		return ReportingPeriod;
+	}
+
+
+	/**
+	 * @param reportingPeriod the reportingPeriod to set
+	 */
+	public void setReportingPeriod(Date reportingPeriod) {
+		ReportingPeriod = reportingPeriod;
+	}	
+	
+	
+	/**
+	 * @return the schema
+	 */
+	public Schema getSchema() {
+		return schema;
+	}
+
+
+	/**
+	 * @param schema the schema to set
+	 */
+	public void setSchema(Schema schema) {
+		this.schema = schema;
+	}
+
+
+	/**
+	 * @return the provider
+	 */
+	public Provider getProvider() {
+		return provider;
+	}
+
+
+	/**
+	 * @param provider the provider to set
+	 */
+	public void setProvider(Provider provider) {
+		this.provider = provider;
+	}
+
 	
 	
 	/**
@@ -114,4 +172,7 @@ public class SourceFile{
 	}
 
 	
+	public void printSourceFile(){
+		logger.debug("printSourceFile: '{}' FileExtension: '{}' Status: '{}' Headers: '{}' ", this.getFileName(), this.getFileExtension(), this.getStatus(), this.getHeaders());
+	}
 }

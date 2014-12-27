@@ -1,5 +1,13 @@
 package gov.gsa.fssi.fileprocessor.providers;
 
+import gov.gsa.fssi.fileprocessor.schemas.Schema;
+import gov.gsa.fssi.fileprocessor.schemas.fields.Field;
+
+import java.util.ArrayList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This is our provider object. the provider object controls how each file is identified and processed.
  * 
@@ -8,7 +16,7 @@ package gov.gsa.fssi.fileprocessor.providers;
  * 
  */
 public class Provider {
-	
+	static Logger logger = LoggerFactory.getLogger(Provider.class);
 	private String providerId = null;
 	private String providerIdentifier = null;
 	private String providerName = null;
@@ -18,9 +26,22 @@ public class Provider {
 	private String schema = null;
 	private String dataMappingTemplate = null;
 	private String schemaValidation = null;
-	private String sourceType = null;			
+	private String sourceType = null;
+	private String providerEmail = "StrategicSourcing@gsa.gov";	
 	
-	
+	/**
+	 * @return the contactEmail
+	 */
+	public String getProviderEmail() {
+		return providerEmail;
+	}
+
+	/**
+	 * @param contactEmail the contactEmail to set
+	 */
+	public void setProviderEmail(String contactEmail) {
+		this.providerEmail = contactEmail;
+	}	
 	
 	/**
 	 * @return the schemaValidation
@@ -176,6 +197,11 @@ public class Provider {
 	 */
 	public void setSourceType(String sourceType) {
 		this.sourceType = sourceType;
+	}
+	
+	public void printProvider(){
+		logger.debug("printProvider: '{}' Name: '{}' Provider: '{}' Identifier: '{}' Email: {}", this.getProviderId(), this.getProviderName(), this.getProviderIdentifier(), this.getProviderEmail());
+
 	}
 	
 	

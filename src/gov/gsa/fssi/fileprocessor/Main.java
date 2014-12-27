@@ -1,24 +1,16 @@
 package gov.gsa.fssi.fileprocessor;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import gov.gsa.fssi.filepreocessor.sourceFiles.FileManager;
+import gov.gsa.fssi.filepreocessor.sourceFiles.SourceFileManager;
 import gov.gsa.fssi.filepreocessor.sourceFiles.SourceFile;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.providers.ProviderManager;
 import gov.gsa.fssi.fileprocessor.schemas.Schema;
 import gov.gsa.fssi.fileprocessor.schemas.SchemaManager;
-import gov.gsa.fssi.fileprocessor.schemas.fields.Field;
 
 
 
@@ -30,29 +22,36 @@ import gov.gsa.fssi.fileprocessor.schemas.fields.Field;
  * @version 0.1
  */
 public class Main {
-
+	static Logger logger = LoggerFactory.getLogger(Main.class);
+	
 	public static void main(String[] args) {
-		System.out.println("Starting FSSI File Processor");
-		//First things first, lets get all of our configuration settings	
-		Config config = new Config();	
 		
-		System.out.println(" ");	
+	    logger.info("Starting FSSI File Processor");
+
+		//First things first, lets get all of our configuration settings	
+	    Config config = new Config();	    
+	    
+		//Next, we need to get all of our provider info. We currently do this up front to make multi-file processing faster
+	    ArrayList<Schema> schemas = SchemaManager.initializeSchemas(config.getProperty("schemas_directory"));
+
+		if (logger.isDebugEnabled()){
+			for ( Schema schema : schemas) {
+				schema.printSchema();
+			}
+		}
 		
 		//Next, we need to get all of our provider info. We currently do this up front to make multi-file processing faster
 		ArrayList<Provider> providers = ProviderManager.initializeProviders(config.getProperty("providers_directory"));
-		
-		//Next, we need to get all of our provider info. We currently do this up front to make multi-file processing faster
-		ArrayList<Schema> schemas = SchemaManager.initializeSchemas(config.getProperty("schemas_directory"));
-
-		for ( Schema schema : schemas) {
-			schema.printlnSchema();
-		}
-		
-		
-		//Next, we need to get all of our provider info. We currently do this up front to make multi-file processing faster
-		ArrayList<SourceFile> sourceFiles = FileManager.initializeSourceFiles(config.getProperty("sourcefiles_directory"));
 
 		
+		//Next, we need to get all of our sourceFiles info. We currently do this up front to make multi-file processing faster
+		ArrayList<SourceFile> sourceFiles = SourceFileManager.initializeSourceFiles(config.getProperty("sourcefiles_directory"));
+
+		if (logger.isDebugEnabled()){
+			for ( SourceFile sourceFile : sourceFiles) {
+				sourceFile.printSourceFile();
+			}
+		}		
 		
 		//TODO: Read source csv
 //		try {
@@ -70,8 +69,8 @@ public class Main {
 //			e.printStackTrace();
 //		}
 		
-		System.out.println("Completed FSSI File Processor");
-		
+
+	    logger.info("Completed FSSI File Processor");
 		
 	}
 	

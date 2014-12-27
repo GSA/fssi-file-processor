@@ -3,8 +3,11 @@ package gov.gsa.fssi.fileprocessor;
 import java.io.File;
 import java.util.ArrayList;
 
-public class FileHelper {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class FileHelper {
+	static Logger logger = LoggerFactory.getLogger(FileHelper.class);
 	
 	public static ArrayList<String> getFilesFromDirectory(String directoryName){
 		return getFilesFromDirectory(directoryName, null);
@@ -12,28 +15,29 @@ public class FileHelper {
 	
 	public static ArrayList<String> getFilesFromDirectory(String directoryName, String whitelist){
 		ArrayList<String> fileList = new ArrayList<String>();
-		//System.out.println("Envoking FileHelper.getFilesFromDirectory");	
-		//System.out.println("     Looking in \""+ directoryName + "\"...");	
+		//logger.info("Envoking FileHelper.getFilesFromDirectory");	
+		logger.info("getFilesFromDirectory Looking in '{}' for '{}' files.", directoryName, whitelist);	
 		
 		
 		File folder = new File(directoryName);
 		File[] listOfFiles = folder.listFiles();
 		int fileCount = 0;
+		int totalFileCount = 0;
 		
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
-			    String fileExtension = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
-			    
+				totalFileCount ++;
+				String fileExtension = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
 			    if(file.isDirectory()){
-			    	//System.out.println("          Ignoring " + file.getName() + " Because it is a directory");	    
+			    	logger.info("Ignoring '{}' because it is a directory", whitelist);	    
 			    }else if(whitelist != null && whitelist != "" && !whitelist.contains(fileExtension)){
-			    	//System.out.println("          Ignoring " + file.getName() + " Because it is not in whitelist");	 
+			    	logger.info("Ignoring '{}' because it is not in whitelist", file.getName());	 
 			    }else if(whitelist != null && whitelist != "" && whitelist.contains(fileExtension)){
-			    	//System.out.println("          Found " + file.getName());	 
+			    	logger.info("Added '{}' to ArrayList", file.getName());	 	 
 			    	fileList.add(file.getName());
 				    fileCount++;
 			    }else{
-			    	//System.out.println("          Found " + file.getName());	 
+			    	logger.info("Added '{}' to ArrayList", file.getName());	 
 			    	fileList.add(file.getName());
 				    fileCount++;
 			    }
@@ -41,7 +45,7 @@ public class FileHelper {
 
 		}
 		
-	    System.out.println("     Found " + fileCount + " files in \""+ directoryName + "\"");			    
+	    logger.info("Added {} out of {} files", fileCount, totalFileCount);			    
 
 		return fileList;
 	}		    

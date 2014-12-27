@@ -1,6 +1,7 @@
 package gov.gsa.fssi.fileprocessor.schemas;
 
 import gov.gsa.fssi.fileprocessor.FileHelper;
+import gov.gsa.fssi.fileprocessor.Main;
 import gov.gsa.fssi.fileprocessor.schemas.fields.Field;
 
 import java.io.File;
@@ -10,20 +11,20 @@ import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class SchemaManager {
-
+	static Logger logger = LoggerFactory.getLogger(SchemaManager.class);
 	
 	public static ArrayList<Schema> initializeSchemas(String schemaDirectory) {
+	    logger.debug("Starting initializeSchemas('{}')", schemaDirectory);		
 		
-		ArrayList<Schema> schemas = new ArrayList<Schema>();	
-		
-		System.out.println("Setting up Schemas");
-		System.out.println("----------------------------");
+	    ArrayList<Schema> schemas = new ArrayList<Schema>();	
 		
 		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(schemaDirectory, ".xml");
 		
@@ -47,7 +48,6 @@ public class SchemaManager {
 				newSchema.setProvider(schemaElement.getElementsByTagName("provider").item(0).getTextContent());
 				newSchema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
 				newSchema.setEffectiveReportingPeriod(schemaElement.getElementsByTagName("effectiveReportingPeriod").item(0).getTextContent());
-				newSchema.setEndingReportingPeriod(schemaElement.getElementsByTagName("endingReportingPeriod").item(0).getTextContent());
 				newSchema.setFields(initializeFields(doc.getElementsByTagName("field")));
 				
 				schemas.add(newSchema);
@@ -57,11 +57,10 @@ public class SchemaManager {
 			    	e.printStackTrace();
 			    }
 		
-				// System.out.println("     Successfully processed " + fileName);
+				// logger.info("     Successfully processed " + fileName);
 			}
 			
-			System.out.println("Completed Schema setup. Added " + schemas.size() + " Schemas");
-			System.out.println(" ");
+			logger.info("Completed Schema setup. Added " + schemas.size() + " Schemas");
 			
 			return schemas;		
 		}	
@@ -96,14 +95,18 @@ public class SchemaManager {
 				
 				//Getting Constraints		
 				constraintNode = fieldElement.getElementsByTagName("constraints").item(0);
+				if(constraintNode != null){
 				constraintList = constraintNode.getChildNodes();
-				for (int i = 0; i < constraintList.getLength(); i++) {
-					constraintNode = constraintList.item(i);
-					if (constraintNode.getNodeType() == Node.ELEMENT_NODE) {
-						//System.out.println(constraintNode.getNodeName() + " - " + constraintNode.getTextContent());
-						constraintMap.put(constraintNode.getNodeName(), constraintNode.getTextContent());
+					if(constraintList != null){
+						for (int i = 0; i < constraintList.getLength(); i++) {
+							constraintNode = constraintList.item(i);
+							if (constraintNode.getNodeType() == Node.ELEMENT_NODE) {
+								//logger.info(constraintNode.getNodeName() + " - " + constraintNode.getTextContent());
+								constraintMap.put(constraintNode.getNodeName(), constraintNode.getTextContent());
+							}
+						}
 					}
-				}						
+				}				
 				field.setConstraints(constraintMap);
 				
 				
@@ -116,7 +119,7 @@ public class SchemaManager {
 				field.setAlias(aliasArray);
 				
 				
-				//System.out.println("First Name : " + eElement.getElementsByTagName("firstname").item(0).getTextContent());
+				//logger.info("First Name : " + eElement.getElementsByTagName("firstname").item(0).getTextContent());
 	 
 			}
 			
