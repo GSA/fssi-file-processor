@@ -1,7 +1,6 @@
 package gov.gsa.fssi.fileprocessor.schemas;
 
 import gov.gsa.fssi.fileprocessor.FileHelper;
-import gov.gsa.fssi.fileprocessor.Main;
 import gov.gsa.fssi.fileprocessor.schemas.fields.Field;
 
 import java.io.File;
@@ -45,7 +44,7 @@ public class SchemaManager {
 				Element schemaElement = (Element) schemaNode;
 				
 				newSchema.setName(schemaElement.getElementsByTagName("name").item(0).getTextContent());
-				newSchema.setProvider(schemaElement.getElementsByTagName("provider").item(0).getTextContent());
+				newSchema.setProviderName(schemaElement.getElementsByTagName("provider").item(0).getTextContent());
 				newSchema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
 				newSchema.setEffectiveReportingPeriod(schemaElement.getElementsByTagName("effectiveReportingPeriod").item(0).getTextContent());
 				newSchema.setFields(initializeFields(doc.getElementsByTagName("field")));

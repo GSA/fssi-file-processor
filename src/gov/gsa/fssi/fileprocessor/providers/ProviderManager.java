@@ -1,8 +1,6 @@
 package gov.gsa.fssi.fileprocessor.providers;
 
 import gov.gsa.fssi.fileprocessor.FileHelper;
-import gov.gsa.fssi.fileprocessor.Main;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -43,13 +41,8 @@ public class ProviderManager {
 			try {
 			    int providerIdentifierColumn = 0;
 			    int providerNameColumn = 0;
-			    int providerIdColumn = 0;	    
-			    int fileIdentifierColumn = 0;	
-			    int fileInputTypeColumn = 0;		    
+			    int providerIdColumn = 0;	    	    
 			    int fileOutputTypeColumn = 0;	
-			    int schemaColumn = 0;	    
-			    int dataMappingTemplateColumn = 0;	    
-			    int schemaValidationColumn = 0;	
 			    int providerEmailColumn = 0;
 				wb = WorkbookFactory.create(new File(providerDirectory + fileName));
 				Sheet sheet1 = wb.getSheetAt(0);
@@ -59,27 +52,23 @@ public class ProviderManager {
 			    	//If this is the header row, we need to figure out where the columns we need are
 			    	if (row.getRowNum() == 0){
 			    		for (Cell cell : row) {
-			    			switch(cell.getStringCellValue().toUpperCase()) {
+			    			//logger.debug("{} - {}", cell.getColumnIndex(), cell.getStringCellValue().toUpperCase());
+			    			switch(cell.getStringCellValue().toUpperCase().toString()) {
 				    			case "PROVIDER_ID":
 				    				providerIdColumn = cell.getColumnIndex();
+				    				break;
 				    			case "PROVIDER_NAME":			    				
 				    				providerNameColumn = cell.getColumnIndex();
+				    				break;
 				    			case "PROVIDER_IDENTIFIER":
 				    				providerIdentifierColumn = cell.getColumnIndex();
-				    			case "FILE_IDENTIFIER":
-				    				fileIdentifierColumn = cell.getColumnIndex();
-				    			case "FILE_INPUT_TYPE":
-				    				fileInputTypeColumn = cell.getColumnIndex();
+				    				break;
 				    			case "FILE_OUTPUT_TYPE":
-				    				fileOutputTypeColumn = cell.getColumnIndex();
-				    			case "SCHEMA":
-				    				schemaColumn = cell.getColumnIndex();
-				    			case "DATA_MAPPING_TEMPLATE":
-				    				dataMappingTemplateColumn = cell.getColumnIndex();
-				    			case "SCHEMA_VALIDATION":
-				    				schemaValidationColumn = cell.getColumnIndex();		
+				    				fileOutputTypeColumn = cell.getColumnIndex();	
+				    				break;
 				    			case "PROVIDER_EMAIL":
-				    				providerEmailColumn = cell.getColumnIndex();						    				
+				    				providerEmailColumn = cell.getColumnIndex();	
+				    				break;
 				    			default:
 				    				break;
 			    			}
@@ -88,43 +77,26 @@ public class ProviderManager {
 			    		
 			    		try {
 			    			
-				    			if (!(row.getCell(providerIdColumn) == null) && !(row.getCell(providerIdColumn).getStringCellValue().isEmpty())){
+				    			if (!(row.getCell(providerIdColumn) == null) && !(row.getCell(providerIdColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdColumn).getStringCellValue().toUpperCase().equals("NULL"))){
 				    				newProvider.setProviderId(row.getCell(providerIdColumn).getStringCellValue());
 				    			}
 				    				    			
-				    			if (!(row.getCell(providerNameColumn) == null) && !(row.getCell(providerNameColumn).getStringCellValue().isEmpty())){
+				    			if (!(row.getCell(providerNameColumn) == null) && !(row.getCell(providerNameColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerNameColumn).getStringCellValue().toUpperCase().equals("NULL"))){
 				    				newProvider.setProviderName(row.getCell(providerNameColumn).getStringCellValue());
 				    			}
 				    			
-				    			if (!(row.getCell(providerIdentifierColumn) == null) && !(row.getCell(providerIdentifierColumn).getStringCellValue().isEmpty())){
+				    			if (!(row.getCell(providerIdentifierColumn) == null) && !(row.getCell(providerIdentifierColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdentifierColumn).getStringCellValue().toUpperCase().equals("NULL"))){
 				    				newProvider.setProviderIdentifier(row.getCell(providerIdentifierColumn).getStringCellValue());
-				    			}
-				    			
-				    			if (!(row.getCell(fileIdentifierColumn) == null) && !(row.getCell(fileIdentifierColumn).getStringCellValue().isEmpty())){
-				    				newProvider.setFileIdentifier(row.getCell(fileIdentifierColumn).getStringCellValue());
-				    			}	
-			    			
-				    			if (!(row.getCell(fileInputTypeColumn) == null) && !(row.getCell(fileInputTypeColumn).getStringCellValue().isEmpty())){
-				    				newProvider.setFileInputType(row.getCell(fileInputTypeColumn).getStringCellValue());
 				    			}				    			
 				    			
-				    			if (!(row.getCell(fileOutputTypeColumn) == null) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().isEmpty())){
+				    			if (!(row.getCell(fileOutputTypeColumn) == null) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().isEmpty()) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().toUpperCase().equals("NULL"))){
 				    				newProvider.setFileOutputType(row.getCell(fileOutputTypeColumn).getStringCellValue());
-				    			}			    			
+				    		
+				    			}			    					    			
 				    			
-				    			if (!(row.getCell(schemaColumn) == null) && !(row.getCell(schemaColumn).getStringCellValue().isEmpty())){
-				    				newProvider.setSchema(row.getCell(schemaColumn).getStringCellValue());
-				    			}				    						    			
-				    			
-				    			if (!(row.getCell(dataMappingTemplateColumn) == null) && !(row.getCell(dataMappingTemplateColumn).getStringCellValue().isEmpty())){
-				    				newProvider.setDataMappingTemplate(row.getCell(dataMappingTemplateColumn).getStringCellValue());
-				    			}			    			
-				    			
-				    			if (!(row.getCell(providerEmailColumn) == null) && !(row.getCell(providerEmailColumn).getStringCellValue().isEmpty())){
+				    			if (!(row.getCell(providerEmailColumn) == null) && !(row.getCell(providerEmailColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerEmailColumn).getStringCellValue().toUpperCase().equals("NULL"))){
 				    				newProvider.setProviderEmail(row.getCell(providerEmailColumn).getStringCellValue());
-				    			}
-				    			if (!(row.getCell(schemaValidationColumn) == null) && !(row.getCell(schemaValidationColumn).getStringCellValue().isEmpty())){
-				    				newProvider.setSchemaValidation(row.getCell(schemaValidationColumn).getStringCellValue());
+				    				//logger.debug("{}", row.getCell(providerEmailColumn).getStringCellValue());
 				    			}					    			
 				    			
 				    			

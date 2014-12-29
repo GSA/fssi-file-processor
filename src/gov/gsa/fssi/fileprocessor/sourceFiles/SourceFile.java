@@ -1,10 +1,13 @@
-package gov.gsa.fssi.filepreocessor.sourceFiles;
+package gov.gsa.fssi.fileprocessor.sourceFiles;
 
-import gov.gsa.fssi.filepreocessor.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.schemas.Schema;
+import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +30,7 @@ public class SourceFile{
 	private Schema schema = null;
 	private Provider provider = null;
 	private Date ReportingPeriod = null;
-	private ArrayList<String> headers = new ArrayList<String>();
+	private Map<String, Integer> headers = new HashMap<String,Integer>();
 	private ArrayList<SourceFileRecord> records = new ArrayList<SourceFileRecord>();	
 	
 	/**
@@ -82,16 +85,16 @@ public class SourceFile{
 	/**
 	 * @return the headers
 	 */
-	public ArrayList<String> getHeaders() {
+	public Map<String, Integer> getHeaders() {
 		return headers;
 	}
 
 
 	/**
-	 * @param headers the headers to set
+	 * @param map the headers to set
 	 */
-	public void setHeaders(ArrayList<String> headers) {
-		this.headers = headers;
+	public void setHeaders(Map<String, Integer> map) {
+		this.headers = map;
 	}
 
 
@@ -150,7 +153,6 @@ public class SourceFile{
 		return status;
 	}
 
-
 	/**
 	 * @param status the status to set
 	 */
@@ -158,21 +160,57 @@ public class SourceFile{
 		this.status = status;
 	}
 
+	/**
+	 * @param record
+	 */
 	public void addRecord(SourceFileRecord record) {
 		this.records.add(record);
 	}	
+	
+	/**
+	 * @param record
+	 */
+	public long recordCount() {
+		return this.records.size();
+	}	
 
+	/**
+	 * @param index
+	 */
 	public void deleteRecord(int index) {
 		this.records.remove(index);
 	}	
 	
-	
+	/**
+	 * 
+	 */
 	public SourceFile() {
 	
 	}
-
 	
-	public void printSourceFile(){
-		logger.debug("printSourceFile: '{}' FileExtension: '{}' Status: '{}' Headers: '{}' ", this.getFileName(), this.getFileExtension(), this.getStatus(), this.getHeaders());
+	/**
+	 * 
+	 */
+	public void print(){
+		ArrayList<SourceFileRecord> sourceFileRecords = this.getRecords();
+		
+		String providerString = null;
+		if (!(this.getProvider() == null)){
+			providerString = this.getProvider().getProviderName() + " - " + this.getProvider().getProviderIdentifier();
+		}
+		
+		String schemaString = null;
+		if (!(this.getSchema() == null)){
+			schemaString = this.schema.getName();
+		}		
+		
+		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getStatus(), this.getHeaders().size(), providerString, schemaString);
+		printRecords(sourceFileRecords);	
+	}
+	
+	private void printRecords(ArrayList<SourceFileRecord> sourceFileRecords) {
+		for (SourceFileRecord sourceFileRecord : sourceFileRecords) {
+			sourceFileRecord.print();
+		}
 	}
 }

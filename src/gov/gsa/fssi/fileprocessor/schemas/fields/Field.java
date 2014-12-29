@@ -3,7 +3,13 @@ package gov.gsa.fssi.fileprocessor.schemas.fields;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Field {
+	static Logger logger = LoggerFactory.getLogger(Field.class);
+	
+	
 	private String name = null;
 	private String title = null;	
 	private String description = null;
@@ -70,5 +76,9 @@ public class Field {
 	 */
 	public void setAlias(ArrayList<String> alias) {
 		this.alias = alias;
+	}
+	
+	public void print() {
+		logger.debug("     Field '{}' Description: '{}' Alias: {}, Constraints: {}",  this.getName(),  this.getDescription(), this.getAlias(), this.getConstraints());
 	}
 }

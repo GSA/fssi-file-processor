@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public class Schema {
 	static Logger logger = LoggerFactory.getLogger(Schema.class);
 	private String name = null;
-	private String provider = null;	
+	private String providerName = null;	
 	private String version = null;
 	private String effectiveReportingPeriod = null;
 	private ArrayList<Field> fields = new ArrayList<Field>();	
@@ -30,14 +30,14 @@ public class Schema {
 	/**
 	 * @return the provider
 	 */
-	public String getProvider() {
-		return provider;
+	public String getProviderName() {
+		return providerName;
 	}
 	/**
 	 * @param provider the provider to set
 	 */
-	public void setProvider(String provider) {
-		this.provider = provider;
+	public void setProviderName(String provider) {
+		this.providerName = provider;
 	}
 	/**
 	 * @return the version
@@ -76,20 +76,17 @@ public class Schema {
 		this.fields = fields;
 	}
 
-	public void printSchema(){
+	public void print(){
 		ArrayList<Field> fields = this.getFields();
-		logger.debug("printSchema: '{}' Version: '{}' Provider: '{}' EffectiveReportingPeriod: '{}' ", this.getName(), this.getVersion(), this.getProvider(), this.getEffectiveReportingPeriod());
+		logger.debug("Name: '{}' Version: '{}' Provider: '{}' EffectiveReportingPeriod: '{}' ", this.getName(), this.getVersion(), this.getProviderName(), this.getEffectiveReportingPeriod());
 		printSchemaFields(fields);	
 	}
 	
 	private void printSchemaFields(ArrayList<Field> fields) {
 		for (Field field : fields) {
-			printSchemaField(field);
+			field.print();
 		}
 	}
 	
-	private void printSchemaField(Field field) {
-		logger.debug("printSchemaFields: {} Description: {} Alias: {}, Constraints{}",  field.getName(),  field.getDescription(), field.getAlias(), field.getConstraints());
-	}
 	
 }
