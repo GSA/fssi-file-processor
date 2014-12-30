@@ -5,3 +5,5 @@
 /working/datamaps/*
 
 *.log
+
+logs/fileprocessor.log

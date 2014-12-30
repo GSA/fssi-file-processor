@@ -48,5 +48,11 @@ public class FileHelper {
 	    logger.info("Added {} out of {} files", fileCount, totalFileCount);			    
 
 		return fileList;
-	}		    
+	}		
+	
+	
+	
+	public static String buildFileName(String oldFileName, String newExtension){
+		return oldFileName.substring(0, oldFileName.lastIndexOf('.') + 1)  + newExtension;
+	}
 }
