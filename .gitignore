@@ -3,3 +3,5 @@
 /working/schemas/*.csvs
 /working/staged/*.csv
 /working/datamaps/*
+
+*.log

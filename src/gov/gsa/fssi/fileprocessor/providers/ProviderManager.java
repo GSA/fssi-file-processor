@@ -46,7 +46,11 @@ public class ProviderManager {
 			    int providerEmailColumn = 0;
 				wb = WorkbookFactory.create(new File(providerDirectory + fileName));
 				Sheet sheet1 = wb.getSheetAt(0);
-			    
+		    	
+		    	int passCounter = 0;
+		    	int failCounter = 0;
+		    	
+		    	
 			    for (Row row : sheet1) {
 			    	Provider newProvider = new Provider();	
 			    	//If this is the header row, we need to figure out where the columns we need are
@@ -102,13 +106,33 @@ public class ProviderManager {
 				    			
 				    			//Certain fields are required.
 				    			if (newProvider.getProviderId() == null || newProvider.getProviderName() == null || newProvider.getProviderIdentifier() == null){
-				    				//logger.info("          Found provider record on row " + row.getRowNum() + " without all of the required fields...ignoring");
+				    				logger.warn("Found provider record on row " + row.getRowNum() + " without all of the required fields (ID, Name, Identifier)...ignoring");
+				    				failCounter++;
 				    			}else{
-				    				//logger.info("          Added Provider: " + newProvider.getProviderName() + " - " + newProvider.getProviderIdentifier());
-				    				providers.add(newProvider);	
+				    				
+				    				//We need to check for duplicative Providers.
+				    				boolean unique = true;
+				    				for (Provider provider : providers) {
+										if(provider.getProviderIdentifier().equals(newProvider.getProviderIdentifier())){
+											//logger.debug("{} - {}", newProvider.getProviderIdentifier(), provider.getProviderIdentifier());
+											unique = false;
+										}
+									}
+				    				
+				    				
+				    				if(unique == false){
+				    					logger.warn("Found provider with same identifier '{}' in '{}'. Providers must be unique", newProvider.getProviderIdentifier(), fileName);	
+				    					failCounter++;
+				    				}else{
+					    				providers.add(newProvider);	
+					    				passCounter++;
+				    				}
+
+				    				
+				    				
 				    			}
 	
-			    			
+				    			
 			    		} catch (java.lang.NullPointerException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -116,7 +140,9 @@ public class ProviderManager {
 			    		
 			    	}
 			    }
-		            
+			    
+				logger.info("Successfully Processed {} Providers ({} Failed) from '{}'", passCounter, failCounter, fileName);	
+				
 			} catch (FileNotFoundException e) {
 				logger.error("Received FileNotFoundException while trying to load {}", fileName);		
 				e.printStackTrace();
@@ -128,7 +154,8 @@ public class ProviderManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			logger.info("Successfully Processed {} Providers from '{}'", providers.size(), fileName);
+			
+
 		}
 						
 		//logger.info("Completed Provider setup. Added " + providers.size() + " Providers");	
