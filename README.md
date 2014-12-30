@@ -1,4 +1,25 @@
-fssi-file-processor
-===================
+#FSSI File Processor
 
-This Java Application is used by the FSSI Data Management team to pre-process CSV files for validation and data ingest.
+Traditional Data warehouses and Data Integration platforms provide a great way to manage structured data. But what happens when your data is semi-structured? or unstructured? This application aims to "Assist" with turning semi-structured and unstructured data into structured data.
+
+This J2SE Application, which is used by the FSSI Data Management team, pre-processes Source files for validation and data ingest into the FSSI Data Management Data Warehouse.
+
+##Overview
+The FSSI File Processor at its core can accept information from a multitude of different file types, process that data as standard java objects, and then export that data in any format requested (Pretty cool, right?).
+
+The FSSI File Processor has 4 main objects that server as inputs to the process; 
+
+1. [**Providers**](../working/providers/): Providers tell you how a file should be processed. All Schemas, Source Files, and Data Mappings must be represented by a provider.
+2. [**Source Files**](../working/srcfiles/): These are the files that are provided to you by the provider.
+3. [**Schemas**](../working/schemas/): are the building blocks for file validation. Regardless of whether you are provided a .csv, .xlsx, .txt, etc... data should be validated based upon its "Schema." Schemas are not required, but are important to the FSSI Data Management team for validating data quality and consistancy.
+4. **Data Mappings**: This is a conceptual component that has not been implemented yet. It provides a relatively simple interface (Via .XSLX) for providing a mapping or template for turning semi-structured or unstrutured data into structured data.
+
+##Requirements
+The FSSI File processor itself is run on files. It uses the above objects to run itself. At a minimum you must have [Providers](../working/providers/) and [Source Files](../working/srcfiles/). 
+
+
+##Running the FSSI File Processor
+TBD
+
+##Point of Contact
+If you have any questions on this repository, please feel free to contact [strategicsourcing@gsa.gov](mailto:strategicsourcing@gsa.gov).
