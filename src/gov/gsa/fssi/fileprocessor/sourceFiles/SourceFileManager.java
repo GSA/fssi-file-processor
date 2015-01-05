@@ -1,6 +1,5 @@
 package gov.gsa.fssi.fileprocessor.sourceFiles;
 
-import gov.gsa.fssi.fileprocessor.Config;
 import gov.gsa.fssi.fileprocessor.FileHelper;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.schemas.Schema;
@@ -23,12 +22,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormat;
-import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -129,10 +124,11 @@ public class SourceFileManager {
 				}
 			}
 			
-			//We couldn't find a provider, we can process this file no longer.
+			//We couldn't find a provider.
 			if(sourceFile.getSchema() == null){
-				logger.warn("No Schema found for file '{}' (Array Index #{}). File has been marked for removal", sourceFile.getFileName(), sourceFiles.indexOf(sourceFile));
-				badFiles.add(sourceFiles.indexOf(sourceFile));
+				logger.warn("No Schema found for file '{}' (Array Index #{}).", sourceFile.getFileName(), sourceFiles.indexOf(sourceFile));
+				//logger.warn("No Schema found for file '{}' (Array Index #{}). File has been marked for removal", sourceFile.getFileName(), sourceFiles.indexOf(sourceFile));
+				//badFiles.add(sourceFiles.indexOf(sourceFile));
 			}
 		}
 		
@@ -195,8 +191,15 @@ public class SourceFileManager {
 				Iterator it = header.entrySet().iterator();
 				while (it.hasNext()) {
 					Map.Entry pairs = (Map.Entry)it.next();
-					thisData.put((Integer)pairs.getValue(), csvRecord.get(pairs.getKey().toString()));
-					string.add(pairs.getKey() + ": " + csvRecord.get(pairs.getKey().toString()));
+					
+					try {
+						thisData.put((Integer)pairs.getValue(), csvRecord.get(pairs.getKey().toString()));
+						string.add(pairs.getKey() + ": " + csvRecord.get(pairs.getKey().toString()));
+					} catch (IllegalArgumentException e) {
+						logger.error("Failed to process record '{} - {}' in file '{}'", pairs.getKey().toString(), pairs.getValue().toString(), sourceFile.getFileName());
+						e.printStackTrace();
+					}
+					
 				}
 				thisRecord.setData(thisData);
 		        //logger.debug("{}", string);
@@ -205,14 +208,14 @@ public class SourceFileManager {
 			logger.info("{} out of {} Records successfully processed in {}", sourceFile.recordCount(), recordCount, sourceFile.getFileName());
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			logger.error("There was an FileNotFoundException error with file {}", sourceFile.getFileName());
+			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			logger.error("There was an IOException error with file {}", sourceFile.getFileName());
+			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			logger.error("There was an IllegalArgumentException error with file {}", sourceFile.getFileName());
+			e.printStackTrace();
 		}
 	}	
 	
@@ -237,7 +240,6 @@ public class SourceFileManager {
 				logger.error("We don't currently handle XML output at this point");
 			}else if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("XLSX")){
 				logger.info("Exporting File {} as a 'XLSX'", sourceFile.getFileName());
-				//logger.error("We don't currently handle XLSX output at this point");
 				outputAsXLSX(stagedDirectory, newFileName, sourceFile);
 
 				
@@ -341,7 +343,7 @@ public class SourceFileManager {
 			wb.write(out);
 			out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.error("There was an IOException error with file {}", sourceFile.getFileName());// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
