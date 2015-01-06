@@ -1,9 +1,15 @@
 package gov.gsa.fssi.fileprocessor;
 
+import gov.gsa.fssi.fileprocessor.sourceFiles.SourceFileManager;
+
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
  
 /**
  * This class loads and manages global configuration
@@ -14,7 +20,7 @@ import java.util.Properties;
  * 
  */
 public class Config {
-	
+	static Logger logger = LoggerFactory.getLogger(Config.class);
 	private Properties prop = null;
 	
 	/**
@@ -38,7 +44,7 @@ public class Config {
 		try {
 			getPropValues();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.error("Unable to load config file");
 			e.printStackTrace();
 		}
 	}
@@ -48,14 +54,9 @@ public class Config {
 		Properties prop = new Properties();
 		String propFileName = "config.properties";
  
-		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
- 
-		if (inputStream != null) {
-			prop.load(inputStream);
-		} else {
-			throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
-		}
-		//System.out.println(prop.getProperty("working_directory"));
+		InputStream inputStream = new FileInputStream(propFileName);
+		prop.load(inputStream);
+		
 		this.prop = prop;
 	}
 }
