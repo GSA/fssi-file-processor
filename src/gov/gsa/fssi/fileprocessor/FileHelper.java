@@ -53,6 +53,6 @@ public class FileHelper {
 	
 	
 	public static String buildFileName(String oldFileName, String newExtension){
-		return oldFileName.substring(0, oldFileName.lastIndexOf('.') + 1)  + newExtension;
+		return oldFileName.substring(0, oldFileName.lastIndexOf('.') + 1)  + newExtension.toLowerCase();
 	}
 }
