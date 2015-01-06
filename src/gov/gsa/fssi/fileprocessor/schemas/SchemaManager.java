@@ -1,12 +1,11 @@
 package gov.gsa.fssi.fileprocessor.schemas;
 
 import gov.gsa.fssi.fileprocessor.FileHelper;
-import gov.gsa.fssi.fileprocessor.schemas.fields.Field;
+import gov.gsa.fssi.fileprocessor.schemas.schemaElements.SchemaElement;
+import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -37,22 +36,26 @@ public class SchemaManager {
 				Document doc = dBuilder.parse(fXmlFile);
 			 
 				//optional, but recommended
-				//read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
 				doc.getDocumentElement().normalize();
 			 
+				//We assume their is only 1 schema in each file.
 				Node schemaNode = doc.getFirstChild();
 				Element schemaElement = (Element) schemaNode;
 				
-				newSchema.setName(schemaElement.getElementsByTagName("name").item(0).getTextContent());
-				newSchema.setProviderName(schemaElement.getElementsByTagName("provider").item(0).getTextContent());
-				newSchema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
-				newSchema.setEffectiveReportingPeriod(schemaElement.getElementsByTagName("effectiveReportingPeriod").item(0).getTextContent());
-				newSchema.setFields(initializeFields(doc.getElementsByTagName("field")));
-				
-				schemas.add(newSchema);
-				
+				//All schemas must have a name
+				if (schemaElement.getElementsByTagName("name").item(0).getTextContent() == null || schemaElement.getElementsByTagName("name").item(0).getTextContent().equals("")){
+					logger.error("Schema in file '{}' does not have required element of 'Name'. Ignoring.", fileName);
+				}else{
+				    logger.info("Processing schema '{}' in file '{}'", schemaElement.getElementsByTagName("name").item(0).getTextContent(), fileName);
+					newSchema.setName(schemaElement.getElementsByTagName("name").item(0).getTextContent());
+					newSchema.setProviderName(schemaElement.getElementsByTagName("provider").item(0).getTextContent());
+					newSchema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
+					newSchema.setFields(initializeFields(doc.getElementsByTagName("field")));
+					
+					schemas.add(newSchema);
+				}
 			    } catch (Exception e) {
-			    	
+				    logger.error("Received Exception error while processing {}", fileName);		
 			    	e.printStackTrace();
 			    }
 		
@@ -65,8 +68,8 @@ public class SchemaManager {
 		}	
 
 
-		public static ArrayList<Field> initializeFields(NodeList fieldNodes) {
-			ArrayList<Field> fields = new ArrayList<Field>();
+		public static ArrayList<SchemaField> initializeFields(NodeList fieldNodes) {
+			ArrayList<SchemaField> fields = new ArrayList<SchemaField>();
 			
 			for (int temp = 0; temp < fieldNodes.getLength(); temp++) {
 				fields.add(initializeField(fieldNodes.item(temp)));
@@ -76,10 +79,8 @@ public class SchemaManager {
 			
 		}
 		
-		public static Field initializeField(Node node) {
-			Field field = new Field();
-			ArrayList<String> aliasArray = new ArrayList<String>();
-			HashMap<String,String> constraintMap = new HashMap<String, String>();
+		public static SchemaField initializeField(Node node) {
+			SchemaField field = new SchemaField();
 			
 			NodeList alias = null;
 			Node constraintNode = null;
@@ -87,9 +88,9 @@ public class SchemaManager {
 			
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element fieldElement = (Element) node;
-				field.setDescription(fieldElement.getElementsByTagName("description").item(0).getTextContent());
-				field.setName(fieldElement.getElementsByTagName("name").item(0).getTextContent());
-				field.setTitle(fieldElement.getElementsByTagName("title").item(0).getTextContent());
+				field.setDescription(fieldElement.getElementsByTagName("description").item(0).getTextContent().toUpperCase());
+				field.setName(fieldElement.getElementsByTagName("name").item(0).getTextContent().toUpperCase());
+				field.setTitle(fieldElement.getElementsByTagName("title").item(0).getTextContent().toUpperCase());
 
 				
 				//Getting Constraints		
@@ -97,32 +98,56 @@ public class SchemaManager {
 				if(constraintNode != null){
 				constraintList = constraintNode.getChildNodes();
 					if(constraintList != null){
+						//logger.debug("Attempting to print constraint with {} elements", constraintList.getLength());
+						
 						for (int i = 0; i < constraintList.getLength(); i++) {
 							constraintNode = constraintList.item(i);
+							SchemaElement constraint = new SchemaElement();
 							if (constraintNode.getNodeType() == Node.ELEMENT_NODE) {
-								//logger.info(constraintNode.getNodeName() + " - " + constraintNode.getTextContent());
-								constraintMap.put(constraintNode.getNodeName(), constraintNode.getTextContent());
+								
+								//Checking for Duplicate Coinstraints
+								boolean dupeConstraintCheck = false;
+								for (SchemaElement constraintList1 : field.getConstraints()) {
+									if(constraintNode.getNodeName().toUpperCase().equals(constraintList1.getName().toUpperCase())){
+										dupeConstraintCheck = true;
+										logger.warn("Ignoring duplicate Constraint '{}' from field: '{}'", constraintList1.getName(),  field.getName());
+									}
+								}
+								if(dupeConstraintCheck == false){
+									constraint.setName(constraintNode.getNodeName().toUpperCase());
+									constraint.setValue(constraintNode.getTextContent().toUpperCase());
+									
+									if(constraintNode.getAttributes().getNamedItem("effectiveDate") != null){
+										constraint.addOption("effectiveDate", constraintNode.getAttributes().getNamedItem("effectiveDate").getNodeValue().toString().toUpperCase());
+									}
+
+									field.addConstraint(constraint);	
+								}								
+								
 							}
 						}
 					}
 				}				
-				field.setConstraints(constraintMap);
-				
+						
 				
 				//Getting Alias
 				alias = fieldElement.getElementsByTagName("alias");
 				for (int i = 0; i < alias.getLength(); i++) {
+					boolean dupeAliasCheck = false;
 					Element currentElement = (Element) alias.item(i);
-					aliasArray.add(currentElement.getTextContent().trim());
+					for (String aliasList : field.getAlias()) {
+						if(currentElement.getTextContent().trim().toUpperCase().equals(aliasList)){
+							dupeAliasCheck = true;
+							logger.warn("Ignoring duplicate Alias '{}' from field: '{}'", aliasList,  field.getName());
+						}
+					}
+					if(dupeAliasCheck == false){
+						field.addAlias(currentElement.getTextContent().trim().toUpperCase());						
+					}
 				}
-				field.setAlias(aliasArray);
-				
-				
-				//logger.info("First Name : " + eElement.getElementsByTagName("firstname").item(0).getTextContent());
-	 
-			}
-			
-		return field;
-		
+			}			
+		return field;	
 	}
+		
+		
 }

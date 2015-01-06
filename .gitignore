@@ -1,9 +1,7 @@
-/working/logs/*.log
-/working/srcfiles/*.csv
-/working/schemas/*.csvs
-/working/staged/*.csv
+/working/logs/*
+/working/srcfiles/*
+/working/schemas/*
+/working/staged/*
 /working/datamaps/*
-
 *.log
-
 logs/fileprocessor.log

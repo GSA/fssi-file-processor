@@ -27,6 +27,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -234,15 +235,19 @@ public class SourceFileManager {
 			
 			if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("CSV")){
 				logger.info("Exporting File {} as a 'CSV'", sourceFile.getFileName()); 
-				//outputAsCSV(stagedDirectory, newFileName, sourceFile);
+				outputAsCSV(stagedDirectory, newFileName, sourceFile);
 			}else if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("XML")){
 				//logger.info("Exporting File {} as a 'XML'", sourceFile.getFileExtension());	
 				logger.error("We don't currently handle XML output at this point");
+			}else if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("XLS")){
+				logger.info("Exporting File {} as a 'XLS'", sourceFile.getFileName());
+				outputAsExcel(stagedDirectory, sourceFile);
 			}else if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("XLSX")){
 				logger.info("Exporting File {} as a 'XLSX'", sourceFile.getFileName());
-				outputAsXLSX(stagedDirectory, newFileName, sourceFile);
-
-				
+				outputAsExcel(stagedDirectory, sourceFile);				
+			}else{
+				logger.warn("I'm sorry, we cannot export a file as a '{}' defaulting to 'CSV'", sourceFile.getFileExtension());
+				outputAsCSV(stagedDirectory, newFileName, sourceFile);				
 			}
 		}
 		
@@ -254,14 +259,14 @@ public class SourceFileManager {
 	 * @param stagedDirectory
 	 * @param newFileName
 	 */
-	private static void outputAsXLSX(String stagedDirectory, String newFileName, SourceFile sourceFile) {
+	private static void outputAsExcel(String stagedDirectory, SourceFile sourceFile) {
 		// create a new file
 		FileOutputStream out;
 		try {
-			out = new FileOutputStream(stagedDirectory + newFileName);
+			out = new FileOutputStream(stagedDirectory + FileHelper.buildFileName(sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType()));
 
 		// create a new workbook
-		Workbook wb = new HSSFWorkbook();
+		Workbook wb = (sourceFile.getFileExtension().toUpperCase().equals("XLSX") ? new XSSFWorkbook() : new HSSFWorkbook());
 		// create a new sheet
 		Sheet s = wb.createSheet();
 		// declare a row object reference
@@ -295,49 +300,7 @@ public class SourceFileManager {
 				c.setCellValue((String)data.getValue());
 			}
 		}
-				
-//		int rownum;
-//		for (rownum = (short) 0; rownum < 30; rownum++)
-//		{
-//		    // create a row
-//		    r = s.createRow(rownum);
-//
-//		    for (short cellnum = (short) 0; cellnum < 10; cellnum += 2)
-//		    {
-//		        // create a numeric cell
-//		        c = r.createCell(cellnum);
-//		        // do some goofy math to demonstrate decimals
-//		        c.setCellValue(rownum * 10000 + cellnum
-//		                + (((double) rownum / 1000)
-//		                + ((double) cellnum / 10000)));
-//
-//		        String cellValue;
-//
-//		        // create a string cell (see why += 2 in the
-//		        c = r.createCell((short) (cellnum + 1));
-//		        
-//		        // on every other row
-//		        if ((rownum % 2) == 0)
-//		        {
-//		            // set this cell to the first cell style we defined
-//		            //c.setCellStyle(cs);
-//		            // set the cell's string value to "Test"
-//		            c.setCellValue( "Test" );
-//		        }
-//		        else
-//		        {
-//		            //c.setCellStyle(cs2);
-//		            // set the cell's string value to "\u0422\u0435\u0441\u0442"
-//		            c.setCellValue( "\u0422\u0435\u0441\u0442" );
-//		        }
-//
-//
-//		        // make this column a bit wider
-//		        s.setColumnWidth((short) (cellnum + 1), (short) ((50 * 8) / ((double) 1 / 20)));
-//		    }
-//		}
-
-
+		
 		// write the workbook to the output stream
 		// close our file (don't blow out our file handles
 			wb.write(out);
@@ -347,7 +310,6 @@ public class SourceFileManager {
 			e.printStackTrace();
 		}
 	}
-
 
 
 	/**

@@ -1,6 +1,6 @@
 package gov.gsa.fssi.fileprocessor.schemas;
 
-import gov.gsa.fssi.fileprocessor.schemas.fields.Field;
+import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
 
 import java.util.ArrayList;
 
@@ -12,8 +12,7 @@ public class Schema {
 	private String name = null;
 	private String providerName = null;	
 	private String version = null;
-	private String effectiveReportingPeriod = null;
-	private ArrayList<Field> fields = new ArrayList<Field>();	
+	private ArrayList<SchemaField> fields = new ArrayList<SchemaField>();	
 	
 	/**
 	 * @return the name
@@ -52,38 +51,25 @@ public class Schema {
 		this.version = version;
 	}
 	/**
-	 * @return the effectiveReportingPeriod
-	 */
-	public String getEffectiveReportingPeriod() {
-		return effectiveReportingPeriod;
-	}
-	/**
-	 * @param effectiveReportingPeriod the effectiveReportingPeriod to set
-	 */
-	public void setEffectiveReportingPeriod(String effectiveReportingPeriod) {
-		this.effectiveReportingPeriod = effectiveReportingPeriod;
-	}
-	/**
 	 * @return the fields
 	 */
-	public ArrayList<Field> getFields() {
+	public ArrayList<SchemaField> getFields() {
 		return fields;
 	}
 	/**
 	 * @param fields the fields to set
 	 */
-	public void setFields(ArrayList<Field> fields) {
+	public void setFields(ArrayList<SchemaField> fields) {
 		this.fields = fields;
 	}
 
 	public void print(){
-		ArrayList<Field> fields = this.getFields();
-		logger.debug("Name: '{}' Version: '{}' Provider: '{}' EffectiveReportingPeriod: '{}' ", this.getName(), this.getVersion(), this.getProviderName(), this.getEffectiveReportingPeriod());
-		printSchemaFields(fields);	
+		logger.debug("Name: '{}' Version: '{}' Provider: '{}' ", this.getName(), this.getVersion(), this.getProviderName());
+		printSchemaFields();	
 	}
 	
-	private void printSchemaFields(ArrayList<Field> fields) {
-		for (Field field : fields) {
+	private void printSchemaFields() {
+		for (SchemaField field : this.getFields()) {
 			field.print();
 		}
 	}

@@ -82,24 +82,24 @@ public class ProviderManager {
 			    		try {
 			    			
 				    			if (!(row.getCell(providerIdColumn) == null) && !(row.getCell(providerIdColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-				    				newProvider.setProviderId(row.getCell(providerIdColumn).getStringCellValue());
+				    				newProvider.setProviderId(row.getCell(providerIdColumn).getStringCellValue().toUpperCase());
 				    			}
 				    				    			
 				    			if (!(row.getCell(providerNameColumn) == null) && !(row.getCell(providerNameColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerNameColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-				    				newProvider.setProviderName(row.getCell(providerNameColumn).getStringCellValue());
+				    				newProvider.setProviderName(row.getCell(providerNameColumn).getStringCellValue().toUpperCase());
 				    			}
 				    			
 				    			if (!(row.getCell(providerIdentifierColumn) == null) && !(row.getCell(providerIdentifierColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdentifierColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-				    				newProvider.setProviderIdentifier(row.getCell(providerIdentifierColumn).getStringCellValue());
+				    				newProvider.setProviderIdentifier(row.getCell(providerIdentifierColumn).getStringCellValue().toUpperCase());
 				    			}				    			
 				    			
 				    			if (!(row.getCell(fileOutputTypeColumn) == null) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().isEmpty()) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-				    				newProvider.setFileOutputType(row.getCell(fileOutputTypeColumn).getStringCellValue());
+				    				newProvider.setFileOutputType(row.getCell(fileOutputTypeColumn).getStringCellValue().toUpperCase());
 				    		
 				    			}			    					    			
 				    			
 				    			if (!(row.getCell(providerEmailColumn) == null) && !(row.getCell(providerEmailColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerEmailColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-				    				newProvider.setProviderEmail(row.getCell(providerEmailColumn).getStringCellValue());
+				    				newProvider.setProviderEmail(row.getCell(providerEmailColumn).getStringCellValue().toUpperCase());
 				    				//logger.debug("{}", row.getCell(providerEmailColumn).getStringCellValue());
 				    			}					    			
 				    			

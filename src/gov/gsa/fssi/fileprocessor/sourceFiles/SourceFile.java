@@ -205,11 +205,11 @@ public class SourceFile{
 		}		
 		
 		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getStatus(), this.getHeaders().size(), providerString, schemaString);
-		printRecords(sourceFileRecords);	
+		printRecords();	
 	}
 	
-	private void printRecords(ArrayList<SourceFileRecord> sourceFileRecords) {
-		for (SourceFileRecord sourceFileRecord : sourceFileRecords) {
+	private void printRecords() {
+		for (SourceFileRecord sourceFileRecord : this.getRecords()) {
 			sourceFileRecord.print();
 		}
 	}

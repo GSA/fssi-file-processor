@@ -85,7 +85,7 @@ public class Main {
 	    
 	    
 	  //OK, now we process the files
-	    SourceFileManager.processSourceFiles(config.getProperty("sourcefiles_directory"), sourceFiles);	    
+	   //SourceFileManager.processSourceFiles(config.getProperty("sourcefiles_directory"), sourceFiles);	    
 	    
 	    
 //		if (logger.isDebugEnabled()){
@@ -100,7 +100,7 @@ public class Main {
 	    logger.info("Completed Phase 3");
 	    logger.info("Starting Phase 4: File Output");
 		
-	    SourceFileManager.outputStagedSourceFiles(config.getProperty("staged_directory"), sourceFiles);
+	    //SourceFileManager.outputStagedSourceFiles(config.getProperty("staged_directory"), sourceFiles);
 	    
 	    logger.info("Completed FSSI File Processor");
 		
