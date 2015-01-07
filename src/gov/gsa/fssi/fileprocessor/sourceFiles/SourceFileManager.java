@@ -44,14 +44,10 @@ public class SourceFileManager {
 	public static String INITIALIZED = "initialized";
 	public static String LOADED = "loaded";	
 	public static String PREPARED = "prepared";		
-<<<<<<< HEAD
 	public static String COMPLETED = "completed";
 	public static String ERROR = "error";		
-=======
 	public static String STAGED = "staged";
-	public static String ERROR = "error";	
 	public static String IGNORED = "ignored";		
->>>>>>> 7558397d45cf7418a78d3159e27dbff63c8d7dcf
 	
 	static Config config = new Config();	    
 	static Logger logger = LoggerFactory.getLogger(SourceFileManager.class);
@@ -182,12 +178,8 @@ public class SourceFileManager {
 		 int emptyRecordCount = 0;
 		
 		 try {
-<<<<<<< HEAD
 			ArrayList<SourceFileRecord> sourceFileRecords = new ArrayList<SourceFileRecord>();
 			Reader in = new FileReader(config.getProperty("sourcefiles_directory") + sourceFile.getFileName());
-=======
-			Reader in = new FileReader(sourceFilesDirectory + sourceFile.getFileName());
->>>>>>> 7558397d45cf7418a78d3159e27dbff63c8d7dcf
 			final CSVParser parser = new CSVParser(in, CSVFormat.EXCEL.withHeader());
 			sourceFile.setHeaders(parser.getHeaderMap());
 			//logger.info("{}",parser.getHeaderMap());

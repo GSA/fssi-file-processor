@@ -91,7 +91,7 @@ public class Main {
 	    logger.info("Completed Phase 3");
 	    logger.info("Starting Phase 4: File Output");
 		
-	    SourceFileManager.outputStagedSourceFiles(config.getProperty("staged_directory"), sourceFiles);
+	    SourceFileManager.outputStagedSourceFiles(sourceFiles);
 	    
 	    logger.info("Completed FSSI File Processor");
 		

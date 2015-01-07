@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory;
 /**
  * This class loads and manages global configuration
  * Currently, the config file (config.properties) needs to be in the 
- * root directory of the class path (/src)
+ * root directory of the project. If you do not provide a config file
+ * it will use the default locations under "/working/". See globals 
+ * for listing of default locations
  * 
  * @author David Larrimore
  * 
