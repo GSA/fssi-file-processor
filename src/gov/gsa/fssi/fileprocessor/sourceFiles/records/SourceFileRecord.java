@@ -45,7 +45,14 @@ public class SourceFileRecord {
 	public void setData(HashMap<Integer, String> data) {
 		this.data = data;
 	}
-
+	
+	/**
+	 * @param key
+	 * @param value
+	 */
+	public void addData(Integer key, String value) {
+		this.data.put(key, value);
+	}
 	/**
 	 * @param key
 	 * @return

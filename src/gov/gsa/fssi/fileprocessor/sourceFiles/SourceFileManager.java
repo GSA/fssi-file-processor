@@ -173,6 +173,7 @@ public class SourceFileManager {
 
 	private static void processCSV(String sourceFilesDirectory, SourceFile sourceFile) {
 		 int recordCount = 0;
+		 int emptyRecordCount = 0;
 		
 		 try {
 			ArrayList<SourceFileRecord> sourceFileRecords = new ArrayList<SourceFileRecord>();
@@ -183,29 +184,34 @@ public class SourceFileManager {
 			
 			for (final CSVRecord csvRecord : parser) {
 				recordCount ++;
-		        //final String string = record.get("Ord_num");
-				SourceFileRecord thisRecord = new SourceFileRecord();
-				HashMap<Integer, String> thisData = new HashMap<Integer, String>(); 
-				ArrayList<String> string = new ArrayList<String>();
 				
+				SourceFileRecord thisRecord = new SourceFileRecord();
 				Map<String,Integer> header = sourceFile.getHeaders(); 	
-				Iterator it = header.entrySet().iterator();
-				while (it.hasNext()) {
-					Map.Entry pairs = (Map.Entry)it.next();
-					
-					try {
-						thisData.put((Integer)pairs.getValue(), csvRecord.get(pairs.getKey().toString()));
-						string.add(pairs.getKey() + ": " + csvRecord.get(pairs.getKey().toString()));
-					} catch (IllegalArgumentException e) {
-						logger.error("Failed to process record '{} - {}' in file '{}'", pairs.getKey().toString(), pairs.getValue().toString(), sourceFile.getFileName());
-						e.printStackTrace();
+				
+				//Ignoring Empty Rows
+				if (csvRecord.size() > 1 && header.size() > 1){
+					Iterator it = header.entrySet().iterator();
+					while (it.hasNext()) {
+						Map.Entry pairs = (Map.Entry)it.next();
+						
+						try {
+							thisRecord.addData((Integer)pairs.getValue(), csvRecord.get(pairs.getKey().toString()));
+						} catch (IllegalArgumentException e) {
+							//logger.error("Failed to process record '{} - {}' in file '{}'", pairs.getKey().toString(), pairs.getValue().toString(), sourceFile.getFileName());
+							logger.error("{}", e.getMessage());
+						}
+						
 					}
-					
+					sourceFile.addRecord(thisRecord);
+				}else{
+					//logger.debug("row {} in file '{}' had no data, ignoring.", recordCount, sourceFile.getFileName());
+					emptyRecordCount ++;
 				}
-				thisRecord.setData(thisData);
-		        //logger.debug("{}", string);
-				sourceFile.addRecord(thisRecord);
 		    }
+			
+			if (emptyRecordCount > 0){
+				logger.warn("{} rows had no data in {}", emptyRecordCount, sourceFile.getFileName());
+			}
 			logger.info("{} out of {} Records successfully processed in {}", sourceFile.recordCount(), recordCount, sourceFile.getFileName());
 			
 		} catch (FileNotFoundException e) {
