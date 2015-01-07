@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 public class Config {
 	static Logger logger = LoggerFactory.getLogger(Config.class);
 	private Properties prop = null;
+	
 	public static String DEFAULT_WORKING_DIRECTORY = "./working/";
 	public static String DEFAULT_SOURCEFILES_DIRECTORY = "./working/srcfiles/";
 	public static String DEFAULT_SCHEMAS_DIRECTORY = "./working/schemas/";	
@@ -52,23 +53,33 @@ public class Config {
 			getPropValues();
 		} catch (IOException e) {
 			logger.error("Could not load config file '{}'. Received following error: {}", DEFAULT_PROPFILE_NAME, e.getMessage());
-		} finally{
 			logger.info("Loading default config settings");
 			getDefaultPropValue();
-		}
+		} 
 	}
 	
 	
+	/**
+	 * @throws IOException
+	 */
 	public void getPropValues() throws IOException {
 		Properties prop = new Properties();
  
 		InputStream inputStream = new FileInputStream(DEFAULT_PROPFILE_NAME);
 		prop.load(inputStream);
 		
+		
+		validatePropFile(prop);
+		
 		this.prop = prop;
 	}
 	
-	public void getDefaultPropValue() {
+	
+	/**
+	 * This method is only envoked if no config.properties file is provided. 
+	 * This loads in default values..
+	 */
+	private void getDefaultPropValue() {
 		Properties prop = new Properties();
 		prop.setProperty("working_directory", DEFAULT_WORKING_DIRECTORY);
 		prop.setProperty("sourcefiles_directory", DEFAULT_SOURCEFILES_DIRECTORY);		
@@ -80,4 +91,52 @@ public class Config {
 		
 		this.prop = prop;
 	}
+	
+	/**
+	 * This method validates provided properties files
+	 * and makes sure that the required properties have been provided.
+	 * 
+	 * @param prop
+	 * @return
+	 */
+	private Properties validatePropFile(Properties prop){
+		
+		if(!prop.containsKey("working_directory")){
+			logger.warn("No 'working_directory' property found in config file, loading default");
+			prop.put("working_directory", DEFAULT_WORKING_DIRECTORY);
+		}
+		
+		if(!prop.containsKey("sourcefiles_directory")){
+			logger.warn("No 'sourcefiles_directory' property found in config file, loading default");
+			prop.put("working_directory", DEFAULT_SOURCEFILES_DIRECTORY);
+		}
+		
+		if(!prop.containsKey("schemas_directory")){
+			logger.warn("No 'schemas_directory' property found in config file, loading default");
+			prop.put("schemas_directory", DEFAULT_SCHEMAS_DIRECTORY);
+		}		
+		
+		if(!prop.containsKey("datamaps_directory")){
+			logger.warn("No 'datamaps_directory' property found in config file, loading default");
+			prop.put("datamaps_directory", DEFAULT_DATAMAPS_DIRECTORY);
+		}	
+		
+		if(!prop.containsKey("logs_directory")){
+			logger.warn("No 'logs_directory' property found in config file, loading default");
+			prop.put("logs_directory", DEFAULT_LOGS_DIRECTORY);
+		}			
+		
+		if(!prop.containsKey("providers_directory")){
+			logger.warn("No 'providers_directory' property found in config file, loading default");
+			prop.put("providers_directory", DEFAULT_PROVIDERS_DIRECTORY);
+		}			
+		
+		if(!prop.containsKey("staged_directory")){
+			logger.warn("No 'staged_directory' property found in config file, loading default");
+			prop.put("staged_directory", DEFAULT_STAGED_DIRECTORY);
+		}		
+		
+		return prop;
+	}
+	
 }

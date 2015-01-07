@@ -178,7 +178,6 @@ public class SourceFileManager {
 		 int emptyRecordCount = 0;
 		
 		 try {
-			ArrayList<SourceFileRecord> sourceFileRecords = new ArrayList<SourceFileRecord>();
 			Reader in = new FileReader(config.getProperty("sourcefiles_directory") + sourceFile.getFileName());
 			final CSVParser parser = new CSVParser(in, CSVFormat.EXCEL.withHeader());
 			sourceFile.setHeaders(parser.getHeaderMap());
