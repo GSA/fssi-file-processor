@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -44,8 +43,9 @@ public class SourceFileManager {
 	public static String INITIALIZED = "initialized";
 	public static String LOADED = "loaded";	
 	public static String PREPARED = "prepared";		
-	public static String COMPLETED = "completed";
-	public static String ERROR = "error";			
+	public static String STAGED = "staged";
+	public static String ERROR = "error";	
+	public static String IGNORED = "ignored";		
 	
 	static Logger logger = LoggerFactory.getLogger(SourceFileManager.class);
 	
@@ -176,7 +176,6 @@ public class SourceFileManager {
 		 int emptyRecordCount = 0;
 		
 		 try {
-			ArrayList<SourceFileRecord> sourceFileRecords = new ArrayList<SourceFileRecord>();
 			Reader in = new FileReader(sourceFilesDirectory + sourceFile.getFileName());
 			final CSVParser parser = new CSVParser(in, CSVFormat.EXCEL.withHeader());
 			sourceFile.setHeaders(parser.getHeaderMap());
@@ -214,6 +213,7 @@ public class SourceFileManager {
 			}
 			logger.info("{} out of {} Records successfully processed in {}", sourceFile.recordCount(), recordCount, sourceFile.getFileName());
 			
+			parser.close();
 		} catch (FileNotFoundException e) {
 			logger.error("There was an FileNotFoundException error with file {}", sourceFile.getFileName());
 			e.printStackTrace();

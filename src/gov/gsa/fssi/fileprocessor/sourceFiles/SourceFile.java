@@ -192,8 +192,6 @@ public class SourceFile{
 	 * 
 	 */
 	public void print(){
-		ArrayList<SourceFileRecord> sourceFileRecords = this.getRecords();
-		
 		String providerString = null;
 		if (!(this.getProvider() == null)){
 			providerString = this.getProvider().getProviderName() + " - " + this.getProvider().getProviderIdentifier();

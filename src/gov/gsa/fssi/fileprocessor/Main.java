@@ -1,14 +1,6 @@
 package gov.gsa.fssi.fileprocessor;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +10,6 @@ import gov.gsa.fssi.fileprocessor.schemas.Schema;
 import gov.gsa.fssi.fileprocessor.schemas.SchemaManager;
 import gov.gsa.fssi.fileprocessor.sourceFiles.SourceFile;
 import gov.gsa.fssi.fileprocessor.sourceFiles.SourceFileManager;
-import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
 
 
 

@@ -1,9 +1,6 @@
 package gov.gsa.fssi.fileprocessor;
 
-import gov.gsa.fssi.fileprocessor.sourceFiles.SourceFileManager;
-
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
