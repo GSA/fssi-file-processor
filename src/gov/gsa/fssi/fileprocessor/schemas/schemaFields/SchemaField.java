@@ -1,11 +1,7 @@
 package gov.gsa.fssi.fileprocessor.schemas.schemaFields;
 
 import gov.gsa.fssi.fileprocessor.schemas.schemaElements.SchemaElement;
-import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

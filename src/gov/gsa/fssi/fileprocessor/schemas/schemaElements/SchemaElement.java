@@ -2,7 +2,6 @@ package gov.gsa.fssi.fileprocessor.schemas.schemaElements;
 
 import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.slf4j.Logger;
