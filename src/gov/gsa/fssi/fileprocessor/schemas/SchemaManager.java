@@ -1,11 +1,13 @@
 package gov.gsa.fssi.fileprocessor.schemas;
 
+import gov.gsa.fssi.fileprocessor.Config;
 import gov.gsa.fssi.fileprocessor.FileHelper;
 import gov.gsa.fssi.fileprocessor.schemas.schemaElements.SchemaElement;
 import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
 
 import java.io.File;
 import java.util.ArrayList;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -18,19 +20,20 @@ import org.w3c.dom.NodeList;
 
 public class SchemaManager {
 	static Logger logger = LoggerFactory.getLogger(SchemaManager.class);
+	static Config config = new Config();	    
 	
-	public static ArrayList<Schema> initializeSchemas(String schemaDirectory) {
-	    logger.debug("Starting initializeSchemas('{}')", schemaDirectory);		
+	public static ArrayList<Schema> initializeSchemas() {
+	    logger.debug("Starting initializeSchemas('{}')", config.getProperty("schemas_directory"));		
 		
 	    ArrayList<Schema> schemas = new ArrayList<Schema>();	
 		
-		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(schemaDirectory, ".xml");
+		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty("schemas_directory"), ".xml");
 		
 		
 		for (String fileName : fileNames) {
 		try {
 				Schema newSchema = new Schema();	
-				File fXmlFile = new File(schemaDirectory + fileName);
+				File fXmlFile = new File(config.getProperty("schemas_directory") + fileName);
 				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 				Document doc = dBuilder.parse(fXmlFile);

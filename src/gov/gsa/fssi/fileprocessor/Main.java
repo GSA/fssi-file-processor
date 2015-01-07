@@ -35,16 +35,17 @@ import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
  */
 public class Main {
 	static Logger logger = LoggerFactory.getLogger(Main.class);
+	static Config config = new Config();	    
 	
 	public static void main(String[] args) {
 		
 	    logger.info("Starting FSSI File Processor");
 	    logger.info("Starting Phase 1: Initialization");
 		//First things first, lets get all of our configuration settings	
-	    Config config = new Config();	    
+	   
 	    
 		//Next, we need to get all of our provider info. We currently do this up front to make multi-file processing faster
-	    ArrayList<Schema> schemas = SchemaManager.initializeSchemas(config.getProperty("schemas_directory"));
+	    ArrayList<Schema> schemas = SchemaManager.initializeSchemas();
 
 		if (logger.isDebugEnabled()){
 			logger.debug("Printing Schemas");
@@ -54,7 +55,7 @@ public class Main {
 		}
 		
 		//Next, we need to get all of our provider info. We currently do this up front to make multi-file processing faster
-		ArrayList<Provider> providers = ProviderManager.initializeProviders(config.getProperty("providers_directory"));
+		ArrayList<Provider> providers = ProviderManager.initializeProviders();
 
 		if (logger.isDebugEnabled()){
 			logger.debug("Printing Providers");
@@ -65,7 +66,7 @@ public class Main {
 		
 		
 		//Next, we need to get all of our sourceFiles info. We currently do this up front to make multi-file processing faster
-		ArrayList<SourceFile> sourceFiles = SourceFileManager.initializeSourceFiles(config.getProperty("sourcefiles_directory"));
+		ArrayList<SourceFile> sourceFiles = SourceFileManager.initializeSourceFiles();
 	
 		
 	    logger.info("Completed Phase 1");
@@ -83,9 +84,8 @@ public class Main {
 	    logger.info("Completed Phase 2");
 	    logger.info("Starting Phase 3: File Processing");
 	    
-	    
 	  //OK, now we process the files
-	   SourceFileManager.processSourceFiles(config.getProperty("sourcefiles_directory"), sourceFiles);	    
+	   SourceFileManager.processSourceFiles(sourceFiles);	    
 	    
 	    
 //		if (logger.isDebugEnabled()){

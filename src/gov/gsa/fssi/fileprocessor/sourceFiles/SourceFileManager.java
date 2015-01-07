@@ -1,5 +1,6 @@
 package gov.gsa.fssi.fileprocessor.sourceFiles;
 
+import gov.gsa.fssi.fileprocessor.Config;
 import gov.gsa.fssi.fileprocessor.FileHelper;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.schemas.Schema;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -45,19 +45,20 @@ public class SourceFileManager {
 	public static String LOADED = "loaded";	
 	public static String PREPARED = "prepared";		
 	public static String COMPLETED = "completed";
-	public static String ERROR = "error";			
+	public static String ERROR = "error";		
 	
+	static Config config = new Config();	    
 	static Logger logger = LoggerFactory.getLogger(SourceFileManager.class);
 	
 	/**
 	 * The purpose of this function is just to prep file processing. We are not actually loading data yet
 	 * @param sourceFileDirectory
 	 */
-	public static ArrayList<SourceFile> initializeSourceFiles(String sourceFileDirectory) {	
-	    logger.debug("Starting initializeSourceFiles('{}')", sourceFileDirectory);		
+	public static ArrayList<SourceFile> initializeSourceFiles() {	
+	    logger.debug("Starting initializeSourceFiles('{}')", config.getProperty("sourcefiles_directory"));		
 	    
 		ArrayList<SourceFile> sourceFiles = new ArrayList<SourceFile>();	
-		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(sourceFileDirectory, ".csv ");
+		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty("sourcefiles_directory"), ".csv ");
 	
 		//Loop through files in sourceFileDirectory and populate SourceFile objects
 		for (String fileName : fileNames) {
@@ -154,13 +155,12 @@ public class SourceFileManager {
 	 * @param sourceFilesDirectory
 	 * @param sourceFiles
 	 */
-	public static void processSourceFiles(String sourceFilesDirectory,
-			ArrayList<SourceFile> sourceFiles) {
+	public static void processSourceFiles(ArrayList<SourceFile> sourceFiles) {
 		//OK, now we start processing the files one at a time.
 		for ( SourceFile sourceFile : sourceFiles) {
 			if(sourceFile.getFileExtension().toUpperCase().equals("CSV")){
 				logger.info("Processing File {} as a 'CSV'", sourceFile.getFileName()); 
-				processCSV(sourceFilesDirectory, sourceFile);
+				processCSV(sourceFile);
 			}else if(sourceFile.getFileExtension().toUpperCase().equals("XML")){
 				 logger.info("Processing File {} as a 'XML'", sourceFile.getFileExtension());					
 			}else if(sourceFile.getFileExtension().toUpperCase().equals("XLSX")){
@@ -171,13 +171,13 @@ public class SourceFileManager {
 
 
 
-	private static void processCSV(String sourceFilesDirectory, SourceFile sourceFile) {
+	private static void processCSV(SourceFile sourceFile) {
 		 int recordCount = 0;
 		 int emptyRecordCount = 0;
 		
 		 try {
 			ArrayList<SourceFileRecord> sourceFileRecords = new ArrayList<SourceFileRecord>();
-			Reader in = new FileReader(sourceFilesDirectory + sourceFile.getFileName());
+			Reader in = new FileReader(config.getProperty("sourcefiles_directory") + sourceFile.getFileName());
 			final CSVParser parser = new CSVParser(in, CSVFormat.EXCEL.withHeader());
 			sourceFile.setHeaders(parser.getHeaderMap());
 			//logger.info("{}",parser.getHeaderMap());
@@ -232,31 +232,31 @@ public class SourceFileManager {
 	 * @param string
 	 * @param sourceFiles
 	 */
-	public static void outputStagedSourceFiles(String stagedDirectory, ArrayList<SourceFile> sourceFiles) {
-		
+	public static void outputStagedSourceFiles(ArrayList<SourceFile> sourceFiles) {
 		//OK, now we start processing the files one at a time.
-		for ( SourceFile sourceFile : sourceFiles) {
-			
-			String newFileName = FileHelper.buildFileName(sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType());
-			
-			if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("CSV")){
-				logger.info("Exporting File {} as a 'CSV'", sourceFile.getFileName()); 
-				outputAsCSV(stagedDirectory, newFileName, sourceFile);
-			}else if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("XML")){
-				//logger.info("Exporting File {} as a 'XML'", sourceFile.getFileExtension());	
-				logger.error("We don't currently handle XML output at this point");
-			}else if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("XLS")){
-				logger.info("Exporting File {} as a 'XLS'", sourceFile.getFileName());
-				outputAsExcel(stagedDirectory, sourceFile);
-			}else if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("XLSX")){
-				logger.info("Exporting File {} as a 'XLSX'", sourceFile.getFileName());
-				outputAsExcel(stagedDirectory, sourceFile);				
-			}else{
-				logger.warn("I'm sorry, we cannot export a file as a '{}' defaulting to 'CSV'", sourceFile.getFileExtension());
-				outputAsCSV(stagedDirectory, newFileName, sourceFile);				
-			}
+		for ( SourceFile sourceFile : sourceFiles) {	
+			outputStagedSourceFile(sourceFile);
 		}
+	}
+
+	private static void outputStagedSourceFile(SourceFile sourceFile) {
 		
+		if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("CSV")){
+			logger.info("Exporting File {} as a 'CSV'", sourceFile.getFileName()); 
+			outputAsCSV(sourceFile);
+		}else if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("XML")){
+			//logger.info("Exporting File {} as a 'XML'", sourceFile.getFileExtension());	
+			logger.error("We don't currently handle XML output at this point");
+		}else if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("XLS")){
+			logger.info("Exporting File {} as a 'XLS'", sourceFile.getFileName());
+			outputAsExcel(sourceFile);
+		}else if(sourceFile.getProvider().getFileOutputType().toUpperCase().equals("XLSX")){
+			logger.info("Exporting File {} as a 'XLSX'", sourceFile.getFileName());
+			outputAsExcel(sourceFile);				
+		}else{
+			logger.warn("I'm sorry, we cannot export a file as a '{}' defaulting to 'CSV'", sourceFile.getFileExtension());
+			outputAsCSV(sourceFile);				
+		}
 	}
 
 
@@ -265,14 +265,14 @@ public class SourceFileManager {
 	 * @param stagedDirectory
 	 * @param newFileName
 	 */
-	private static void outputAsExcel(String stagedDirectory, SourceFile sourceFile) {
+	private static void outputAsExcel(SourceFile sourceFile) {
 		// create a new file
 		FileOutputStream out;
 		try {
-			out = new FileOutputStream(stagedDirectory + FileHelper.buildFileName(sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType()));
+			out = new FileOutputStream(config.getProperty("staged_directory") + FileHelper.buildFileName(sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType()));
 
 		// create a new workbook
-		Workbook wb = (sourceFile.getFileExtension().toUpperCase().equals("XLSX") ? new XSSFWorkbook() : new HSSFWorkbook());
+		Workbook wb = (sourceFile.getProvider().getFileOutputType().toUpperCase().equals("XLSX") ? new XSSFWorkbook() : new HSSFWorkbook());
 		// create a new sheet
 		Sheet s = wb.createSheet();
 		// declare a row object reference
@@ -322,8 +322,9 @@ public class SourceFileManager {
 	 * @param string
 	 * @param sourceFile
 	 */
-	private static void outputAsCSV(String stagedDirectory, String newFileName, SourceFile sourceFile) {
+	private static void outputAsCSV(SourceFile sourceFile) {
 		//Delimiter used in CSV file
+		String newFileName = FileHelper.buildFileName(sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType());
 		String newLineSeparator = "\n";
 		FileWriter fileWriter = null;
 		CSVPrinter csvFilePrinter = null;
@@ -334,7 +335,7 @@ public class SourceFileManager {
 		try {
 			
 			//initialize FileWriter object
-			fileWriter = new FileWriter(stagedDirectory + newFileName);
+			fileWriter = new FileWriter(config.getProperty("staged_directory") + newFileName);
 			
 			//initialize CSVPrinter object 
 		    csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);

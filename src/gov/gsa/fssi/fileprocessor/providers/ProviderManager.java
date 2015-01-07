@@ -1,6 +1,8 @@
 package gov.gsa.fssi.fileprocessor.providers;
 
+import gov.gsa.fssi.fileprocessor.Config;
 import gov.gsa.fssi.fileprocessor.FileHelper;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,14 +30,15 @@ import org.slf4j.LoggerFactory;
  */
 public class ProviderManager {
 	static Logger logger = LoggerFactory.getLogger(ProviderManager.class);
+	static Config config = new Config();	    
 	
-	public static ArrayList<Provider> initializeProviders(String providerDirectory) {	
+	public static ArrayList<Provider> initializeProviders() {	
 		ArrayList<Provider> providers = new ArrayList<Provider>();
 		Workbook wb;
 	    
-	    logger.debug("Starting initializeProviders('{}')", providerDirectory);
+	    logger.debug("Starting initializeProviders('{}')", config.getProperty("providers_directory"));
 		
-		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(providerDirectory, ".xlsx");
+		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty("providers_directory"), ".xlsx");
 		
 		for (String fileName : fileNames) {		
 			try {
@@ -44,7 +47,7 @@ public class ProviderManager {
 			    int providerIdColumn = 0;	    	    
 			    int fileOutputTypeColumn = 0;	
 			    int providerEmailColumn = 0;
-				wb = WorkbookFactory.create(new File(providerDirectory + fileName));
+				wb = WorkbookFactory.create(new File(config.getProperty("providers_directory") + fileName));
 				Sheet sheet1 = wb.getSheetAt(0);
 		    	
 		    	int passCounter = 0;

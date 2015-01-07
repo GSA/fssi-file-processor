@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class FileHelper {
 	static Logger logger = LoggerFactory.getLogger(FileHelper.class);
+	//static Config config = new Config();	    
 	
 	public static ArrayList<String> getFilesFromDirectory(String directoryName){
 		return getFilesFromDirectory(directoryName, null);
@@ -15,7 +16,6 @@ public class FileHelper {
 	
 	public static ArrayList<String> getFilesFromDirectory(String directoryName, String whitelist){
 		ArrayList<String> fileList = new ArrayList<String>();
-		//logger.info("Envoking FileHelper.getFilesFromDirectory");	
 		logger.info("getFilesFromDirectory Looking in '{}' for '{}' files.", directoryName, whitelist);	
 		
 		
