@@ -10,7 +10,7 @@
 			<description>Each order should be identified by a unique order identification number</description>         
 			<constraints>
 				<required effectiveDate="2014-10-01">true</required>
-				<required effectiveDate="2014-10-01">true</required>
+				<required >false</required>
 				<dataType>Number</dataType>
 			</constraints>
 			<alias>Ord_Num</alias>

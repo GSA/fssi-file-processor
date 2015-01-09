@@ -31,7 +31,12 @@ public class SourceFile{
 	private Provider provider = null;
 	private Date ReportingPeriod = null;
 	private Map<String, Integer> headers = new HashMap<String,Integer>();
-	private ArrayList<SourceFileRecord> records = new ArrayList<SourceFileRecord>();	
+	private ArrayList<SourceFileRecord> records = new ArrayList<SourceFileRecord>();
+	public static String STATUS_INITIALIZED = "initialized";	
+	public static String STATUS_STAGED = "staged";
+	public static String STATUS_IGNORED = "ignored";	
+	public static String STATUS_ERROR = "error";
+	public static String STATUS_WARNING = "warnings";		
 	
 	/**
 	 * @return the reportingPeriod
@@ -80,15 +85,12 @@ public class SourceFile{
 		this.provider = provider;
 	}
 
-	
-	
 	/**
 	 * @return the headers
 	 */
 	public Map<String, Integer> getHeaders() {
 		return headers;
 	}
-
 
 	/**
 	 * @param map the headers to set

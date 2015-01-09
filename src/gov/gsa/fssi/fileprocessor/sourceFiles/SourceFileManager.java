@@ -5,6 +5,7 @@ import gov.gsa.fssi.fileprocessor.FileHelper;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.schemas.Schema;
 import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
+import gov.gsa.fssi.fileprocessor.sourceFiles.records.datas.Data;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -39,16 +40,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SourceFileManager {
-	
-	//Status Types.
-	public static String INITIALIZED = "initialized";
-	public static String LOADED = "loaded";	
-	public static String PREPARED = "prepared";		
-	public static String COMPLETED = "completed";
-	public static String ERROR = "error";		
-	public static String STAGED = "staged";
-	public static String IGNORED = "ignored";		
-	
 	static Config config = new Config();	    
 	static Logger logger = LoggerFactory.getLogger(SourceFileManager.class);
 	
@@ -68,8 +59,7 @@ public class SourceFileManager {
 	    	newSourceFile.setFileName(fileName);
 	    	int startOfExtension = fileName.lastIndexOf(".")+1;
 	    	newSourceFile.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
-	    	newSourceFile.setStatus(SourceFileManager.INITIALIZED);
-	    	//newSourceFile.setProvider(getProvider(fileName.substring(0, (int)fileName.indexOf("_"))));	
+	    	newSourceFile.setStatus(SourceFile.STATUS_INITIALIZED);
 		    sourceFiles.add(newSourceFile);		        
 		}		    
 		
@@ -98,8 +88,9 @@ public class SourceFileManager {
 			
 			//We couldn't find a provider, we can process this file no longer.
 			if(sourceFile.getProvider() == null){
-				logger.warn("No Provider found for file '{}' (Array Index #{}). File has been marked for removal", sourceFile.getFileName(), sourceFiles.indexOf(sourceFile));
+				logger.warn("No Provider found for file '{}' (Array Index #{}). File will be ignored", sourceFile.getFileName(), sourceFiles.indexOf(sourceFile));
 				badFiles.add(sourceFiles.indexOf(sourceFile));
+				sourceFile.setStatus(SourceFile.STATUS_IGNORED);
 			}
 		}
 		
@@ -121,31 +112,35 @@ public class SourceFileManager {
 		ArrayList<Integer> badFiles = new ArrayList<Integer>();
 		//Loop 
 		for ( SourceFile sourceFile : sourceFiles) {
-			Provider provider = sourceFile.getProvider();
-			for ( Schema schema : schemas) {
-				if(provider.getProviderName().toUpperCase().equals(schema.getName().toUpperCase())){
-					sourceFile.setSchema(schema);
+			
+			//We do not processed the ignored files
+			if (!sourceFile.getStatus().equals(SourceFile.STATUS_IGNORED)){
+				Provider provider = sourceFile.getProvider();
+				for ( Schema schema : schemas) {
+					if(provider.getProviderName().toUpperCase().equals(schema.getName().toUpperCase())){
+						sourceFile.setSchema(schema);
+					}
+				}
+				
+				//We couldn't find a provider.
+				if(sourceFile.getSchema() == null){
+					logger.warn("No Schema found for file '{}' (Array Index #{}).", sourceFile.getFileName(), sourceFiles.indexOf(sourceFile));
+					//logger.warn("No Schema found for file '{}' (Array Index #{}). File has been marked for removal", sourceFile.getFileName(), sourceFiles.indexOf(sourceFile));
+					//badFiles.add(sourceFiles.indexOf(sourceFile));
 				}
 			}
 			
-			//We couldn't find a provider.
-			if(sourceFile.getSchema() == null){
-				logger.warn("No Schema found for file '{}' (Array Index #{}).", sourceFile.getFileName(), sourceFiles.indexOf(sourceFile));
-				//logger.warn("No Schema found for file '{}' (Array Index #{}). File has been marked for removal", sourceFile.getFileName(), sourceFiles.indexOf(sourceFile));
-				//badFiles.add(sourceFiles.indexOf(sourceFile));
+			//Reversing Order to prevent removing good files
+			Collections.reverse(badFiles);
+			
+			//Removing any bad files
+			if (badFiles.size() > 0){
+				for (Integer integer : badFiles) {
+					logger.warn("Removing sourceFile with index of '{}'", integer);
+					sourceFiles.remove(integer.intValue());
+				}
 			}
-		}
-		
-		//Reversing Order to prevent removing good files
-		Collections.reverse(badFiles);
-		
-		//Removing any bad files
-		if (badFiles.size() > 0){
-			for (Integer integer : badFiles) {
-				logger.warn("Removing sourceFile with index of '{}'", integer);
-				sourceFiles.remove(integer.intValue());
-			}
-		}
+		}	
 	}	
 
 	
@@ -189,21 +184,39 @@ public class SourceFileManager {
 				SourceFileRecord thisRecord = new SourceFileRecord();
 				Map<String,Integer> header = sourceFile.getHeaders(); 	
 				
-				//Ignoring Empty Rows
+				//Ignoring null rows
 				if (csvRecord.size() > 1 && header.size() > 1){
-					Iterator it = header.entrySet().iterator();
+					Iterator<?> it = header.entrySet().iterator();
 					while (it.hasNext()) {
 						Map.Entry pairs = (Map.Entry)it.next();
-						
+						Data data = new Data();
 						try {
-							thisRecord.addData((Integer)pairs.getValue(), csvRecord.get(pairs.getKey().toString()));
+							data.setData(csvRecord.get(pairs.getKey().toString()));
+							data.setHeaderIndex((Integer)pairs.getValue());
+							data.setStatus(Data.STATUS_LOADED);
+							thisRecord.addData(data);
 						} catch (IllegalArgumentException e) {
 							//logger.error("Failed to process record '{} - {}' in file '{}'", pairs.getKey().toString(), pairs.getValue().toString(), sourceFile.getFileName());
 							logger.error("{}", e.getMessage());
 						}
 						
 					}
-					sourceFile.addRecord(thisRecord);
+					
+					//Checking to see if any data was in the row.
+					boolean emptyRowCheck = false;
+					for (Data data : thisRecord.getDatas()) {
+						if(data.getData() == null || data.getData().isEmpty() || data.getData().equals("")){
+							emptyRowCheck = true;
+						}else{
+							emptyRowCheck = false;
+							break;
+						}
+					}
+					
+					if(emptyRowCheck == false){
+						sourceFile.addRecord(thisRecord);	
+					}
+
 				}else{
 					//logger.debug("row {} in file '{}' had no data, ignoring.", recordCount, sourceFile.getFileName());
 					emptyRecordCount ++;
@@ -264,6 +277,7 @@ public class SourceFileManager {
 
 
 	/**
+	 * This Method takes our SourceFile data and exports it to Excel format
 	 * @param stagedDirectory
 	 * @param newFileName
 	 */
@@ -286,7 +300,7 @@ public class SourceFileManager {
 		r = s.createRow(0);
 
 		Map<String,Integer> headers = sourceFile.getHeaders(); 	
-		Iterator headerMap = headers.entrySet().iterator();
+		Iterator<?> headerMap = headers.entrySet().iterator();
 		while (headerMap.hasNext()) {
 			Map.Entry header = (Map.Entry)headerMap.next();
 			c = r.createCell((int) header.getValue());
@@ -299,13 +313,11 @@ public class SourceFileManager {
 			counter ++;	
 			r = s.createRow(counter);
 			
-			Map<Integer,String> records = sourceFileRecord.getData(); 	
-			Iterator dataMap = records.entrySet().iterator();
-			while (dataMap.hasNext()) {
-				Map.Entry data = (Map.Entry)dataMap.next();
+			ArrayList<Data> records = sourceFileRecord.getDatas(); 	
+			for (Data data : records) {
 				//logger.debug("{}", data.getKey());
-				c = r.createCell((int)data.getKey());
-				c.setCellValue((String)data.getValue());
+				c = r.createCell((int)data.getHeaderIndex());
+				c.setCellValue(data.getData());
 			}
 		}
 		
@@ -343,10 +355,10 @@ public class SourceFileManager {
 		    csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
 		    
 		    
-			List csvHeaders = new ArrayList();
+			List<String> csvHeaders = new ArrayList<String>();
 			
 			Map<String, Integer> headerMap = sourceFile.getHeaders(); 	
-			Iterator iter = headerMap.entrySet().iterator();
+			Iterator<?> iter = headerMap.entrySet().iterator();
 			while (iter.hasNext()) {
 				Map.Entry pairs = (Map.Entry)iter.next();
 				csvHeaders.add(pairs.getKey().toString());
@@ -357,14 +369,11 @@ public class SourceFileManager {
 		    csvFilePrinter.printRecord(csvHeaders);
 			
 			//Write a new student object list to the CSV file
-			for (SourceFileRecord data : sourceFile.getRecords()) {
-				List csvRecord = new ArrayList();
+			for (SourceFileRecord record : sourceFile.getRecords()) {
+				List<String> csvRecord = new ArrayList<String>();
 
-				Map<Integer,String> dataMap = data.getData(); 	
-				Iterator it = dataMap.entrySet().iterator();
-				while (it.hasNext()) {
-					Map.Entry pairs = (Map.Entry)it.next();
-					csvRecord.add(pairs.getValue().toString());
+				for (Data data : record.getDatas()) {
+					csvRecord.add(data.getData());
 				}
 		        csvFilePrinter.printRecord(csvRecord);
 			}

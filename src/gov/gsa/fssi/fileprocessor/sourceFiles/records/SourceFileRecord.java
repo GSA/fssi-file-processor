@@ -1,6 +1,8 @@
 package gov.gsa.fssi.fileprocessor.sourceFiles.records;
 
-import java.util.HashMap;
+import gov.gsa.fssi.fileprocessor.sourceFiles.records.datas.Data;
+
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,85 +13,59 @@ import org.slf4j.LoggerFactory;
  */
 public class SourceFileRecord {
 	static Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);	
+	private int rowIndex = 0;
+	private ArrayList<Data> datas = new ArrayList<Data>();	
+	private String status = null;
+	public static String STATUS_ERROR = "error";	
+	public static String STATUS_WARNING = "warning";
+	public static String STATUS_PASS = "pass";		
 	
-	private Integer row = null;
-	
-	//Data contains index to Header and actual row field data
-	private HashMap<Integer,String> data = new HashMap<Integer, String>();	
-	
-	
+	public ArrayList<Data> getDatas() {
+		return datas;
+	}
+	public Data getDataByHeader(short headerIndex) {
+		for (Data data : this.datas) {
+			if(data.getHeaderIndex() == headerIndex){
+				return data;
+			}else{
+				return null;	
+			}
+		}
+		return null;	
+	}
+	public void setDatas(ArrayList<Data> datas) {
+		this.datas = datas;
+	}
+	public void addData(Data data) {
+		this.datas.add(data);
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	/**
 	 * @return the row
 	 */
-	public Integer getRow() {
-		return row;
+	public int getRowIndex() {
+		return rowIndex;
 	}
-
 	/**
 	 * @param row the row to set
 	 */
-	public void setRow(Integer row) {
-		this.row = row;
+	public void setRowIndex(Integer row) {
+		this.rowIndex = row;
 	}
-
-	/**
-	 * @return data
-	 */
-	public HashMap<Integer, String> getData() {
-		return data;
-	}
-
-	/**
-	 * @param data
-	 */
-	public void setData(HashMap<Integer, String> data) {
-		this.data = data;
-	}
-	
-	/**
-	 * @param key
-	 * @param value
-	 */
-	public void addData(Integer key, String value) {
-		this.data.put(key, value);
-	}
-	/**
-	 * @param key
-	 * @return
-	 */
-	public String getDataElementValue(String key) {
-		return data.get(key);
-	}	
-	
-	
-	/**
-	 * @param Key
-	 * @param Value
-	 */
-	public void setDataElement(Integer Key, String Value) {
-		this.data.put(Key, Value);
-	}		
-	
-
-	/**
-	 * @param key
-	 * @param value
-	 */
-	public void addDataElement(Integer key, String value) {
-		this.data.put(key, value);
-	}	
-	
-
-	/**
-	 * @param key
-	 */
-	public void deleteDataElement(int key) {
-		this.data.remove(key);
-	}	
-	
 	
 	public void print(){
-		logger.debug("{}", this.getData());
+		logger.debug(" Row: {} Status: {}",  this.getRowIndex(), this.getStatus());
+		printDatas();
 	}
 	
+	private void printDatas() {
+		for (Data data : this.getDatas()) {
+			data.print();
+		}
+	}
 }
