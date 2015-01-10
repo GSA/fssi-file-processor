@@ -166,9 +166,7 @@ public class SourceFileManager {
 				 logger.info("Processing File {} as a 'XLSX'", sourceFile.getFileExtension());						
 			}
 			
-			logger.info("Atempting to explode File {} against Schema {}", sourceFile.getFileName(), sourceFile.getSchema().getName());
-			
-			
+			logger.info("Atempting to map field names from Schema {} to File {}", sourceFile.getSchema().getName(), sourceFile.getFileName());
 			//Checking sourcefile headers for schema fields...if they have it, we are good to go, otherwise we explode to include element.
 			Map<String, Integer> thisHeader = sourceFile.getHeaders();
 			HashMap<String, Integer> newHeader = new HashMap<String, Integer>();
@@ -199,6 +197,12 @@ public class SourceFileManager {
 				}
 			}
 			sourceFile.setHeaders(newHeader);
+			
+			logger.info("Atempting to explode File {} against Schema {}", sourceFile.getFileName(), sourceFile.getSchema().getName());
+			
+			
+			
+			
 			
 			logger.info("Atempting to validate File {} against Schema {}", sourceFile.getFileName(), sourceFile.getSchema().getName());
 			for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
@@ -423,9 +427,9 @@ public class SourceFileManager {
 			//Write a new student object list to the CSV file
 			for (SourceFileRecord record : sourceFile.getRecords()) {
 				List<String> csvRecord = new ArrayList<String>();
-
-				for (Data data : record.getDatas()) {
-					csvRecord.add(data.getData());
+				while (iter.hasNext()) {
+					Map.Entry pairs = (Map.Entry)iter.next();
+					csvRecord.add(record.getDataByHeader((Short)pairs.getValue()).getData());
 				}
 		        csvFilePrinter.printRecord(csvRecord);
 			}

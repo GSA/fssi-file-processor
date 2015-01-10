@@ -50,5 +50,14 @@
 			</constraints>
 			<alias>PROD_DESCR</alias>
 		</field>	
+		<field>
+			<name>DODAAC</name>
+			<title>DoDAAC</title>
+			<description>Department of Defense Activity Address Code</description>
+			<constraints>
+				<dataType>Number</dataType>
+			</constraints>
+			<alias>AAC</alias>
+		</field>			
 	</fields>
 </schema>
