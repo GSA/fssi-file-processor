@@ -4,6 +4,7 @@ import gov.gsa.fssi.fileprocessor.Config;
 import gov.gsa.fssi.fileprocessor.FileHelper;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.schemas.Schema;
+import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.fileprocessor.sourceFiles.records.datas.Data;
 
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -157,21 +159,67 @@ public class SourceFileManager {
 		for ( SourceFile sourceFile : sourceFiles) {
 			if(sourceFile.getFileExtension().toUpperCase().equals("CSV")){
 				logger.info("Processing File {} as a 'CSV'", sourceFile.getFileName()); 
-				processCSV(sourceFile);
+				loadSourceFileObjectFromCSV(sourceFile);
 			}else if(sourceFile.getFileExtension().toUpperCase().equals("XML")){
 				 logger.info("Processing File {} as a 'XML'", sourceFile.getFileExtension());					
 			}else if(sourceFile.getFileExtension().toUpperCase().equals("XLSX")){
 				 logger.info("Processing File {} as a 'XLSX'", sourceFile.getFileExtension());						
 			}
+			
+			logger.info("Atempting to explode File {} against Schema {}", sourceFile.getFileName(), sourceFile.getSchema().getName());
+			
+			
+			//Checking sourcefile headers for schema fields...if they have it, we are good to go, otherwise we explode to include element.
+			Map<String, Integer> thisHeader = sourceFile.getHeaders();
+			HashMap<String, Integer> newHeader = new HashMap<String, Integer>();
+			Iterator<?> it = thisHeader.entrySet().iterator();
+			//logger.info("{}", thisHeader.size());
+			while (it.hasNext()) {
+				boolean hasSchemaField = false;
+				Map.Entry pairs = (Map.Entry)it.next();
+				for (SchemaField schemaField : sourceFile.getSchema().getFields()) {
+					//See if header field name matches base schema name
+					if (schemaField.getName().toUpperCase().equals(pairs.getKey().toString().toUpperCase())){
+						logger.debug("Header {} name matches Schema", pairs.getKey().toString().toUpperCase());
+						newHeader.put(schemaField.getName(), (Integer)pairs.getValue());
+						hasSchemaField = true;
+					}
+						//If we found an alias, we need to clean up the name
+					for(String alias: schemaField.getAlias()){
+						if (alias.toUpperCase().equals(pairs.getKey().toString().toUpperCase())){
+							logger.info("Header {} in file {} matches alias in from field {}. Changing name", pairs.getKey().toString().toUpperCase(),sourceFile.getFileName(), schemaField.getName());
+							newHeader.put(schemaField.getName(), (Integer)pairs.getValue());
+							hasSchemaField = true;
+						}
+					}
+				}
+				//Could not find the header so we are using what was provided.
+				if(hasSchemaField == false){
+					newHeader.put(pairs.getKey().toString().toUpperCase(), (Integer)pairs.getValue());	
+				}
+			}
+			sourceFile.setHeaders(newHeader);
+			
+			logger.info("Atempting to validate File {} against Schema {}", sourceFile.getFileName(), sourceFile.getSchema().getName());
+			for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
+				for (Data data: sourceFileRecord.getDatas()){
+					
+				}
+				
+			}
+			
 		}
 	}
 
 
 
-	private static void processCSV(SourceFile sourceFile) {
-		 int recordCount = 0;
-		 int emptyRecordCount = 0;
-		
+	/**
+	 * This method ingests a CSV file into a sourceFile Object
+	 * It checks for Null/Empty records
+	 * 
+	 * @param sourceFile
+	 */
+	private static void loadSourceFileObjectFromCSV(SourceFile sourceFile) {
 		 try {
 			Reader in = new FileReader(config.getProperty("sourcefiles_directory") + sourceFile.getFileName());
 			final CSVParser parser = new CSVParser(in, CSVFormat.EXCEL.withHeader());
@@ -179,7 +227,7 @@ public class SourceFileManager {
 			//logger.info("{}",parser.getHeaderMap());
 			
 			for (final CSVRecord csvRecord : parser) {
-				recordCount ++;
+				sourceFile.incrementTotalRecords();
 				
 				SourceFileRecord thisRecord = new SourceFileRecord();
 				Map<String,Integer> header = sourceFile.getHeaders(); 	
@@ -202,7 +250,7 @@ public class SourceFileManager {
 						
 					}
 					
-					//Checking to see if any data was in the row.
+					//Checking to see if any data was in the row. if so, we consider this an Empty Record
 					boolean emptyRowCheck = false;
 					for (Data data : thisRecord.getDatas()) {
 						if(data.getData() == null || data.getData().isEmpty() || data.getData().equals("")){
@@ -214,20 +262,24 @@ public class SourceFileManager {
 					}
 					
 					if(emptyRowCheck == false){
-						sourceFile.addRecord(thisRecord);	
+						thisRecord.setStatus(SourceFileRecord.STATUS_LOADED);
+						sourceFile.addRecord(thisRecord);
+					}else{
+						sourceFile.incrementTotalEmptyRecords();
 					}
 
 				}else{
 					//logger.debug("row {} in file '{}' had no data, ignoring.", recordCount, sourceFile.getFileName());
-					emptyRecordCount ++;
+					sourceFile.incrementTotalNullRecords();
 				}
 		    }
 			
-			if (emptyRecordCount > 0){
-				logger.warn("{} rows had no data in {}", emptyRecordCount, sourceFile.getFileName());
+			if (sourceFile.getTotalEmptyRecords()+sourceFile.getTotalNullRecords() > 0){
+				logger.warn("Only {} out of {} rows processed from {}. Null Rows: {} Empty Records: {}", sourceFile.recordCount(), sourceFile.getTotalRecords(), sourceFile.getFileName(), sourceFile.getTotalNullRecords(), sourceFile.getTotalEmptyRecords());
+			}else{
+				logger.info("All {} Records successfully processed in {}", sourceFile.getTotalRecords(), sourceFile.getFileName());
 			}
-			logger.info("{} out of {} Records successfully processed in {}", sourceFile.recordCount(), recordCount, sourceFile.getFileName());
-			
+			sourceFile.setStatus(SourceFile.STATUS_LOADED);
 			parser.close();
 		} catch (FileNotFoundException e) {
 			logger.error("There was an FileNotFoundException error with file {}", sourceFile.getFileName());

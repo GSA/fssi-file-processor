@@ -32,6 +32,7 @@ public class SchemaManager {
 		
 		for (String fileName : fileNames) {
 		try {
+				boolean dupeSchemaCheck = false;
 				Schema newSchema = new Schema();	
 				File fXmlFile = new File(config.getProperty("schemas_directory") + fileName);
 				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -45,23 +46,33 @@ public class SchemaManager {
 				Node schemaNode = doc.getFirstChild();
 				Element schemaElement = (Element) schemaNode;
 				
-				//All schemas must have a name
-				if (schemaElement.getElementsByTagName("name").item(0).getTextContent() == null || schemaElement.getElementsByTagName("name").item(0).getTextContent().equals("")){
-					logger.error("Schema in file '{}' does not have required element of 'Name'. Ignoring.", fileName);
-				}else{
-				    logger.info("Processing schema '{}' in file '{}'", schemaElement.getElementsByTagName("name").item(0).getTextContent(), fileName);
-					newSchema.setName(schemaElement.getElementsByTagName("name").item(0).getTextContent());
-					newSchema.setProviderName(schemaElement.getElementsByTagName("provider").item(0).getTextContent());
-					newSchema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
-					newSchema.setFields(initializeFields(doc.getElementsByTagName("field")));
-					
-					schemas.add(newSchema);
+				
+				for (Schema schema: schemas){
+					if (schemaElement.getElementsByTagName("name").item(0).getTextContent().toUpperCase().equals(schema.getName())){
+						logger.warn("Duplicate schema {} found in file {}, ignorning", schema.getName(), fileName);
+						dupeSchemaCheck = true;
+					}
+				}
+				
+				if (dupeSchemaCheck == false){
+					//All schemas must have a name
+					if (schemaElement.getElementsByTagName("name").item(0).getTextContent() == null || schemaElement.getElementsByTagName("name").item(0).getTextContent().equals("")){
+						logger.error("Schema in file '{}' does not have required element of 'Name'. Ignoring.", fileName);
+					}else{
+					    logger.info("Processing schema '{}' in file '{}'", schemaElement.getElementsByTagName("name").item(0).getTextContent(), fileName);
+						newSchema.setName(schemaElement.getElementsByTagName("name").item(0).getTextContent());
+						newSchema.setProviderName(schemaElement.getElementsByTagName("provider").item(0).getTextContent());
+						newSchema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
+						newSchema.setFields(initializeFields(doc.getElementsByTagName("field")));
+						
+						schemas.add(newSchema);
+					}
 				}
 			    } catch (Exception e) {
 				    logger.error("Received Exception error while processing {}", fileName);		
 			    	e.printStackTrace();
 			    }
-		
+				
 				// logger.info("     Successfully processed " + fileName);
 			}
 			
@@ -73,9 +84,22 @@ public class SchemaManager {
 
 		public static ArrayList<SchemaField> initializeFields(NodeList fieldNodes) {
 			ArrayList<SchemaField> fields = new ArrayList<SchemaField>();
-			
 			for (int temp = 0; temp < fieldNodes.getLength(); temp++) {
-				fields.add(initializeField(fieldNodes.item(temp)));
+				boolean dupeCheck = false;
+				SchemaField newField = initializeField(fieldNodes.item(temp));
+				//logger.info("Processed field, now adding to array");
+				for (SchemaField schemaField : fields) {
+					if(schemaField.getName().equals(newField.getName())){
+						logger.warn("Duplicate field {} found. Ignoring", newField.getName());
+						dupeCheck = true;
+					}
+				}
+				
+				if(dupeCheck == false){
+					fields.add(newField);		
+					logger.info("Successfully added field '{}'", newField.getName());
+				}
+
 			}
 		
 			return fields;
@@ -91,11 +115,19 @@ public class SchemaManager {
 			
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element fieldElement = (Element) node;
-				field.setDescription(fieldElement.getElementsByTagName("description").item(0).getTextContent().toUpperCase());
-				field.setName(fieldElement.getElementsByTagName("name").item(0).getTextContent().toUpperCase());
-				field.setTitle(fieldElement.getElementsByTagName("title").item(0).getTextContent().toUpperCase());
-
 				
+				if(!(fieldElement.getElementsByTagName("description").item(0).getTextContent()  == null)){
+					field.setDescription(fieldElement.getElementsByTagName("description").item(0).getTextContent().toUpperCase());					
+				}
+				if(!(fieldElement.getElementsByTagName("name").item(0).getTextContent()  == null)){
+					field.setName(fieldElement.getElementsByTagName("name").item(0).getTextContent().toUpperCase());	
+					logger.info("Processing field '{}'", field.getName());
+				}
+				if(!(fieldElement.getElementsByTagName("title").item(0).getTextContent()  == null)){
+					field.setTitle(fieldElement.getElementsByTagName("title").item(0).getTextContent().toUpperCase());					
+				}
+				
+							
 				//Getting Constraints		
 				constraintNode = fieldElement.getElementsByTagName("constraints").item(0);
 				if(constraintNode != null){
@@ -123,14 +155,16 @@ public class SchemaManager {
 									if(constraintNode.getAttributes().getNamedItem("effectiveDate") != null){
 										constraint.addOption("effectiveDate", constraintNode.getAttributes().getNamedItem("effectiveDate").getNodeValue().toString().toUpperCase());
 									}
-
+									
 									field.addConstraint(constraint);	
 								}								
 								
 							}
 						}
 					}
-				}				
+				}else{
+					logger.info("Did not find any constraints");
+				}
 						
 				
 				//Getting Alias
@@ -138,14 +172,16 @@ public class SchemaManager {
 				for (int i = 0; i < alias.getLength(); i++) {
 					boolean dupeAliasCheck = false;
 					Element currentElement = (Element) alias.item(i);
+					//Checking for duplicate alias
 					for (String aliasList : field.getAlias()) {
-						if(currentElement.getTextContent().trim().toUpperCase().equals(aliasList)){
+						if(currentElement.getTextContent().trim().toUpperCase().equals(aliasList.toUpperCase().trim())){
 							dupeAliasCheck = true;
 							logger.warn("Ignoring duplicate Alias '{}' from field: '{}'", aliasList,  field.getName());
 						}
 					}
 					if(dupeAliasCheck == false){
-						field.addAlias(currentElement.getTextContent().trim().toUpperCase());						
+						field.addAlias(currentElement.getTextContent().trim().toUpperCase());				
+						logger.info("added alias {} to field {}", currentElement.getTextContent().trim().toUpperCase(), field.getName());
 					}
 				}
 			}			

@@ -39,6 +39,16 @@
 			<alias>Order_Num</alias>
 			<alias>Ord_Number</alias>	
 			<alias>Ord_Num</alias>			
-		</field>		
+		</field>	
+		<field>
+			<name>PRODUCT_DESCRIPTION</name>
+			<title>Product Description</title>
+			<description>Description of product</description>
+			<constraints>
+				<required effectiveDate="2014-10-01">true</required>
+				<dataType>Number</dataType>
+			</constraints>
+			<alias>PROD_DESCR</alias>
+		</field>	
 	</fields>
 </schema>
