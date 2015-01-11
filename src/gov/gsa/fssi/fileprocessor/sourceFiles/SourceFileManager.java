@@ -166,56 +166,23 @@ public class SourceFileManager {
 				 logger.info("Processing File {} as a 'XLSX'", sourceFile.getFileExtension());						
 			}
 			
-			logger.info("Atempting to map field names from Schema {} to File {}", sourceFile.getSchema().getName(), sourceFile.getFileName());
-			//Checking sourcefile headers for schema fields...if they have it, we are good to go, otherwise we explode to include element.
-			Map<String, Integer> thisHeader = sourceFile.getHeaders();
-			HashMap<String, Integer> newHeader = new HashMap<String, Integer>();
-			Iterator<?> it = thisHeader.entrySet().iterator();
-			//logger.info("{}", thisHeader.size());
-			while (it.hasNext()) {
-				boolean hasSchemaField = false;
-				Map.Entry pairs = (Map.Entry)it.next();
-				for (SchemaField schemaField : sourceFile.getSchema().getFields()) {
-					//See if header field name matches base schema name
-					if (schemaField.getName().toUpperCase().equals(pairs.getKey().toString().toUpperCase())){
-						logger.debug("Header {} name matches Schema", pairs.getKey().toString().toUpperCase());
-						newHeader.put(schemaField.getName(), (Integer)pairs.getValue());
-						hasSchemaField = true;
-					}
-						//If we found an alias, we need to clean up the name
-					for(String alias: schemaField.getAlias()){
-						if (alias.toUpperCase().equals(pairs.getKey().toString().toUpperCase())){
-							logger.info("Header {} in file {} matches alias in from field {}. Changing name", pairs.getKey().toString().toUpperCase(),sourceFile.getFileName(), schemaField.getName());
-							newHeader.put(schemaField.getName(), (Integer)pairs.getValue());
-							hasSchemaField = true;
-						}
-					}
-				}
-				//Could not find the header so we are using what was provided.
-				if(hasSchemaField == false){
-					newHeader.put(pairs.getKey().toString().toUpperCase(), (Integer)pairs.getValue());	
-				}
-			}
-			sourceFile.setHeaders(newHeader);
 			
-			logger.info("Atempting to explode File {} against Schema {}", sourceFile.getFileName(), sourceFile.getSchema().getName());
-			
-			
-			
-			
-			
-			logger.info("Atempting to validate File {} against Schema {}", sourceFile.getFileName(), sourceFile.getSchema().getName());
-			for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
-				for (Data data: sourceFileRecord.getDatas()){
-					
-				}
+			//sourceFile Schema Processing
+			if(sourceFile.getSchema() != null){
+				sourceFile.explodeHeadersToSchema();
 				
+//				logger.info("Atempting to validate File {} against Schema {}", sourceFile.getFileName(), sourceFile.getSchema().getName());
+//				for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
+//					for (Data data: sourceFileRecord.getDatas()){
+//						
+//					}
+//				}
+			}else{
+				logger.info("No schema was found for file {}. Ignoring sourceFile schema processing", sourceFile.getFileName());
 			}
 			
 		}
 	}
-
-
 
 	/**
 	 * This method ingests a CSV file into a sourceFile Object
@@ -227,29 +194,37 @@ public class SourceFileManager {
 		 try {
 			Reader in = new FileReader(config.getProperty("sourcefiles_directory") + sourceFile.getFileName());
 			final CSVParser parser = new CSVParser(in, CSVFormat.EXCEL.withHeader());
-			sourceFile.setHeaders(parser.getHeaderMap());
+			
+			//Converting Apache Commons CSV header map from <String, Integer> to <Integer,String>
+			Map<String, Integer> parserHeaderMap = parser.getHeaderMap();
+			Iterator<?> parserHeaderMapIterator = parserHeaderMap.entrySet().iterator();
+			while (parserHeaderMapIterator.hasNext()) {
+				Map.Entry pairs = (Map.Entry)parserHeaderMapIterator.next();
+				sourceFile.addHeader((Integer)pairs.getValue(), pairs.getKey().toString());
+			}
+			
 			//logger.info("{}",parser.getHeaderMap());
 			
 			for (final CSVRecord csvRecord : parser) {
 				sourceFile.incrementTotalRecords();
 				
 				SourceFileRecord thisRecord = new SourceFileRecord();
-				Map<String,Integer> header = sourceFile.getHeaders(); 	
 				
 				//Ignoring null rows
-				if (csvRecord.size() > 1 && header.size() > 1){
-					Iterator<?> it = header.entrySet().iterator();
-					while (it.hasNext()) {
-						Map.Entry pairs = (Map.Entry)it.next();
+				if (csvRecord.size() > 1 && sourceFile.getHeaders().size() > 1){
+					Iterator<?> headerIterator = sourceFile.getHeaders().entrySet().iterator();
+					while (headerIterator.hasNext()) {
+						Map.Entry pairs = (Map.Entry)headerIterator.next();
 						Data data = new Data();
 						try {
-							data.setData(csvRecord.get(pairs.getKey().toString()));
-							data.setHeaderIndex((Integer)pairs.getValue());
+							data.setData(csvRecord.get(pairs.getValue().toString()));
+							data.setHeaderIndex((Integer)pairs.getKey());
 							data.setStatus(Data.STATUS_LOADED);
 							thisRecord.addData(data);
 						} catch (IllegalArgumentException e) {
 							//logger.error("Failed to process record '{} - {}' in file '{}'", pairs.getKey().toString(), pairs.getValue().toString(), sourceFile.getFileName());
 							logger.error("{}", e.getMessage());
+							data.setStatus(Data.STATUS_ERROR);
 						}
 						
 					}
@@ -355,15 +330,13 @@ public class SourceFileManager {
 		//creating header row
 		r = s.createRow(0);
 
-		Map<String,Integer> headers = sourceFile.getHeaders(); 	
-		Iterator<?> headerMap = headers.entrySet().iterator();
-		while (headerMap.hasNext()) {
-			Map.Entry header = (Map.Entry)headerMap.next();
-			c = r.createCell((int) header.getValue());
-			c.setCellValue((String)header.getKey());
+		for(int i=0; i < sourceFile.getHeaders().size();i++){
+			c = r.createCell(i);
+			c.setCellValue(sourceFile.getHeaders().get(i));
 		}
 		
 		int counter = 0;
+		
 		//Now lets put some data in there....
 		for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
 			counter ++;	
@@ -371,7 +344,7 @@ public class SourceFileManager {
 			
 			ArrayList<Data> records = sourceFileRecord.getDatas(); 	
 			for (Data data : records) {
-				//logger.debug("{}", data.getKey());
+				//logger.debug("{}", data.getHeaderIndex());
 				c = r.createCell((int)data.getHeaderIndex());
 				c.setCellValue(data.getData());
 			}
@@ -412,11 +385,11 @@ public class SourceFileManager {
 		    
 		    
 			List<String> csvHeaders = new ArrayList<String>();
-			
-			Map<String, Integer> headerMap = sourceFile.getHeaders(); 	
-			Iterator<?> iter = headerMap.entrySet().iterator();
-			while (iter.hasNext()) {
-				Map.Entry pairs = (Map.Entry)iter.next();
+			//Writing Headers
+			Map<Integer,String> headerMap = sourceFile.getHeaders(); 	
+			Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
+			while (headerMapIterator.hasNext()) {
+				Map.Entry pairs = (Map.Entry)headerMapIterator.next();
 				csvHeaders.add(pairs.getKey().toString());
 			}
 		    
@@ -424,12 +397,17 @@ public class SourceFileManager {
 		    //Create CSV file header
 		    csvFilePrinter.printRecord(csvHeaders);
 			
-			//Write a new student object list to the CSV file
+		    //Writing Data
 			for (SourceFileRecord record : sourceFile.getRecords()) {
 				List<String> csvRecord = new ArrayList<String>();
-				while (iter.hasNext()) {
-					Map.Entry pairs = (Map.Entry)iter.next();
-					csvRecord.add(record.getDataByHeader((Short)pairs.getValue()).getData());
+				while (headerMapIterator.hasNext()) {
+					Map.Entry headerMapPairs = (Map.Entry)headerMapIterator.next();
+					//In case no data is there, we put in ""
+					if(record.getDataByHeader((Short)headerMapPairs.getKey()).getData() != null){
+						csvRecord.add(record.getDataByHeader((Short)headerMapPairs.getValue()).getData());						
+					}else{
+						csvRecord.add("");
+					}
 				}
 		        csvFilePrinter.printRecord(csvRecord);
 			}

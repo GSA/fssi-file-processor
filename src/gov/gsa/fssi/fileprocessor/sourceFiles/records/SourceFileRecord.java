@@ -61,13 +61,16 @@ public class SourceFileRecord {
 	}
 	
 	public void print(){
-		logger.debug(" Row: {} Status: {}",  this.getRowIndex(), this.getStatus());
-		printDatas();
+		
+		logger.debug(" Row: {} Status: {} Data: {}",  this.getRowIndex(), this.getStatus(), this.printDatas());
+		//printDatas();
 	}
 	
-	private void printDatas() {
+	private ArrayList<String> printDatas() {
+		ArrayList<String> row = new ArrayList<String>();
 		for (Data data : this.getDatas()) {
-			data.print();
+			row.add(data.getHeaderIndex()+" = "+(data == null? "" : data.getData()));
 		}
+		return row;
 	}
 }

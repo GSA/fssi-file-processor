@@ -2,11 +2,14 @@ package gov.gsa.fssi.fileprocessor.sourceFiles;
 
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.schemas.Schema;
+import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
+import gov.gsa.fssi.fileprocessor.sourceFiles.records.datas.Data;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -34,7 +37,7 @@ public class SourceFile{
 	private Integer totalProcessedRecords = 0;
 	private Integer totalNullRecords = 0;
 	private Integer totalEmptyRecords = 0;
-	private Map<String, Integer> headers = new HashMap<String,Integer>();
+	private Map<Integer, String> headers = new HashMap<Integer, String>();
 	private ArrayList<SourceFileRecord> records = new ArrayList<SourceFileRecord>();
 	public static String STATUS_INITIALIZED = "initialized";	
 	public static String STATUS_STAGED = "staged";
@@ -154,19 +157,19 @@ public class SourceFile{
 	/**
 	 * @return the headers
 	 */
-	public Map<String, Integer> getHeaders() {
+	public Map<Integer, String> getHeaders() {
 		return headers;
 	}
 	/**
 	 * @param map the headers to set
 	 */
-	public void setHeaders(Map<String, Integer> map) {
+	public void setHeaders(Map<Integer, String> map) {
 		this.headers = map;
 	}
 	/**
 	 * @param map the headers to set
 	 */
-	public void addHeader(String key, Integer value) {
+	public void addHeader(Integer key, String value) {
 		this.headers.put(key, value);
 	}
 	/**
@@ -249,6 +252,96 @@ public class SourceFile{
 	public SourceFile() {
 	
 	}
+	/**
+	 * This method fixes the column header names (Key) to match the Schema.
+	 */
+	public void updateHeadersNamesToMatchSchema(){
+		if(this.getSchema() != null){
+			logger.info("Atempting to map field names from Schema {} to File {}", this.getSchema().getName(), this.getFileName());
+			//Checking sourcefile headers for schema fields...if they have it, we are good to go, otherwise we explode to include element.
+			Map<Integer, String> thisHeader = this.getHeaders();
+			HashMap<Integer, String> newHeader = new HashMap<Integer, String>();
+			Iterator<?> thisHeaderIterator = thisHeader.entrySet().iterator();
+			while (thisHeaderIterator.hasNext()) {
+				Map.Entry pairs = (Map.Entry)thisHeaderIterator.next();
+				newHeader.put((Integer)pairs.getKey(), this.getSchema().getFieldName(pairs.getValue().toString().trim().toUpperCase()));
+			}
+			this.setHeaders(newHeader);
+			logger.info("Headers have been updated");	
+		}else{
+			logger.info("No schema was found for file {}. Will not Map Schema Fields to Header", this.getFileName());
+		}
+	}
+	/**
+	 * This method adds missing headers and re-organizes the data to put schema headers first
+	 */
+	public void explodeHeadersToSchema(){
+		
+		HashMap<Integer, String> newHeader = new HashMap<Integer, String>();	
+		//This is our count to determine location of each header
+		Integer headerCounter = 0;
+		
+		//First, lets add all of the fields from our Schema, they always go first
+		for (SchemaField field : this.getSchema().getFields()) {
+			newHeader.put(headerCounter, field.getName());
+			headerCounter ++;
+		}
+		
+		//Second, prep this sourcefiles 
+		this.updateHeadersNamesToMatchSchema();
+		//logger.debug("{}", this.getHeaders());
+		//logger.debug("{}", newHeader);
+		//Now we iterate through the existing header and add any additional fields as well as create our "Translation Map"
+		Map<Integer, String> thisHeader = this.getHeaders();
+		//The headerTranslationMap object translates the old headerIndex, to the new header index.
+		//Key = Old Index, Value = New Index
+		HashMap<Integer, Integer> headerTranslationMap = new HashMap<Integer, Integer>();
+		
+		Iterator<?> sourceFileHeaderIterator = thisHeader.entrySet().iterator();
+		
+		
+		while (sourceFileHeaderIterator.hasNext()) {
+			boolean foundColumn = false;
+			Map.Entry<Integer, String> thisHeaderPairs = (Map.Entry)sourceFileHeaderIterator.next();
+			Iterator<?> newHeaderIterator = newHeader.entrySet().iterator();
+			//We need to check to see if the header is already in the index. If so, we need to put the index in the translation map
+			while (newHeaderIterator.hasNext()) {
+				Map.Entry<Integer, String> newHeaderPairs = (Map.Entry)newHeaderIterator.next();
+				if (newHeaderPairs.getValue().toString().toUpperCase().equals(thisHeaderPairs.getValue().toString().toUpperCase())){
+					logger.info("Mapping header field '{} - {}' to new index {}", thisHeaderPairs.getValue().toString().toUpperCase(), thisHeaderPairs.getKey(), newHeaderPairs.getKey());
+					headerTranslationMap.put(thisHeaderPairs.getKey(), newHeaderPairs.getKey());
+					foundColumn = true;
+				}
+			}
+			
+			if(!foundColumn){
+				logger.info("Source field '{} - {}' was not in new header, adding to newHeader index '{} - {}'", thisHeaderPairs.getValue().toString().toUpperCase(), thisHeaderPairs.getKey(), thisHeaderPairs.getValue(), headerCounter);
+				headerTranslationMap.put(thisHeaderPairs.getKey(), headerCounter);
+				newHeader.put(headerCounter, thisHeaderPairs.getValue().toString().toUpperCase());
+				headerCounter ++;
+			}
+			
+		}
+	
+		//Now we reset the HeaderIndex's in the data object
+		logger.info("Old Header:{}", this.getHeaders());
+		this.setHeaders(newHeader);
+		logger.debug("New Header: {}", this.getHeaders());
+		logger.debug("Header Translation (Old/New): {}", headerTranslationMap);
+		for (SourceFileRecord sourceFileRecord : records) {
+			//sourceFileRecord.print();
+			for (Data data : sourceFileRecord.getDatas()) {
+					data.setHeaderIndex(headerTranslationMap.get(data.getHeaderIndex()));
+			}
+			//sourceFileRecord.print();
+		}
+		
+		
+		//Lastly, we need to update data.
+		
+	}
+	
+	
 	
 	/**
 	 * 
