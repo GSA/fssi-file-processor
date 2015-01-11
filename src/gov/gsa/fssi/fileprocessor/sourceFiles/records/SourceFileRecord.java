@@ -39,6 +39,32 @@ public class SourceFileRecord {
 	public void addData(Data data) {
 		this.datas.add(data);
 	}
+	public void deleteData(Data data) {
+		this.datas.remove(this.datas.indexOf(data));
+	}
+	public void deletDataByIndex(int dataIndex) {
+		this.datas.remove(dataIndex);
+	}
+	/**
+	 * 
+	 * @param headerIndex
+	 */
+	public void deleteDataByHeaderIndex(int headerIndex) {
+		Integer dataIndex = null;
+		//First we generate the list of objects to delete
+		for(Data data: this.getDatas()){
+			if(data.getHeaderIndex() == headerIndex){
+				dataIndex = this.datas.indexOf(data);
+			}
+		}
+		
+		//Now we delete the object
+		if(dataIndex != null){
+			//logger.info("found data with index {} which is headerIndex {}", dataIndex, headerIndex);
+			deletDataByIndex(dataIndex);	
+		}
+	}
+	
 	public String getStatus() {
 		return status;
 	}
@@ -59,9 +85,11 @@ public class SourceFileRecord {
 	}
 	
 	public void print(){
-		
+		logger.debug(" Row: {} Status: {} Data Elements: {}",  this.getRowIndex(), this.getStatus(), this.getDatas().size());
+	}
+	
+	public void printAll(){
 		logger.debug(" Row: {} Status: {} Data: {}",  this.getRowIndex(), this.getStatus(), this.printDatas());
-		//printDatas();
 	}
 	
 	private ArrayList<String> printDatas() {

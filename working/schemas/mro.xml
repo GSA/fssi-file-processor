@@ -58,6 +58,15 @@
 				<dataType>Number</dataType>
 			</constraints>
 			<alias>AAC</alias>
-		</field>			
+		</field>
+		<field>
+			<name>UNIT_OF_MEASURE</name>
+			<title>Unit of Measure</title>
+			<description></description>
+			<constraints>
+				<dataType>Number</dataType>
+			</constraints>
+			<alias>UOI</alias>
+		</field>				
 	</fields>
 </schema>

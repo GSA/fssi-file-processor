@@ -169,14 +169,14 @@ public class SourceFileManager {
 			
 			//sourceFile Schema Processing
 			if(sourceFile.getSchema() != null){
-				sourceFile.explodeHeadersToSchema();
-				
-//				logger.info("Atempting to validate File {} against Schema {}", sourceFile.getFileName(), sourceFile.getSchema().getName());
-//				for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
-//					for (Data data: sourceFileRecord.getDatas()){
-//						
-//					}
-//				}
+				if(config.getProperty("debug").equals("true")){
+					logger.info("We are in debug mode, exploding SourceFile to Schema");
+					sourceFile.explodeSourceFileToSchema();					
+				}else{
+					logger.info("We are not in debug mode, exploding SourceFile to Schema");
+					sourceFile.implodeSourceFileToSchema();	
+				}
+
 			}else{
 				logger.info("No schema was found for file {}. Ignoring sourceFile schema processing", sourceFile.getFileName());
 			}
@@ -217,7 +217,7 @@ public class SourceFileManager {
 						Map.Entry pairs = (Map.Entry)headerIterator.next();
 						Data data = new Data();
 						try {
-							data.setData(csvRecord.get(pairs.getValue().toString()));
+							data.setData(csvRecord.get(pairs.getValue().toString()).trim());
 							data.setHeaderIndex((Integer)pairs.getKey());
 							data.setStatus(Data.STATUS_LOADED);
 							thisRecord.addData(data);
@@ -402,6 +402,7 @@ public class SourceFileManager {
 				List<String> csvRecord = new ArrayList<String>();
 				for(int i = 0;i < sourceFile.getHeaders().size();i++){
 					if(sourceFileRecord.getDataByHeaderIndex(i)!= null && sourceFileRecord.getDataByHeaderIndex(i).getData() != null){
+						//sourceFileRecord.print();
 						csvRecord.add(sourceFileRecord.getDataByHeaderIndex(i).getData());						
 					}else{
 						csvRecord.add("");

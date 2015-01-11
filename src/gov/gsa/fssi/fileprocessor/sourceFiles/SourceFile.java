@@ -275,7 +275,7 @@ public class SourceFile{
 	/**
 	 * This method adds missing headers and re-organizes the data to put schema headers first
 	 */
-	public void explodeHeadersToSchema(){
+	public void explodeSourceFileToSchema(){
 		
 		HashMap<Integer, String> newHeader = new HashMap<Integer, String>();	
 		//This is our count to determine location of each header
@@ -335,13 +335,83 @@ public class SourceFile{
 			}
 			//sourceFileRecord.print();
 		}
-		
-		
-		//Lastly, we need to update data.
-		
 	}
 	
 	
+	/**
+	 * This method maps a sourceFile to its schema and then conforms the file/data to the schema format 
+	 * We delete any data that is no longer necessary
+	 */	
+	public void implodeSourceFileToSchema(){
+		
+		HashMap<Integer, String> newHeader = new HashMap<Integer, String>();	
+		//This is our count to determine location of each header
+		Integer headerCounter = 0;
+		
+		//First, lets add all of the fields from our Schema, they always go first
+		for (SchemaField field : this.getSchema().getFields()) {
+			newHeader.put(headerCounter, field.getName());
+			headerCounter ++;
+		}
+		
+		//Second, prep this sourcefiles 
+		this.updateHeadersNamesToMatchSchema();
+		//logger.debug("{}", this.getHeaders());
+		//logger.debug("{}", newHeader);
+		//Now we iterate through the existing header and add any additional fields as well as create our "Translation Map"
+		Map<Integer, String> thisHeader = this.getHeaders();
+		//The headerTranslationMap object translates the old headerIndex, to the new header index.
+		//Key = Old Index, Value = New Index
+		HashMap<Integer, Integer> headerTranslationMap = new HashMap<Integer, Integer>();
+		
+		Iterator<?> sourceFileHeaderIterator = thisHeader.entrySet().iterator();
+		ArrayList<Integer> deleteFieldDataList = new ArrayList<Integer>();
+		
+		while (sourceFileHeaderIterator.hasNext()) {
+			boolean foundColumn = false;
+			Map.Entry<Integer, String> thisHeaderPairs = (Map.Entry)sourceFileHeaderIterator.next();
+			Iterator<?> newHeaderIterator = newHeader.entrySet().iterator();
+			//We need to check to see if the header is already in the index. If so, we need to put the index in the translation map
+			while (newHeaderIterator.hasNext()) {
+				Map.Entry<Integer, String> newHeaderPairs = (Map.Entry)newHeaderIterator.next();
+				if (newHeaderPairs.getValue().toString().toUpperCase().equals(thisHeaderPairs.getValue().toString().toUpperCase())){
+					logger.info("Mapping header field '{} - {}' to new index {}", thisHeaderPairs.getValue().toString().toUpperCase(), thisHeaderPairs.getKey(), newHeaderPairs.getKey());
+					headerTranslationMap.put(thisHeaderPairs.getKey(), newHeaderPairs.getKey());
+					foundColumn = true;
+				}
+			}
+			
+			if(!foundColumn){
+				logger.info("Source field '{} - {}' was not in new header, adding to adding to delete list", thisHeaderPairs.getValue().toString().toUpperCase(), thisHeaderPairs.getKey(), thisHeaderPairs.getValue(), headerCounter);
+				deleteFieldDataList.add(thisHeaderPairs.getKey());
+			}
+			
+		}         
+		logger.info("Deleting headers:{}", deleteFieldDataList);
+		//Now we delete the old data
+		for(SourceFileRecord sourceFileRecord: this.getRecords()){
+			for(Integer deleteField : deleteFieldDataList){
+				sourceFileRecord.deleteDataByHeaderIndex(deleteField);
+			}
+		}
+
+		
+		//Now we reset the HeaderIndex's in the data object
+		logger.info("Old Header:{}", this.getHeaders());
+		this.setHeaders(newHeader);
+		logger.debug("New Header: {}", this.getHeaders());
+		
+		logger.debug("Header Translation (Old/New): {}", headerTranslationMap);
+		for (SourceFileRecord sourceFileRecord : this.records) {
+			//sourceFileRecord.print();
+			for (Data data : sourceFileRecord.getDatas()) {
+					data.setHeaderIndex(headerTranslationMap.get(data.getHeaderIndex()));
+			}
+			//sourceFileRecord.print();
+		}
+		
+		
+	}
 	
 	/**
 	 * 
@@ -358,12 +428,26 @@ public class SourceFile{
 		}		
 		
 		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getStatus(), this.getHeaders().size(), providerString, schemaString);
-		printRecords();	
 	}
 	
+	public void printAll(){
+		String providerString = null;
+		if (!(this.getProvider() == null)){
+			providerString = this.getProvider().getProviderName() + " - " + this.getProvider().getProviderIdentifier();
+		}
+		
+		String schemaString = null;
+		if (!(this.getSchema() == null)){
+			schemaString = this.schema.getName();
+		}		
+		
+		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getStatus(), this.getHeaders().size(), providerString, schemaString);
+		printRecords();	
+	}
 	private void printRecords() {
 		for (SourceFileRecord sourceFileRecord : this.getRecords()) {
 			sourceFileRecord.print();
 		}
 	}
+	
 }
