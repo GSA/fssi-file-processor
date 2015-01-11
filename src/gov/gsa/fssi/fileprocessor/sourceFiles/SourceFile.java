@@ -1,17 +1,36 @@
 package gov.gsa.fssi.fileprocessor.sourceFiles;
 
+import gov.gsa.fssi.fileprocessor.Config;
+import gov.gsa.fssi.fileprocessor.FileHelper;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.schemas.Schema;
 import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.fileprocessor.sourceFiles.records.datas.Data;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +45,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SourceFile{
 	static Logger logger = LoggerFactory.getLogger(SourceFile.class);
+	static Config config = new Config();	    
 	
 	private String fileName = null;
 	private String fileExtension = null;	
@@ -258,15 +278,13 @@ public class SourceFile{
 	public void updateHeadersNamesToMatchSchema(){
 		if(this.getSchema() != null){
 			logger.info("Atempting to map field names from Schema {} to File {}", this.getSchema().getName(), this.getFileName());
-			//Checking sourcefile headers for schema fields...if they have it, we are good to go, otherwise we explode to include element.
 			Map<Integer, String> thisHeader = this.getHeaders();
-			HashMap<Integer, String> newHeader = new HashMap<Integer, String>();
+			//HashMap<Integer, String> newHeader = new HashMap<Integer, String>();
 			Iterator<?> thisHeaderIterator = thisHeader.entrySet().iterator();
 			while (thisHeaderIterator.hasNext()) {
-				Map.Entry pairs = (Map.Entry)thisHeaderIterator.next();
-				newHeader.put((Integer)pairs.getKey(), this.getSchema().getFieldName(pairs.getValue().toString().trim().toUpperCase()));
+				Map.Entry<Integer, String> thisHeaderPairs = (Map.Entry<Integer, String>)thisHeaderIterator.next();
+				this.addHeader((Integer)thisHeaderPairs.getKey(), this.getSchema().getFieldName(thisHeaderPairs.getValue().toString().trim().toUpperCase()));
 			}
-			this.setHeaders(newHeader);
 			logger.info("Headers have been updated");	
 		}else{
 			logger.info("No schema was found for file {}. Will not Map Schema Fields to Header", this.getFileName());
@@ -448,6 +466,271 @@ public class SourceFile{
 		for (SourceFileRecord sourceFileRecord : this.getRecords()) {
 			sourceFileRecord.print();
 		}
+	}	
+	
+	
+	/**
+	 * This method ingests a CSV file into a sourceFile Object
+	 * It checks for Null/Empty records
+	 * 
+	 * @param sourceFile
+	 */
+	private void loadSourceFileObjectFromCSV() {
+		 try {
+			Reader in = new FileReader(config.getProperty("sourcefiles_directory") + this.getFileName());
+			final CSVParser parser = new CSVParser(in, CSVFormat.EXCEL.withHeader());
+			
+			//Converting Apache Commons CSV header map from <String, Integer> to <Integer,String>
+			Map<String, Integer> parserHeaderMap = parser.getHeaderMap();
+			Iterator<?> parserHeaderMapIterator = parserHeaderMap.entrySet().iterator();
+			while (parserHeaderMapIterator.hasNext()) {
+				Map.Entry pairs = (Map.Entry)parserHeaderMapIterator.next();
+				this.addHeader((Integer)pairs.getValue(), pairs.getKey().toString());
+			}
+			
+			//logger.info("{}",parser.getHeaderMap());
+			
+			for (final CSVRecord csvRecord : parser) {
+				this.incrementTotalRecords();
+				
+				SourceFileRecord thisRecord = new SourceFileRecord();
+				
+				//Ignoring null rows
+				if (csvRecord.size() > 1 && this.getHeaders().size() > 1){
+					Iterator<?> headerIterator = this.getHeaders().entrySet().iterator();
+					while (headerIterator.hasNext()) {
+						Map.Entry pairs = (Map.Entry)headerIterator.next();
+						Data data = new Data();
+						try {
+							data.setData(csvRecord.get(pairs.getValue().toString()).trim());
+							data.setHeaderIndex((Integer)pairs.getKey());
+							data.setStatus(Data.STATUS_LOADED);
+							thisRecord.addData(data);
+						} catch (IllegalArgumentException e) {
+							//logger.error("Failed to process record '{} - {}' in file '{}'", pairs.getKey().toString(), pairs.getValue().toString(), sourceFile.getFileName());
+							logger.error("{}", e.getMessage());
+							data.setStatus(Data.STATUS_ERROR);
+						}
+						
+					}
+					
+					//Checking to see if any data was in the row. if so, we consider this an Empty Record
+					boolean emptyRowCheck = false;
+					for (Data data : thisRecord.getDatas()) {
+						if(data.getData() == null || data.getData().isEmpty() || data.getData().equals("")){
+							emptyRowCheck = true;
+						}else{
+							emptyRowCheck = false;
+							break;
+						}
+					}
+					
+					if(emptyRowCheck == false){
+						thisRecord.setStatus(SourceFileRecord.STATUS_LOADED);
+						this.addRecord(thisRecord);
+					}else{
+						this.incrementTotalEmptyRecords();
+					}
+
+				}else{
+					//logger.debug("row {} in file '{}' had no data, ignoring.", recordCount, sourceFile.getFileName());
+					this.incrementTotalNullRecords();
+				}
+		    }
+			
+			if (this.getTotalEmptyRecords()+this.getTotalNullRecords() > 0){
+				logger.warn("Only {} out of {} rows processed from {}. Null Rows: {} Empty Records: {}", this.recordCount(), this.getTotalRecords(), this.getFileName(), this.getTotalNullRecords(), this.getTotalEmptyRecords());
+			}else{
+				logger.info("All {} Records successfully processed in {}", this.getTotalRecords(), this.getFileName());
+			}
+			this.setStatus(SourceFile.STATUS_LOADED);
+			parser.close();
+		} catch (FileNotFoundException e) {
+			logger.error("There was an FileNotFoundException error with file {}", this.getFileName());
+			e.printStackTrace();
+		} catch (IOException e) {
+			logger.error("There was an IOException error with file {}", this.getFileName());
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			logger.error("There was an IllegalArgumentException error with file {}", this.getFileName());
+			e.printStackTrace();
+		}
+	}	
+
+	/**
+	 * @param sourceFile
+	 */
+	public void processSourceFile() {
+		if(this.getFileExtension().toUpperCase().equals("CSV")){
+			logger.info("Processing File {} as a 'CSV'", this.getFileName()); 
+			this.loadSourceFileObjectFromCSV();
+		}else if(this.getFileExtension().toUpperCase().equals("XML")){
+			 logger.info("Processing File {} as a 'XML'", this.getFileExtension());					
+		}else if(this.getFileExtension().toUpperCase().equals("XLSX")){
+			 logger.info("Processing File {} as a 'XLSX'", this.getFileExtension());						
+		}
+		
+		
+		//processing sourcefile for export
+		if(this.getSchema() != null){
+			if(config.getProperty("export_mode") != null && config.getProperty("export_mode").equals("explode")){
+				logger.info("Export mode 'export_mode' set to explode. Exploding file");
+				this.explodeSourceFileToSchema();					
+			}else if(config.getProperty("export_mode") != null && config.getProperty("export_mode").equals("implode")){
+				logger.info("Export mode 'export_mode' set to implode. Imploding file");
+				this.implodeSourceFileToSchema();	
+			}else{
+				logger.info("No Export Mode 'export_mode' provided. leaving file as-is");
+				//sourceFile.implodeSourceFileToSchema();	
+			}
+
+		}else{
+			logger.info("No schema was found for file {}. Ignoring sourceFile schema processing", this.getFileName());
+		}
+	}	
+
+	public void outputStagedSourceFile() {
+		
+		if(this.getProvider().getFileOutputType().toUpperCase().equals("CSV")){
+			logger.info("Exporting File {} as a 'CSV'", this.getFileName()); 
+			this.outputAsCSV();
+		}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XML")){
+			//logger.info("Exporting File {} as a 'XML'", sourceFile.getFileExtension());	
+			logger.error("We don't currently handle XML output at this point");
+		}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XLS")){
+			logger.info("Exporting File {} as a 'XLS'", this.getFileName());
+			this.outputAsExcel();
+		}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XLSX")){
+			logger.info("Exporting File {} as a 'XLSX'", this.getFileName());
+			this.outputAsExcel();				
+		}else{
+			logger.warn("I'm sorry, we cannot export a file as a '{}' defaulting to 'CSV'", this.getFileExtension());
+			outputAsCSV();				
+		}
 	}
+
+
+
+	/**
+	 * This Method takes our SourceFile data and exports it to Excel format
+	 * @param stagedDirectory
+	 * @param newFileName
+	 */
+	private void outputAsExcel() {
+		// create a new file
+		FileOutputStream out;
+		try {
+			out = new FileOutputStream(config.getProperty("staged_directory") + FileHelper.buildFileName(this.getFileName(), this.getProvider().getFileOutputType()));
+
+		// create a new workbook
+		Workbook wb = (this.getProvider().getFileOutputType().toUpperCase().equals("XLSX") ? new XSSFWorkbook() : new HSSFWorkbook());
+		// create a new sheet
+		Sheet s = wb.createSheet();
+		// declare a row object reference
+		Row r = null;
+		// declare a cell object reference
+		Cell c = null;
+
+		//creating header row
+		r = s.createRow(0);
+
+		for(int i=0; i < this.getHeaders().size();i++){
+			c = r.createCell(i);
+			c.setCellValue(this.getHeaders().get(i));
+		}
+		
+		int counter = 0;
+		
+		//Now lets put some data in there....
+		for (SourceFileRecord sourceFileRecord : this.getRecords()) {
+			counter ++;	
+			r = s.createRow(counter);
+			
+			ArrayList<Data> records = sourceFileRecord.getDatas(); 	
+			for (Data data : records) {
+				//logger.debug("{}", data.getHeaderIndex());
+				c = r.createCell((int)data.getHeaderIndex());
+				c.setCellValue(data.getData());
+			}
+		}
+		
+		// write the workbook to the output stream
+		// close our file (don't blow out our file handles
+			wb.write(out);
+			out.close();
+		} catch (IOException e) {
+			logger.error("There was an IOException error with file {}", this.getFileName());// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+	/**
+	 * @param string
+	 * @param sourceFile
+	 */
+	private void outputAsCSV() {
+		//Delimiter used in CSV file
+		String newFileName = FileHelper.buildFileName(this.getFileName(), this.getProvider().getFileOutputType());
+		String newLineSeparator = "\n";
+		FileWriter fileWriter = null;
+		CSVPrinter csvFilePrinter = null;
+		
+		//Create the CSVFormat object with "\n" as a record delimiter
+		CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(newLineSeparator);
+				
+		try {
+			
+			//initialize FileWriter object
+			fileWriter = new FileWriter(config.getProperty("staged_directory") + newFileName);
+			
+			//initialize CSVPrinter object 
+		    csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
+		    
+		    
+			List<String> csvHeaders = new ArrayList<String>();
+			//Writing Headers
+			Map<Integer,String> headerMap = this.getHeaders(); 	
+			Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
+			while (headerMapIterator.hasNext()) {
+				Map.Entry pairs = (Map.Entry)headerMapIterator.next();
+				csvHeaders.add(pairs.getValue().toString());
+			}
+		    
+		    
+		    //Create CSV file header
+		    csvFilePrinter.printRecord(csvHeaders);
+			
+		    //Writing Data
+			for (SourceFileRecord sourceFileRecord : this.getRecords()) {
+				List<String> csvRecord = new ArrayList<String>();
+				for(int i = 0;i < this.getHeaders().size();i++){
+					if(sourceFileRecord.getDataByHeaderIndex(i)!= null && sourceFileRecord.getDataByHeaderIndex(i).getData() != null){
+						//sourceFileRecord.print();
+						csvRecord.add(sourceFileRecord.getDataByHeaderIndex(i).getData());						
+					}else{
+						csvRecord.add("");
+					}	
+				}
+				
+		        csvFilePrinter.printRecord(csvRecord);
+			}
+
+			logger.info("{} Created Successfully. {} Records processed", this.getFileName(), this.recordCount());
+			
+		} catch (Exception e) {
+			logger.error("Received Exception '{}' while processing {}", e.getMessage(), this.getFileName());
+			e.printStackTrace();
+		} finally {
+			try {
+				fileWriter.flush();
+				fileWriter.close();
+				csvFilePrinter.close();
+			} catch (IOException e) {
+				logger.error("Received error while flushing/closing fileWriter for {}", this.getFileName());
+//		        e.printStackTrace();
+			}
+		}
+	}	
 	
 }
