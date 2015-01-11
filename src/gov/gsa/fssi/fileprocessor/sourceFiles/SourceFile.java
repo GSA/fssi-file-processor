@@ -321,7 +321,7 @@ public class SourceFile{
 				headerCounter ++;
 			}
 			
-		}
+		}               
 	
 		//Now we reset the HeaderIndex's in the data object
 		logger.info("Old Header:{}", this.getHeaders());

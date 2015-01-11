@@ -25,12 +25,10 @@ public class SourceFileRecord {
 	public ArrayList<Data> getDatas() {
 		return datas;
 	}
-	public Data getDataByHeader(short headerIndex) {
+	public Data getDataByHeaderIndex(int headerIndex) {
 		for (Data data : this.datas) {
 			if(data.getHeaderIndex() == headerIndex){
 				return data;
-			}else{
-				return null;	
 			}
 		}
 		return null;	

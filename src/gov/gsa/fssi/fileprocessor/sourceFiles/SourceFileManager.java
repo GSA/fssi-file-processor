@@ -390,7 +390,7 @@ public class SourceFileManager {
 			Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
 			while (headerMapIterator.hasNext()) {
 				Map.Entry pairs = (Map.Entry)headerMapIterator.next();
-				csvHeaders.add(pairs.getKey().toString());
+				csvHeaders.add(pairs.getValue().toString());
 			}
 		    
 		    
@@ -398,25 +398,24 @@ public class SourceFileManager {
 		    csvFilePrinter.printRecord(csvHeaders);
 			
 		    //Writing Data
-			for (SourceFileRecord record : sourceFile.getRecords()) {
+			for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
 				List<String> csvRecord = new ArrayList<String>();
-				while (headerMapIterator.hasNext()) {
-					Map.Entry headerMapPairs = (Map.Entry)headerMapIterator.next();
-					//In case no data is there, we put in ""
-					if(record.getDataByHeader((Short)headerMapPairs.getKey()).getData() != null){
-						csvRecord.add(record.getDataByHeader((Short)headerMapPairs.getValue()).getData());						
+				for(int i = 0;i < sourceFile.getHeaders().size();i++){
+					if(sourceFileRecord.getDataByHeaderIndex(i)!= null && sourceFileRecord.getDataByHeaderIndex(i).getData() != null){
+						csvRecord.add(sourceFileRecord.getDataByHeaderIndex(i).getData());						
 					}else{
 						csvRecord.add("");
-					}
+					}	
 				}
+				
 		        csvFilePrinter.printRecord(csvRecord);
 			}
 
 			logger.info("{} Created Successfully. {} Records processed", sourceFile.getFileName(), sourceFile.recordCount());
 			
 		} catch (Exception e) {
-			logger.error("Received Exception while processing {}", sourceFile.getFileName());
-//			e.printStackTrace();
+			logger.error("Received Exception '{}' while processing {}", e.getMessage(), sourceFile.getFileName());
+			e.printStackTrace();
 		} finally {
 			try {
 				fileWriter.flush();
