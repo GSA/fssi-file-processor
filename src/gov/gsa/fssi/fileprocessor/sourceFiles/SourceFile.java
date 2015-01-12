@@ -272,6 +272,17 @@ public class SourceFile{
 	public SourceFile() {
 	
 	}
+	
+	/**
+	 * @param fileName
+	 */
+	public SourceFile(String fileName) {
+		this.setFileName(fileName);
+		int startOfExtension = fileName.lastIndexOf(".")+1;
+		this.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
+		this.setStatus(SourceFile.STATUS_INITIALIZED);
+	}	
+		
 	/**
 	 * This method fixes the column header names (Key) to match the Schema.
 	 */
@@ -477,7 +488,7 @@ public class SourceFile{
 	 */
 	private void loadSourceFileObjectFromCSV() {
 		 try {
-			Reader in = new FileReader(config.getProperty("sourcefiles_directory") + this.getFileName());
+			Reader in = new FileReader(config.getProperty(Config.SOURCEFILES_DIRECTORY) + this.getFileName());
 			final CSVParser parser = new CSVParser(in, CSVFormat.EXCEL.withHeader());
 			
 			//Converting Apache Commons CSV header map from <String, Integer> to <Integer,String>
@@ -573,10 +584,10 @@ public class SourceFile{
 		
 		//processing sourcefile for export
 		if(this.getSchema() != null){
-			if(config.getProperty("export_mode") != null && config.getProperty("export_mode").equals("explode")){
+			if(config.getProperty(Config.EXPORT_MODE) != null && config.getProperty(Config.EXPORT_MODE).equals("explode")){
 				logger.info("Export mode 'export_mode' set to explode. Exploding file");
 				this.explodeSourceFileToSchema();					
-			}else if(config.getProperty("export_mode") != null && config.getProperty("export_mode").equals("implode")){
+			}else if(config.getProperty(Config.EXPORT_MODE) != null && config.getProperty(Config.EXPORT_MODE).equals("implode")){
 				logger.info("Export mode 'export_mode' set to implode. Imploding file");
 				this.implodeSourceFileToSchema();	
 			}else{
@@ -620,7 +631,7 @@ public class SourceFile{
 		// create a new file
 		FileOutputStream out;
 		try {
-			out = new FileOutputStream(config.getProperty("staged_directory") + FileHelper.buildFileName(this.getFileName(), this.getProvider().getFileOutputType()));
+			out = new FileOutputStream(config.getProperty(Config.STAGED_DIRECTORY) + FileHelper.buildFileName(this.getFileName(), this.getProvider().getFileOutputType()));
 
 		// create a new workbook
 		Workbook wb = (this.getProvider().getFileOutputType().toUpperCase().equals("XLSX") ? new XSSFWorkbook() : new HSSFWorkbook());
@@ -682,7 +693,7 @@ public class SourceFile{
 		try {
 			
 			//initialize FileWriter object
-			fileWriter = new FileWriter(config.getProperty("staged_directory") + newFileName);
+			fileWriter = new FileWriter(config.getProperty(Config.STAGED_DIRECTORY) + newFileName);
 			
 			//initialize CSVPrinter object 
 		    csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);

@@ -50,24 +50,15 @@ public class SourceFileManager {
 	 * @param sourceFileDirectory
 	 */
 	public static ArrayList<SourceFile> initializeSourceFiles() {	
-	    logger.debug("Starting initializeSourceFiles('{}')", config.getProperty("sourcefiles_directory"));		
-	    
+	    logger.debug("Starting initializeSourceFiles('{}')", config.getProperty(Config.SOURCEFILES_DIRECTORY));		
 		ArrayList<SourceFile> sourceFiles = new ArrayList<SourceFile>();	
-		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty("sourcefiles_directory"), ".csv ");
 	
 		//Loop through files in sourceFileDirectory and populate SourceFile objects
-		for (String fileName : fileNames) {
-	    	SourceFile newSourceFile = new SourceFile();	
-	    	newSourceFile.setFileName(fileName);
-	    	int startOfExtension = fileName.lastIndexOf(".")+1;
-	    	newSourceFile.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
-	    	newSourceFile.setStatus(SourceFile.STATUS_INITIALIZED);
-		    sourceFiles.add(newSourceFile);		        
+		for (String fileName : FileHelper.getFilesFromDirectory(config.getProperty(Config.SOURCEFILES_DIRECTORY), ".csv ")) {
+	    	sourceFiles.add(new SourceFile(fileName));		        
 		}		    
-		
 		return sourceFiles;
-	}	
-	
+	}
 	
 	
 	/**

@@ -23,18 +23,18 @@ public class SchemaManager {
 	static Config config = new Config();	    
 	
 	public static ArrayList<Schema> initializeSchemas() {
-	    logger.debug("Starting initializeSchemas('{}')", config.getProperty("schemas_directory"));		
+	    logger.debug("Starting initializeSchemas('{}')", config.getProperty(Config.SCHEMAS_DIRECTORY));		
 		
 	    ArrayList<Schema> schemas = new ArrayList<Schema>();	
 		
-		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty("schemas_directory"), ".xml");
+		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty(Config.SCHEMAS_DIRECTORY), ".xml");
 		
 		
 		for (String fileName : fileNames) {
 		try {
 				boolean dupeSchemaCheck = false;
 				Schema newSchema = new Schema();	
-				File fXmlFile = new File(config.getProperty("schemas_directory") + fileName);
+				File fXmlFile = new File(config.getProperty(Config.SCHEMAS_DIRECTORY) + fileName);
 				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 				Document doc = dBuilder.parse(fXmlFile);

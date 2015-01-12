@@ -21,6 +21,15 @@ import org.slf4j.LoggerFactory;
 public class Config {
 	static Logger logger = LoggerFactory.getLogger(Config.class);
 	private Properties prop = null;
+
+	public static String WORKING_DIRECTORY = "working_directory";
+	public static String SOURCEFILES_DIRECTORY = "sourcefiles_directory";
+	public static String SCHEMAS_DIRECTORY = "schemas_directory";	
+	public static String DATAMAPS_DIRECTORY = "datamaps_directory";		
+	public static String LOGS_DIRECTORY = "logs_directory";			
+	public static String PROVIDERS_DIRECTORY = "providers_directory";	
+	public static String STAGED_DIRECTORY = "staged_directory";	
+	public static String EXPORT_MODE = "export_mode";	
 	
 	public static String DEFAULT_WORKING_DIRECTORY = "./working/";
 	public static String DEFAULT_SOURCEFILES_DIRECTORY = "./working/srcfiles/";

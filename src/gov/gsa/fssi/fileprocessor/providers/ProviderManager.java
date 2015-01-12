@@ -36,9 +36,9 @@ public class ProviderManager {
 		ArrayList<Provider> providers = new ArrayList<Provider>();
 		Workbook wb;
 	    
-	    logger.debug("Starting initializeProviders('{}')", config.getProperty("providers_directory"));
+	    logger.debug("Starting initializeProviders('{}')", config.getProperty(Config.PROVIDERS_DIRECTORY));
 		
-		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty("providers_directory"), ".xlsx");
+		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty(Config.PROVIDERS_DIRECTORY), ".xlsx");
 		
 		for (String fileName : fileNames) {		
 			try {
@@ -47,7 +47,7 @@ public class ProviderManager {
 			    int providerIdColumn = 0;	    	    
 			    int fileOutputTypeColumn = 0;	
 			    int providerEmailColumn = 0;
-				wb = WorkbookFactory.create(new File(config.getProperty("providers_directory") + fileName));
+				wb = WorkbookFactory.create(new File(config.getProperty(Config.PROVIDERS_DIRECTORY) + fileName));
 				Sheet sheet1 = wb.getSheetAt(0);
 		    	
 		    	int passCounter = 0;

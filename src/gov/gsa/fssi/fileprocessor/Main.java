@@ -59,11 +59,8 @@ public class Main {
 		//Next, we need to get all of our sourceFiles info. We currently do this up front to make multi-file processing faster
 		ArrayList<SourceFile> sourceFiles = SourceFileManager.initializeSourceFiles();
 	
-		
 	    logger.info("Completed Phase 1");
 	    logger.info("Starting Phase 2: Mapping");
-		
-	    
 	    
 	    //OK, now the fun stuff begins. The first step we do is map all of the files to schemas and providers. 
 		SourceFileManager.validateSourceFileProviders(providers, sourceFiles);	
