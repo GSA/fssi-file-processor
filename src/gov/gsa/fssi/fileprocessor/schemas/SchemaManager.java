@@ -26,11 +26,19 @@ public class SchemaManager {
 	    logger.debug("Starting initializeSchemas('{}')", config.getProperty(Config.SCHEMAS_DIRECTORY));		
 		
 	    ArrayList<Schema> schemas = new ArrayList<Schema>();	
-		
 		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty(Config.SCHEMAS_DIRECTORY), ".xml");
 		
-		
 		for (String fileName : fileNames) {
+			initializeSchema(schemas, fileName);
+		}
+		logger.info("Completed Schema setup. Added " + schemas.size() + " Schemas");
+			
+		return schemas;		
+	}
+
+
+	public static void initializeSchema(ArrayList<Schema> schemas,
+			String fileName) {
 		try {
 				boolean dupeSchemaCheck = false;
 				Schema newSchema = new Schema();	
@@ -74,12 +82,7 @@ public class SchemaManager {
 			    }
 				
 				// logger.info("     Successfully processed " + fileName);
-			}
-			
-			logger.info("Completed Schema setup. Added " + schemas.size() + " Schemas");
-			
-			return schemas;		
-		}	
+	}	
 
 
 		public static ArrayList<SchemaField> initializeFields(NodeList fieldNodes) {

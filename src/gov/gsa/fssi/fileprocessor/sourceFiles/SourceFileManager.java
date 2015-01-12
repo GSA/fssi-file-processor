@@ -4,33 +4,8 @@ import gov.gsa.fssi.fileprocessor.Config;
 import gov.gsa.fssi.fileprocessor.FileHelper;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.schemas.Schema;
-import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
-import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
-import gov.gsa.fssi.fileprocessor.sourceFiles.records.datas.Data;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVRecord;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,6 +75,10 @@ public class SourceFileManager {
 	}	
 	
 	
+	/**
+	 * @param schemas
+	 * @param sourceFiles
+	 */
 	public static void validateSourceFileSchemas(ArrayList<Schema> schemas,
 		ArrayList<SourceFile> sourceFiles) {
 		ArrayList<Integer> badFiles = new ArrayList<Integer>();

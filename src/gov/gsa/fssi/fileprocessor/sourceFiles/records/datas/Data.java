@@ -2,8 +2,6 @@ package gov.gsa.fssi.fileprocessor.sourceFiles.records.datas;
 
 import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
 
-import java.util.HashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

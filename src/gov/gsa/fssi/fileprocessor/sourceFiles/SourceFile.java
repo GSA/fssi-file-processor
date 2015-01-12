@@ -39,7 +39,6 @@ import org.slf4j.LoggerFactory;
  * This is our file object. It is an abstract class that forms the structure of all source files
  * Whether it be xls, xlsx, csv, etc...
  * 
- * 
  * @author David Larrimore
  * 
  */
@@ -262,7 +261,7 @@ public class SourceFile{
 	/**
 	 * @param index
 	 */
-	public void deleteRecord(int index) {
+	public void removeRecord(int index) {
 		this.records.remove(index);
 	}	
 	
@@ -459,6 +458,9 @@ public class SourceFile{
 		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getStatus(), this.getHeaders().size(), providerString, schemaString);
 	}
 	
+	/**
+	 * 
+	 */
 	public void printAll(){
 		String providerString = null;
 		if (!(this.getProvider() == null)){
@@ -473,6 +475,9 @@ public class SourceFile{
 		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getStatus(), this.getHeaders().size(), providerString, schemaString);
 		printRecords();	
 	}
+	/**
+	 * 
+	 */
 	private void printRecords() {
 		for (SourceFileRecord sourceFileRecord : this.getRecords()) {
 			sourceFileRecord.print();
