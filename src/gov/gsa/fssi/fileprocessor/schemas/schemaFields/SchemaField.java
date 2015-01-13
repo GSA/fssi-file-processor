@@ -1,7 +1,9 @@
 package gov.gsa.fssi.fileprocessor.schemas.schemaFields;
 
-import gov.gsa.fssi.fileprocessor.schemas.schemaElements.SchemaElement;
+import gov.gsa.fssi.fileprocessor.schemas.schemaFields.fieldConstraints.FieldConstraint;
+
 import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +14,7 @@ public class SchemaField {
 	private String name = null;
 	private String title = null;	
 	private String description = null;
-	private ArrayList<SchemaElement> constraints = new ArrayList<SchemaElement>();	
+	private ArrayList<FieldConstraint> constraints = new ArrayList<FieldConstraint>();	
 	private ArrayList<String> alias = new ArrayList<String>();		
 	
 	
@@ -55,19 +57,19 @@ public class SchemaField {
 	/**
 	 * @return the constraints
 	 */
-	public ArrayList<SchemaElement> getConstraints() {
+	public ArrayList<FieldConstraint> getConstraints() {
 		return constraints;
 	}
 	/**
 	 * @param constraintMap the constraints to set
 	 */
-	public void setConstraints(ArrayList<SchemaElement> constraintMap) {
+	public void setConstraints(ArrayList<FieldConstraint> constraintMap) {
 		this.constraints = constraintMap;
 	}
 	/**
 	 * @param constraint
 	 */
-	public void addConstraint(SchemaElement constraint) {
+	public void addConstraint(FieldConstraint constraint) {
 		this.constraints.add(constraint);
 	}	
 	/**
@@ -97,7 +99,7 @@ public class SchemaField {
 	}
 	
 	private void printConstraints(){
-		for (SchemaElement constraint : this.getConstraints()) {
+		for (FieldConstraint constraint : this.getConstraints()) {
 			constraint.print();
 		}
 	}

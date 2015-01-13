@@ -327,7 +327,6 @@ public class SourceFile{
 		
 		Iterator<?> sourceFileHeaderIterator = thisHeader.entrySet().iterator();
 		
-		
 		while (sourceFileHeaderIterator.hasNext()) {
 			boolean foundColumn = false;
 			Map.Entry<Integer, String> thisHeaderPairs = (Map.Entry)sourceFileHeaderIterator.next();
@@ -347,8 +346,7 @@ public class SourceFile{
 				headerTranslationMap.put(thisHeaderPairs.getKey(), headerCounter);
 				newHeader.put(headerCounter, thisHeaderPairs.getValue().toString().toUpperCase());
 				headerCounter ++;
-			}
-			
+			}	
 		}               
 	
 		//Now we reset the HeaderIndex's in the data object
@@ -578,14 +576,13 @@ public class SourceFile{
 	 */
 	public void processSourceFile() {
 		if(this.getFileExtension().toUpperCase().equals("CSV")){
-			logger.info("Processing File {} as a 'CSV'", this.getFileName()); 
+			logger.info("Loading file {} as a 'CSV'", this.getFileName()); 
 			this.loadSourceFileObjectFromCSV();
 		}else if(this.getFileExtension().toUpperCase().equals("XML")){
-			 logger.info("Processing File {} as a 'XML'", this.getFileExtension());					
+			 logger.info("Loading File {} as a 'XML'", this.getFileExtension());					
 		}else if(this.getFileExtension().toUpperCase().equals("XLSX")){
-			 logger.info("Processing File {} as a 'XLSX'", this.getFileExtension());						
+			 logger.info("Loading File {} as a 'XLSX'", this.getFileExtension());						
 		}
-		
 		
 		//processing sourcefile for export
 		if(this.getSchema() != null){
@@ -599,7 +596,16 @@ public class SourceFile{
 				logger.info("No Export Mode 'export_mode' provided. leaving file as-is");
 				//sourceFile.implodeSourceFileToSchema();	
 			}
-
+			
+			//Starting Data Validation
+			logger.info("Starting Data validation on file {}", this.getFileName()); 
+			
+			
+			
+			
+			//END DATA VALIDATIOn
+			
+			
 		}else{
 			logger.info("No schema was found for file {}. Ignoring sourceFile schema processing", this.getFileName());
 		}

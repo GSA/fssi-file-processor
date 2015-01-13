@@ -128,7 +128,6 @@ public class SourceFileManager {
 		//OK, now we start processing the files one at a time.
 		for ( SourceFile sourceFile : sourceFiles) {
 			sourceFile.processSourceFile();
-			
 		}
 	}
 	

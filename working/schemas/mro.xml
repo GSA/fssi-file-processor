@@ -9,9 +9,9 @@
 			<title>Order Number</title>
 			<description>Each order should be identified by a unique order identification number</description>         
 			<constraints>
-				<required effectiveDate="2014-10-01">true</required>
-				<required >false</required>
-				<dataType>Number</dataType>
+				<required level="error" effectiveDate="2014-10-01">true</required>
+				<required level="error"  effectiveDate="2014-10-01">false</required>
+				<dataType level="warning" effectiveDate="2014-10-01">Number</dataType>
 			</constraints>
 			<alias>Ord_Num</alias>
 			<alias>Order_Num</alias>
@@ -23,7 +23,7 @@
 			<title>Order Date</title>
 			<description>URI from ODC of publishing organization</description>
 			<constraints>
-				<required>true</required>
+				<required effectiveDate="2014-10-01">true</required>
 			</constraints>
 			<alias>Ord_Date</alias>			
 		</field>
@@ -68,5 +68,13 @@
 			</constraints>
 			<alias>UOI</alias>
 		</field>				
-	</fields>
+		<field>
+			<name>BPA_PRICE</name>
+			<title>Unit of Measure</title>
+			<description></description>
+			<constraints>
+				<dataType>Number</dataType>
+			</constraints>
+		</field>				
+	</fields>	
 </schema>

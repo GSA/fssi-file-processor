@@ -2,17 +2,23 @@ package gov.gsa.fssi.fileprocessor.schemas;
 
 import gov.gsa.fssi.fileprocessor.Config;
 import gov.gsa.fssi.fileprocessor.FileHelper;
-import gov.gsa.fssi.fileprocessor.schemas.schemaElements.SchemaElement;
 import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
+import gov.gsa.fssi.fileprocessor.schemas.schemaFields.fieldConstraints.FieldConstraint;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Attr;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -140,27 +146,49 @@ public class SchemaManager {
 						
 						for (int i = 0; i < constraintList.getLength(); i++) {
 							constraintNode = constraintList.item(i);
-							SchemaElement constraint = new SchemaElement();
+							FieldConstraint constraint = new FieldConstraint();
 							if (constraintNode.getNodeType() == Node.ELEMENT_NODE) {
 								
-								//Checking for Duplicate Coinstraints
-								boolean dupeConstraintCheck = false;
-								for (SchemaElement constraintList1 : field.getConstraints()) {
-									if(constraintNode.getNodeName().toUpperCase().equals(constraintList1.getName().toUpperCase())){
-										dupeConstraintCheck = true;
-										logger.warn("Ignoring duplicate Constraint '{}' from field: '{}'", constraintList1.getName(),  field.getName());
+								constraint.setConstraintType(constraintNode.getNodeName().trim().toUpperCase());
+								constraint.setValue(constraintNode.getTextContent().trim().toUpperCase());									
+								
+								// get a map containing the attributes of this constraint 
+								NamedNodeMap attributeMap = constraintNode.getAttributes();
+								
+								//Iterating through AttributeMap to get parameters of attribute
+								for (int i1 = 0; i1 < attributeMap.getLength(); i1++) {
+									Attr attr = (Attr) attributeMap.item(i1);
+									
+									//Checking for duplicate Attributes
+									boolean dupeAttributeCheck = false;
+									Iterator<Entry<String, String>> constraintAttributeIterator = constraint.getOptions().entrySet().iterator();
+									while (constraintAttributeIterator.hasNext()) {
+										Map.Entry constraintAttributePairs = (Map.Entry)constraintAttributeIterator.next();
+										if(constraintAttributePairs.getKey().toString().trim().toUpperCase().equals(attr.getName().trim().toUpperCase())){
+											dupeAttributeCheck = true;
+											logger.warn("Ignoring duplicate Attribute '{}' from Constraint: '{}'", constraintAttributePairs.getKey(),  constraint.getConstraintType());
+										}
+									}
+									
+									//Duplicate not found, add Option
+									if(dupeAttributeCheck == false){
+										constraint.addOption(attr.getNodeName().trim().toUpperCase(),attr.getNodeValue().trim().toUpperCase()) ;
+										logger.info("Adding Attribute {} - {} to Constraint {}", attr.getNodeName(), attr.getNodeValue(), constraintNode.getNodeName().toUpperCase());	
 									}
 								}
-								if(dupeConstraintCheck == false){
-									constraint.setName(constraintNode.getNodeName().toUpperCase());
-									constraint.setValue(constraintNode.getTextContent().toUpperCase());
-									
-									if(constraintNode.getAttributes().getNamedItem("effectiveDate") != null){
-										constraint.addOption("effectiveDate", constraintNode.getAttributes().getNamedItem("effectiveDate").getNodeValue().toString().toUpperCase());
+								
+								//Checking for Duplicate Constraint
+								boolean dupeConstraintCheck = false;
+								for (FieldConstraint constraintCheck : field.getConstraints()) {
+									if(constraint.getConstraintType().trim().toUpperCase().equals(constraintCheck.getConstraintType().trim().toUpperCase())){
+										dupeConstraintCheck = true;
+										logger.warn("Ignoring duplicate Constraint '{}' from field: '{}'", constraintCheck.getConstraintType(),  field.getName());
 									}
-									
-									field.addConstraint(constraint);	
-								}								
+								}
+								
+								if(dupeConstraintCheck == false){
+									field.addConstraint(constraint);								
+								}
 								
 							}
 						}
