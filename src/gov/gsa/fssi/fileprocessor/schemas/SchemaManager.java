@@ -1,7 +1,8 @@
 package gov.gsa.fssi.fileprocessor.schemas;
 
 import gov.gsa.fssi.fileprocessor.Config;
-import gov.gsa.fssi.fileprocessor.FileHelper;
+import gov.gsa.fssi.fileprocessor.helpers.FileHelper;
+import gov.gsa.fssi.fileprocessor.helpers.XmlHelper;
 import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.fileprocessor.schemas.schemaFields.fieldConstraints.FieldConstraint;
 
@@ -130,12 +131,12 @@ public class SchemaManager {
 				}
 				if(!(fieldElement.getElementsByTagName("name").item(0).getTextContent()  == null)){
 					field.setName(fieldElement.getElementsByTagName("name").item(0).getTextContent().toUpperCase());	
-					logger.info("Processing field '{}'", field.getName());
 				}
 				if(!(fieldElement.getElementsByTagName("title").item(0).getTextContent()  == null)){
 					field.setTitle(fieldElement.getElementsByTagName("title").item(0).getTextContent().toUpperCase());					
 				}
 				
+				logger.info("Processing field '{}'", field.getName());
 							
 				//Getting Constraints		
 				constraintNode = fieldElement.getElementsByTagName("constraints").item(0);
@@ -146,50 +147,40 @@ public class SchemaManager {
 						
 						for (int i = 0; i < constraintList.getLength(); i++) {
 							constraintNode = constraintList.item(i);
-							FieldConstraint constraint = new FieldConstraint();
+							FieldConstraint newConstraint = new FieldConstraint();
 							if (constraintNode.getNodeType() == Node.ELEMENT_NODE) {
+
+								newConstraint.setConstraintType(constraintNode.getNodeName().trim().toUpperCase());
+								newConstraint.setValue(constraintNode.getTextContent().trim().toUpperCase());									
 								
-								constraint.setConstraintType(constraintNode.getNodeName().trim().toUpperCase());
-								constraint.setValue(constraintNode.getTextContent().trim().toUpperCase());									
-								
+								logger.info("Processing Constraint '{}' for field {}", newConstraint.getConstraintType(), field.getName());
 								// get a map containing the attributes of this constraint 
-								NamedNodeMap attributeMap = constraintNode.getAttributes();
 								
-								//Iterating through AttributeMap to get parameters of attribute
-								for (int i1 = 0; i1 < attributeMap.getLength(); i1++) {
-									Attr attr = (Attr) attributeMap.item(i1);
-									
-									//Checking for duplicate Attributes
-									boolean dupeAttributeCheck = false;
-									Iterator<Entry<String, String>> constraintAttributeIterator = constraint.getOptions().entrySet().iterator();
-									while (constraintAttributeIterator.hasNext()) {
-										Map.Entry constraintAttributePairs = (Map.Entry)constraintAttributeIterator.next();
-										if(constraintAttributePairs.getKey().toString().trim().toUpperCase().equals(attr.getName().trim().toUpperCase())){
-											dupeAttributeCheck = true;
-											logger.warn("Ignoring duplicate Attribute '{}' from Constraint: '{}'", constraintAttributePairs.getKey(),  constraint.getConstraintType());
-										}
-									}
-									
-									//Duplicate not found, add Option
-									if(dupeAttributeCheck == false){
-										constraint.addOption(attr.getNodeName().trim().toUpperCase(),attr.getNodeValue().trim().toUpperCase()) ;
-										logger.info("Adding Attribute {} - {} to Constraint {}", attr.getNodeName(), attr.getNodeValue(), constraintNode.getNodeName().toUpperCase());	
+								//NamedNodeMap attributeMap = constraintNode.getAttributes();
+								HashMap<String,String> attributeMap = XmlHelper.convertXmlAttributeToHashMap(constraintNode.getAttributes());
+								Iterator optionsIterator = attributeMap.entrySet().iterator();
+								
+								while (optionsIterator.hasNext()) {
+									Map.Entry<String, String> optionsPair = (Map.Entry)optionsIterator.next();
+									if(!newConstraint.isValidOption(optionsPair.getKey())){
+										logger.warn("Ignoring invalid Option from Constraint: '{}'. {}  is not a valid type", newConstraint.getConstraintType(), optionsPair.getKey());
+									}else if(optionsPair.getKey().toUpperCase() == FieldConstraint.OPTION_LEVEL && !newConstraint.isValidOptionLevel(optionsPair.getValue())){
+										logger.warn("Ignoring invalid Option level from Constraint: '{}'. {} is not a valid level", newConstraint.getConstraintType(), optionsPair.getKey());
+									}else{
+										newConstraint.addOption(optionsPair.getKey(),optionsPair.getValue()) ;
+										logger.info("Adding Attribute {} - {} to Constraint {}", optionsPair.getKey(), optionsPair.getValue(), constraintNode.getNodeName().toUpperCase());		
 									}
 								}
 								
-								//Checking for Duplicate Constraint
-								boolean dupeConstraintCheck = false;
-								for (FieldConstraint constraintCheck : field.getConstraints()) {
-									if(constraint.getConstraintType().trim().toUpperCase().equals(constraintCheck.getConstraintType().trim().toUpperCase())){
-										dupeConstraintCheck = true;
-										logger.warn("Ignoring duplicate Constraint '{}' from field: '{}'", constraintCheck.getConstraintType(),  field.getName());
-									}
+								//if duplicate not found, add constraint								
+								if(isDuplicateConstraint(field, newConstraint)){
+									logger.warn("Ignoring duplicate Constraint '{}' from Field: '{}'", newConstraint.getConstraintType(),  field.getName());
+								}else if(!newConstraint.isValidType(newConstraint.getConstraintType())){
+									logger.warn("Ignoring invalid Constraint from Field: '{}'. '{}' is not a valid type", newConstraint.getConstraintType(), field.getName(), newConstraint.getConstraintType());									
+								}else{
+									logger.info("Successfully added Constraint '{}'", newConstraint.getConstraintType());	
+									field.addConstraint(newConstraint);								
 								}
-								
-								if(dupeConstraintCheck == false){
-									field.addConstraint(constraint);								
-								}
-								
 							}
 						}
 					}
@@ -207,10 +198,10 @@ public class SchemaManager {
 					for (String aliasList : field.getAlias()) {
 						if(currentElement.getTextContent().trim().toUpperCase().equals(aliasList.toUpperCase().trim())){
 							dupeAliasCheck = true;
-							logger.warn("Ignoring duplicate Alias '{}' from field: '{}'", aliasList,  field.getName());
+							//logger.warn("Ignoring duplicate Alias '{}' from field: '{}'", aliasList,  field.getName());
 						}
 					}
-					if(dupeAliasCheck == false){
+					if(isDuplicateConstraintAlias(field, currentElement.getTextContent().trim().toUpperCase())){
 						field.addAlias(currentElement.getTextContent().trim().toUpperCase());				
 						logger.info("added alias {} to field {}", currentElement.getTextContent().trim().toUpperCase(), field.getName());
 					}
@@ -218,6 +209,52 @@ public class SchemaManager {
 			}			
 		return field;	
 	}
-	
+
+		
+		/**
+		 * @param schema
+		 * @param newAlias
+		 * @return
+		 */
+		private static boolean isDuplicateSchemaConstraintAlias(Schema schema, String newAlias){
+			for (SchemaField field : schema.getFields()) {
+				return isDuplicateConstraintAlias(field, newAlias);
+			}
+			return false;
+		}
+
+
+		/**
+		 * @param newAlias
+		 * @param field
+		 * @return 
+		 */
+		private static boolean isDuplicateConstraintAlias(SchemaField field, String newAlias) {
+			for(String alias: field.getAlias()){
+				return (alias.equals(newAlias.trim().toUpperCase())? true:false);
+			}
+			return false;
+		}
+
+
+		/**
+		 * Checks for a duplicate constraint based upon type and option effectivedate
+		 * @param field
+		 * @param newConstraint
+		 * @return
+		 */
+		private static boolean isDuplicateConstraint(SchemaField field,FieldConstraint newConstraint) {
+			for (FieldConstraint constraintCheck : field.getConstraints()) {
+				if(newConstraint.getConstraintType().trim().toUpperCase().equals(constraintCheck.getConstraintType().trim().toUpperCase())){
+					if(newConstraint.getOptions().containsKey(FieldConstraint.OPTION_EFFECTIVEDATE) && constraintCheck.getOptions().containsKey(FieldConstraint.OPTION_EFFECTIVEDATE)){
+						return (newConstraint.getOptionValue(FieldConstraint.OPTION_EFFECTIVEDATE) == constraintCheck.getOptionValue(FieldConstraint.OPTION_EFFECTIVEDATE)? true:false);
+					}else if(!newConstraint.getOptions().containsKey(FieldConstraint.OPTION_EFFECTIVEDATE) && !constraintCheck.getOptions().containsKey(FieldConstraint.OPTION_EFFECTIVEDATE)){
+						//logger.debug("Both constraints had no effective date, is duplicate");
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 		
 }

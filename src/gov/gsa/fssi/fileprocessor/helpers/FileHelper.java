@@ -1,4 +1,4 @@
-package gov.gsa.fssi.fileprocessor;
+package gov.gsa.fssi.fileprocessor.helpers;
 
 import java.io.File;
 import java.util.ArrayList;
