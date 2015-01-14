@@ -1,6 +1,7 @@
 package gov.gsa.fssi.fileprocessor.sourceFiles;
 
 import gov.gsa.fssi.fileprocessor.Config;
+import gov.gsa.fssi.fileprocessor.helpers.DateHelper;
 import gov.gsa.fssi.fileprocessor.helpers.FileHelper;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.schemas.Schema;
@@ -18,7 +19,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -341,36 +344,34 @@ public class SourceFile{
 					Date date = new Date();
 					//if 6 digits, we attempt to get a Reporting Period in mmYYYY format, example 072015 is July 2015
 					if(fileNamePart.length() == 6){
-						DateFormat format = new SimpleDateFormat("MMyyyy", Locale.ENGLISH);
-						try {
-							logger.info("Attempting to extract date from fileNamePart: '{}'", fileNamePart);
-							date = format.parse(fileNamePart);
-						} catch (ParseException e) {
-							logger.error("There was an '{}' error attempting to get date from fileNamePart: '{}'",e.getMessage(), fileNamePart);
-							e.printStackTrace();
-						}
+						date = DateHelper.getDate(fileNamePart, DateHelper.FORMAT_MMYYYY);
 					//if 8 digits, we attempt to get a Reporting Period in MMddyyyy format, example 07252015 is July 25, 2015	
 					}else if(fileNamePart.length() == 8){
-						DateFormat format = new SimpleDateFormat("MMddyyyy", Locale.ENGLISH);
-						try {
-							logger.info("Attempting to extract date from fileNamePart: '{}'", fileNamePart);
-							date = format.parse(fileNamePart);
-	
-						} catch (ParseException e) {
-							logger.error("There was an '{}' error attempting to get date from fileNamePart: '{}'",e.getMessage(), fileNamePart);
-							e.printStackTrace();
-						}
+						date = DateHelper.getDate(fileNamePart, DateHelper.FORMAT_MMDDYYYY);
 					}
 					if(date != null){
 						logger.info("Processed date as '{}'",date.toString());
 						//TODO: We need to make sure that the reporting date is not in the future or before 2000.
-						this.setReportingPeriod(date);
+						Date todaysDate = DateHelper.getTodaysDate();
+						Date minimumDate = DateHelper.getDate("012000", DateHelper.FORMAT_MMYYYY);
+						
+						if(date.compareTo(todaysDate) > 0){
+							logger.error("ReportingPeriod '{}' found in FileName is later than current date. Please check file name", date.toString());
+							this.setStatus(SourceFile.STATUS_ERROR);
+						}else if(date.compareTo(minimumDate) < 0){
+							logger.error("ReportingPeriod '{}' found in FileName is before the year 2000 and may be inacurate. Please check file name", date.toString());
+							this.setStatus(SourceFile.STATUS_ERROR);							
+						}else{
+							logger.info("Successfully added Reporting Period '{}'", date.toString());
+							this.setReportingPeriod(date);
+						}
+
 					}
 				}
 
 			}
 		}
-	}	
+	}
 		
 	/**
 	 * This method fixes the column header names (Key) to match the Schema.
