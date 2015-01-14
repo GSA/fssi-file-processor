@@ -130,6 +130,10 @@ public class SourceFileManager {
 		//OK, now we start processing the files one at a time.
 		for ( SourceFile sourceFile : sourceFiles) {
 			sourceFile.processSourceFile();
+			//Starting Data Validation
+			logger.info("Starting Data validation on file {}", sourceFile.getFileName()); 
+			
+			//END DATA VALIDATION
 		}
 	}
 	

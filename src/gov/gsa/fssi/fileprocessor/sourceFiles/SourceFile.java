@@ -14,11 +14,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.csv.CSVFormat;
@@ -47,8 +51,8 @@ public class SourceFile{
 	static Config config = new Config();	    
 	
 	private String fileName = null;
-	private String fileExtension = null;	
-	private String status = null;
+	private String fileExtension = null;
+	private ArrayList<String> fileNameParts = new ArrayList<String>();
 	private Schema schema = null;
 	private Provider provider = null;
 	private Date ReportingPeriod = null;
@@ -58,12 +62,15 @@ public class SourceFile{
 	private Integer totalEmptyRecords = 0;
 	private Map<Integer, String> headers = new HashMap<Integer, String>();
 	private ArrayList<SourceFileRecord> records = new ArrayList<SourceFileRecord>();
+	
+	private String status = null;
+	//TODO: Create some sort of object or mechanism for capturing status messages for reporting
 	public static String STATUS_INITIALIZED = "initialized";	
 	public static String STATUS_STAGED = "staged";
 	public static String STATUS_IGNORED = "ignored";	
 	public static String STATUS_ERROR = "error";
 	public static String STATUS_WARNING = "warnings";		
-	public static String STATUS_LOADED = "loaded";			
+	public static String STATUS_LOADED = "loaded";		
 	
 	/**
 	 * @return
@@ -259,6 +266,45 @@ public class SourceFile{
 	}	
 
 	/**
+	 * @return the fileParts
+	 */
+	public ArrayList<String> getFileNameParts() {
+		return fileNameParts;
+	}
+	/**
+	 * @param fileParts the fileParts to set
+	 */
+	public void setFileNameParts(ArrayList<String> fileParts) {
+		this.fileNameParts = fileParts;
+	}
+	/**
+	 * This Method sets fileNameParts based upon the sourceFiles file name. If filename is not set, then filenameparts will be empty
+	 */
+	public void setFileNameParts() {
+		if(fileName == null || this.fileName.isEmpty()){
+			logger.warn("FileName is not set, unable to set FileNameParts");
+		}else{
+			this.setFileNameParts(this.fileName);
+		}
+	}
+	/**
+	 * This Method sets fileNameParts based upon input file name.
+	 */
+	public void setFileNameParts(String fileName) {
+		if(fileName == null || fileName.isEmpty()){
+			logger.warn("FileName was empty or null, unable to set FileNameParts");
+		}else{
+			this.setFileNameParts(FileHelper.setFileNameParts(fileName, FileHelper.SEPARATOR_UNDERSCORE));
+		}
+	}	
+	/**
+	 * @param filepart
+	 */
+	public void addFileNameParts(String filepart) {
+		this.fileNameParts.add(filepart);
+	}
+	
+	/**
 	 * @param index
 	 */
 	public void removeRecord(int index) {
@@ -276,10 +322,54 @@ public class SourceFile{
 	 * @param fileName
 	 */
 	public SourceFile(String fileName) {
+		logger.info("Constructing SourceFile using fileName '{}'", fileName);
 		this.setFileName(fileName);
 		int startOfExtension = fileName.lastIndexOf(".")+1;
 		this.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
 		this.setStatus(SourceFile.STATUS_INITIALIZED);
+		this.setFileNameParts();
+		
+		if(this.getFileNameParts() == null || this.getFileNameParts().isEmpty()){
+			logger.error("File has no fileNameParts, which means we cannot discern a provider or schema. we can process the file no farther");
+			this.setStatus(SourceFile.STATUS_ERROR);
+		}else{
+			
+			//TODO: This logic needs to be placed AFTER Schema and Provider mapping in case for some reason the provider is a valid date....
+			for(String fileNamePart: this.getFileNameParts()){
+				//Checking to see if fileNamePart is all numbers and meets the length restrictions. if so Attempt to process as date
+				if(fileNamePart.matches("[0-9]+") && (fileNamePart.length() == 6 || fileNamePart.length() == 8)){
+					Date date = new Date();
+					//if 6 digits, we attempt to get a Reporting Period in mmYYYY format, example 072015 is July 2015
+					if(fileNamePart.length() == 6){
+						DateFormat format = new SimpleDateFormat("MMyyyy", Locale.ENGLISH);
+						try {
+							logger.info("Attempting to extract date from fileNamePart: '{}'", fileNamePart);
+							date = format.parse(fileNamePart);
+						} catch (ParseException e) {
+							logger.error("There was an '{}' error attempting to get date from fileNamePart: '{}'",e.getMessage(), fileNamePart);
+							e.printStackTrace();
+						}
+					//if 8 digits, we attempt to get a Reporting Period in MMddyyyy format, example 07252015 is July 25, 2015	
+					}else if(fileNamePart.length() == 8){
+						DateFormat format = new SimpleDateFormat("MMddyyyy", Locale.ENGLISH);
+						try {
+							logger.info("Attempting to extract date from fileNamePart: '{}'", fileNamePart);
+							date = format.parse(fileNamePart);
+	
+						} catch (ParseException e) {
+							logger.error("There was an '{}' error attempting to get date from fileNamePart: '{}'",e.getMessage(), fileNamePart);
+							e.printStackTrace();
+						}
+					}
+					if(date != null){
+						logger.info("Processed date as '{}'",date.toString());
+						//TODO: We need to make sure that the reporting date is not in the future or before 2000.
+						this.setReportingPeriod(date);
+					}
+				}
+
+			}
+		}
 	}	
 		
 	/**
@@ -595,16 +685,7 @@ public class SourceFile{
 			}else{
 				logger.info("No Export Mode 'export_mode' provided. leaving file as-is");
 				//sourceFile.implodeSourceFileToSchema();	
-			}
-			
-			//Starting Data Validation
-			logger.info("Starting Data validation on file {}", this.getFileName()); 
-			
-			
-			
-			
-			//END DATA VALIDATIOn
-			
+			}	
 			
 		}else{
 			logger.info("No schema was found for file {}. Ignoring sourceFile schema processing", this.getFileName());
@@ -642,7 +723,7 @@ public class SourceFile{
 		// create a new file
 		FileOutputStream out;
 		try {
-			out = new FileOutputStream(config.getProperty(Config.STAGED_DIRECTORY) + FileHelper.buildFileName(this.getFileName(), this.getProvider().getFileOutputType()));
+			out = new FileOutputStream(config.getProperty(Config.STAGED_DIRECTORY) + FileHelper.buildNewFileName(this.getFileName(), this.getProvider().getFileOutputType()));
 
 		// create a new workbook
 		Workbook wb = (this.getProvider().getFileOutputType().toUpperCase().equals("XLSX") ? new XSSFWorkbook() : new HSSFWorkbook());
@@ -681,7 +762,7 @@ public class SourceFile{
 			wb.write(out);
 			out.close();
 		} catch (IOException e) {
-			logger.error("There was an IOException error with file {}", this.getFileName());// TODO Auto-generated catch block
+			logger.error("There was an IOException error '{}' with file {}. ", this.getFileName(), e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -693,7 +774,7 @@ public class SourceFile{
 	 */
 	private void outputAsCSV() {
 		//Delimiter used in CSV file
-		String newFileName = FileHelper.buildFileName(this.getFileName(), this.getProvider().getFileOutputType());
+		String newFileName = FileHelper.buildNewFileName(this.getFileName(), this.getProvider().getFileOutputType());
 		String newLineSeparator = "\n";
 		FileWriter fileWriter = null;
 		CSVPrinter csvFilePrinter = null;

@@ -8,7 +8,14 @@ import org.slf4j.LoggerFactory;
 
 public class FileHelper {
 	static Logger logger = LoggerFactory.getLogger(FileHelper.class);
-	//static Config config = new Config();	    
+	//static Config config = new Config();
+	public static byte SEPARATOR_UNDERSCORE = '_';
+	public static byte SEPARATOR_DASH = '-';
+	public static byte SEPARATOR_COMMA = ',';
+	public static byte SEPARATOR_PIPE = '|';
+	public static byte SEPARATOR_TILDE = '~';
+	public static byte SEPARATOR_FORWARDSLASH = '/';
+	public static byte SEPARATOR_BACKSLASH = '\\';
 	
 	public static ArrayList<String> getFilesFromDirectory(String directoryName){
 		return getFilesFromDirectory(directoryName, null);
@@ -52,7 +59,40 @@ public class FileHelper {
 	
 	
 	
-	public static String buildFileName(String oldFileName, String newExtension){
+	public static String buildNewFileName(String oldFileName, String newExtension){
 		return oldFileName.substring(0, oldFileName.lastIndexOf('.') + 1)  + newExtension.toLowerCase();
 	}
+	
+	
+	/**
+	 * This Method sets fileNameParts based upon input file name.
+	 * This 
+	 */
+	public static ArrayList<String> setFileNameParts(String fileName, byte filePartSeparator) {
+		ArrayList<String> fileNameParts = new ArrayList<String>();
+		
+		if(fileName == null || fileName.isEmpty()){
+			logger.warn("FileName was empty or null, unable to set FileNameParts");
+		}else{
+			String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf("."));
+			boolean loopQuit = false;
+			
+			logger.debug("Attemtping to get file parts from fileName '{}'", fileName);
+			while (!loopQuit){
+				logger.debug("fileNameWithoutExtension: {}", fileNameWithoutExtension);
+				if(fileNameWithoutExtension.contains("_")){
+					logger.debug("Adding File Part: '{}'", fileNameWithoutExtension.substring(0, fileNameWithoutExtension.indexOf("_")));
+					fileNameParts.add(fileName.substring(0, fileNameWithoutExtension.indexOf("_")));
+					fileNameWithoutExtension = fileNameWithoutExtension.substring(fileNameWithoutExtension.indexOf("_")+1,fileNameWithoutExtension.length());	
+				}else{
+					logger.debug("Adding File Part: '{}'", fileNameWithoutExtension);
+					fileNameParts.add(fileNameWithoutExtension);
+					loopQuit = true;
+				}	
+			}
+			logger.info("FileName '{}' had the following filename parts: {}", fileName, fileNameParts);
+		}
+		
+		return fileNameParts;
+	}	
 }
