@@ -15,8 +15,7 @@
 			</constraints>
 			<alias>Ord_Num</alias>
 			<alias>Order_Num</alias>
-			<alias>Ord_Number</alias>	
-			<alias>Ord_Num</alias>			
+			<alias>Ord_Number</alias>		
 		</field>
 		<field>
 			<name>ORDER_DATE</name>
@@ -67,14 +66,12 @@
 				<dataType>Number</dataType>
 			</constraints>
 			<alias>UOI</alias>
+			<alias>Ord_Num</alias>			
 		</field>				
 		<field>
 			<name>BPA_PRICE</name>
 			<title>Unit of Measure</title>
 			<description></description>
-			<constraints>
-				<dataType>Number</dataType>
-			</constraints>
 		</field>				
 	</fields>	
 </schema>

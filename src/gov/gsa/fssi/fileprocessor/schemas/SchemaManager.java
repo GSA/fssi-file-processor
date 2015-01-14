@@ -11,15 +11,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Attr;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -44,8 +40,7 @@ public class SchemaManager {
 	}
 
 
-	public static void initializeSchema(ArrayList<Schema> schemas,
-			String fileName) {
+	public static void initializeSchema(ArrayList<Schema> schemas, String fileName) {
 		try {
 				boolean dupeSchemaCheck = false;
 				Schema newSchema = new Schema();	
@@ -95,31 +90,54 @@ public class SchemaManager {
 		public static ArrayList<SchemaField> initializeFields(NodeList fieldNodes) {
 			ArrayList<SchemaField> fields = new ArrayList<SchemaField>();
 			for (int temp = 0; temp < fieldNodes.getLength(); temp++) {
-				boolean dupeCheck = false;
-				SchemaField newField = initializeField(fieldNodes.item(temp));
-				//logger.info("Processed field, now adding to array");
-				for (SchemaField schemaField : fields) {
-					if(schemaField.getName().equals(newField.getName())){
-						logger.warn("Duplicate field {} found. Ignoring", newField.getName());
-						dupeCheck = true;
-					}
-				}
-				
-				if(dupeCheck == false){
-					fields.add(newField);		
-					logger.info("Successfully added field '{}'", newField.getName());
-				}
-
+				initializeField(fieldNodes, fields, temp);
 			}
-		
 			return fields;
 			
+		}
+
+
+		/**
+		 * @param fieldNodes
+		 * @param fields
+		 * @param temp
+		 */
+		private static void initializeField(NodeList fieldNodes,ArrayList<SchemaField> fields, int temp) {
+			boolean dupeCheck = false;
+			SchemaField newField = initializeField(fieldNodes.item(temp));
+			ArrayList<String> dupeFields = new ArrayList<String>();
+			//logger.info("Processed field, now adding to array");
+			
+			for (SchemaField schemaField : fields) {
+				if(schemaField.getName().equals(newField.getName())){
+					logger.warn("Duplicate field {} found. Ignoring", newField.getName());
+					dupeCheck = true;
+				}
+				for(String alias:schemaField.getAlias()){
+					for(String newAlias:newField.getAlias()){
+						if (alias.equals(newAlias)){
+							dupeFields.add(alias);
+						}
+					}
+				}
+			}
+			
+			if(!dupeFields.isEmpty()){
+				for (String dupeFieldAlias : dupeFields) {
+					logger.warn("alias {} in field {} is a duplicate in another field. It is being removed", dupeFieldAlias, newField.getName());
+					newField.removeAlias(dupeFieldAlias);
+				}
+			}
+			
+			if(dupeCheck == false){
+				fields.add(newField);		
+				logger.info("Successfully added field '{}'", newField.getName());
+			}
 		}
 		
 		public static SchemaField initializeField(Node node) {
 			SchemaField field = new SchemaField();
 			
-			NodeList alias = null;
 			Node constraintNode = null;
 			NodeList constraintList = null;
 			
@@ -153,7 +171,7 @@ public class SchemaManager {
 								newConstraint.setConstraintType(constraintNode.getNodeName().trim().toUpperCase());
 								newConstraint.setValue(constraintNode.getTextContent().trim().toUpperCase());									
 								
-								logger.info("Processing Constraint '{}' for field {}", newConstraint.getConstraintType(), field.getName());
+								//logger.info("Processing Constraint '{}' for field {}", newConstraint.getConstraintType(), field.getName());
 								// get a map containing the attributes of this constraint 
 								
 								//NamedNodeMap attributeMap = constraintNode.getAttributes();
@@ -190,20 +208,15 @@ public class SchemaManager {
 						
 				
 				//Getting Alias
-				alias = fieldElement.getElementsByTagName("alias");
-				for (int i = 0; i < alias.getLength(); i++) {
-					boolean dupeAliasCheck = false;
-					Element currentElement = (Element) alias.item(i);
-					//Checking for duplicate alias
-					for (String aliasList : field.getAlias()) {
-						if(currentElement.getTextContent().trim().toUpperCase().equals(aliasList.toUpperCase().trim())){
-							dupeAliasCheck = true;
-							//logger.warn("Ignoring duplicate Alias '{}' from field: '{}'", aliasList,  field.getName());
-						}
-					}
-					if(isDuplicateConstraintAlias(field, currentElement.getTextContent().trim().toUpperCase())){
+				NodeList aliasList = fieldElement.getElementsByTagName("alias");
+				//logger.debug("Adding alias", aliasList.getLength());
+				for (int i = 0; i < aliasList.getLength(); i++) {
+					Element currentElement = (Element) aliasList.item(i);
+					if(!isDuplicateConstraintAlias(field, currentElement.getTextContent().trim().toUpperCase())){
 						field.addAlias(currentElement.getTextContent().trim().toUpperCase());				
 						logger.info("added alias {} to field {}", currentElement.getTextContent().trim().toUpperCase(), field.getName());
+					}else{
+						logger.warn("Ignoring duplicate Alias '{}' from field: '{}'", currentElement.getTextContent().trim().toUpperCase(),  field.getName());
 					}
 				}
 			}			

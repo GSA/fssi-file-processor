@@ -90,6 +90,10 @@ public class SchemaField {
 	public void addAlias(String alias) {
 		this.alias.add(alias);
 	}
+	public void removeAlias(String alias){
+		int index = this.alias.indexOf(alias);
+		this.alias.remove(index);
+	}
 	/**
 	 * Print Field
 	 */
