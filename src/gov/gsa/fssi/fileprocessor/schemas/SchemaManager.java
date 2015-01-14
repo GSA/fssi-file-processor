@@ -1,16 +1,17 @@
 package gov.gsa.fssi.fileprocessor.schemas;
 
 import gov.gsa.fssi.fileprocessor.Config;
-import gov.gsa.fssi.fileprocessor.helpers.FileHelper;
-import gov.gsa.fssi.fileprocessor.helpers.XmlHelper;
 import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.fileprocessor.schemas.schemaFields.fieldConstraints.FieldConstraint;
+import gov.gsa.fssi.helpers.FileHelper;
+import gov.gsa.fssi.helpers.XmlHelper;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 

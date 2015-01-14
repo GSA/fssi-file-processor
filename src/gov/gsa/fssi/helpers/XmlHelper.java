@@ -1,4 +1,4 @@
-package gov.gsa.fssi.fileprocessor.helpers;
+package gov.gsa.fssi.helpers;
 
 import java.util.HashMap;
 

@@ -1,9 +1,9 @@
 package gov.gsa.fssi.fileprocessor.sourceFiles;
 
 import gov.gsa.fssi.fileprocessor.Config;
-import gov.gsa.fssi.fileprocessor.helpers.FileHelper;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.schemas.Schema;
+import gov.gsa.fssi.helpers.FileHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;

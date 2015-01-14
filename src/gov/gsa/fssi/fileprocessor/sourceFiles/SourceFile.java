@@ -1,13 +1,13 @@
 package gov.gsa.fssi.fileprocessor.sourceFiles;
 
 import gov.gsa.fssi.fileprocessor.Config;
-import gov.gsa.fssi.fileprocessor.helpers.DateHelper;
-import gov.gsa.fssi.fileprocessor.helpers.FileHelper;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.schemas.Schema;
 import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.fileprocessor.sourceFiles.records.datas.Data;
+import gov.gsa.fssi.helpers.DateHelper;
+import gov.gsa.fssi.helpers.FileHelper;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
