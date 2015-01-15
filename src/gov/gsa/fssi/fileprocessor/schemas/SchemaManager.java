@@ -80,7 +80,7 @@ public class SchemaManager {
 					}
 				}
 			    } catch (Exception e) {
-				    logger.error("Received Exception error while processing {}", fileName);		
+				    logger.error("Received Exception error '{}' while processing {}", e.getMessage(), fileName);		
 			    	e.printStackTrace();
 			    }
 				
@@ -93,8 +93,7 @@ public class SchemaManager {
 			for (int temp = 0; temp < fieldNodes.getLength(); temp++) {
 				initializeField(fieldNodes, fields, temp);
 			}
-			return fields;
-			
+			return fields;		
 		}
 
 
@@ -145,14 +144,25 @@ public class SchemaManager {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element fieldElement = (Element) node;
 				
-				if(!(fieldElement.getElementsByTagName("description").item(0).getTextContent()  == null)){
-					field.setDescription(fieldElement.getElementsByTagName("description").item(0).getTextContent().toUpperCase());					
+				if(fieldElement.getElementsByTagName("description")  != null && fieldElement.getElementsByTagName("description").item(0) != null){
+					field.setDescription(fieldElement.getElementsByTagName("description").item(0).getTextContent());					
 				}
-				if(!(fieldElement.getElementsByTagName("name").item(0).getTextContent()  == null)){
-					field.setName(fieldElement.getElementsByTagName("name").item(0).getTextContent().toUpperCase());	
+				if(fieldElement.getElementsByTagName("name")  != null && fieldElement.getElementsByTagName("name").item(0) != null){
+					field.setName(fieldElement.getElementsByTagName("name").item(0).getTextContent());	
 				}
-				if(!(fieldElement.getElementsByTagName("title").item(0).getTextContent()  == null)){
-					field.setTitle(fieldElement.getElementsByTagName("title").item(0).getTextContent().toUpperCase());					
+				if(fieldElement.getElementsByTagName("title") != null && fieldElement.getElementsByTagName("title").item(0) != null){
+					field.setTitle(fieldElement.getElementsByTagName("title").item(0).getTextContent());					
+				}
+				if(fieldElement.getElementsByTagName("format")  != null && fieldElement.getElementsByTagName("format").item(0) != null){
+					
+					field.setTitle(fieldElement.getElementsByTagName("format").item(0).getTextContent());					
+				}
+				if(!(fieldElement.getElementsByTagName("type")  == null  
+						&& fieldElement.getElementsByTagName("type").item(0) != null
+							&& !fieldElement.getElementsByTagName("type").item(0).getTextContent().isEmpty())){
+					field.setTitle(fieldElement.getElementsByTagName("type").item(0).getTextContent());					
+				}else{
+					logger.warn("No Field type provided, defaulting to '{}'", SchemaField.TYPE_ANY);
 				}
 				
 				logger.info("Processing field '{}'", field.getName());
@@ -169,8 +179,8 @@ public class SchemaManager {
 							FieldConstraint newConstraint = new FieldConstraint();
 							if (constraintNode.getNodeType() == Node.ELEMENT_NODE) {
 
-								newConstraint.setConstraintType(constraintNode.getNodeName().trim().toUpperCase());
-								newConstraint.setValue(constraintNode.getTextContent().trim().toUpperCase());									
+								newConstraint.setConstraintType(constraintNode.getNodeName().trim());
+								newConstraint.setValue(constraintNode.getTextContent().trim());									
 								
 								//logger.info("Processing Constraint '{}' for field {}", newConstraint.getConstraintType(), field.getName());
 								// get a map containing the attributes of this constraint 
@@ -183,11 +193,11 @@ public class SchemaManager {
 									Map.Entry<String, String> optionsPair = (Map.Entry)optionsIterator.next();
 									if(!newConstraint.isValidOption(optionsPair.getKey())){
 										logger.warn("Ignoring invalid Option from Constraint: '{}'. {}  is not a valid type", newConstraint.getConstraintType(), optionsPair.getKey());
-									}else if(optionsPair.getKey().toUpperCase() == FieldConstraint.OPTION_LEVEL && !newConstraint.isValidOptionLevel(optionsPair.getValue())){
+									}else if(optionsPair.getKey() == FieldConstraint.OPTION_LEVEL && !newConstraint.isValidOptionLevel(optionsPair.getValue())){
 										logger.warn("Ignoring invalid Option level from Constraint: '{}'. {} is not a valid level", newConstraint.getConstraintType(), optionsPair.getKey());
 									}else{
 										newConstraint.addOption(optionsPair.getKey(),optionsPair.getValue()) ;
-										logger.info("Adding Attribute {} - {} to Constraint {}", optionsPair.getKey(), optionsPair.getValue(), constraintNode.getNodeName().toUpperCase());		
+										logger.info("Adding Attribute {} - {} to Constraint {}", optionsPair.getKey(), optionsPair.getValue(), constraintNode.getNodeName());		
 									}
 								}
 								
@@ -271,4 +281,9 @@ public class SchemaManager {
 			return false;
 		}
 		
+		public static void printAllSchemas(ArrayList<Schema> schemas){
+			for(Schema schema: schemas){
+				schema.print();
+			}
+		}
 }

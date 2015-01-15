@@ -7,11 +7,19 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The Schema object is ment to mimic the JSON table schema located here: http://dataprotocols.org/json-table-schema/
+ * 
+ * @author DavidKLarrimore
+ *
+ */
 public class Schema {
 	static Logger logger = LoggerFactory.getLogger(Schema.class);
 	private String name = null;
 	private String providerName = null;	
 	private String version = null;
+	private ArrayList<String> primaryKeys = null;
+	private ArrayList<String> foreignKeys = null;	
 	private ArrayList<SchemaField> fields = new ArrayList<SchemaField>();	
 	
 	/**
@@ -49,6 +57,42 @@ public class Schema {
 	 */
 	public void setVersion(String version) {
 		this.version = version;
+	}
+	/**
+	 * @return
+	 */
+	public ArrayList<String> getPrimaryKeys() {
+		return primaryKeys;
+	}
+	/**
+	 * @param primaryKey
+	 */
+	public void setPrimaryKeys(ArrayList<String> primaryKey) {
+		this.primaryKeys = primaryKey;
+	}
+	/**
+	 * @param string
+	 */
+	public void addPrimaryKey(String string) {
+		this.primaryKeys.add(string);
+	}
+	/**
+	 * @return
+	 */
+	public ArrayList<String> getForeignKeys() {
+		return foreignKeys;
+	}
+	/**
+	 * @param foreignKeys
+	 */
+	public void setForeignKeys(ArrayList<String> foreignKeys) {
+		this.foreignKeys = foreignKeys;
+	}
+	/**
+	 * @param string
+	 */
+	public void addForeignKey(String string) {
+		this.foreignKeys.add(string);
 	}
 	/**
 	 * @return the fields
@@ -104,6 +148,10 @@ public class Schema {
 	}
 
 	public void print(){
+		logger.debug("Name: '{}' Version: '{}' Provider: '{}' ", this.getName(), this.getVersion(), this.getProviderName());
+	}
+	
+	public void printAll(){
 		logger.debug("Name: '{}' Version: '{}' Provider: '{}' ", this.getName(), this.getVersion(), this.getProviderName());
 		printSchemaFields();	
 	}

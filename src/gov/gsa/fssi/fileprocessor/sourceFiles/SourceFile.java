@@ -69,10 +69,13 @@ public class SourceFile{
 	private String status = null;
 	//TODO: Create some sort of object or mechanism for capturing status messages for reporting
 	public static String STATUS_INITIALIZED = "initialized";	
+	public static String STATUS_LOADED = "loaded";	
+	public static String STATUS_MAPPED = "mapped";		
+	public static String STATUS_PROCESSED = "processed";		
+	public static String STATUS_VALIDATED = "validated";		
 	public static String STATUS_STAGED = "staged";
 	public static String STATUS_ERROR = "error";
 	public static String STATUS_WARNING = "warning";		
-	public static String STATUS_LOADED = "loaded";		
 	
 	/**
 	 * @return
@@ -502,13 +505,15 @@ public class SourceFile{
 			}
 			
 			if(!foundColumn){
-				logger.info("Source field '{} - {}' was not in new header, adding to adding to delete list", thisHeaderPairs.getValue().toString().toUpperCase(), thisHeaderPairs.getKey(), thisHeaderPairs.getValue(), headerCounter);
+				logger.info("Source field field '{} - {}' was not in Schema, adding to adding to delete list", thisHeaderPairs.getValue().toString().toUpperCase(), thisHeaderPairs.getKey(), thisHeaderPairs.getValue(), headerCounter);
 				deleteFieldDataList.add(thisHeaderPairs.getKey());
 			}
 			
 		}         
-		logger.info("Deleting headers:{}", deleteFieldDataList);
-		//Now we delete the old data
+		
+		
+		//Now we delete the old data. We do this before we re-stack the headers
+		logger.info("Deleting data from the following headers: {}", deleteFieldDataList);
 		for(SourceFileRecord sourceFileRecord: this.getRecords()){
 			for(Integer deleteField : deleteFieldDataList){
 				sourceFileRecord.deleteDataByHeaderIndex(deleteField);
@@ -583,7 +588,7 @@ public class SourceFile{
 	 * 
 	 * @param sourceFile
 	 */
-	private void loadSourceFileObjectFromCSV() {
+	private void loadSourceFileObjectsFromCSV() {
 		 try {
 			Reader in = new FileReader(config.getProperty(Config.SOURCEFILES_DIRECTORY) + this.getFileName());
 			final CSVParser parser = new CSVParser(in, CSVFormat.EXCEL.withHeader());
@@ -671,29 +676,28 @@ public class SourceFile{
 	public void ingest() {
 		if(this.getFileExtension().toUpperCase().equals("CSV")){
 			logger.info("Loading file {} as a 'CSV'", this.getFileName()); 
-			this.loadSourceFileObjectFromCSV();
+			this.loadSourceFileObjectsFromCSV();
 		}else if(this.getFileExtension().toUpperCase().equals("XML")){
 			 logger.info("Loading File {} as a 'XML'", this.getFileExtension());					
 		}else if(this.getFileExtension().toUpperCase().equals("XLSX")){
 			 logger.info("Loading File {} as a 'XLSX'", this.getFileExtension());						
 		}
-		process();
 	}
 	
 	/**
-	 * 
+	 * This method processes a file against its schema
 	 */
-	public void process() {
+	public void processToSchema() {
 		//processing sourcefile for export
 		if(this.getSchema() != null){
 			if(config.getProperty(Config.EXPORT_MODE) != null && config.getProperty(Config.EXPORT_MODE).equals("explode")){
-				logger.info("Export mode 'export_mode' set to explode. Exploding file");
+				logger.info("Export mode set to explode. Exploding file");
 				this.explodeSourceFileToSchema();					
 			}else if(config.getProperty(Config.EXPORT_MODE) != null && config.getProperty(Config.EXPORT_MODE).equals("implode")){
-				logger.info("Export mode 'export_mode' set to implode. Imploding file");
+				logger.info("Export mode set to implode. Imploding file");
 				this.implodeSourceFileToSchema();	
 			}else{
-				logger.info("No Export Mode 'export_mode' provided. leaving file as-is");
+				logger.info("No export node provided. leaving file as-is");
 				//sourceFile.implodeSourceFileToSchema();	
 			}	
 			
@@ -702,27 +706,33 @@ public class SourceFile{
 		}
 	}	
 
+	
+	public void processToSchema(Schema schema) {
+		this.setSchema(schema);
+		this.processToSchema();
+	}	
+	
+	
 	public void outputStagedSourceFile() {
-		
-		if(this.getProvider().getFileOutputType().toUpperCase().equals("CSV")){
-			logger.info("Exporting File {} as a 'CSV'", this.getFileName()); 
-			this.outputAsCSV();
-		}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XML")){
-			//logger.info("Exporting File {} as a 'XML'", sourceFile.getFileExtension());	
-			logger.error("We don't currently handle XML output at this point");
-		}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XLS")){
-			logger.info("Exporting File {} as a 'XLS'", this.getFileName());
-			this.outputAsExcel();
-		}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XLSX")){
-			logger.info("Exporting File {} as a 'XLSX'", this.getFileName());
-			this.outputAsExcel();				
+		 if (this.getRecords() != null){
+			if(this.getProvider().getFileOutputType().toUpperCase().equals("CSV")){
+				this.outputAsCSV();
+			}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XML")){
+				//logger.info("Exporting File {} as a 'XML'", sourceFile.getFileExtension());	
+				logger.error("Cannot export sourceFile '{}' as XML. We don't currently handle XML output at this point", this.getFileName());
+				this.setStatus(STATUS_ERROR);
+			}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XLS")){
+				this.outputAsExcel();
+			}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XLSX")){
+				this.outputAsExcel();				
+			}else{
+				logger.warn("I'm sorry, we cannot export a file as a '{}' defaulting to 'CSV'", this.getFileExtension());
+				outputAsCSV();				
+			} 
 		}else{
-			logger.warn("I'm sorry, we cannot export a file as a '{}' defaulting to 'CSV'", this.getFileExtension());
-			outputAsCSV();				
+			logger.error("Cannot export sourceFile '{}'. No data found", this.getFileName());
 		}
 	}
-
-
 
 	/**
 	 * This Method takes our SourceFile data and exports it to Excel format
@@ -730,7 +740,7 @@ public class SourceFile{
 	 * @param newFileName
 	 */
 	private void outputAsExcel() {
-		// create a new file
+		logger.info("Exporting File {} as a 'XLS'", this.getFileName());
 		FileOutputStream out;
 		try {
 			out = new FileOutputStream(config.getProperty(Config.STAGED_DIRECTORY) + FileHelper.buildNewFileName(this.getFileName(), this.getProvider().getFileOutputType()));
@@ -783,6 +793,7 @@ public class SourceFile{
 	 * @param sourceFile
 	 */
 	private void outputAsCSV() {
+		logger.info("Exporting File {} as a 'CSV'", this.getFileName()); 
 		//Delimiter used in CSV file
 		String newFileName = FileHelper.buildNewFileName(this.getFileName(), this.getProvider().getFileOutputType());
 		String newLineSeparator = "\n";
@@ -793,23 +804,19 @@ public class SourceFile{
 		CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(newLineSeparator);
 				
 		try {
-			
 			//initialize FileWriter object
 			fileWriter = new FileWriter(config.getProperty(Config.STAGED_DIRECTORY) + newFileName);
-			
 			//initialize CSVPrinter object 
 		    csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
-		    
 		    
 			List<String> csvHeaders = new ArrayList<String>();
 			//Writing Headers
 			Map<Integer,String> headerMap = this.getHeaders(); 	
 			Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
 			while (headerMapIterator.hasNext()) {
-				Map.Entry pairs = (Map.Entry)headerMapIterator.next();
-				csvHeaders.add(pairs.getValue().toString());
+				Map.Entry headerMapPairs = (Map.Entry)headerMapIterator.next();
+				csvHeaders.add(headerMapPairs.getValue().toString());
 			}
-		    
 		    
 		    //Create CSV file header
 		    csvFilePrinter.printRecord(csvHeaders);
@@ -824,23 +831,21 @@ public class SourceFile{
 					}else{
 						csvRecord.add("");
 					}	
-				}
-				
+				}	
 		        csvFilePrinter.printRecord(csvRecord);
 			}
-
 			logger.info("{} Created Successfully. {} Records processed", this.getFileName(), this.recordCount());
 			
 		} catch (Exception e) {
 			logger.error("Received Exception '{}' while processing {}", e.getMessage(), this.getFileName());
-			e.printStackTrace();
+			//e.printStackTrace();
 		} finally {
 			try {
 				fileWriter.flush();
 				fileWriter.close();
 				csvFilePrinter.close();
 			} catch (IOException e) {
-				logger.error("Received error while flushing/closing fileWriter for {}", this.getFileName());
+				logger.error("Received IOException '{}' while flushing/closing fileWriter for {}", e.getMessage() ,this.getFileName());
 //		        e.printStackTrace();
 			}
 		}

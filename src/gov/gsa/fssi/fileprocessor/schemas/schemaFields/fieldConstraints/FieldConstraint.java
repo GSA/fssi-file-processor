@@ -19,17 +19,40 @@ public class FieldConstraint {
 	static Logger logger = LoggerFactory.getLogger(SchemaField.class);
 	
 	//List of constraint types
-	public static String TYPE_REQUIRED = "REQUIRED";
-	public static String TYPE_DATATYPE = "DATATYPE";
-	public static String TYPE_LENGTH = "LENGTH";
-	public static String TYPE_CUSTOM = "CUSTOM";
-	public static String TYPE_MATCH_LIST = "MATCHLIST";
-	public static String TYPE_POSITIVE_NUMBER = "POSITIVENUMBER";
-	public static String TYPE_NEGATIVE_NUMBER = "NEGATIVENUMBER";
+	/**
+	 * A boolean value which indicates whether a field must have a value in every row of the table. An empty string is considered to be a missing value.
+	 */
+	public static String TYPE_REQUIRED = "required"; 
+	
+	/**
+	 * An integer that specifies the minimum number of characters for a value
+	 */
+	public static String TYPE_MINLENGTH = "minLength"; 
+	/**
+	 * An integer that specifies the maximum number of characters for a value
+	 */
+	public static String TYPE_MAXLENGTH = "maxLength";
+	/**
+	 * A regular expression that can be used to test field values. If the regular expression matches then the value is valid. Values will be treated as a string of characters. It is recommended that values of this field conform to the standard XML Schema regular expression syntax.
+	 * @see <a href="http://www.w3.org/TR/xmlschema-2/#regexs">standard XML Schema regular expression syntax</a>
+	 * @see <a href="http://www.regular-expressions.info/xml.html">Regular Expressions</a>
+	 */
+	public static String TYPE_PATTERN = "pattern";
+	/**
+	 * specifies a minimum value for a field. This is different to minLength which checks number of characters. A minimum value constraint checks whether a field value is greater than or equal to the specified value. The range checking depends on the type of the field. E.g. an integer field may have a minimum value of 100; a date field might have a minimum date. If a minimum value constraint is specified then the field descriptor MUST contain a type key
+	 */
+	public static String TYPE_MINIMUM = "minimum";
+	/**
+	 * specifies a maximum value for a field. This is different to maxLength which checks number of characters. A maximum value constraint checks whether a field value is less than or equal to the specified value. The range checking depends on the type of the field. E.g. an integer field may have a maximum value of 100; a date field might have a maximum date. If a maximum value constraint is specified then the field descriptor MUST contain a type key
+	 */
+	public static String TYPE_MAXIMUM = "maximum";
+	
+
+//	maximum – as above, but specifies a maximum value for a field.
 	
 	//List of Constraint Options which come from the constraints attributes
-	public static String OPTION_EFFECTIVEDATE = "EFFECTIVEDATE";
-	public static String OPTION_LEVEL = "LEVEL";
+	public static String OPTION_EFFECTIVEDATE = "effectiveDate";
+	public static String OPTION_LEVEL = "level";
 	
 	//List of Constraint Levels
 	public static String LEVEL_ERROR = "ERROR";
@@ -51,12 +74,11 @@ public class FieldConstraint {
 		//TODO: use java java.lang.reflect.Field to iterate through globals to generate ArrayList
 		ArrayList<String> validTypes = new ArrayList<String>();
 		validTypes.add(TYPE_REQUIRED);
-		validTypes.add(TYPE_DATATYPE);
-		validTypes.add(TYPE_LENGTH);
-		validTypes.add(TYPE_CUSTOM);
-		validTypes.add( TYPE_MATCH_LIST);
-		validTypes.add(TYPE_POSITIVE_NUMBER);
-		validTypes.add(TYPE_NEGATIVE_NUMBER);
+		validTypes.add(TYPE_MINLENGTH);
+		validTypes.add(TYPE_MAXLENGTH);
+		validTypes.add(TYPE_PATTERN);
+		validTypes.add(TYPE_MINIMUM);
+		validTypes.add(TYPE_MAXIMUM);
 		
 		for(String type: validTypes){
 			if (type.trim().toUpperCase().equals(string.trim().toUpperCase())){

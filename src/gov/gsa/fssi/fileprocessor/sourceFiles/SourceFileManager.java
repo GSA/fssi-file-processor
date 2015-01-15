@@ -63,6 +63,7 @@ public class SourceFileManager {
 				if(sourceFile.getFileName().toUpperCase().contains(provider.getProviderIdentifier().toUpperCase())){
 					logger.info("Mapped provider {} - {} to file '{}'", provider.getProviderName(), provider.getProviderIdentifier(),sourceFile.getFileName());
 					sourceFile.setProvider(provider);
+					sourceFile.setStatus(SourceFile.STATUS_MAPPED);					
 				}
 			}
 		}

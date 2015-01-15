@@ -1,6 +1,7 @@
 package gov.gsa.fssi.fileprocessor.providers;
 
 import gov.gsa.fssi.fileprocessor.Config;
+import gov.gsa.fssi.fileprocessor.schemas.Schema;
 import gov.gsa.fssi.helpers.FileHelper;
 
 import java.io.File;
@@ -164,4 +165,11 @@ public class ProviderManager {
 			e.printStackTrace();
 		}
 	}	
+	
+	
+	public static void printAllProviders(ArrayList<Provider> providers){
+		for(Provider provider: providers){
+			provider.print();
+		}
+	}
 }

@@ -1,6 +1,5 @@
 package gov.gsa.fssi.helpers;
 
-import gov.gsa.fssi.fileprocessor.Config;
 import gov.gsa.fssi.fileprocessor.sourceFiles.SourceFile;
 
 import java.text.DateFormat;

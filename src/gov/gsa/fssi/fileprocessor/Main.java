@@ -30,15 +30,14 @@ public class Main {
 	static Config config = new Config();	    
 	
 	public static void main(String[] args) {
-		
 	    logger.info("Starting FSSI File Processor");
-	    ArrayList<Schema> schemas = SchemaManager.initializeSchemas();
 		ArrayList<Provider> providers = ProviderManager.initializeProviders();
-		ArrayList<SourceFile> sourceFiles = SourceFileManager.initializeSourceFiles();
-		ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
-	    
-	    logger.info("Completed FSSI File Processor");
-		
+		ProviderManager.printAllProviders(providers);
+	    ArrayList<Schema> schemas = SchemaManager.initializeSchemas();
+	    SchemaManager.printAllSchemas(schemas);
+		//ArrayList<SourceFile> sourceFiles = SourceFileManager.initializeSourceFiles();
+		//ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
+	    logger.info("Completed FSSI File Processor");	
 	}
 
 	/**
@@ -57,30 +56,34 @@ public class Main {
 	 * @param schemas
 	 * @param sourceFile
 	 */
-	private static void ingestProcessAndExportSourceFile(ArrayList<Provider> providers,
-			ArrayList<Schema> schemas, SourceFile sourceFile) {
+	private static void ingestProcessAndExportSourceFile(ArrayList<Provider> providers, ArrayList<Schema> schemas, SourceFile sourceFile) {
 		logger.debug("Processing sourceFile '{}'", sourceFile.getFileName());	
 		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
 		    logger.info("Mapping Provider to SourceFile '{}'", sourceFile.getFileName());	
 			SourceFileManager.validateSourceFileProvider(providers, sourceFile);	
+		    logger.info("Completed Mapping Provider to SourceFile '{}'", sourceFile.getFileName());			
 		}
 		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
 		    logger.info("Mapping Schema to SourceFile '{}'", sourceFile.getFileName());	
 		    SourceFileManager.validateSourceFileSchema(schemas, sourceFile); 
+		    logger.info("Completed Mapping Schema to SourceFile '{}'", sourceFile.getFileName());	
 		}
 		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
 		    logger.info("Ingesting SourceFile '{}'", sourceFile.getFileName());	
 			sourceFile.ingest();
+		    logger.info("Completed Ingesting SourceFile '{}'", sourceFile.getFileName());	
 		}
 		
 		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
 		    logger.info("Processing SourceFile '{}'", sourceFile.getFileName());	
-			sourceFile.process();
+			sourceFile.processToSchema();
+		    logger.info("Completed Processing SourceFile '{}'", sourceFile.getFileName());	
 		}	
 		
 		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
 		    logger.info("Outputting SourceFile '{}'", sourceFile.getFileName());	
 		    sourceFile.outputStagedSourceFile();
+		    logger.info("Completed Outputting SourceFile '{}'", sourceFile.getFileName());	
 		}
 	}	
 }
