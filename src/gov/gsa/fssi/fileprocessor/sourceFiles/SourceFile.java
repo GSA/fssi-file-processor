@@ -668,7 +668,7 @@ public class SourceFile{
 	/**
 	 * @param sourceFile
 	 */
-	public void processSourceFile() {
+	public void ingest() {
 		if(this.getFileExtension().toUpperCase().equals("CSV")){
 			logger.info("Loading file {} as a 'CSV'", this.getFileName()); 
 			this.loadSourceFileObjectFromCSV();
@@ -677,7 +677,13 @@ public class SourceFile{
 		}else if(this.getFileExtension().toUpperCase().equals("XLSX")){
 			 logger.info("Loading File {} as a 'XLSX'", this.getFileExtension());						
 		}
-		
+		process();
+	}
+	
+	/**
+	 * 
+	 */
+	public void process() {
 		//processing sourcefile for export
 		if(this.getSchema() != null){
 			if(config.getProperty(Config.EXPORT_MODE) != null && config.getProperty(Config.EXPORT_MODE).equals("explode")){

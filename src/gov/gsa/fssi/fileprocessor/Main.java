@@ -1,6 +1,7 @@
 package gov.gsa.fssi.fileprocessor;
 
 import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,68 +32,55 @@ public class Main {
 	public static void main(String[] args) {
 		
 	    logger.info("Starting FSSI File Processor");
-	    logger.info("Starting Phase 1: Initialization");
-		//First things first, lets get all of our configuration settings	
-	   
-	    
-		//Next, we need to get all of our provider info. We currently do this up front to make multi-file processing faster
 	    ArrayList<Schema> schemas = SchemaManager.initializeSchemas();
-
-		if (logger.isDebugEnabled()){
-			logger.debug("Printing Schemas");
-			for ( Schema schema : schemas) {
-				schema.print();
-			}
-		}
-		
-		//Next, we need to get all of our provider info. We currently do this up front to make multi-file processing faster
 		ArrayList<Provider> providers = ProviderManager.initializeProviders();
-
-		if (logger.isDebugEnabled()){
-			logger.debug("Printing Providers");
-			for ( Provider provider : providers) {
-				provider.print();
-			}
-		}	
-		
-		
-		//Next, we need to get all of our sourceFiles info. We currently do this up front to make multi-file processing faster
 		ArrayList<SourceFile> sourceFiles = SourceFileManager.initializeSourceFiles();
-	
-	    logger.info("Completed Phase 1");
-	    logger.info("Starting Phase 2: Mapping");
-	    
-	    //OK, now the fun stuff begins. The first step we do is map all of the files to schemas and providers. 
-		SourceFileManager.validateSourceFileProviders(providers, sourceFiles);	
-		
-		
-		//OK, now we map all of the files to the appropriate schemas 
-		SourceFileManager.validateSourceFileSchemas(schemas, sourceFiles);	
-
-	    logger.info("Completed Phase 2");
-	    logger.info("Starting Phase 3: File Processing");
-	    
-	  //OK, now we process the files
-	   SourceFileManager.processSourceFiles(sourceFiles);	    
-	    
-	    
-//		if (logger.isDebugEnabled()){
-//			logger.debug("Printing Source Files");
-//			for ( SourceFile sourceFile : sourceFiles) {
-//				sourceFile.print();
-//			}
-//			logger.debug("Found {} sourceFiles", sourceFiles.size());
-//		}	
-		
-		
-	    logger.info("Completed Phase 3");
-	    logger.info("Starting Phase 4: File Output");
-		
-	    SourceFileManager.outputStagedSourceFiles(sourceFiles);
+		ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
 	    
 	    logger.info("Completed FSSI File Processor");
 		
 	}
 
-	
+	/**
+	 * The purpose of this function is to process a all files through the entire process from ingestion to processing to validation and finally to output.
+	 * @param sourceFileDirectory
+	 */
+	public static void ingestProcessAndExportSourceFiles(ArrayList<Provider> providers, ArrayList<Schema> schemas, ArrayList<SourceFile> sourceFiles) {	
+	    for ( SourceFile sourceFile : sourceFiles) {
+	    	ingestProcessAndExportSourceFile(providers, schemas, sourceFile);		    	
+		}		    
+	}
+
+	/**
+	 * The purpose of this function is to process a single file through the entire process from ingestion to processing to validation and finally to output.
+	 * @param providers
+	 * @param schemas
+	 * @param sourceFile
+	 */
+	private static void ingestProcessAndExportSourceFile(ArrayList<Provider> providers,
+			ArrayList<Schema> schemas, SourceFile sourceFile) {
+		logger.debug("Processing sourceFile '{}'", sourceFile.getFileName());	
+		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
+		    logger.info("Mapping Provider to SourceFile '{}'", sourceFile.getFileName());	
+			SourceFileManager.validateSourceFileProvider(providers, sourceFile);	
+		}
+		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
+		    logger.info("Mapping Schema to SourceFile '{}'", sourceFile.getFileName());	
+		    SourceFileManager.validateSourceFileSchema(schemas, sourceFile); 
+		}
+		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
+		    logger.info("Ingesting SourceFile '{}'", sourceFile.getFileName());	
+			sourceFile.ingest();
+		}
+		
+		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
+		    logger.info("Processing SourceFile '{}'", sourceFile.getFileName());	
+			sourceFile.process();
+		}	
+		
+		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
+		    logger.info("Outputting SourceFile '{}'", sourceFile.getFileName());	
+		    sourceFile.outputStagedSourceFile();
+		}
+	}	
 }
