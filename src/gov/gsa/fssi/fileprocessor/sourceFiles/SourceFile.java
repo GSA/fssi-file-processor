@@ -158,7 +158,49 @@ public class SourceFile{
 	 */
 	public void setReportingPeriod(Date reportingPeriod) {
 		ReportingPeriod = reportingPeriod;
-	}	
+	}
+	/**
+	 * 
+	 */
+	public void setReportingPeriod(){
+		if(this.getFileNameParts() == null || this.getFileNameParts().isEmpty()){
+			logger.error("File has no fileNameParts, which means we cannot discern a provider or schema. we can process the file no farther");
+			this.setStatus(SourceFile.STATUS_ERROR);
+		}else{
+			
+			for(String fileNamePart: this.getFileNameParts()){
+				//Checking to see if fileNamePart is all numbers and meets the length restrictions. if so Attempt to process as date
+				if(fileNamePart.matches("[0-9]+") && (fileNamePart.length() == 6 || fileNamePart.length() == 8)){
+					Date date = new Date();
+					//if 6 digits, we attempt to get a Reporting Period in mmYYYY format, example 072015 is July 2015
+					if(fileNamePart.length() == 6){
+						date = DateHelper.getDate(fileNamePart, DateHelper.FORMAT_MMYYYY);
+					//if 8 digits, we attempt to get a Reporting Period in MMddyyyy format, example 07252015 is July 25, 2015	
+					}else if(fileNamePart.length() == 8){
+						date = DateHelper.getDate(fileNamePart, DateHelper.FORMAT_MMDDYYYY);
+					}
+					if(date != null){
+						logger.info("Processed date as '{}'",date.toString());
+						Date todaysDate = DateHelper.getTodaysDate();
+						Date minimumDate = DateHelper.getDate("012000", DateHelper.FORMAT_MMYYYY);
+						
+						if(date.compareTo(todaysDate) > 0){
+							logger.error("ReportingPeriod '{}' found in FileName is later than current date. Please check file name", date.toString());
+							this.setStatus(SourceFile.STATUS_ERROR);
+						}else if(date.compareTo(minimumDate) < 0){
+							logger.error("ReportingPeriod '{}' found in FileName is before the year 2000 and may be inacurate. Please check file name", date.toString());
+							this.setStatus(SourceFile.STATUS_ERROR);							
+						}else{
+							logger.info("Successfully added Reporting Period '{}'", date.toString());
+							this.setReportingPeriod(date);
+						}
+
+					}
+				}
+
+			}
+		}
+	}
 	/**
 	 * @return the schema
 	 */
@@ -322,7 +364,8 @@ public class SourceFile{
 	}
 	
 	/**
-	 * @param fileName
+	 * This constructor class takes a file name and uses it to initialize the basic elements of a SourceFile
+	 * @param fileName - This should be in name.ext format.
 	 */
 	public SourceFile(String fileName) {
 		logger.info("Constructing SourceFile using fileName '{}'", fileName);
@@ -331,46 +374,7 @@ public class SourceFile{
 		this.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
 		this.setStatus(SourceFile.STATUS_INITIALIZED);
 		this.setFileNameParts();
-		
-		if(this.getFileNameParts() == null || this.getFileNameParts().isEmpty()){
-			logger.error("File has no fileNameParts, which means we cannot discern a provider or schema. we can process the file no farther");
-			this.setStatus(SourceFile.STATUS_ERROR);
-		}else{
-			
-			//TODO: This logic needs to be placed AFTER Schema and Provider mapping in case for some reason the provider is a valid date....
-			for(String fileNamePart: this.getFileNameParts()){
-				//Checking to see if fileNamePart is all numbers and meets the length restrictions. if so Attempt to process as date
-				if(fileNamePart.matches("[0-9]+") && (fileNamePart.length() == 6 || fileNamePart.length() == 8)){
-					Date date = new Date();
-					//if 6 digits, we attempt to get a Reporting Period in mmYYYY format, example 072015 is July 2015
-					if(fileNamePart.length() == 6){
-						date = DateHelper.getDate(fileNamePart, DateHelper.FORMAT_MMYYYY);
-					//if 8 digits, we attempt to get a Reporting Period in MMddyyyy format, example 07252015 is July 25, 2015	
-					}else if(fileNamePart.length() == 8){
-						date = DateHelper.getDate(fileNamePart, DateHelper.FORMAT_MMDDYYYY);
-					}
-					if(date != null){
-						logger.info("Processed date as '{}'",date.toString());
-						//TODO: We need to make sure that the reporting date is not in the future or before 2000.
-						Date todaysDate = DateHelper.getTodaysDate();
-						Date minimumDate = DateHelper.getDate("012000", DateHelper.FORMAT_MMYYYY);
-						
-						if(date.compareTo(todaysDate) > 0){
-							logger.error("ReportingPeriod '{}' found in FileName is later than current date. Please check file name", date.toString());
-							this.setStatus(SourceFile.STATUS_ERROR);
-						}else if(date.compareTo(minimumDate) < 0){
-							logger.error("ReportingPeriod '{}' found in FileName is before the year 2000 and may be inacurate. Please check file name", date.toString());
-							this.setStatus(SourceFile.STATUS_ERROR);							
-						}else{
-							logger.info("Successfully added Reporting Period '{}'", date.toString());
-							this.setReportingPeriod(date);
-						}
-
-					}
-				}
-
-			}
-		}
+		this.setReportingPeriod();
 	}
 		
 	/**
