@@ -70,9 +70,8 @@ public class SourceFile{
 	//TODO: Create some sort of object or mechanism for capturing status messages for reporting
 	public static String STATUS_INITIALIZED = "initialized";	
 	public static String STATUS_STAGED = "staged";
-	public static String STATUS_IGNORED = "ignored";	
 	public static String STATUS_ERROR = "error";
-	public static String STATUS_WARNING = "warnings";		
+	public static String STATUS_WARNING = "warning";		
 	public static String STATUS_LOADED = "loaded";		
 	
 	/**
@@ -399,7 +398,7 @@ public class SourceFile{
 	 * This method adds missing headers and re-organizes the data to put schema headers first
 	 */
 	public void explodeSourceFileToSchema(){
-		
+		logger.info("Exploding sourceFile '{}' to Schema '{}'", this.getFileName(), this.getSchema().getName());
 		HashMap<Integer, String> newHeader = new HashMap<Integer, String>();	
 		//This is our count to determine location of each header
 		Integer headerCounter = 0;
@@ -464,7 +463,7 @@ public class SourceFile{
 	 * We delete any data that is no longer necessary
 	 */	
 	public void implodeSourceFileToSchema(){
-		
+		logger.info("Imploding sourceFile '{}' to Schema '{}'", this.getFileName(), this.getSchema().getName());		
 		HashMap<Integer, String> newHeader = new HashMap<Integer, String>();	
 		//This is our count to determine location of each header
 		Integer headerCounter = 0;

@@ -29,7 +29,15 @@ public class Config {
 	public static String LOGS_DIRECTORY = "logs_directory";			
 	public static String PROVIDERS_DIRECTORY = "providers_directory";	
 	public static String STAGED_DIRECTORY = "staged_directory";	
+	
+	/**
+	 * Valid "Export Modes" include: implode, explode
+	 */
 	public static String EXPORT_MODE = "export_mode";	
+	public static String VALIDATION_MODE = "validation_mode";	
+	
+	
+	
 	
 	public static String DEFAULT_WORKING_DIRECTORY = "./working/";
 	public static String DEFAULT_SOURCEFILES_DIRECTORY = "./working/srcfiles/";
@@ -38,6 +46,8 @@ public class Config {
 	public static String DEFAULT_LOGS_DIRECTORY = "./working/logs/";			
 	public static String DEFAULT_PROVIDERS_DIRECTORY = "./working/providers/";	
 	public static String DEFAULT_STAGED_DIRECTORY = "./working/staged/";	
+	public static String DEFAULT_EXPORT_MODE = "implode";
+	public static String DEFAULT_VALIDATION_MODE = "";
 	public static String DEFAULT_PROPFILE_NAME = "config.properties";
 	
 	/**
@@ -90,13 +100,15 @@ public class Config {
 	 */
 	private void getDefaultPropValue() {
 		Properties prop = new Properties();
-		prop.setProperty("working_directory", DEFAULT_WORKING_DIRECTORY);
-		prop.setProperty("sourcefiles_directory", DEFAULT_SOURCEFILES_DIRECTORY);		
-		prop.setProperty("schemas_directory", DEFAULT_SCHEMAS_DIRECTORY);				
-		prop.setProperty("datamaps_directory", DEFAULT_DATAMAPS_DIRECTORY);	
-		prop.setProperty("logs_directory", DEFAULT_LOGS_DIRECTORY);		
-		prop.setProperty("providers_directory", DEFAULT_PROVIDERS_DIRECTORY);	
-		prop.setProperty("staged_directory", DEFAULT_STAGED_DIRECTORY);			
+		prop.setProperty(WORKING_DIRECTORY, DEFAULT_WORKING_DIRECTORY);
+		prop.setProperty(SOURCEFILES_DIRECTORY, DEFAULT_SOURCEFILES_DIRECTORY);		
+		prop.setProperty(SCHEMAS_DIRECTORY, DEFAULT_SCHEMAS_DIRECTORY);				
+		prop.setProperty(DATAMAPS_DIRECTORY, DEFAULT_DATAMAPS_DIRECTORY);	
+		prop.setProperty(LOGS_DIRECTORY, DEFAULT_LOGS_DIRECTORY);		
+		prop.setProperty(PROVIDERS_DIRECTORY, DEFAULT_PROVIDERS_DIRECTORY);	
+		prop.setProperty(STAGED_DIRECTORY, DEFAULT_STAGED_DIRECTORY);		
+		prop.setProperty(EXPORT_MODE, DEFAULT_EXPORT_MODE);		
+		prop.setProperty(VALIDATION_MODE, DEFAULT_VALIDATION_MODE);		
 		
 		this.prop = prop;
 	}
@@ -110,41 +122,50 @@ public class Config {
 	 */
 	private Properties validatePropFile(Properties prop){
 		
-		if(!prop.containsKey("working_directory")){
-			logger.warn("No 'working_directory' property found in config file, loading default");
-			prop.put("working_directory", DEFAULT_WORKING_DIRECTORY);
+		if(!prop.containsKey(WORKING_DIRECTORY)){
+			logger.warn("No '{}' property found in config file, loading default", WORKING_DIRECTORY);
+			prop.put(WORKING_DIRECTORY, DEFAULT_WORKING_DIRECTORY);
 		}
 		
-		if(!prop.containsKey("sourcefiles_directory")){
-			logger.warn("No 'sourcefiles_directory' property found in config file, loading default");
-			prop.put("working_directory", DEFAULT_SOURCEFILES_DIRECTORY);
+		if(!prop.containsKey(SOURCEFILES_DIRECTORY)){
+			logger.warn("No '{}' property found in config file, loading default", SOURCEFILES_DIRECTORY);
+			prop.put(SOURCEFILES_DIRECTORY, DEFAULT_SOURCEFILES_DIRECTORY);
 		}
 		
-		if(!prop.containsKey("schemas_directory")){
-			logger.warn("No 'schemas_directory' property found in config file, loading default");
-			prop.put("schemas_directory", DEFAULT_SCHEMAS_DIRECTORY);
+		if(!prop.containsKey(SCHEMAS_DIRECTORY)){
+			logger.warn("No '{}' property found in config file, loading default", SCHEMAS_DIRECTORY);
+			prop.put(SCHEMAS_DIRECTORY, DEFAULT_SCHEMAS_DIRECTORY);
 		}		
 		
-		if(!prop.containsKey("datamaps_directory")){
-			logger.warn("No 'datamaps_directory' property found in config file, loading default");
-			prop.put("datamaps_directory", DEFAULT_DATAMAPS_DIRECTORY);
+		if(!prop.containsKey(DATAMAPS_DIRECTORY)){
+			logger.warn("No '{}' property found in config file, loading default", DATAMAPS_DIRECTORY);
+			prop.put(DATAMAPS_DIRECTORY, DEFAULT_DATAMAPS_DIRECTORY);
 		}	
 		
-		if(!prop.containsKey("logs_directory")){
-			logger.warn("No 'logs_directory' property found in config file, loading default");
-			prop.put("logs_directory", DEFAULT_LOGS_DIRECTORY);
+		if(!prop.containsKey(LOGS_DIRECTORY)){
+			logger.warn("No '{}' property found in config file, loading default", LOGS_DIRECTORY);
+			prop.put(LOGS_DIRECTORY, DEFAULT_LOGS_DIRECTORY);
 		}			
 		
-		if(!prop.containsKey("providers_directory")){
-			logger.warn("No 'providers_directory' property found in config file, loading default");
-			prop.put("providers_directory", DEFAULT_PROVIDERS_DIRECTORY);
+		if(!prop.containsKey(PROVIDERS_DIRECTORY)){
+			logger.warn("No '{}' property found in config file, loading default", PROVIDERS_DIRECTORY);
+			prop.put(PROVIDERS_DIRECTORY, DEFAULT_PROVIDERS_DIRECTORY);
 		}			
 		
-		if(!prop.containsKey("staged_directory")){
-			logger.warn("No 'staged_directory' property found in config file, loading default");
-			prop.put("staged_directory", DEFAULT_STAGED_DIRECTORY);
+		if(!prop.containsKey(STAGED_DIRECTORY)){
+			logger.warn("No '{}' property found in config file, loading default", STAGED_DIRECTORY);
+			prop.put(STAGED_DIRECTORY, DEFAULT_STAGED_DIRECTORY);
 		}		
 		
+		if(!prop.containsKey(EXPORT_MODE)){
+			logger.warn("No '{}' property found in config file, loading default", EXPORT_MODE);
+			prop.put(EXPORT_MODE, DEFAULT_EXPORT_MODE);
+		}				
+		
+		if(!prop.containsKey(VALIDATION_MODE)){
+			logger.warn("No '{}' property found in config file, loading default", VALIDATION_MODE);
+			prop.put(VALIDATION_MODE, DEFAULT_VALIDATION_MODE);
+		}				
 		return prop;
 	}
 	

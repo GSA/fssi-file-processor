@@ -46,32 +46,19 @@ public class SourceFileManager {
 	 */
 	public static void validateSourceFileProviders(
 		ArrayList<Provider> providers, ArrayList<SourceFile> sourceFiles) {
-		ArrayList<Integer> badFiles = new ArrayList<Integer>();
-		
-		//Loop 
 		for ( SourceFile sourceFile : sourceFiles) {
-			for ( Provider provider : providers) {
-				if(sourceFile.getFileName().toUpperCase().contains(provider.getProviderIdentifier().toUpperCase())){
-					sourceFile.setProvider(provider);
+			if(!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
+				logger.info("Attempting to map Provider to file {}", sourceFile.getFileName());
+				for (Provider provider : providers) {
+					if(sourceFile.getFileName().toUpperCase().contains(provider.getProviderIdentifier().toUpperCase())){
+						logger.info("Mapped provider {} - {} to file '{}'", provider.getProviderName(), provider.getProviderIdentifier(),sourceFile.getFileName());
+						sourceFile.setProvider(provider);
+					}
 				}
 			}
-			
-			//We couldn't find a provider, we can process this file no longer.
-			if(sourceFile.getProvider() == null){
-				logger.warn("No Provider found for file '{}' (Array Index #{}). File will be ignored", sourceFile.getFileName(), sourceFiles.indexOf(sourceFile));
-				badFiles.add(sourceFiles.indexOf(sourceFile));
-				sourceFile.setStatus(SourceFile.STATUS_IGNORED);
-			}
-		}
-		
-		//Reversing Order to prevent removing good files
-		Collections.reverse(badFiles);
-		
-		//Removing any bad files
-		if (badFiles.size() > 0){
-			for (Integer integer : badFiles) {
-				logger.warn("Removing sourceFile with index of '{}'", integer);
-				sourceFiles.remove(integer.intValue());
+			if (sourceFile.getProvider() == null){
+				logger.error("Could not find provider for file: '{}'", sourceFile.getFileName());
+				sourceFile.setStatus(SourceFile.STATUS_ERROR);
 			}
 		}
 	}	
@@ -83,35 +70,19 @@ public class SourceFileManager {
 	 */
 	public static void validateSourceFileSchemas(ArrayList<Schema> schemas,
 		ArrayList<SourceFile> sourceFiles) {
-		ArrayList<Integer> badFiles = new ArrayList<Integer>();
-		//Loop 
 		for ( SourceFile sourceFile : sourceFiles) {
-			
-			//We do not processed the ignored files
-			if (!sourceFile.getStatus().equals(SourceFile.STATUS_IGNORED)){
+			logger.info("Attempting to map Schema to file {}", sourceFile.getFileName());
+			if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
 				Provider provider = sourceFile.getProvider();
 				for ( Schema schema : schemas) {
 					if(provider.getProviderName().toUpperCase().equals(schema.getName().toUpperCase())){
+						logger.info("Mapped schema {} to file '{}'", schema.getName(), sourceFile.getFileName());
 						sourceFile.setSchema(schema);
 					}
 				}
-				
-				//We couldn't find a provider.
-				if(sourceFile.getSchema() == null){
-					logger.warn("No Schema found for file '{}' (Array Index #{}).", sourceFile.getFileName(), sourceFiles.indexOf(sourceFile));
-					//logger.warn("No Schema found for file '{}' (Array Index #{}). File has been marked for removal", sourceFile.getFileName(), sourceFiles.indexOf(sourceFile));
-					//badFiles.add(sourceFiles.indexOf(sourceFile));
-				}
-			}
-			
-			//Reversing Order to prevent removing good files
-			Collections.reverse(badFiles);
-			
-			//Removing any bad files
-			if (badFiles.size() > 0){
-				for (Integer integer : badFiles) {
-					logger.warn("Removing sourceFile with index of '{}'", integer);
-					sourceFiles.remove(integer.intValue());
+				if (sourceFile.getSchema() == null){
+					logger.error("Could not find schema for file: '{}'", sourceFile.getFileName());
+					sourceFile.setStatus(SourceFile.STATUS_WARNING);
 				}
 			}
 		}	
@@ -129,11 +100,12 @@ public class SourceFileManager {
 	public static void processSourceFiles(ArrayList<SourceFile> sourceFiles) {
 		//OK, now we start processing the files one at a time.
 		for ( SourceFile sourceFile : sourceFiles) {
+			if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
 			sourceFile.processSourceFile();
 			//Starting Data Validation
 			logger.info("Starting Data validation on file {}", sourceFile.getFileName()); 
-			
 			//END DATA VALIDATION
+			}
 		}
 	}
 	
@@ -146,7 +118,10 @@ public class SourceFileManager {
 	public static void outputStagedSourceFiles(ArrayList<SourceFile> sourceFiles) {
 		//OK, now we start processing the files one at a time.
 		for ( SourceFile sourceFile : sourceFiles) {	
-			sourceFile.outputStagedSourceFile();
+			if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
+				//logger.info("Starting ouput of file {}", sourceFile.getFileName());
+				sourceFile.outputStagedSourceFile();
+			}
 		}
 	}
 		
