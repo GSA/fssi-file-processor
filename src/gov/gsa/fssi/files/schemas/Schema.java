@@ -12,10 +12,6 @@ import java.util.ArrayList;
  *
  */
 public class Schema extends File{
-	
-	public Schema(String fileName) {
-		super(fileName);
-	}
 
 	private String name = null;
 	private String providerName = null;	
@@ -26,6 +22,12 @@ public class Schema extends File{
 	private ArrayList<SchemaField> fields = new ArrayList<SchemaField>();	
 	
 	
+	/**
+	 * @param fileName
+	 */
+	public Schema(String fileName) {
+		super();
+	}
 	/**
 	 * @return the name
 	 */

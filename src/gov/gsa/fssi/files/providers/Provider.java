@@ -1,4 +1,6 @@
-package gov.gsa.fssi.fileprocessor.providers;
+package gov.gsa.fssi.files.providers;
+
+import gov.gsa.fssi.files.File;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,11 +8,11 @@ import org.slf4j.LoggerFactory;
 /**
  * This is our provider object. the provider object controls how each file is identified and processed.
  * 
- * 
  * @author David Larrimore
  * 
  */
-public class Provider {
+public class Provider extends File{
+
 	static Logger logger = LoggerFactory.getLogger(Provider.class);
 	private String providerId = null;
 	private String providerName = null;	
@@ -18,7 +20,6 @@ public class Provider {
 	private String providerEmail = "StrategicSourcing@gsa.gov";		
 	private String fileOutputType = null;
 
-	
 	/**
 	 * @return the contactEmail
 	 */
@@ -32,20 +33,7 @@ public class Provider {
 	public void setProviderEmail(String contactEmail) {
 		this.providerEmail = contactEmail;
 	}		
-	
-	/**
-	 * Constructor Method
-	 */
-	public Provider() {
-	}
-	
-	
-	public Provider(String name) {
-		this.providerId = name;
-	}
 		
-	
-	
 	/**
 	 * @return the providerId
 	 */

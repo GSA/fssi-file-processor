@@ -1,6 +1,6 @@
-package gov.gsa.fssi.fileprocessor.sourceFiles.records;
+package gov.gsa.fssi.files.sourceFiles.records;
 
-import gov.gsa.fssi.fileprocessor.sourceFiles.records.datas.Data;
+import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 
 import java.util.ArrayList;
 

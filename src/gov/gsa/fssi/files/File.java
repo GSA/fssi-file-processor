@@ -1,7 +1,7 @@
 package gov.gsa.fssi.files;
 
 import gov.gsa.fssi.fileprocessor.Config;
-import gov.gsa.fssi.fileprocessor.sourceFiles.SourceFile;
+import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.helpers.FileHelper;
 
 import java.util.ArrayList;
@@ -16,27 +16,53 @@ import org.slf4j.LoggerFactory;
  */
 public class File {
 	
+	/**
+	 * @return
+	 */
+	public void file() {
+		
+	}
+	
+	
+	/**
+	 * @return
+	 */
 	public String getFileName() {
 		return fileName;
 	}
 	
+	/**
+	 * @param fileName
+	 */
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
 	
+	/**
+	 * @return
+	 */
 	public String getFileExtension() {
 		return fileExtension;
 	}
 	
+	/**
+	 * @param fileExtension
+	 */
 	public void setFileExtension(String fileExtension) {
 		this.fileExtension = fileExtension;
 	}
 	
+	/**
+	 * @param filepart
+	 */
 	public void addFileNameParts(String filepart) {
 		this.fileNameParts.add(filepart);
 	}
 	/**
 	 * @return the fileParts
+	 */
+	/**
+	 * @return
 	 */
 	public ArrayList<String> getFileNameParts() {
 		return fileNameParts;
@@ -44,21 +70,18 @@ public class File {
 	/**
 	 * @param fileParts the fileParts to set
 	 */
+	/**
+	 * @param fileParts
+	 */
 	public void setFileNameParts(ArrayList<String> fileParts) {
 		this.fileNameParts = fileParts;
 	}
-	/**
-	 * This Method sets fileNameParts based upon the sourceFiles file name. If filename is not set, then filenameparts will be empty
-	 */
-	public void setFileNameParts() {
-		if(fileName == null || this.fileName.isEmpty()){
-			logger.warn("FileName is not set, unable to set FileNameParts");
-		}else{
-			this.setFileNameParts(this.fileName);
-		}
-	}
+
 	/**
 	 * This Method sets fileNameParts based upon input file name.
+	 */
+	/**
+	 * @param fileName
 	 */
 	public void setFileNameParts(String fileName) {
 		if(fileName == null || fileName.isEmpty()){
@@ -68,10 +91,16 @@ public class File {
 		}
 	}	
 	
+	/**
+	 * @return
+	 */
 	public String getStatus() {
 		return status;
 	}
 
+	/**
+	 * @param status
+	 */
 	public void setStatus(String status) {
 		this.status = status;
 	}
@@ -85,7 +114,10 @@ public class File {
 		int startOfExtension = fileName.lastIndexOf(".")+1;
 		this.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
 		this.setStatus(SourceFile.STATUS_INITIALIZED);
-		this.setFileNameParts();
+		this.setFileNameParts(this.getFileName());
+	}
+	
+	public File() {
 	}
 	
 	public String fileName = null;

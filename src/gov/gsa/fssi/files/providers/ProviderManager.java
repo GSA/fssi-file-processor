@@ -1,4 +1,4 @@
-package gov.gsa.fssi.fileprocessor.providers;
+package gov.gsa.fssi.files.providers;
 
 import gov.gsa.fssi.fileprocessor.Config;
 import gov.gsa.fssi.files.schemas.Schema;

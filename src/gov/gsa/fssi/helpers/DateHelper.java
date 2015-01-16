@@ -1,6 +1,6 @@
 package gov.gsa.fssi.helpers;
 
-import gov.gsa.fssi.fileprocessor.sourceFiles.SourceFile;
+import gov.gsa.fssi.files.sourceFiles.SourceFile;
 
 import java.text.DateFormat;
 import java.text.ParseException;

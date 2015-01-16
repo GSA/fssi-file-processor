@@ -1,6 +1,6 @@
-package gov.gsa.fssi.fileprocessor.sourceFiles.records.datas;
+package gov.gsa.fssi.files.sourceFiles.records.datas;
 
-import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
+import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

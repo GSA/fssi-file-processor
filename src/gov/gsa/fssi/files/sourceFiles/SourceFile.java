@@ -1,12 +1,12 @@
-package gov.gsa.fssi.fileprocessor.sourceFiles;
+package gov.gsa.fssi.files.sourceFiles;
 
 import gov.gsa.fssi.fileprocessor.Config;
-import gov.gsa.fssi.fileprocessor.providers.Provider;
-import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
-import gov.gsa.fssi.fileprocessor.sourceFiles.records.datas.Data;
 import gov.gsa.fssi.files.File;
+import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
+import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
+import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import gov.gsa.fssi.helpers.DateHelper;
 import gov.gsa.fssi.helpers.FileHelper;
 

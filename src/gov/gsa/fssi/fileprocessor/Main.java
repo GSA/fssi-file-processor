@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.gsa.fssi.fileprocessor.providers.Provider;
-import gov.gsa.fssi.fileprocessor.providers.ProviderManager;
-import gov.gsa.fssi.fileprocessor.sourceFiles.SourceFile;
-import gov.gsa.fssi.fileprocessor.sourceFiles.SourceFileManager;
+import gov.gsa.fssi.files.providers.Provider;
+import gov.gsa.fssi.files.providers.ProviderManager;
 import gov.gsa.fssi.files.schemas.Schema;
+import gov.gsa.fssi.files.sourceFiles.SourceFile;
+import gov.gsa.fssi.files.sourceFiles.SourceFileManager;
 
 
 
