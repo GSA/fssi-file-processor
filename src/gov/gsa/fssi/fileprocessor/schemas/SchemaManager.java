@@ -143,27 +143,40 @@ public class SchemaManager {
 			
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element fieldElement = (Element) node;
+//				
+//				if(fieldElement.getElementsByTagName("description")  != null && fieldElement.getElementsByTagName("description").item(0) != null){
+//					field.setDescription(fieldElement.getElementsByTagName("description").item(0).getTextContent());					
+//				}
+//				if(fieldElement.getElementsByTagName("name")  != null && fieldElement.getElementsByTagName("name").item(0) != null){
+//					field.setName(fieldElement.getElementsByTagName("name").item(0).getTextContent());	
+//				}
+//				if(fieldElement.getElementsByTagName("title") != null && fieldElement.getElementsByTagName("title").item(0) != null){
+//					field.setTitle(fieldElement.getElementsByTagName("title").item(0).getTextContent());					
+//				}
+//				if(fieldElement.getElementsByTagName("format")  != null && fieldElement.getElementsByTagName("format").item(0) != null){
+//					
+//					field.setTitle(fieldElement.getElementsByTagName("format").item(0).getTextContent());					
+//				}
+//				if(!(fieldElement.getElementsByTagName("type")  == null  
+//						&& fieldElement.getElementsByTagName("type").item(0) != null
+//							&& !fieldElement.getElementsByTagName("type").item(0).getTextContent().isEmpty())){
+//					field.setTitle(fieldElement.getElementsByTagName("type").item(0).getTextContent());					
+//				}else{
+//					logger.warn("No Field type provided, defaulting to '{}'", SchemaField.TYPE_ANY);
+//				}
 				
-				if(fieldElement.getElementsByTagName("description")  != null && fieldElement.getElementsByTagName("description").item(0) != null){
-					field.setDescription(fieldElement.getElementsByTagName("description").item(0).getTextContent());					
-				}
-				if(fieldElement.getElementsByTagName("name")  != null && fieldElement.getElementsByTagName("name").item(0) != null){
-					field.setName(fieldElement.getElementsByTagName("name").item(0).getTextContent());	
-				}
-				if(fieldElement.getElementsByTagName("title") != null && fieldElement.getElementsByTagName("title").item(0) != null){
-					field.setTitle(fieldElement.getElementsByTagName("title").item(0).getTextContent());					
-				}
-				if(fieldElement.getElementsByTagName("format")  != null && fieldElement.getElementsByTagName("format").item(0) != null){
+				
+				NodeList nodeList = node.getChildNodes();
+				
+				for (int j = 0; j < nodeList.getLength(); j++){
 					
-					field.setTitle(fieldElement.getElementsByTagName("format").item(0).getTextContent());					
+					if (nodeList.item(j).getNodeType() == Node.ELEMENT_NODE){
+						logger.debug("{}", nodeList.item(j).getNodeName());	
+					}
 				}
-				if(!(fieldElement.getElementsByTagName("type")  == null  
-						&& fieldElement.getElementsByTagName("type").item(0) != null
-							&& !fieldElement.getElementsByTagName("type").item(0).getTextContent().isEmpty())){
-					field.setTitle(fieldElement.getElementsByTagName("type").item(0).getTextContent());					
-				}else{
-					logger.warn("No Field type provided, defaulting to '{}'", SchemaField.TYPE_ANY);
-				}
+				
+				
+				
 				
 				logger.info("Processing field '{}'", field.getName());
 							
