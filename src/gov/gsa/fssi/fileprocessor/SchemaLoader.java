@@ -1,8 +1,8 @@
-package gov.gsa.fssi.fileprocessor.schemas;
+package gov.gsa.fssi.fileprocessor;
 
-import gov.gsa.fssi.fileprocessor.Config;
-import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
-import gov.gsa.fssi.fileprocessor.schemas.schemaFields.fieldConstraints.FieldConstraint;
+import gov.gsa.fssi.files.schemas.Schema;
+import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
+import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.helpers.FileHelper;
 import gov.gsa.fssi.helpers.XmlHelper;
 
@@ -23,8 +23,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-public class SchemaManager {
-	static Logger logger = LoggerFactory.getLogger(SchemaManager.class);
+public class SchemaLoader {
+	static Logger logger = LoggerFactory.getLogger(SchemaLoader.class);
 	static Config config = new Config();	    
 	
 	public static ArrayList<Schema> initializeSchemas() {
@@ -45,7 +45,7 @@ public class SchemaManager {
 	public static void initializeSchema(ArrayList<Schema> schemas, String fileName) {
 		Document doc = null;
 		boolean dupeSchemaCheck = false;
-		Schema newSchema = new Schema();	
+		Schema newSchema = new Schema(fileName);	
 		
 		try {
 			File fXmlFile = new File(config.getProperty(Config.SCHEMAS_DIRECTORY) + fileName);
@@ -162,7 +162,7 @@ public class SchemaManager {
 						}else if(currentNode.getNodeName().equals("constraints")){
 							logger.info("Processing Constraints");
 							NodeList constraintList = currentNode.getChildNodes();
-								if(constraintList != null){
+							if(constraintList != null){
 								try {
 									processConstraints(field, constraintList);
 								} catch (DOMException e) {
@@ -174,12 +174,7 @@ public class SchemaManager {
 							}			
 							logger.info("Completed processing Constraints");
 						}else if (currentNode.getNodeName().equals("alias")){
-							if(currentNode.getNodeValue() != null && !isDuplicateConstraintAlias(field, currentNode.getNodeValue().trim().toUpperCase())){
-								field.addAlias(currentNode.getTextContent().trim().toUpperCase());		
-								logger.info("added alias {} to field {}", currentNode.getTextContent().trim().toUpperCase(), field.getName());
-							}else{
-								logger.warn("Ignoring duplicate Alias '{}' from field: '{}'", currentNode.getTextContent().trim().toUpperCase(),  field.getName());
-							}
+							field.addAlias(currentNode.getTextContent().trim().toUpperCase());		
 						}
 					}
 				}
@@ -216,34 +211,16 @@ public class SchemaManager {
 				newConstraint.setConstraintType(currentNode.getNodeName().trim());
 				newConstraint.setValue(currentNode.getTextContent().trim());									
 				
-				//logger.info("Processing Constraint '{}' for field {}", newConstraint.getConstraintType(), field.getName());
-				// get a map containing the attributes of this constraint 
-				
-				//NamedNodeMap attributeMap = constraintNode.getAttributes();
 				HashMap<String,String> attributeMap = XmlHelper.convertXmlAttributeToHashMap(currentNode.getAttributes());
 				Iterator optionsIterator = attributeMap.entrySet().iterator();
 				
 				while (optionsIterator.hasNext()) {
 					Map.Entry<String, String> optionsPair = (Map.Entry)optionsIterator.next();
-					if(!newConstraint.isValidOption(optionsPair.getKey())){
-						logger.warn("Ignoring invalid Option from Constraint: '{}'. {}  is not a valid type", newConstraint.getConstraintType(), optionsPair.getKey());
-					}else if(optionsPair.getKey() == FieldConstraint.OPTION_LEVEL && !newConstraint.isValidOptionLevel(optionsPair.getValue())){
-						logger.warn("Ignoring invalid Option level from Constraint: '{}'. {} is not a valid level", newConstraint.getConstraintType(), optionsPair.getKey());
-					}else{
 						newConstraint.addOption(optionsPair.getKey(),optionsPair.getValue()) ;
 						logger.info("Adding Attribute {} - {} to Constraint {}", optionsPair.getKey(), optionsPair.getValue(), currentNode.getNodeName());		
-					}
 				}
 				
-				//if duplicate not found, add constraint								
-				if(isDuplicateConstraint(field, newConstraint)){
-					logger.warn("Ignoring duplicate Constraint '{}' from Field: '{}'", newConstraint.getConstraintType(),  field.getName());
-				}else if(!newConstraint.isValidType(newConstraint.getConstraintType())){
-					logger.warn("Ignoring invalid Constraint from Field: '{}'. '{}' is not a valid type", newConstraint.getConstraintType(), field.getName(), newConstraint.getConstraintType());									
-				}else{
-					logger.info("Successfully added Constraint '{}'", newConstraint.getConstraintType());	
-					field.addConstraint(newConstraint);								
-				}
+				field.addConstraint(newConstraint);								
 			}
 		}
 

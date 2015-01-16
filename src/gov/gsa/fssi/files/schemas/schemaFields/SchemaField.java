@@ -1,6 +1,6 @@
-package gov.gsa.fssi.fileprocessor.schemas.schemaFields;
+package gov.gsa.fssi.files.schemas.schemaFields;
 
-import gov.gsa.fssi.fileprocessor.schemas.schemaFields.fieldConstraints.FieldConstraint;
+import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 
 import java.util.ArrayList;
 

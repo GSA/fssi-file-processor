@@ -7,10 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import gov.gsa.fssi.fileprocessor.providers.Provider;
 import gov.gsa.fssi.fileprocessor.providers.ProviderManager;
-import gov.gsa.fssi.fileprocessor.schemas.Schema;
-import gov.gsa.fssi.fileprocessor.schemas.SchemaManager;
 import gov.gsa.fssi.fileprocessor.sourceFiles.SourceFile;
 import gov.gsa.fssi.fileprocessor.sourceFiles.SourceFileManager;
+import gov.gsa.fssi.files.schemas.Schema;
 
 
 
@@ -33,8 +32,8 @@ public class Main {
 	    logger.info("Starting FSSI File Processor");
 		ArrayList<Provider> providers = ProviderManager.initializeProviders();
 		ProviderManager.printAllProviders(providers);
-	    ArrayList<Schema> schemas = SchemaManager.initializeSchemas();
-	    SchemaManager.printAllSchemas(schemas);
+	    ArrayList<Schema> schemas = SchemaLoader.initializeSchemas();
+	    SchemaLoader.printAllSchemas(schemas);
 		//ArrayList<SourceFile> sourceFiles = SourceFileManager.initializeSourceFiles();
 		//ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
 	    logger.info("Completed FSSI File Processor");	

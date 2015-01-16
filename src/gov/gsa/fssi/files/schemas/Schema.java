@@ -1,11 +1,9 @@
-package gov.gsa.fssi.fileprocessor.schemas;
+package gov.gsa.fssi.files.schemas;
 
-import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
+import gov.gsa.fssi.files.File;
+import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 
 import java.util.ArrayList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Schema object is ment to mimic the JSON table schema located here: http://dataprotocols.org/json-table-schema/
@@ -13,19 +11,19 @@ import org.slf4j.LoggerFactory;
  * @author DavidKLarrimore
  *
  */
-public class Schema {
-	static Logger logger = LoggerFactory.getLogger(Schema.class);
+public class Schema extends File{
+	
+	public Schema(String fileName) {
+		super(fileName);
+	}
+
 	private String name = null;
 	private String providerName = null;	
 	private String version = null;
-	private String status = null;
+
 	private ArrayList<String> primaryKeys = null;
 	private ArrayList<String> foreignKeys = null;	
 	private ArrayList<SchemaField> fields = new ArrayList<SchemaField>();	
-	
-	public static String STATUS_ERROR = "error";
-	public static String STATUS_WARNING = "warning";
-	public static String STATUS_VALIDATED = "validated";
 	
 	
 	/**
@@ -167,18 +165,5 @@ public class Schema {
 			field.print();
 		}
 	}
-	/**
-	 * @return the status
-	 */
-	public String getStatus() {
-		return status;
-	}
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 	
 }

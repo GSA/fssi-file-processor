@@ -1,7 +1,7 @@
 package gov.gsa.fssi.fileprocessor.providers;
 
 import gov.gsa.fssi.fileprocessor.Config;
-import gov.gsa.fssi.fileprocessor.schemas.Schema;
+import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.helpers.FileHelper;
 
 import java.io.File;

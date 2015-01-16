@@ -2,10 +2,11 @@ package gov.gsa.fssi.fileprocessor.sourceFiles;
 
 import gov.gsa.fssi.fileprocessor.Config;
 import gov.gsa.fssi.fileprocessor.providers.Provider;
-import gov.gsa.fssi.fileprocessor.schemas.Schema;
-import gov.gsa.fssi.fileprocessor.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.fileprocessor.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.fileprocessor.sourceFiles.records.datas.Data;
+import gov.gsa.fssi.files.File;
+import gov.gsa.fssi.files.schemas.Schema;
+import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.helpers.DateHelper;
 import gov.gsa.fssi.helpers.FileHelper;
 
@@ -49,13 +50,10 @@ import org.slf4j.LoggerFactory;
  * @author David Larrimore
  * 
  */
-public class SourceFile{
+public class SourceFile extends File{
 	static Logger logger = LoggerFactory.getLogger(SourceFile.class);
 	static Config config = new Config();	    
 	
-	private String fileName = null;
-	private String fileExtension = null;
-	private ArrayList<String> fileNameParts = new ArrayList<String>();
 	private Schema schema = null;
 	private Provider provider = null;
 	private Date ReportingPeriod = null;
@@ -65,17 +63,6 @@ public class SourceFile{
 	private Integer totalEmptyRecords = 0;
 	private Map<Integer, String> headers = new HashMap<Integer, String>();
 	private ArrayList<SourceFileRecord> records = new ArrayList<SourceFileRecord>();
-	
-	private String status = null;
-	//TODO: Create some sort of object or mechanism for capturing status messages for reporting
-	public static String STATUS_INITIALIZED = "initialized";	
-	public static String STATUS_LOADED = "loaded";	
-	public static String STATUS_MAPPED = "mapped";		
-	public static String STATUS_PROCESSED = "processed";		
-	public static String STATUS_VALIDATED = "validated";		
-	public static String STATUS_STAGED = "staged";
-	public static String STATUS_ERROR = "error";
-	public static String STATUS_WARNING = "warning";		
 	
 	/**
 	 * @return
@@ -276,30 +263,6 @@ public class SourceFile{
 		this.fileName = fileName;
 	}
 	/**
-	 * @return the fileExtension
-	 */
-	public String getFileExtension() {
-		return fileExtension;
-	}
-	/**
-	 * @param fileExtension the fileExtension to set
-	 */
-	public void setFileExtension(String fileExtension) {
-		this.fileExtension = fileExtension;
-	}
-	/**
-	 * @return the status
-	 */
-	public String getStatus() {
-		return status;
-	}
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	/**
 	 * @param record
 	 */
 	public void addRecord(SourceFileRecord record) {
@@ -313,69 +276,14 @@ public class SourceFile{
 	}	
 
 	/**
-	 * @return the fileParts
-	 */
-	public ArrayList<String> getFileNameParts() {
-		return fileNameParts;
-	}
-	/**
-	 * @param fileParts the fileParts to set
-	 */
-	public void setFileNameParts(ArrayList<String> fileParts) {
-		this.fileNameParts = fileParts;
-	}
-	/**
-	 * This Method sets fileNameParts based upon the sourceFiles file name. If filename is not set, then filenameparts will be empty
-	 */
-	public void setFileNameParts() {
-		if(fileName == null || this.fileName.isEmpty()){
-			logger.warn("FileName is not set, unable to set FileNameParts");
-		}else{
-			this.setFileNameParts(this.fileName);
-		}
-	}
-	/**
-	 * This Method sets fileNameParts based upon input file name.
-	 */
-	public void setFileNameParts(String fileName) {
-		if(fileName == null || fileName.isEmpty()){
-			logger.warn("FileName was empty or null, unable to set FileNameParts");
-		}else{
-			this.setFileNameParts(FileHelper.setFileNameParts(fileName, FileHelper.SEPARATOR_UNDERSCORE));
-		}
-	}	
-	/**
-	 * @param filepart
-	 */
-	public void addFileNameParts(String filepart) {
-		this.fileNameParts.add(filepart);
-	}
-	
-	/**
 	 * @param index
 	 */
 	public void removeRecord(int index) {
 		this.records.remove(index);
 	}	
 	
-	/**
-	 * 
-	 */
-	public SourceFile() {
-	
-	}
-	
-	/**
-	 * This constructor class takes a file name and uses it to initialize the basic elements of a SourceFile
-	 * @param fileName - This should be in name.ext format.
-	 */
 	public SourceFile(String fileName) {
-		logger.info("Constructing SourceFile using fileName '{}'", fileName);
-		this.setFileName(fileName);
-		int startOfExtension = fileName.lastIndexOf(".")+1;
-		this.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
-		this.setStatus(SourceFile.STATUS_INITIALIZED);
-		this.setFileNameParts();
+		super(fileName);
 		this.setReportingPeriod();
 	}
 		
