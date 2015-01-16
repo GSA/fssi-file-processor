@@ -1,9 +1,6 @@
 package gov.gsa.fssi.files;
 
 import gov.gsa.fssi.fileprocessor.Config;
-import gov.gsa.fssi.files.sourceFiles.SourceFile;
-import gov.gsa.fssi.helpers.FileHelper;
-
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -15,15 +12,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class File {
-	
-	/**
-	 * @return
-	 */
-	public void file() {
-		
-	}
-	
-	
 	/**
 	 * @return
 	 */
@@ -76,20 +64,6 @@ public class File {
 	public void setFileNameParts(ArrayList<String> fileParts) {
 		this.fileNameParts = fileParts;
 	}
-
-	/**
-	 * This Method sets fileNameParts based upon input file name.
-	 */
-	/**
-	 * @param fileName
-	 */
-	public void setFileNameParts(String fileName) {
-		if(fileName == null || fileName.isEmpty()){
-			logger.warn("FileName was empty or null, unable to set FileNameParts");
-		}else{
-			this.setFileNameParts(FileHelper.setFileNameParts(fileName, FileHelper.SEPARATOR_UNDERSCORE));
-		}
-	}	
 	
 	/**
 	 * @return
@@ -113,12 +87,45 @@ public class File {
 		this.setFileName(fileName);
 		int startOfExtension = fileName.lastIndexOf(".")+1;
 		this.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
-		this.setStatus(SourceFile.STATUS_INITIALIZED);
-		this.setFileNameParts(this.getFileName());
+		this.setStatus(File.STATUS_INITIALIZED);
+		//defaulted to underscore
+		this.setFileNameParts(SEPARATOR_UNDERSCORE);
 	}
 	
 	public File() {
 	}
+	
+	/**
+	 * This Method sets fileNameParts based upon input file name.
+	 */
+	public void setFileNameParts(byte filePartSeparator) {
+		ArrayList<String> fileNameParts = new ArrayList<String>();
+		
+		if(fileName == null || fileName.isEmpty()){
+			logger.warn("FileName was empty or null, unable to set FileNameParts");
+		}else{
+			String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf("."));
+			boolean loopQuit = false;
+			
+			logger.debug("Attemtping to get file parts from fileName '{}'", fileName);
+			while (!loopQuit){
+				logger.debug("fileNameWithoutExtension: {}", fileNameWithoutExtension);
+				if(fileNameWithoutExtension.contains("_")){
+					logger.debug("Adding File Part: '{}'", fileNameWithoutExtension.substring(0, fileNameWithoutExtension.indexOf("_")));
+					fileNameParts.add(fileName.substring(0, fileNameWithoutExtension.indexOf("_")));
+					fileNameWithoutExtension = fileNameWithoutExtension.substring(fileNameWithoutExtension.indexOf("_")+1,fileNameWithoutExtension.length());	
+				}else{
+					logger.debug("Adding File Part: '{}'", fileNameWithoutExtension);
+					fileNameParts.add(fileNameWithoutExtension);
+					loopQuit = true;
+				}	
+			}
+			logger.info("FileName '{}' had the following filename parts: {}", fileName, fileNameParts);
+		}
+		
+		this.setFileNameParts(fileNameParts);
+	}	
+	
 	
 	public String fileName = null;
 	private String fileExtension = null;
@@ -134,4 +141,11 @@ public class File {
 	public static String STATUS_PROCESSED = "processed";		
 	public static String STATUS_VALIDATED = "validated";		
 	public static String STATUS_STAGED = "staged";
+	public static byte SEPARATOR_UNDERSCORE = '_';
+	public static byte SEPARATOR_DASH = '-';
+	public static byte SEPARATOR_COMMA = ',';
+	public static byte SEPARATOR_PIPE = '|';
+	public static byte SEPARATOR_TILDE = '~';
+	public static byte SEPARATOR_FORWARDSLASH = '/';
+	public static byte SEPARATOR_BACKSLASH = '\\';
 }

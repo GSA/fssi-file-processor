@@ -10,6 +10,7 @@ import gov.gsa.fssi.files.providers.ProviderManager;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.SourceFileManager;
+import gov.gsa.fssi.helpers.FileHelper;
 
 
 
@@ -32,7 +33,7 @@ public class Main {
 	    logger.info("Starting FSSI File Processor");
 		ArrayList<Provider> providers = ProviderManager.initializeProviders();
 		ProviderManager.printAllProviders(providers);
-	    ArrayList<Schema> schemas = SchemaLoader.initializeSchemas();
+	    ArrayList<Schema> schemas = initializeSchemas();
 	    SchemaLoader.printAllSchemas(schemas);
 		//ArrayList<SourceFile> sourceFiles = SourceFileManager.initializeSourceFiles();
 		//ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
@@ -85,4 +86,21 @@ public class Main {
 		    logger.info("Completed Outputting SourceFile '{}'", sourceFile.getFileName());	
 		}
 	}	
+	
+	public static ArrayList<Schema> initializeSchemas() {
+	    logger.debug("Starting initializeSchemas('{}')", config.getProperty(Config.SCHEMAS_DIRECTORY));		
+		
+	    ArrayList<Schema> schemas = new ArrayList<Schema>();	
+	    ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty(Config.SCHEMAS_DIRECTORY), ".xml");
+		
+		for (String fileName : fileNames) {
+			Schema schema = SchemaLoader.loadSchema(fileName);
+			schemas.add(schema);
+		}
+		logger.info("Completed Schema setup. Added " + schemas.size() + " Schemas");
+			
+		return schemas;		
+	}
+	
+	
 }

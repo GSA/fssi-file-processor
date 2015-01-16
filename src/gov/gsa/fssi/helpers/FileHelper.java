@@ -63,36 +63,4 @@ public class FileHelper {
 		return oldFileName.substring(0, oldFileName.lastIndexOf('.') + 1)  + newExtension.toLowerCase();
 	}
 	
-	
-	/**
-	 * This Method sets fileNameParts based upon input file name.
-	 * This 
-	 */
-	public static ArrayList<String> setFileNameParts(String fileName, byte filePartSeparator) {
-		ArrayList<String> fileNameParts = new ArrayList<String>();
-		
-		if(fileName == null || fileName.isEmpty()){
-			logger.warn("FileName was empty or null, unable to set FileNameParts");
-		}else{
-			String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf("."));
-			boolean loopQuit = false;
-			
-			logger.debug("Attemtping to get file parts from fileName '{}'", fileName);
-			while (!loopQuit){
-				logger.debug("fileNameWithoutExtension: {}", fileNameWithoutExtension);
-				if(fileNameWithoutExtension.contains("_")){
-					logger.debug("Adding File Part: '{}'", fileNameWithoutExtension.substring(0, fileNameWithoutExtension.indexOf("_")));
-					fileNameParts.add(fileName.substring(0, fileNameWithoutExtension.indexOf("_")));
-					fileNameWithoutExtension = fileNameWithoutExtension.substring(fileNameWithoutExtension.indexOf("_")+1,fileNameWithoutExtension.length());	
-				}else{
-					logger.debug("Adding File Part: '{}'", fileNameWithoutExtension);
-					fileNameParts.add(fileNameWithoutExtension);
-					loopQuit = true;
-				}	
-			}
-			logger.info("FileName '{}' had the following filename parts: {}", fileName, fileNameParts);
-		}
-		
-		return fileNameParts;
-	}	
 }

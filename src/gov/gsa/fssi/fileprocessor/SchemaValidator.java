@@ -3,6 +3,7 @@ package gov.gsa.fssi.fileprocessor;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
+import gov.gsa.fssi.helpers.FileHelper;
 import gov.gsa.fssi.helpers.XmlHelper;
 
 import java.io.File;
@@ -22,22 +23,23 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-public class SchemaLoader {
-	static Logger logger = LoggerFactory.getLogger(SchemaLoader.class);
+public class SchemaValidator {
+	static Logger logger = LoggerFactory.getLogger(SchemaValidator.class);
 	static Config config = new Config();	    
 
 
-	public static Schema loadSchema(String fileName) {
+	public static void loadSchema(ArrayList<Schema> schemas, String fileName) {
 		Document doc = null;
+		boolean dupeSchemaCheck = false;
 		Schema newSchema = new Schema(fileName);	
+		
 		try {
 			File fXmlFile = new File(config.getProperty(Config.SCHEMAS_DIRECTORY) + fileName);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			doc = dBuilder.parse(fXmlFile);
 		} catch (Exception e) {
-			logger.error("Received Exception error '{}' while processing file {}", e.getMessage(), fileName);	
-			return null;
+			logger.error("Received Exception error '{}' while processing file {}", e.getMessage(), fileName);		
 			//e.printStackTrace();
 	    }
 		
@@ -48,47 +50,85 @@ public class SchemaLoader {
 			//We assume their is only 1 schema in each file.
 			Node schemaNode = doc.getFirstChild();
 			Element schemaElement = (Element) schemaNode;
-		    logger.info("Attempting to load schema '{}' in file '{}'", schemaElement.getElementsByTagName("name").item(0).getTextContent(), fileName);
 			
-		    newSchema.setName(schemaElement.getElementsByTagName("name").item(0).getTextContent());
-			newSchema.setProviderName(schemaElement.getElementsByTagName("provider").item(0).getTextContent());
-			newSchema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
-			newSchema.setFields(initializeFields(doc.getElementsByTagName("field")));
-			
-			if(newSchema.getStatus().equals(Schema.STATUS_ERROR)){
-				logger.error("Could not load Schema '{}' in file '{}' as it is in error status", newSchema.getName(), fileName);
-				return null;
+			for (Schema schema: schemas){
+			if (schemaElement.getElementsByTagName("name").item(0).getTextContent().toUpperCase().equals(schema.getName())){
+				logger.warn("Duplicate schema {} found in file {}, ignorning", schema.getName(), fileName);
+				dupeSchemaCheck = true;
 			}
-			
-			logger.info("successfully loaded Schema '{}' from file '{}'", newSchema.getName(), fileName);
-			newSchema.setStatus(Schema.STATUS_LOADED);
-			return newSchema;
+			}
+		
+			if (dupeSchemaCheck == false){
+				//All schemas must have a name
+				if (schemaElement.getElementsByTagName("name").item(0).getTextContent() == null || schemaElement.getElementsByTagName("name").item(0).getTextContent().equals("")){
+					logger.error("Schema in file '{}' does not have required element of 'Name'. Ignoring.", fileName);
+				}else{
+				    logger.info("Processing schema '{}' in file '{}'", schemaElement.getElementsByTagName("name").item(0).getTextContent(), fileName);
+					newSchema.setName(schemaElement.getElementsByTagName("name").item(0).getTextContent());
+					newSchema.setProviderName(schemaElement.getElementsByTagName("provider").item(0).getTextContent());
+					newSchema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
+					newSchema.setFields(initializeFields(doc.getElementsByTagName("field")));
+					
+					schemas.add(newSchema);
+				}
+			}
 		}
-		logger.error("No document found in file '{}'. Unable to load any schema", fileName);
-		newSchema.setStatus(Schema.STATUS_ERROR);
-		return newSchema;
+		// logger.info("     Successfully processed " + fileName);
 	}	
 
 
 		public static ArrayList<SchemaField> initializeFields(NodeList fieldNodes) {
 			ArrayList<SchemaField> fields = new ArrayList<SchemaField>();
 			for (int temp = 0; temp < fieldNodes.getLength(); temp++) {
-				SchemaField field = initializeField(fieldNodes.item(temp));
-				fields.add(field);
-				logger.info("succesfully added field '{}' to the schema.", field.getName());
+				initializeField(fieldNodes, fields, temp);
 			}
 			return fields;		
 		}
 
-		
+
 		/**
-		 * @param node
-		 * @return
+		 * @param fieldNodes
+		 * @param fields
+		 * @param temp
 		 */
-	public static SchemaField initializeField(Node node) {
-		SchemaField field = new SchemaField();
+		private static void initializeField(NodeList fieldNodes,ArrayList<SchemaField> fields, int temp) {
+			boolean dupeCheck = false;
+			SchemaField newField = initializeField(fieldNodes.item(temp));
+			ArrayList<String> dupeFields = new ArrayList<String>();
+			//logger.info("Processed field, now adding to array");
 			
-		if (node.getNodeType() == Node.ELEMENT_NODE) {
+			for (SchemaField schemaField : fields) {
+				if(schemaField.getName().equals(newField.getName())){
+					logger.warn("Duplicate field {} found. Ignoring", newField.getName());
+					dupeCheck = true;
+				}
+				for(String alias:schemaField.getAlias()){
+					for(String newAlias:newField.getAlias()){
+						if (alias.equals(newAlias)){
+							dupeFields.add(alias);
+						}
+					}
+				}
+			}
+			
+			if(!dupeFields.isEmpty()){
+				for (String dupeFieldAlias : dupeFields) {
+					logger.warn("alias {} in field {} is a duplicate in another field. It is being removed", dupeFieldAlias, newField.getName());
+					newField.removeAlias(dupeFieldAlias);
+				}
+			}
+			
+			if(dupeCheck == false){
+				fields.add(newField);		
+				logger.info("Successfully added field '{}'", newField.getName());
+			}
+		}
+		
+		public static SchemaField initializeField(Node node) {
+			SchemaField field = new SchemaField();
+			
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element fieldElement = (Element) node;
 				
 				NodeList nodeList = node.getChildNodes();
 				for (int j = 0; j < nodeList.getLength(); j++){
@@ -124,6 +164,7 @@ public class SchemaLoader {
 						}
 					}
 				}
+				
 				logger.info("Processing field '{}'", field.getName());
 			}			
 		return field;	
@@ -152,12 +193,12 @@ public class SchemaLoader {
 		private static void processConstraint(SchemaField field, Node currentNode) throws DOMException {
 			FieldConstraint newConstraint = new FieldConstraint();
 			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
-				logger.info("Adding Constraint {} - {}", currentNode.getNodeName().trim(), currentNode.getTextContent().trim());		
+
 				newConstraint.setConstraintType(currentNode.getNodeName().trim());
 				newConstraint.setValue(currentNode.getTextContent().trim());									
 				
 				HashMap<String,String> attributeMap = XmlHelper.convertXmlAttributeToHashMap(currentNode.getAttributes());
-				Iterator<?> optionsIterator = attributeMap.entrySet().iterator();
+				Iterator optionsIterator = attributeMap.entrySet().iterator();
 				
 				while (optionsIterator.hasNext()) {
 					Map.Entry<String, String> optionsPair = (Map.Entry)optionsIterator.next();
@@ -169,6 +210,38 @@ public class SchemaLoader {
 			}
 		}
 
+		/**
+		 * @param newAlias
+		 * @param field
+		 * @return 
+		 */
+		private static boolean isDuplicateConstraintAlias(SchemaField field, String newAlias) {
+			for(String alias: field.getAlias()){
+				return (alias.equals(newAlias.trim().toUpperCase())? true:false);
+			}
+			return false;
+		}
+
+
+		/**
+		 * Checks for a duplicate constraint based upon type and option effectivedate
+		 * @param field
+		 * @param newConstraint
+		 * @return
+		 */
+		private static boolean isDuplicateConstraint(SchemaField field,FieldConstraint newConstraint) {
+			for (FieldConstraint constraintCheck : field.getConstraints()) {
+				if(newConstraint.getConstraintType().trim().toUpperCase().equals(constraintCheck.getConstraintType().trim().toUpperCase())){
+					if(newConstraint.getOptions().containsKey(FieldConstraint.OPTION_EFFECTIVEDATE) && constraintCheck.getOptions().containsKey(FieldConstraint.OPTION_EFFECTIVEDATE)){
+						return (newConstraint.getOptionValue(FieldConstraint.OPTION_EFFECTIVEDATE) == constraintCheck.getOptionValue(FieldConstraint.OPTION_EFFECTIVEDATE)? true:false);
+					}else if(!newConstraint.getOptions().containsKey(FieldConstraint.OPTION_EFFECTIVEDATE) && !constraintCheck.getOptions().containsKey(FieldConstraint.OPTION_EFFECTIVEDATE)){
+						//logger.debug("Both constraints had no effective date, is duplicate");
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 		
 		public static void printAllSchemas(ArrayList<Schema> schemas){
 			for(Schema schema: schemas){

@@ -188,7 +188,7 @@ public class SchemaField {
 	 * Print Field
 	 */
 	public void print() {
-		logger.debug("     Field '{}' Title: '{}' Type: '{}' Description: '{}' Format: '{}' Alias: {}}",  this.getName(), this.getTitle(), this.getType(), this.getDescription(), this.getFormat(), this.getAlias());
+		logger.debug("     Field Name:'{}' Title:'{}' Type:'{}' Description:'{}' Format:'{}' Alias:{}}",  this.getName(), this.getTitle(), this.getType(), this.getDescription(), this.getFormat(), this.getAlias());
 		printConstraints();
 	}
 	

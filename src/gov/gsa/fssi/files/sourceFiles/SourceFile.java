@@ -298,7 +298,8 @@ public class SourceFile extends File{
 			Iterator<?> thisHeaderIterator = thisHeader.entrySet().iterator();
 			while (thisHeaderIterator.hasNext()) {
 				Map.Entry<Integer, String> thisHeaderPairs = (Map.Entry<Integer, String>)thisHeaderIterator.next();
-				this.addHeader((Integer)thisHeaderPairs.getKey(), this.getSchema().getFieldName(thisHeaderPairs.getValue().toString().trim().toUpperCase()));
+				String sourceFileFieldName = thisHeaderPairs.getValue().toString().trim().toUpperCase();
+				this.addHeader((Integer)thisHeaderPairs.getKey(), (this.getSchema().isSchemaField(sourceFileFieldName)? this.getSchema().getFieldName(sourceFileFieldName): sourceFileFieldName));
 			}
 			logger.info("Headers have been updated");	
 		}else{

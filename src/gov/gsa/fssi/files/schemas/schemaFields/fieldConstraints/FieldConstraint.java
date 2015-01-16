@@ -48,7 +48,7 @@ public class FieldConstraint {
 	public static String TYPE_MAXIMUM = "maximum";
 	
 
-//	maximum – as above, but specifies a maximum value for a field.
+//	maximum ï¿½ as above, but specifies a maximum value for a field.
 	
 	//List of Constraint Options which come from the constraints attributes
 	public static String OPTION_EFFECTIVEDATE = "effectiveDate";
@@ -169,7 +169,7 @@ public class FieldConstraint {
 	}
 
 	public void print() {
-		logger.debug("          Constraint '{}' Value: '{}' Options: {}",  this.getConstraintType(),  this.getValue(),  this.getOptions());
+		logger.debug("          Constraint Name:'{}' Value:'{}' Options:{}",  this.getConstraintType(),  this.getValue(),  this.getOptions());
 	}	
 	
 }

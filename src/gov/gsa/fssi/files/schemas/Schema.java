@@ -21,12 +21,11 @@ public class Schema extends File{
 	private ArrayList<String> foreignKeys = null;	
 	private ArrayList<SchemaField> fields = new ArrayList<SchemaField>();	
 	
-	
 	/**
 	 * @param fileName
 	 */
 	public Schema(String fileName) {
-		super();
+		super(fileName);
 	}
 	/**
 	 * @return the name
@@ -107,58 +106,59 @@ public class Schema extends File{
 		return fields;
 	}
 	/**
-	 * @param fields the fields to set
+	 * @param fields
 	 */
 	public void setFields(ArrayList<SchemaField> fields) {
 		this.fields = fields;
 	}
 	/**
-	 * @param sourceFileHeaderName
-	 * @return
+	 * @param e
+	 * @return 
 	 */
-	public String getFieldName(String sourceFileHeaderName){
+	public String getFieldName(String e){
 		for(SchemaField field: this.getFields()){
-			if(field.getName().toUpperCase().trim().equals(sourceFileHeaderName.toUpperCase().trim())){
-				logger.info("Source File Header '{}' matches field {}",sourceFileHeaderName.toUpperCase(), field.getName());
+			if(field.getName().toUpperCase().trim().equals(e.toUpperCase().trim())){
+				logger.info("Source File Header '{}' matches field {}",e.toUpperCase(), field.getName());
 				return field.getName().trim().toUpperCase();
 			}
 			for(String alias:field.getAlias()){
-				if(alias.toUpperCase().trim().equals(sourceFileHeaderName.trim().toUpperCase())){
-					logger.info("Source File Header '{}' matches alias in field {}",sourceFileHeaderName.toUpperCase(), field.getName());
+				if(alias.toUpperCase().trim().equals(e.trim().toUpperCase())){
+					logger.info("Source File Header '{}' matches alias in field {}",e.toUpperCase(), field.getName());
 					return field.getName().trim().toUpperCase();					
 				}
 			}
 		}
-		logger.info("Header field name '{}' not found in schema {}",sourceFileHeaderName.trim().toUpperCase(), this.getName());
-		return sourceFileHeaderName.trim().toUpperCase();
+		logger.info("Header field name '{}' not found in schema {}",e.trim().toUpperCase(), this.getName());
+		return null;
 	}
 	/**
-	 * @param alias
-	 * @return
+	 * Determines if the proposed string in the schema as either a field name or alias of a field
+	 * @param e
+	 * @return true or false
 	 */
-	public boolean isSchemaField(String sourceFileHeaderName){
+	public boolean isSchemaField(String e){
 		for(SchemaField field: this.getFields()){
-			if(field.getName().toUpperCase().equals(sourceFileHeaderName.toUpperCase())){
-				logger.info("Source File Header '{}' is in Schema {}",sourceFileHeaderName.toUpperCase(), this.getName());
+			if(field.getName().toUpperCase().equals(e.toUpperCase())){
+				logger.info("Source File Header '{}' is in Schema {}",e.toUpperCase(), this.getName());
 				return true;
 			}
 			for(String alias:field.getAlias()){
-				if(alias.toUpperCase().equals(sourceFileHeaderName.toUpperCase())){
-					logger.info("Source File Header '{}' is in Schema {}",sourceFileHeaderName.toUpperCase(), this.getName());
+				if(alias.toUpperCase().equals(e.toUpperCase())){
+					logger.info("Source File Header '{}' is in Schema {}",e.toUpperCase(), this.getName());
 					return true;					
 				}
 			}
 		}
-		logger.info("Source File Header '{}' is NOT in Schema {}",sourceFileHeaderName.toUpperCase(), this.getName());
+		logger.info("Source File Header '{}' is NOT in Schema {}",e.toUpperCase(), this.getName());
 		return false;
 	}
 
 	public void print(){
-		logger.debug("Name: '{}' Version: '{}' Provider: '{}' ", this.getName(), this.getVersion(), this.getProviderName());
+		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Status:'{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getStatus());
 	}
 	
 	public void printAll(){
-		logger.debug("Name: '{}' Version: '{}' Provider: '{}' ", this.getName(), this.getVersion(), this.getProviderName());
+		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Status:'{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getStatus());
 		printSchemaFields();	
 	}
 	
