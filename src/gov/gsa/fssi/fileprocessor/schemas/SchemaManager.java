@@ -17,6 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,49 +43,51 @@ public class SchemaManager {
 
 
 	public static void initializeSchema(ArrayList<Schema> schemas, String fileName) {
+		Document doc = null;
+		boolean dupeSchemaCheck = false;
+		Schema newSchema = new Schema();	
+		
 		try {
-				boolean dupeSchemaCheck = false;
-				Schema newSchema = new Schema();	
-				File fXmlFile = new File(config.getProperty(Config.SCHEMAS_DIRECTORY) + fileName);
-				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-				Document doc = dBuilder.parse(fXmlFile);
-			 
-				//optional, but recommended
-				doc.getDocumentElement().normalize();
-			 
-				//We assume their is only 1 schema in each file.
-				Node schemaNode = doc.getFirstChild();
-				Element schemaElement = (Element) schemaNode;
-				
-				
-				for (Schema schema: schemas){
-					if (schemaElement.getElementsByTagName("name").item(0).getTextContent().toUpperCase().equals(schema.getName())){
-						logger.warn("Duplicate schema {} found in file {}, ignorning", schema.getName(), fileName);
-						dupeSchemaCheck = true;
-					}
+			File fXmlFile = new File(config.getProperty(Config.SCHEMAS_DIRECTORY) + fileName);
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			doc = dBuilder.parse(fXmlFile);
+		} catch (Exception e) {
+			logger.error("Received Exception error '{}' while processing file {}", e.getMessage(), fileName);		
+			//e.printStackTrace();
+	    }
+		
+		if(doc != null){
+			//optional, but recommended
+			doc.getDocumentElement().normalize();
+		 
+			//We assume their is only 1 schema in each file.
+			Node schemaNode = doc.getFirstChild();
+			Element schemaElement = (Element) schemaNode;
+			
+			for (Schema schema: schemas){
+				if (schemaElement.getElementsByTagName("name").item(0).getTextContent().toUpperCase().equals(schema.getName())){
+					logger.warn("Duplicate schema {} found in file {}, ignorning", schema.getName(), fileName);
+					dupeSchemaCheck = true;
 				}
-				
-				if (dupeSchemaCheck == false){
-					//All schemas must have a name
-					if (schemaElement.getElementsByTagName("name").item(0).getTextContent() == null || schemaElement.getElementsByTagName("name").item(0).getTextContent().equals("")){
-						logger.error("Schema in file '{}' does not have required element of 'Name'. Ignoring.", fileName);
-					}else{
-					    logger.info("Processing schema '{}' in file '{}'", schemaElement.getElementsByTagName("name").item(0).getTextContent(), fileName);
-						newSchema.setName(schemaElement.getElementsByTagName("name").item(0).getTextContent());
-						newSchema.setProviderName(schemaElement.getElementsByTagName("provider").item(0).getTextContent());
-						newSchema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
-						newSchema.setFields(initializeFields(doc.getElementsByTagName("field")));
-						
-						schemas.add(newSchema);
-					}
+			}
+		
+			if (dupeSchemaCheck == false){
+				//All schemas must have a name
+				if (schemaElement.getElementsByTagName("name").item(0).getTextContent() == null || schemaElement.getElementsByTagName("name").item(0).getTextContent().equals("")){
+					logger.error("Schema in file '{}' does not have required element of 'Name'. Ignoring.", fileName);
+				}else{
+				    logger.info("Processing schema '{}' in file '{}'", schemaElement.getElementsByTagName("name").item(0).getTextContent(), fileName);
+					newSchema.setName(schemaElement.getElementsByTagName("name").item(0).getTextContent());
+					newSchema.setProviderName(schemaElement.getElementsByTagName("provider").item(0).getTextContent());
+					newSchema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
+					newSchema.setFields(initializeFields(doc.getElementsByTagName("field")));
+					
+					schemas.add(newSchema);
 				}
-			    } catch (Exception e) {
-				    logger.error("Received Exception error '{}' while processing {}", e.getMessage(), fileName);		
-			    	e.printStackTrace();
-			    }
-				
-				// logger.info("     Successfully processed " + fileName);
+			}
+		}
+		// logger.info("     Successfully processed " + fileName);
 	}	
 
 
@@ -138,128 +141,111 @@ public class SchemaManager {
 		public static SchemaField initializeField(Node node) {
 			SchemaField field = new SchemaField();
 			
-			Node constraintNode = null;
-			NodeList constraintList = null;
-			
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element fieldElement = (Element) node;
-//				
-//				if(fieldElement.getElementsByTagName("description")  != null && fieldElement.getElementsByTagName("description").item(0) != null){
-//					field.setDescription(fieldElement.getElementsByTagName("description").item(0).getTextContent());					
-//				}
-//				if(fieldElement.getElementsByTagName("name")  != null && fieldElement.getElementsByTagName("name").item(0) != null){
-//					field.setName(fieldElement.getElementsByTagName("name").item(0).getTextContent());	
-//				}
-//				if(fieldElement.getElementsByTagName("title") != null && fieldElement.getElementsByTagName("title").item(0) != null){
-//					field.setTitle(fieldElement.getElementsByTagName("title").item(0).getTextContent());					
-//				}
-//				if(fieldElement.getElementsByTagName("format")  != null && fieldElement.getElementsByTagName("format").item(0) != null){
-//					
-//					field.setTitle(fieldElement.getElementsByTagName("format").item(0).getTextContent());					
-//				}
-//				if(!(fieldElement.getElementsByTagName("type")  == null  
-//						&& fieldElement.getElementsByTagName("type").item(0) != null
-//							&& !fieldElement.getElementsByTagName("type").item(0).getTextContent().isEmpty())){
-//					field.setTitle(fieldElement.getElementsByTagName("type").item(0).getTextContent());					
-//				}else{
-//					logger.warn("No Field type provided, defaulting to '{}'", SchemaField.TYPE_ANY);
-//				}
-				
 				
 				NodeList nodeList = node.getChildNodes();
-				
 				for (int j = 0; j < nodeList.getLength(); j++){
-					
-					if (nodeList.item(j).getNodeType() == Node.ELEMENT_NODE){
-						logger.debug("{}", nodeList.item(j).getNodeName());	
-					}
-				}
-				
-				
-				
-				
-				logger.info("Processing field '{}'", field.getName());
-							
-				//Getting Constraints		
-				constraintNode = fieldElement.getElementsByTagName("constraints").item(0);
-				if(constraintNode != null){
-				constraintList = constraintNode.getChildNodes();
-					if(constraintList != null){
-						//logger.debug("Attempting to print constraint with {} elements", constraintList.getLength());
-						
-						for (int i = 0; i < constraintList.getLength(); i++) {
-							constraintNode = constraintList.item(i);
-							FieldConstraint newConstraint = new FieldConstraint();
-							if (constraintNode.getNodeType() == Node.ELEMENT_NODE) {
-
-								newConstraint.setConstraintType(constraintNode.getNodeName().trim());
-								newConstraint.setValue(constraintNode.getTextContent().trim());									
-								
-								//logger.info("Processing Constraint '{}' for field {}", newConstraint.getConstraintType(), field.getName());
-								// get a map containing the attributes of this constraint 
-								
-								//NamedNodeMap attributeMap = constraintNode.getAttributes();
-								HashMap<String,String> attributeMap = XmlHelper.convertXmlAttributeToHashMap(constraintNode.getAttributes());
-								Iterator optionsIterator = attributeMap.entrySet().iterator();
-								
-								while (optionsIterator.hasNext()) {
-									Map.Entry<String, String> optionsPair = (Map.Entry)optionsIterator.next();
-									if(!newConstraint.isValidOption(optionsPair.getKey())){
-										logger.warn("Ignoring invalid Option from Constraint: '{}'. {}  is not a valid type", newConstraint.getConstraintType(), optionsPair.getKey());
-									}else if(optionsPair.getKey() == FieldConstraint.OPTION_LEVEL && !newConstraint.isValidOptionLevel(optionsPair.getValue())){
-										logger.warn("Ignoring invalid Option level from Constraint: '{}'. {} is not a valid level", newConstraint.getConstraintType(), optionsPair.getKey());
-									}else{
-										newConstraint.addOption(optionsPair.getKey(),optionsPair.getValue()) ;
-										logger.info("Adding Attribute {} - {} to Constraint {}", optionsPair.getKey(), optionsPair.getValue(), constraintNode.getNodeName());		
-									}
-								}
-								
-								//if duplicate not found, add constraint								
-								if(isDuplicateConstraint(field, newConstraint)){
-									logger.warn("Ignoring duplicate Constraint '{}' from Field: '{}'", newConstraint.getConstraintType(),  field.getName());
-								}else if(!newConstraint.isValidType(newConstraint.getConstraintType())){
-									logger.warn("Ignoring invalid Constraint from Field: '{}'. '{}' is not a valid type", newConstraint.getConstraintType(), field.getName(), newConstraint.getConstraintType());									
-								}else{
-									logger.info("Successfully added Constraint '{}'", newConstraint.getConstraintType());	
-									field.addConstraint(newConstraint);								
-								}
+					Node currentNode = nodeList.item(j);
+					if (currentNode.getNodeType() == Node.ELEMENT_NODE && currentNode.getNodeName() != null){
+						//logger.debug("{} - {}", currentNode.getNodeName(), currentNode.getTextContent());	
+						if(currentNode.getNodeName().equals("name")){
+							field.setName(currentNode.getTextContent());					
+						}else if (currentNode.getNodeName().equals("description")){
+							field.setDescription(currentNode.getTextContent());	
+						}else if (currentNode.getNodeName().equals("title")){
+							field.setTitle(currentNode.getTextContent());	
+						}else if (currentNode.getNodeName().equals("format")){
+							field.setFormat(currentNode.getTextContent());	
+						}else if (currentNode.getNodeName().equals("type")){
+							field.setType(currentNode.getTextContent());	
+						}else if(currentNode.getNodeName().equals("constraints")){
+							logger.info("Processing Constraints");
+							NodeList constraintList = currentNode.getChildNodes();
+								if(constraintList != null){
+								try {
+									processConstraints(field, constraintList);
+								} catch (DOMException e) {
+									logger.error("Received DOMException '{}'",e.getMessage());
+									//e.printStackTrace();
+								}	
+							}else{
+								logger.info("Did not find any constraints");
+							}			
+							logger.info("Completed processing Constraints");
+						}else if (currentNode.getNodeName().equals("alias")){
+							if(currentNode.getNodeValue() != null && !isDuplicateConstraintAlias(field, currentNode.getNodeValue().trim().toUpperCase())){
+								field.addAlias(currentNode.getTextContent().trim().toUpperCase());		
+								logger.info("added alias {} to field {}", currentNode.getTextContent().trim().toUpperCase(), field.getName());
+							}else{
+								logger.warn("Ignoring duplicate Alias '{}' from field: '{}'", currentNode.getTextContent().trim().toUpperCase(),  field.getName());
 							}
 						}
 					}
-				}else{
-					logger.info("Did not find any constraints");
 				}
-						
 				
-				//Getting Alias
-				NodeList aliasList = fieldElement.getElementsByTagName("alias");
-				//logger.debug("Adding alias", aliasList.getLength());
-				for (int i = 0; i < aliasList.getLength(); i++) {
-					Element currentElement = (Element) aliasList.item(i);
-					if(!isDuplicateConstraintAlias(field, currentElement.getTextContent().trim().toUpperCase())){
-						field.addAlias(currentElement.getTextContent().trim().toUpperCase());				
-						logger.info("added alias {} to field {}", currentElement.getTextContent().trim().toUpperCase(), field.getName());
-					}else{
-						logger.warn("Ignoring duplicate Alias '{}' from field: '{}'", currentElement.getTextContent().trim().toUpperCase(),  field.getName());
-					}
-				}
+				logger.info("Processing field '{}'", field.getName());
 			}			
 		return field;	
 	}
 
-		
+
 		/**
-		 * @param schema
-		 * @param newAlias
-		 * @return
+		 * @param field
+		 * @param constraintList
+		 * @throws DOMException
 		 */
-		private static boolean isDuplicateSchemaConstraintAlias(Schema schema, String newAlias){
-			for (SchemaField field : schema.getFields()) {
-				return isDuplicateConstraintAlias(field, newAlias);
+		private static void processConstraints(SchemaField field, NodeList constraintList) throws DOMException {
+			Node currentNode;
+			for (int i = 0; i < constraintList.getLength(); i++) {
+				currentNode = constraintList.item(i);
+				processConstraint(field, currentNode);
 			}
-			return false;
 		}
 
+
+		/**
+		 * @param field
+		 * @param currentNode
+		 * @throws DOMException
+		 */
+		private static void processConstraint(SchemaField field, Node currentNode) throws DOMException {
+			FieldConstraint newConstraint = new FieldConstraint();
+			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+
+				newConstraint.setConstraintType(currentNode.getNodeName().trim());
+				newConstraint.setValue(currentNode.getTextContent().trim());									
+				
+				//logger.info("Processing Constraint '{}' for field {}", newConstraint.getConstraintType(), field.getName());
+				// get a map containing the attributes of this constraint 
+				
+				//NamedNodeMap attributeMap = constraintNode.getAttributes();
+				HashMap<String,String> attributeMap = XmlHelper.convertXmlAttributeToHashMap(currentNode.getAttributes());
+				Iterator optionsIterator = attributeMap.entrySet().iterator();
+				
+				while (optionsIterator.hasNext()) {
+					Map.Entry<String, String> optionsPair = (Map.Entry)optionsIterator.next();
+					if(!newConstraint.isValidOption(optionsPair.getKey())){
+						logger.warn("Ignoring invalid Option from Constraint: '{}'. {}  is not a valid type", newConstraint.getConstraintType(), optionsPair.getKey());
+					}else if(optionsPair.getKey() == FieldConstraint.OPTION_LEVEL && !newConstraint.isValidOptionLevel(optionsPair.getValue())){
+						logger.warn("Ignoring invalid Option level from Constraint: '{}'. {} is not a valid level", newConstraint.getConstraintType(), optionsPair.getKey());
+					}else{
+						newConstraint.addOption(optionsPair.getKey(),optionsPair.getValue()) ;
+						logger.info("Adding Attribute {} - {} to Constraint {}", optionsPair.getKey(), optionsPair.getValue(), currentNode.getNodeName());		
+					}
+				}
+				
+				//if duplicate not found, add constraint								
+				if(isDuplicateConstraint(field, newConstraint)){
+					logger.warn("Ignoring duplicate Constraint '{}' from Field: '{}'", newConstraint.getConstraintType(),  field.getName());
+				}else if(!newConstraint.isValidType(newConstraint.getConstraintType())){
+					logger.warn("Ignoring invalid Constraint from Field: '{}'. '{}' is not a valid type", newConstraint.getConstraintType(), field.getName(), newConstraint.getConstraintType());									
+				}else{
+					logger.info("Successfully added Constraint '{}'", newConstraint.getConstraintType());	
+					field.addConstraint(newConstraint);								
+				}
+			}
+		}
 
 		/**
 		 * @param newAlias
@@ -296,7 +282,7 @@ public class SchemaManager {
 		
 		public static void printAllSchemas(ArrayList<Schema> schemas){
 			for(Schema schema: schemas){
-				schema.print();
+				schema.printAll();
 			}
 		}
 }
