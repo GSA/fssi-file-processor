@@ -1,6 +1,7 @@
 package gov.gsa.fssi.files;
 
 import gov.gsa.fssi.fileprocessor.Config;
+
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -63,20 +64,93 @@ public class File {
 	 */
 	public void setFileNameParts(ArrayList<String> fileParts) {
 		this.fileNameParts = fileParts;
-	}
+	}	
+	
+	
 	
 	/**
 	 * @return
 	 */
-	public String getStatus() {
-		return status;
+	public ValidatorStatus getValidatorStatus() {
+		return validatorStatus;
 	}
-
 	/**
-	 * @param status
+	 * @return
 	 */
-	public void setStatus(String status) {
-		this.status = status;
+	public String getValidatorStatusMessage(){
+		return validatorStatus.getStatusMessage();
+	}
+	/**
+	 * @return
+	 */
+	public String getValidatorStatusLevel(){
+		return validatorStatus.getLevel();
+	}	
+	/**
+	 * @param buildStatus
+	 */
+	public void setValidatorStatus(ValidatorStatus validatorStatus) {
+		this.validatorStatus = validatorStatus;
+	}
+	/**
+	 * @param level
+	 */
+	public void setValidatorStatusLevel(String level) {
+		this.validatorStatus.setLevel(level);
+	}
+	/**
+	 * @param level
+	 */
+	public void setValidatorStatusError() {
+		this.validatorStatus.setLevel(ValidatorStatus.ERROR);
+	}	
+	/**
+	 * @param message
+	 */
+	public void setValidatorStatusMessage(String message) {
+		this.validatorStatus.setStatusMessage(message);
+	}	
+	/**
+	 * @return
+	 */
+	public BuilderStatus getBuilderStatus() {
+		return builderStatus;
+	}
+	/**
+	 * @return
+	 */
+	public String getBuilderStatusMessage(){
+		return builderStatus.getStatusMessage();
+	}
+	/**
+	 * @return
+	 */
+	public String getBuilderStatusLevel(){
+		return builderStatus.getLevel();
+	}	
+	/**
+	 * @param buildStatus
+	 */
+	public void setBuilderStatus(BuilderStatus buildStatus) {
+		this.builderStatus = buildStatus;
+	}
+	/**
+	 * @param level
+	 */
+	public void setBuilderStatusError() {
+		this.builderStatus.setLevel(BuilderStatus.ERROR);
+	}	
+	/**
+	 * @param level
+	 */
+	public void setBuilderStatusLevel(String level) {
+		this.builderStatus.setLevel(level);
+	}
+	/**
+	 * @param message
+	 */
+	public void setBuilderStatusMessage(String message) {
+		this.builderStatus.setStatusMessage(message);
 	}
 	/**
 	 * This constructor class takes a file name and uses it to initialize the basic elements of a SourceFile
@@ -87,7 +161,7 @@ public class File {
 		this.setFileName(fileName);
 		int startOfExtension = fileName.lastIndexOf(".")+1;
 		this.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
-		this.setStatus(File.STATUS_INITIALIZED);
+		this.builderStatus.setLevel(BuilderStatus.INITIALIZED);;
 		//defaulted to underscore
 		this.setFileNameParts(SEPARATOR_UNDERSCORE);
 	}
@@ -130,22 +204,16 @@ public class File {
 	public String fileName = null;
 	private String fileExtension = null;
 	private ArrayList<String> fileNameParts = new ArrayList<String>();
-	private String status = null;
+	//private String status = null;
 	protected static Logger logger = LoggerFactory.getLogger(File.class);
 	protected static Config config = new Config();	    
-	public static String STATUS_ERROR = "error";
-	public static String STATUS_WARNING = "warning";
-	public static String STATUS_INITIALIZED = "initialized";	
-	public static String STATUS_LOADED = "loaded";	
-	public static String STATUS_MAPPED = "mapped";		
-	public static String STATUS_PROCESSED = "processed";		
-	public static String STATUS_VALIDATED = "validated";		
-	public static String STATUS_STAGED = "staged";
-	public static byte SEPARATOR_UNDERSCORE = '_';
-	public static byte SEPARATOR_DASH = '-';
-	public static byte SEPARATOR_COMMA = ',';
-	public static byte SEPARATOR_PIPE = '|';
-	public static byte SEPARATOR_TILDE = '~';
-	public static byte SEPARATOR_FORWARDSLASH = '/';
-	public static byte SEPARATOR_BACKSLASH = '\\';
+	private BuilderStatus builderStatus = new BuilderStatus();
+	private ValidatorStatus validatorStatus = new ValidatorStatus();	
+	public static final byte SEPARATOR_UNDERSCORE = '_';
+	public static final byte SEPARATOR_DASH = '-';
+	public static final byte SEPARATOR_COMMA = ',';
+	public static final byte SEPARATOR_PIPE = '|';
+	public static final byte SEPARATOR_TILDE = '~';
+	public static final byte SEPARATOR_FORWARDSLASH = '/';
+	public static final byte SEPARATOR_BACKSLASH = '\\';
 }

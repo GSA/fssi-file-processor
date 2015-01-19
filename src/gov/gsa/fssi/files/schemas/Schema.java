@@ -3,6 +3,7 @@ package gov.gsa.fssi.files.schemas;
 import gov.gsa.fssi.files.File;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -99,6 +100,21 @@ public class Schema extends File{
 	public void setForeignKeys(ArrayList<String> foreignKeys) {
 		this.foreignKeys = foreignKeys;
 	}
+	public void removeField(int index){
+		this.fields.remove(index);
+	}
+	public void removeField(SchemaField schemaField){
+		this.fields.remove(schemaField);
+	}
+	public void removeField(String fieldName){
+		SchemaField field = new SchemaField();
+		field = this.getField(fieldName);
+		if(field != null){
+			this.removeField(this.getField(fieldName));	
+		}else{
+			logger.error("Could not remove field '{}' from Schema '{}'", fieldName, this.getName());
+		}
+	}
 	/**
 	 * @param string
 	 */
@@ -110,6 +126,14 @@ public class Schema extends File{
 	 */
 	public ArrayList<SchemaField> getFields() {
 		return fields;
+	}
+	public SchemaField getField(String fieldName){
+		for(SchemaField field:this.getFields()){
+			if(field.getName().equals(fieldName)){
+				return field;
+			}
+		}
+		return null;
 	}
 	/**
 	 * @param fields
@@ -160,11 +184,11 @@ public class Schema extends File{
 	}
 
 	public void print(){
-		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Status:'{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getStatus());
+		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Build Status:'{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getBuilderStatusLevel());
 	}
 	
 	public void printAll(){
-		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Status:'{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getStatus());
+		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Build Status:'{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getBuilderStatusLevel());
 		printSchemaFields();	
 	}
 	

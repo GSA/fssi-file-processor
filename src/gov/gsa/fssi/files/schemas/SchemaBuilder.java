@@ -1,6 +1,7 @@
 package gov.gsa.fssi.files.schemas;
 
 import gov.gsa.fssi.fileprocessor.Config;
+import gov.gsa.fssi.files.BuilderStatus;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.helpers.XmlHelper;
@@ -81,17 +82,17 @@ public class SchemaBuilder {
 				schema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
 				schema.setFields(loadFields(doc.getElementsByTagName("field")));
 				
-				if(schema.getStatus().equals(Schema.STATUS_ERROR)){
+				if(schema.getBuilderStatusLevel().equals(BuilderStatus.ERROR)){
 					logger.error("Could not load Schema '{}' in file '{}' as it is in error status", schema.getName(), this.getFileName());
 					return null;
 				}
 				
 				logger.info("successfully loaded Schema '{}' from file '{}'", schema.getName(), this.getFileName());
-				schema.setStatus(Schema.STATUS_LOADED);
+				schema.setBuilderStatusLevel(BuilderStatus.LOADED);
 				return schema;
 			}
 			logger.error("No document found in file '{}'. Unable to load any schema", this.getFileName());
-			schema.setStatus(Schema.STATUS_ERROR);
+			schema.setBuilderStatusLevel(BuilderStatus.ERROR);
 			return schema;
 			
 		}else{

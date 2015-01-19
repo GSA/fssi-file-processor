@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.gsa.fssi.files.BuilderStatus;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.providers.ProviderManager;
 import gov.gsa.fssi.files.schemas.Schema;
@@ -56,29 +57,29 @@ public class Main {
 	 */
 	private static void ingestProcessAndExportSourceFile(ArrayList<Provider> providers, ArrayList<Schema> schemas, SourceFile sourceFile) {
 		logger.debug("Processing sourceFile '{}'", sourceFile.getFileName());	
-		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
+		if (!sourceFile.getBuilderStatusLevel().equals(BuilderStatus.ERROR)){
 		    logger.info("Mapping Provider to SourceFile '{}'", sourceFile.getFileName());	
 			SourceFileManager.validateSourceFileProvider(providers, sourceFile);	
 		    logger.info("Completed Mapping Provider to SourceFile '{}'", sourceFile.getFileName());			
 		}
-		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
+		if (!sourceFile.getBuilderStatusLevel().equals(BuilderStatus.ERROR)){
 		    logger.info("Mapping Schema to SourceFile '{}'", sourceFile.getFileName());	
 		    SourceFileManager.validateSourceFileSchema(schemas, sourceFile); 
 		    logger.info("Completed Mapping Schema to SourceFile '{}'", sourceFile.getFileName());	
 		}
-		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
+		if (!sourceFile.getBuilderStatusLevel().equals(BuilderStatus.ERROR)){
 		    logger.info("Ingesting SourceFile '{}'", sourceFile.getFileName());	
 			sourceFile.ingest();
 		    logger.info("Completed Ingesting SourceFile '{}'", sourceFile.getFileName());	
 		}
 		
-		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
+		if (!sourceFile.getBuilderStatusLevel().equals(BuilderStatus.ERROR)){
 		    logger.info("Processing SourceFile '{}'", sourceFile.getFileName());	
 			sourceFile.processToSchema();
 		    logger.info("Completed Processing SourceFile '{}'", sourceFile.getFileName());	
 		}	
 		
-		if (!sourceFile.getStatus().equals(SourceFile.STATUS_ERROR)){
+		if (!sourceFile.getBuilderStatusLevel().equals(BuilderStatus.ERROR)){
 		    logger.info("Outputting SourceFile '{}'", sourceFile.getFileName());	
 		    sourceFile.outputStagedSourceFile();
 		    logger.info("Completed Outputting SourceFile '{}'", sourceFile.getFileName());	
