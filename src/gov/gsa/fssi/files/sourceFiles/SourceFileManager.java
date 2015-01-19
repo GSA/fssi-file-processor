@@ -1,7 +1,7 @@
 package gov.gsa.fssi.files.sourceFiles;
 
 import gov.gsa.fssi.fileprocessor.Config;
-import gov.gsa.fssi.files.BuilderStatus;
+import gov.gsa.fssi.files.LoaderStatus;
 import gov.gsa.fssi.files.ValidatorStatus;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.schemas.Schema;
@@ -59,19 +59,19 @@ public class SourceFileManager {
 	 */
 	public static void validateSourceFileProvider(
 			ArrayList<Provider> providers, SourceFile sourceFile) {
-		if(!sourceFile.getBuilderStatusLevel().equals(BuilderStatus.ERROR)){
+		if(!sourceFile.getBuilderStatusLevel().equals(LoaderStatus.ERROR)){
 			logger.info("Attempting to map Provider to file {}", sourceFile.getFileName());
 			for (Provider provider : providers) {
 				if(sourceFile.getFileName().toUpperCase().contains(provider.getProviderIdentifier().toUpperCase())){
 					logger.info("Mapped provider {} - {} to file '{}'", provider.getProviderName(), provider.getProviderIdentifier(),sourceFile.getFileName());
 					sourceFile.setProvider(provider);
-					sourceFile.setBuilderStatusLevel(BuilderStatus.MAPPED);
+					sourceFile.setBuilderStatusLevel(LoaderStatus.MAPPED);
 				}
 			}
 		}
 		if (sourceFile.getProvider() == null){
 			logger.error("Could not find provider for file: '{}'", sourceFile.getFileName());
-			sourceFile.setBuilderStatusLevel(BuilderStatus.ERROR);
+			sourceFile.setBuilderStatusLevel(LoaderStatus.ERROR);
 		}
 	}	
 	
@@ -94,7 +94,7 @@ public class SourceFileManager {
 	public static void validateSourceFileSchema(ArrayList<Schema> schemas,
 			SourceFile sourceFile) {
 		logger.info("Attempting to map Schema to file {}", sourceFile.getFileName());
-		if (!sourceFile.getBuilderStatusLevel().equals(BuilderStatus.ERROR)){
+		if (!sourceFile.getBuilderStatusLevel().equals(LoaderStatus.ERROR)){
 			Provider provider = sourceFile.getProvider();
 			for ( Schema schema : schemas) {
 				if(provider.getProviderName().toUpperCase().equals(schema.getName().toUpperCase())){

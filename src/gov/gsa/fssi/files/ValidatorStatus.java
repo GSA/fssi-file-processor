@@ -10,7 +10,7 @@ public class ValidatorStatus {
 	
 	
 	public String getLevel() {
-		return level;
+		return this.level;
 	}
 
 	public void setLevel(String level) {
@@ -18,7 +18,7 @@ public class ValidatorStatus {
 	}
 
 	public String getStatusMessage() {
-		return statusMessage;
+		return this.statusMessage;
 	}
 
 	public void setStatusMessage(String statusMessage) {

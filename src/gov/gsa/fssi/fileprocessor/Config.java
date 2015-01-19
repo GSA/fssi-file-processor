@@ -83,13 +83,9 @@ public class Config {
 	 */
 	public void getPropValues() throws IOException {
 		Properties prop = new Properties();
- 
 		InputStream inputStream = new FileInputStream(DEFAULT_PROPFILE_NAME);
 		prop.load(inputStream);
-		
-		
 		validatePropFile(prop);
-		
 		this.prop = prop;
 	}
 	

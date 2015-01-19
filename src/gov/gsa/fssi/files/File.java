@@ -113,7 +113,7 @@ public class File {
 	/**
 	 * @return
 	 */
-	public BuilderStatus getBuilderStatus() {
+	public LoaderStatus getBuilderStatus() {
 		return builderStatus;
 	}
 	/**
@@ -131,14 +131,14 @@ public class File {
 	/**
 	 * @param buildStatus
 	 */
-	public void setBuilderStatus(BuilderStatus buildStatus) {
+	public void setBuilderStatus(LoaderStatus buildStatus) {
 		this.builderStatus = buildStatus;
 	}
 	/**
 	 * @param level
 	 */
 	public void setBuilderStatusError() {
-		this.builderStatus.setLevel(BuilderStatus.ERROR);
+		this.builderStatus.setLevel(LoaderStatus.ERROR);
 	}	
 	/**
 	 * @param level
@@ -161,7 +161,7 @@ public class File {
 		this.setFileName(fileName);
 		int startOfExtension = fileName.lastIndexOf(".")+1;
 		this.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
-		this.builderStatus.setLevel(BuilderStatus.INITIALIZED);;
+		this.builderStatus.setLevel(LoaderStatus.INITIALIZED);;
 		//defaulted to underscore
 		this.setFileNameParts(SEPARATOR_UNDERSCORE);
 	}
@@ -207,7 +207,7 @@ public class File {
 	//private String status = null;
 	protected static Logger logger = LoggerFactory.getLogger(File.class);
 	protected static Config config = new Config();	    
-	private BuilderStatus builderStatus = new BuilderStatus();
+	private LoaderStatus builderStatus = new LoaderStatus();
 	private ValidatorStatus validatorStatus = new ValidatorStatus();	
 	public static final byte SEPARATOR_UNDERSCORE = '_';
 	public static final byte SEPARATOR_DASH = '-';

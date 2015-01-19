@@ -167,34 +167,34 @@ public class Schema extends File{
 		logger.info("Header field name '{}' not found in schema {}",e.trim().toUpperCase(), this.getName());
 		return null;
 	}
-	/**
-	 * Determines if the proposed string in the schema as either a field name or alias of a field
-	 * @param e
-	 * @return true or false
-	 */
-	public boolean isSchemaField(String e){
+
+	public ArrayList<String> getFieldNames(){
+		ArrayList<String> fieldNames = new ArrayList<String>();
 		for(SchemaField field: this.getFields()){
-			if(field.getName().toUpperCase().equals(e.toUpperCase())){
-				logger.info("Source File Header '{}' is in Schema {}",e.toUpperCase(), this.getName());
-				return true;
-			}
+			fieldNames.add(field.getName());
+		}
+		return fieldNames;
+	}
+	
+
+	public ArrayList<String> getFieldAndAliasNames(){
+		ArrayList<String> aliasNames = new ArrayList<String>();
+		for(SchemaField field: this.getFields()){
+			aliasNames.add(field.getName());
 			for(String alias:field.getAlias()){
-				if(alias.toUpperCase().equals(e.toUpperCase())){
-					logger.info("Source File Header '{}' is in Schema {}",e.toUpperCase(), this.getName());
-					return true;					
-				}
+				aliasNames.add(alias);
 			}
 		}
-		logger.info("Source File Header '{}' is NOT in Schema {}",e.toUpperCase(), this.getName());
-		return false;
+		return aliasNames;
 	}
-
+	
+	
 	public void print(){
-		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Build Status:'{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getBuilderStatusLevel());
+		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Build Status:'{}' Validator Status: '{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getBuilderStatusLevel(), this.getValidatorStatusLevel());
 	}
 	
 	public void printAll(){
-		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Build Status:'{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getBuilderStatusLevel());
+		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Build Status:'{}' Validator Status: '{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getBuilderStatusLevel(), this.getValidatorStatusLevel());
 		printSchemaFields();	
 	}
 	

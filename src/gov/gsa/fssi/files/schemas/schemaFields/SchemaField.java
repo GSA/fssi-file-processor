@@ -1,5 +1,7 @@
 package gov.gsa.fssi.files.schemas.schemaFields;
 
+import gov.gsa.fssi.files.LoaderStatus;
+import gov.gsa.fssi.files.ValidatorStatus;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 
 import java.util.ArrayList;
@@ -15,14 +17,11 @@ public class SchemaField {
 	private String title = null;	
 	private String type = null;		
 	private String format = null;	
-	private String status = null;
+	private LoaderStatus builderStatus = new LoaderStatus();
+	private ValidatorStatus validatorStatus = new ValidatorStatus();	
 	private String description = null;
 	private ArrayList<FieldConstraint> constraints = new ArrayList<FieldConstraint>();	
 	private ArrayList<String> alias = new ArrayList<String>();	
-	
-	public static String STATUS_ERROR = "error";
-	public static String STATUS_WARNING = "warning";
-	public static String STATUS_VALIDATED = "validated";
 	
 	/**
 	 * a string (of arbitrary length)
@@ -69,18 +68,6 @@ public class SchemaField {
 	 * value of field may be any type
 	 */
 	public static String TYPE_ANY = "any"; 
-	/**
-	 * @return
-	 */
-	public String getStatus() {
-		return status;
-	}
-	/**
-	 * @param status
-	 */
-	public void setStatus(String status) {
-		this.status = status;
-	}	
 	/**
 	 * @return the name
 	 */
@@ -225,5 +212,92 @@ public class SchemaField {
 		return arrayList;
 	}
 	
-	
+	/**
+	 * @return
+	 */
+	public ValidatorStatus getValidatorStatus() {
+		return validatorStatus;
+	}
+	/**
+	 * @return
+	 */
+	public String getValidatorStatusMessage(){
+		return validatorStatus.getStatusMessage();
+	}
+	/**
+	 * @return
+	 */
+	public String getValidatorStatusLevel(){
+		return validatorStatus.getLevel();
+	}	
+	/**
+	 * @param buildStatus
+	 */
+	public void setValidatorStatus(ValidatorStatus validatorStatus) {
+		this.validatorStatus = validatorStatus;
+	}
+	/**
+	 * @param level
+	 */
+	public void setValidatorStatusLevel(String level) {
+		this.validatorStatus.setLevel(level);
+	}
+	/**
+	 * @param level
+	 */
+	public void setValidatorStatusError() {
+		this.validatorStatus.setLevel(ValidatorStatus.ERROR);
+	}	
+	/**
+	 * @param message
+	 */
+	public void setValidatorStatusMessage(String message) {
+		this.validatorStatus.setStatusMessage(message);
+	}	
+	/**
+	 * @return
+	 */
+	public LoaderStatus getBuilderStatus() {
+		return builderStatus;
+	}
+	/**
+	 * @return
+	 */
+	public String getBuilderStatusMessage(){
+		return builderStatus.getStatusMessage();
+	}
+	/**
+	 * @return
+	 */
+	public String getBuilderStatusLevel(){
+		return builderStatus.getLevel();
+	}	
+	/**
+	 * @param buildStatus
+	 */
+	public void setBuilderStatus(LoaderStatus buildStatus) {
+		this.builderStatus = buildStatus;
+	}
+	/**
+	 * @param level
+	 */
+	public void setBuilderStatusError() {
+		this.builderStatus.setLevel(LoaderStatus.ERROR);
+	}	
+	/**
+	 * @param level
+	 */
+	public void setBuilderStatusLevel(String level) {
+		this.builderStatus.setLevel(level);
+	}
+	/**
+	 * @param message
+	 */
+	public void setBuilderStatusMessage(String message) {
+		this.builderStatus.setStatusMessage(message);
+	}
+	/**
+	 * This constructor class takes a file name and uses it to initialize the basic elements of a SourceFile
+	 * @param fileName - This should be in name.ext format.
+	 */
 }

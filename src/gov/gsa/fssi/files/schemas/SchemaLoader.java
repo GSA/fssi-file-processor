@@ -1,7 +1,7 @@
 package gov.gsa.fssi.files.schemas;
 
 import gov.gsa.fssi.fileprocessor.Config;
-import gov.gsa.fssi.files.BuilderStatus;
+import gov.gsa.fssi.files.LoaderStatus;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.helpers.XmlHelper;
@@ -23,8 +23,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-public class SchemaBuilder {
-	static Logger logger = LoggerFactory.getLogger(SchemaBuilder.class);
+public class SchemaLoader {
+	static Logger logger = LoggerFactory.getLogger(SchemaLoader.class);
 	static Config config = new Config();	
 	private String fileName = null;
 
@@ -82,17 +82,17 @@ public class SchemaBuilder {
 				schema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
 				schema.setFields(loadFields(doc.getElementsByTagName("field")));
 				
-				if(schema.getBuilderStatusLevel().equals(BuilderStatus.ERROR)){
+				if(schema.getBuilderStatusLevel().equals(LoaderStatus.ERROR)){
 					logger.error("Could not load Schema '{}' in file '{}' as it is in error status", schema.getName(), this.getFileName());
 					return null;
 				}
 				
 				logger.info("successfully loaded Schema '{}' from file '{}'", schema.getName(), this.getFileName());
-				schema.setBuilderStatusLevel(BuilderStatus.LOADED);
+				schema.setBuilderStatusLevel(LoaderStatus.LOADED);
 				return schema;
 			}
 			logger.error("No document found in file '{}'. Unable to load any schema", this.getFileName());
-			schema.setBuilderStatusLevel(BuilderStatus.ERROR);
+			schema.setBuilderStatusLevel(LoaderStatus.ERROR);
 			return schema;
 			
 		}else{
@@ -197,7 +197,7 @@ public class SchemaBuilder {
 			FieldConstraint newConstraint = new FieldConstraint();
 			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 				logger.info("Adding Constraint {} - {}", currentNode.getNodeName().trim(), currentNode.getTextContent().trim());		
-				newConstraint.setConstraintType(currentNode.getNodeName().trim());
+				newConstraint.setType(currentNode.getNodeName().trim());
 				newConstraint.setValue(currentNode.getTextContent().trim());									
 				
 				HashMap<String,String> attributeMap = XmlHelper.convertXmlAttributeToHashMap(currentNode.getAttributes());

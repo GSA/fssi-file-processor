@@ -1,6 +1,6 @@
 package gov.gsa.fssi.files;
 
-public class BuilderStatus {
+public class LoaderStatus {
 	public static final String ERROR = "error";
 	public static final String INITIALIZED = "initialized";	
 	public static final String LOADED = "loaded";	
@@ -28,7 +28,7 @@ public class BuilderStatus {
 		this.statusMessage = statusMessage;
 	}
 	
-	public BuilderStatus(){
+	public LoaderStatus(){
 		
 	}
 	
