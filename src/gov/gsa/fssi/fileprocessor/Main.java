@@ -94,7 +94,9 @@ public class Main {
 		
 		for (String fileName : fileNames) {
 			SchemaBuilder schemaBuilder = new SchemaBuilder();
+			SchemaValidator schemaValidator = new SchemaValidator();
 			Schema schema = schemaBuilder.load(fileName);
+			schema = schemaValidator.validate(schema);
 			
 			if(schema == null){
 				logger.error("No schema was returned from schemaBuilder. Most likely a file IO issue.");

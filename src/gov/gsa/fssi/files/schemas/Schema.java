@@ -142,6 +142,12 @@ public class Schema extends File{
 		this.fields = fields;
 	}
 	/**
+	 * @param fields
+	 */
+	public void addField(SchemaField field) {
+		this.fields.add(field);
+	}	
+	/**
 	 * @param e
 	 * @return 
 	 */

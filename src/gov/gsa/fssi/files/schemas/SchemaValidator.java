@@ -32,7 +32,7 @@ public class SchemaValidator {
 			schema.setValidatorStatusLevel(ValidatorStatus.WARNING);
 		}		
 		
-		deDuplicateFieldNames(schema);
+		schema = deDuplicateFieldNames(schema);
 		
 		
 		
@@ -44,19 +44,17 @@ public class SchemaValidator {
 	 * This method checks naming for duplicate field naming
 	 * @param schema
 	 */
-	private static void deDuplicateFieldNames(Schema schema) {
+	private static Schema deDuplicateFieldNames(Schema schema) {
+		Schema newSchema = new Schema();
 		for(SchemaField field:schema.getFields()){
-			int dupeIndex = 0;
-			for(SchemaField field2:schema.getFields()){
-				if(field2.getName().equals(field.getName()) && !field2.equals(field)){
-					dupeIndex = schema.getFields().indexOf(field2);
-					logger.warn("Found duplicate field '{}' with index of '{}' in schema '{}'. Marking for deletion", dupeIndex, schema.getName());
-				}
+			if(!newSchema.isSchemaField(field.getName())){
+				newSchema.addField(field);
+			}else{
+				logger.warn("Field '{}' is a duplicate, removing", field.getName());
 			}
-			if(dupeIndex != 0){
-				schema.removeField(dupeIndex);
-			}	
 		}
+		
+		return newSchema;
 	}	
 
 
