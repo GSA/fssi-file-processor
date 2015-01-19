@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.providers.ProviderManager;
 import gov.gsa.fssi.files.schemas.Schema;
+import gov.gsa.fssi.files.schemas.SchemaBuilder;
+import gov.gsa.fssi.files.schemas.SchemaValidator;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.SourceFileManager;
 import gov.gsa.fssi.helpers.FileHelper;
@@ -21,10 +23,6 @@ import gov.gsa.fssi.helpers.FileHelper;
  * @author David Larrimore
  * @version 0.1
  */
-/**
- * @author davidlarrimore
- *
- */
 public class Main {
 	static Logger logger = LoggerFactory.getLogger(Main.class);
 	static Config config = new Config();	    
@@ -34,7 +32,7 @@ public class Main {
 		ArrayList<Provider> providers = ProviderManager.initializeProviders();
 		ProviderManager.printAllProviders(providers);
 	    ArrayList<Schema> schemas = initializeSchemas();
-	    SchemaLoader.printAllSchemas(schemas);
+	    SchemaBuilder.printAllSchemas(schemas);
 		//ArrayList<SourceFile> sourceFiles = SourceFileManager.initializeSourceFiles();
 		//ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
 	    logger.info("Completed FSSI File Processor");	
@@ -94,8 +92,14 @@ public class Main {
 	    ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty(Config.SCHEMAS_DIRECTORY), ".xml");
 		
 		for (String fileName : fileNames) {
-			Schema schema = SchemaLoader.loadSchema(fileName);
-			schemas.add(schema);
+			SchemaBuilder schemaBuilder = new SchemaBuilder();
+			Schema schema = schemaBuilder.load(fileName);
+			
+			if(schema == null){
+				logger.error("No schema was returned from schemaBuilder. Most likely a file IO issue.");
+			}else{
+				schemas.add(schemaBuilder.load(fileName));
+			}
 		}
 		logger.info("Completed Schema setup. Added " + schemas.size() + " Schemas");
 			

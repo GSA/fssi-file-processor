@@ -20,7 +20,13 @@ public class Schema extends File{
 	private ArrayList<String> primaryKeys = null;
 	private ArrayList<String> foreignKeys = null;	
 	private ArrayList<SchemaField> fields = new ArrayList<SchemaField>();	
-	
+
+	/**
+	 * @param fileName
+	 */
+	public Schema() {
+		super();
+	}
 	/**
 	 * @param fileName
 	 */
