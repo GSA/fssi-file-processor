@@ -80,7 +80,6 @@ public class SchemaValidator {
 					newField.setConstraints(validateFieldConstraints(newSchema, newField));	
 				}
 				
-				//TODO: Validate Constraints
 				//TODO: Validate format	to make sure it is compatible with type
 				newSchema.addField(newField);
 			}
@@ -132,7 +131,7 @@ public class SchemaValidator {
 			
 			
 			if(newConstraint.getType() == null || newConstraint.getType().isEmpty()){
-				logger.error("Constraint requires a type. ignoring");	
+				logger.error("No constraint type provided, constraints requires a type. ignoring.");	
 			}else if (!isValidType(newConstraint.getType())){
 				logger.warn("'{}' is an invalid type, ignoring",newConstraint.getType());
 			}else{
@@ -142,7 +141,7 @@ public class SchemaValidator {
 					logger.warn("Level in '{} - {}' is null, checking to options", newField.getName(), newConstraint.getType());
 					
 					//checking options
-					if(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL) != null && !isValidLevel(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL))){
+					if(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL) != null && isValidLevel(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL))){
 						logger.info("Found good level in '{} - {}' options, using that",newConstraint.getType());
 						newConstraint.setLevel(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL));
 					}else{

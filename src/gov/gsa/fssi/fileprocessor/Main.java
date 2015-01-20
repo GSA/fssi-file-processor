@@ -96,16 +96,13 @@ public class Main {
 			SchemaLoader schemaBuilder = new SchemaLoader();
 			
 			Schema schema = schemaBuilder.load(fileName);
-			SchemaLoader.printAllSchemas(schemas);
+			logger.info("Printing '{}' Schema", schema.getName());
+			schema.printAll();
 			
 			schema = SchemaValidator.validate(schema);
-			SchemaLoader.printAllSchemas(schemas);
+			schema.printAll();
 			
-			if(schema == null){
-				logger.error("No schema was returned from schemaBuilder. Most likely a file IO issue.");
-			}else{
-				schemas.add(schema);
-			}
+			schemas.add(schema);
 		}
 		logger.info("Completed Schema setup. Added " + schemas.size() + " Schemas");
 			
