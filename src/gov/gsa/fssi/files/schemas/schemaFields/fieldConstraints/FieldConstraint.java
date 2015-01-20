@@ -66,7 +66,7 @@ public class FieldConstraint {
 	private String type = null;
 	private String value = null;	
 	private String level = null;
-	private Date effectiveDate = new Date();
+	private Date effectiveDate = null;
 	private HashMap<String, String> options = new HashMap<String, String>();
 	
 	

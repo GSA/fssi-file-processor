@@ -7,15 +7,26 @@ import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.helpers.DateHelper;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class validates CSV File validator schemas
+ * You give it a Schema object, and then it goes through it, validating it
+ * removing bad or duplicate fields, constraints, and alias'. all of this ends
+ * with a completely rebuild schema that is sent back to  the requester.
+ * 
+ * @author davidlarrimore
+ *
+ */
 public class SchemaValidator {
 	static Logger logger = LoggerFactory.getLogger(SchemaValidator.class);
 	static Config config = new Config();	    
 
 	/**
+	 * This is the only public facing method. you send it a schema, it validates it and sends one back.
 	 * @param schema
 	 * @return
 	 */
@@ -125,29 +136,44 @@ public class SchemaValidator {
 			}else if (!isValidType(newConstraint.getType())){
 				logger.warn("'{}' is an invalid type, ignoring",newConstraint.getType());
 			}else{
-				newConstraint.setLevel(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL));
 				
-				//Setting Effective Date
-				if(newConstraint.getOptionValue(FieldConstraint.OPTION_EFFECTIVEDATE) != null){
-					newConstraint.setEffectiveDate(DateHelper.getDate(newConstraint.getOptionValue(FieldConstraint.OPTION_EFFECTIVEDATE), DateHelper.FORMAT_YYYY_MM_DD));	
+				//Checking default level value. Level cannot be null
+				if(newConstraint.getLevel() == null || newConstraint.getLevel().isEmpty() || !isValidLevel(newConstraint.getLevel())){
+					logger.warn("Level in '{} - {}' is null, checking to options", newField.getName(), newConstraint.getType());
+					
+					//checking options
+					if(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL) != null && !isValidLevel(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL))){
+						logger.info("Found good level in '{} - {}' options, using that",newConstraint.getType());
+						newConstraint.setLevel(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL));
+					}else{
+						logger.warn("No good level in in '{} - {}' found, defaulting to error", newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL) , newConstraint.getType());
+						newConstraint.setLevel(FieldConstraint.LEVEL_ERROR);
+					}
+				}else{
+					logger.warn("No good level found in in '{} - {}' , defaulting to error", newField.getName(), newConstraint.getType());
+					newConstraint.setLevel(FieldConstraint.LEVEL_ERROR);
+				}
+				
+				
+				//Checking default effectiveDate value
+				if(newConstraint.getEffectiveDate() == null){
+					logger.info("Effective Date in in '{} - {}' is null, checking to options", newField.getName(), newConstraint.getType());
+					//checking options
+					if(newConstraint.getOptionValue(FieldConstraint.OPTION_EFFECTIVEDATE) != null){
+						Date newDate = DateHelper.getDate(newConstraint.getOptionValue(FieldConstraint.OPTION_EFFECTIVEDATE), DateHelper.FORMAT_YYYY_MM_DD);
+						if(newDate != null){
+							logger.info("Found good effectiveDate in options, using that",newConstraint.getType());
+							newConstraint.setEffectiveDate(newDate);
+						}else{
+							logger.error("Could not convert date '{}' using yyyy-MM-dd format.", newConstraint.getOptionValue(FieldConstraint.OPTION_EFFECTIVEDATE));
+						}
+					}else{
+						logger.info("No date was provided in options either");
+					}
 				}
 
-				if(newConstraint.getLevel() == null || newConstraint.getLevel().isEmpty()){
-					logger.warn("No level provided for constraint '{}', defaulting to error",newConstraint.getType());
-					newConstraint.setLevel(FieldConstraint.LEVEL_ERROR);
-				}
-				
-				//TODO:process Options
-				
-				if(!isValidOptionLevel(newConstraint.getLevel())){
-					logger.warn("invalid level provided for constraint '{}', defaulting to error",newConstraint.getType());
-					newConstraint.setLevel(FieldConstraint.LEVEL_ERROR);
-				}
-				
-				
 				fieldConstraints.add(newConstraint);
 			}
-			
 		}
 		return fieldConstraints;
 	}
@@ -207,7 +233,7 @@ public class SchemaValidator {
 		 * @param string
 		 * @return
 		 */
-		public static boolean isValidOptionLevel(String string){
+		public static boolean isValidLevel(String string){
 			//TODO: use java java.lang.reflect.Field to iterate through globals to generate ArrayList
 			ArrayList<String> validList = new ArrayList<String>();
 			validList.add(FieldConstraint.LEVEL_ERROR);

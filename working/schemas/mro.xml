@@ -12,7 +12,7 @@
 			<description>Each order should be identified by a unique order identification number</description>         
 			<constraints>
 				<required level="error" effectiveDate="2014-10-01">true</required>
-				<required level="error"  effectiveDate="2015-10-01">false</required>
+				<required level="warning"  effectiveDate="2015-10-01">false</required>
 			</constraints>
 			<alias>Ord_Num</alias>
 			<alias>Order_Num</alias>

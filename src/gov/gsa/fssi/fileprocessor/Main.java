@@ -33,7 +33,7 @@ public class Main {
 		ArrayList<Provider> providers = ProviderManager.initializeProviders();
 		ProviderManager.printAllProviders(providers);
 	    ArrayList<Schema> schemas = initializeSchemas();
-	    SchemaLoader.printAllSchemas(schemas);
+	    //SchemaLoader.printAllSchemas(schemas);
 		//ArrayList<SourceFile> sourceFiles = SourceFileManager.initializeSourceFiles();
 		//ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
 	    logger.info("Completed FSSI File Processor");	
@@ -94,8 +94,12 @@ public class Main {
 		
 		for (String fileName : fileNames) {
 			SchemaLoader schemaBuilder = new SchemaLoader();
+			
 			Schema schema = schemaBuilder.load(fileName);
+			SchemaLoader.printAllSchemas(schemas);
+			
 			schema = SchemaValidator.validate(schema);
+			SchemaLoader.printAllSchemas(schemas);
 			
 			if(schema == null){
 				logger.error("No schema was returned from schemaBuilder. Most likely a file IO issue.");
