@@ -1,6 +1,7 @@
 package gov.gsa.fssi.files;
 
 import gov.gsa.fssi.config.Config;
+import gov.gsa.fssi.files.sourceFiles.loaders.NewSourceFileLoader;
 
 import java.util.ArrayList;
 
@@ -199,8 +200,7 @@ public class File {
 		
 		this.setFileNameParts(fileNameParts);
 	}	
-	
-	
+
 	public String fileName = null;
 	private String fileExtension = null;
 	private ArrayList<String> fileNameParts = new ArrayList<String>();

@@ -1,10 +1,11 @@
-package gov.gsa.fssi.files.sourceFiles;
+package gov.gsa.fssi.files.sourceFiles.utils.validators;
 
 import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.LoaderStatus;
 import gov.gsa.fssi.files.ValidatorStatus;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.schemas.Schema;
+import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.helpers.FileHelper;
 
 import java.util.ArrayList;

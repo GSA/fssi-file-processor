@@ -1,10 +1,11 @@
-package gov.gsa.fssi.loaders.schemas;
+package gov.gsa.fssi.files.schemas.utils.loaders;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,44 +30,21 @@ import org.w3c.dom.NodeList;
  *
  */
 public class SchemaXMLLoader implements SchemaLoader{
-	private String fileName = null;
-	
-	@Override
-	public Schema load(String fileName) {
-		this.setFileName(fileName);
-		return this.load();
-	}	
-
-	/**
-	 * @return the fileName
-	 */
-	public String getFileName() {
-		return fileName;
-	}
-	/**
-	 * @param fileName the fileName to set
-	 */
-	
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
 
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
 	 */
-	public Schema load() {
+	public void load(Schema schema) {
 		Document doc = null;
-		Schema schema = new Schema(this.getFileName());	
-		if(this.getFileName() != null){
+		if(schema.getFileName() != null){
 			try {
-				File fXmlFile = new File(config.getProperty(Config.SCHEMAS_DIRECTORY) + this.getFileName());
+				File fXmlFile = new File(config.getProperty(Config.SCHEMAS_DIRECTORY) + schema.getFileName());
 				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 				doc = dBuilder.parse(fXmlFile);
 			} catch (Exception e) {
-				logger.error("Received Exception error '{}' while processing file {}", e.getMessage(), this.getFileName());	
-				return null;
+				logger.error("Received Exception error '{}' while processing file {}", e.getMessage(), schema.getFileName());	
 				//e.printStackTrace();
 		    }
 			
@@ -77,7 +55,7 @@ public class SchemaXMLLoader implements SchemaLoader{
 				//We assume their is only 1 schema in each file.
 				Node schemaNode = doc.getFirstChild();
 				Element schemaElement = (Element) schemaNode;
-			    logger.info("Attempting to load schema '{}' in file '{}'", schemaElement.getElementsByTagName("name").item(0).getTextContent(), this.getFileName());
+			    logger.info("Attempting to load schema '{}' in file '{}'", schemaElement.getElementsByTagName("name").item(0).getTextContent(), schema.getFileName());
 				
 			    schema.setName(schemaElement.getElementsByTagName("name").item(0).getTextContent());
 				schema.setProviderName(schemaElement.getElementsByTagName("provider").item(0).getTextContent());
@@ -85,21 +63,17 @@ public class SchemaXMLLoader implements SchemaLoader{
 				schema.setFields(loadFields(doc.getElementsByTagName("field")));
 				
 				if(schema.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
-					logger.error("Could not load Schema '{}' in file '{}' as it is in error status", schema.getName(), this.getFileName());
-					return null;
+					logger.error("Could not load Schema '{}' in file '{}' as it is in error status", schema.getName(), schema.getFileName());
 				}
 				
-				logger.info("successfully loaded Schema '{}' from file '{}'", schema.getName(), this.getFileName());
+				logger.info("successfully loaded Schema '{}' from file '{}'", schema.getName(), schema.getFileName());
 				schema.setLoaderStatusLevel(LoaderStatus.LOADED);
-				return schema;
 			}
-			logger.error("No document found in file '{}'. Unable to load any schema", this.getFileName());
+			logger.error("No document found in file '{}'. Unable to load any schema", schema.getFileName());
 			schema.setLoaderStatusLevel(LoaderStatus.ERROR);
-			return schema;
 			
 		}else{
 			logger.error("Could not build Schema, no fileName was set");
-			return null;
 		}
 	}		
 	
@@ -206,7 +180,7 @@ public class SchemaXMLLoader implements SchemaLoader{
 				Iterator<?> optionsIterator = attributeMap.entrySet().iterator();
 				
 				while (optionsIterator.hasNext()) {
-					Map.Entry<String, String> optionsPair = (Map.Entry)optionsIterator.next();
+					Map.Entry<String, String> optionsPair = (Entry<String, String>)optionsIterator.next();
 					newConstraint.addOption(optionsPair.getKey(),optionsPair.getValue()) ;
 					logger.info("Adding Attribute {} - {} to Constraint {}", optionsPair.getKey(), optionsPair.getValue(), currentNode.getNodeName());		
 				}

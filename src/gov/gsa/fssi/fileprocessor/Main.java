@@ -11,11 +11,12 @@ import gov.gsa.fssi.files.ValidatorStatus;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.providers.ProviderManager;
 import gov.gsa.fssi.files.schemas.Schema;
-import gov.gsa.fssi.files.schemas.SchemaValidator;
+import gov.gsa.fssi.files.schemas.utils.loaders.SchemaXMLLoader;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
-import gov.gsa.fssi.files.sourceFiles.SourceFileLoader;
+import gov.gsa.fssi.files.sourceFiles.loaders.SourceFileCSVLoader;
+import gov.gsa.fssi.files.sourceFiles.loaders.NewSourceFileLoader;
 import gov.gsa.fssi.helpers.FileHelper;
-import gov.gsa.fssi.loaders.schemas.SchemaXMLLoader;
+import gov.gsa.fssi.validators.schemas.SchemaValidator;
 
 
 
@@ -35,7 +36,7 @@ public class Main {
 		ArrayList<Provider> providers = ProviderManager.initializeProviders();
 		ProviderManager.printAllProviders(providers);
 	    ArrayList<Schema> schemas = initializeSchemas();
-		ArrayList<SourceFile> sourceFiles = SourceFileLoader.initializeSourceFiles();
+		ArrayList<SourceFile> sourceFiles = OldSourceFileLoader.initializeSourceFiles();
 		ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
 	    logger.info("Completed FSSI File Processor");	
 	}
@@ -60,18 +61,18 @@ public class Main {
 		logger.debug("Processing sourceFile '{}'", sourceFile.getFileName());	
 		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
 		    logger.info("Mapping Provider to SourceFile '{}'", sourceFile.getFileName());	
-			SourceFileLoader.validateSourceFileProvider(providers, sourceFile);	
+			OldSourceFileLoader.validateSourceFileProvider(providers, sourceFile);	
 		    logger.info("Completed Mapping Provider to SourceFile '{}'", sourceFile.getFileName());			
 		}
 		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
 		    logger.info("Mapping Schema to SourceFile '{}'", sourceFile.getFileName());	
-		    SourceFileLoader.validateSourceFileSchema(schemas, sourceFile); 
+		    OldSourceFileLoader.validateSourceFileSchema(schemas, sourceFile); 
 		    logger.info("Completed Mapping Schema to SourceFile '{}'", sourceFile.getFileName());	
 		}
 		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
-		    logger.info("Ingesting SourceFile '{}'", sourceFile.getFileName());	
-			sourceFile.ingest();
-		    logger.info("Completed Ingesting SourceFile '{}'", sourceFile.getFileName());	
+		    logger.info("Loading SourceFile '{}'", sourceFile.getFileName());	
+		    sourceFile.load();
+		    logger.info("Completed loading SourceFile '{}'", sourceFile.getFileName());	
 		}
 		
 		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
@@ -94,15 +95,17 @@ public class Main {
 	    ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty(Config.SCHEMAS_DIRECTORY), ".xml");
 		
 		for (String fileName : fileNames) {
-			SchemaXMLLoader schemaBuilder = new SchemaXMLLoader();
+			SchemaXMLLoader schemaLoader = new SchemaXMLLoader();
+			SchemaValidator schemaValidator = new SchemaValidator();
+			Schema schema = new Schema(fileName);
 			
-			Schema schema = schemaBuilder.load(fileName);
+			schemaLoader.load(schema);
 			if(logger.isDebugEnabled()){
 				logger.info("Printing '{}' Schema that has been loaded", schema.getName());
 				schema.printAll();
 			}
 			
-			schema = SchemaValidator.validate(schema);
+			schemaValidator.validate(schema);
 			if(logger.isDebugEnabled()){
 				logger.info("Printing '{}' Schema that has been validated", schema.getName());
 				schema.printAll();

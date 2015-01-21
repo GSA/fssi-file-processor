@@ -1,7 +1,8 @@
-package gov.gsa.fssi.files.schemas;
+package gov.gsa.fssi.validators.schemas;
 
 import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.ValidatorStatus;
+import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.helpers.DateHelper;
@@ -30,28 +31,26 @@ public class SchemaValidator {
 	 * @param schema
 	 * @return
 	 */
-	public static Schema validate(Schema schema) {
+	public void validate(Schema schema) {
 		logger.info("Started schema validation for schema '{}'", schema.getName());	
-		Schema newSchema = schema;
-
+		//Schema newSchema = schema;
 		
-		if(newSchema.getName() == null || schema.getName().isEmpty()){
-			logger.error("Schema in file '{}' does not have a name", newSchema.getFileName());
-			newSchema.setValidatorStatusLevel(ValidatorStatus.ERROR);
+		if(schema.getName() == null || schema.getName().isEmpty()){
+			logger.error("Schema in file '{}' does not have a name", schema.getFileName());
+			schema.setValidatorStatusLevel(ValidatorStatus.ERROR);
 		}
 		
-		newSchema.setFields(validateFields(newSchema));
+		schema.setFields(validateFields(schema));
 		
-		if(newSchema.getFields() == null || schema.getFields().isEmpty()){
-			logger.warn("Schema '{}' in file '{}' does not have any fields", schema.getName(), newSchema.getFileName());
-			newSchema.setValidatorStatusLevel(ValidatorStatus.WARNING);
+		if(schema.getFields() == null || schema.getFields().isEmpty()){
+			logger.warn("Schema '{}' in file '{}' does not have any fields", schema.getName(), schema.getFileName());
+			schema.setValidatorStatusLevel(ValidatorStatus.WARNING);
 		}	
 		
-		if(newSchema.getValidatorStatusLevel() == null){
-			newSchema.setValidatorStatusLevel(ValidatorStatus.PASS);
+		if(schema.getValidatorStatusLevel() == null){
+			schema.setValidatorStatusLevel(ValidatorStatus.PASS);
 		}
-		
-		return newSchema;
+	
 	}
 
 
@@ -59,7 +58,7 @@ public class SchemaValidator {
 	 * This method checks naming for duplicate field naming
 	 * @param schema
 	 */
-	private static ArrayList<SchemaField> validateFields(Schema schema) {
+	private ArrayList<SchemaField> validateFields(Schema schema) {
 		Schema newSchema = new Schema();
 		for(SchemaField field:schema.getFields()){
 			SchemaField newField = field;
@@ -93,7 +92,7 @@ public class SchemaValidator {
 	 * This method checks naming for duplicate alias'
 	 * @param schemaField
 	 */
-	private static ArrayList<String> validateFieldAlias(Schema newSchema, SchemaField newField) {
+	private ArrayList<String> validateFieldAlias(Schema newSchema, SchemaField newField) {
 		ArrayList<String> newAliasList = new ArrayList<String>();
 		for(String alias:newField.getAlias()){
 			String newAlias = alias.toUpperCase().trim();
@@ -124,7 +123,7 @@ public class SchemaValidator {
 	}	
 	
 	
-	private static ArrayList<FieldConstraint> validateFieldConstraints(Schema newSchema, SchemaField newField) {
+	private ArrayList<FieldConstraint> validateFieldConstraints(Schema newSchema, SchemaField newField) {
 		ArrayList<FieldConstraint> fieldConstraints = new ArrayList<FieldConstraint>();
 		for(FieldConstraint constraint:newField.getConstraints()){
 			FieldConstraint newConstraint = constraint;
@@ -178,7 +177,7 @@ public class SchemaValidator {
 	}
 
 		
-		public static void printAllSchemas(ArrayList<Schema> schemas){
+		public void printAllSchemas(ArrayList<Schema> schemas){
 			for(Schema schema: schemas){
 				schema.printAll();
 			}
@@ -190,7 +189,7 @@ public class SchemaValidator {
 		 * @param string
 		 * @return
 		 */
-		public static boolean isValidType(String string){
+		public boolean isValidType(String string){
 			//TODO: use java java.lang.reflect.Field to iterate through globals to generate ArrayList
 			ArrayList<String> validTypes = new ArrayList<String>();
 			validTypes.add(FieldConstraint.TYPE_REQUIRED);
@@ -213,7 +212,7 @@ public class SchemaValidator {
 		 * @param string
 		 * @return
 		 */
-		public static boolean isValidOption(String string){
+		public boolean isValidOption(String string){
 			//TODO: use java java.lang.reflect.Field to iterate through globals to generate ArrayList
 			ArrayList<String> validList = new ArrayList<String>();
 			validList.add(FieldConstraint.OPTION_EFFECTIVEDATE);
@@ -232,7 +231,7 @@ public class SchemaValidator {
 		 * @param string
 		 * @return
 		 */
-		public static boolean isValidLevel(String string){
+		public boolean isValidLevel(String string){
 			//TODO: use java java.lang.reflect.Field to iterate through globals to generate ArrayList
 			ArrayList<String> validList = new ArrayList<String>();
 			validList.add(FieldConstraint.LEVEL_ERROR);

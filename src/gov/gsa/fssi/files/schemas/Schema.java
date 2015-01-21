@@ -3,7 +3,6 @@ package gov.gsa.fssi.files.schemas;
 import gov.gsa.fssi.files.File;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -30,6 +29,7 @@ public class Schema extends File{
 	}
 	/**
 	 * @param fileName
+	 * @see File#File(String)
 	 */
 	public Schema(String fileName) {
 		super(fileName);
