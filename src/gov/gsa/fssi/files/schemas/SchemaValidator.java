@@ -1,6 +1,6 @@
 package gov.gsa.fssi.files.schemas;
 
-import gov.gsa.fssi.fileprocessor.Config;
+import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.ValidatorStatus;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
@@ -36,14 +36,14 @@ public class SchemaValidator {
 
 		
 		if(newSchema.getName() == null || schema.getName().isEmpty()){
-			logger.error("Schema does not have a name");
+			logger.error("Schema in file '{}' does not have a name", newSchema.getFileName());
 			newSchema.setValidatorStatusLevel(ValidatorStatus.ERROR);
 		}
 		
 		newSchema.setFields(validateFields(newSchema));
 		
 		if(newSchema.getFields() == null || schema.getFields().isEmpty()){
-			logger.warn("Schema '{}' does not have any fields", schema.getName());
+			logger.warn("Schema '{}' in file '{}' does not have any fields", schema.getName(), newSchema.getFileName());
 			newSchema.setValidatorStatusLevel(ValidatorStatus.WARNING);
 		}	
 		

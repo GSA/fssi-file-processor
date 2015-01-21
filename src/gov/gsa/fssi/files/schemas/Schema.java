@@ -190,11 +190,11 @@ public class Schema extends File{
 	
 	
 	public void print(){
-		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Build Status:'{}' Validator Status: '{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getBuilderStatusLevel(), this.getValidatorStatusLevel());
+		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Build Status:'{}' Validator Status: '{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getLoaderStatusLevel(), this.getValidatorStatusLevel());
 	}
 	
 	public void printAll(){
-		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Build Status:'{}' Validator Status: '{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getBuilderStatusLevel(), this.getValidatorStatusLevel());
+		logger.debug("Name: '{}' Version: '{}' Provider: '{}' Build Status:'{}' Validator Status: '{}'", this.getName(), this.getVersion(), this.getProviderName(), this.getLoaderStatusLevel(), this.getValidatorStatusLevel());
 		printSchemaFields();	
 	}
 	

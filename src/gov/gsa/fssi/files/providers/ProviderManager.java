@@ -1,6 +1,6 @@
 package gov.gsa.fssi.files.providers;
 
-import gov.gsa.fssi.fileprocessor.Config;
+import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.helpers.FileHelper;
 

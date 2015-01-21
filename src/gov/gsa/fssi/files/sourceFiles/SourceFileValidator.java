@@ -1,6 +1,6 @@
 package gov.gsa.fssi.files.sourceFiles;
 
-import gov.gsa.fssi.fileprocessor.Config;
+import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.LoaderStatus;
 import gov.gsa.fssi.files.ValidatorStatus;
 import gov.gsa.fssi.files.providers.Provider;
@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
  * @author davidlarrimore
  *
  */
-public class SourceFileManager {
+public class SourceFileValidator {
 	static Config config = new Config();	    
-	static Logger logger = LoggerFactory.getLogger(SourceFileManager.class);
+	static Logger logger = LoggerFactory.getLogger(SourceFileValidator.class);
 	
 	/**
 	 * The purpose of this function is just to prep file processing. We are not actually loading data yet
@@ -59,19 +59,19 @@ public class SourceFileManager {
 	 */
 	public static void validateSourceFileProvider(
 			ArrayList<Provider> providers, SourceFile sourceFile) {
-		if(!sourceFile.getBuilderStatusLevel().equals(LoaderStatus.ERROR)){
+		if(!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
 			logger.info("Attempting to map Provider to file {}", sourceFile.getFileName());
 			for (Provider provider : providers) {
 				if(sourceFile.getFileName().toUpperCase().contains(provider.getProviderIdentifier().toUpperCase())){
 					logger.info("Mapped provider {} - {} to file '{}'", provider.getProviderName(), provider.getProviderIdentifier(),sourceFile.getFileName());
 					sourceFile.setProvider(provider);
-					sourceFile.setBuilderStatusLevel(LoaderStatus.MAPPED);
+					sourceFile.setLoaderStatusLevel(LoaderStatus.MAPPED);
 				}
 			}
 		}
 		if (sourceFile.getProvider() == null){
 			logger.error("Could not find provider for file: '{}'", sourceFile.getFileName());
-			sourceFile.setBuilderStatusLevel(LoaderStatus.ERROR);
+			sourceFile.setLoaderStatusLevel(LoaderStatus.ERROR);
 		}
 	}	
 	
@@ -94,7 +94,7 @@ public class SourceFileManager {
 	public static void validateSourceFileSchema(ArrayList<Schema> schemas,
 			SourceFile sourceFile) {
 		logger.info("Attempting to map Schema to file {}", sourceFile.getFileName());
-		if (!sourceFile.getBuilderStatusLevel().equals(LoaderStatus.ERROR)){
+		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
 			Provider provider = sourceFile.getProvider();
 			for ( Schema schema : schemas) {
 				if(provider.getProviderName().toUpperCase().equals(schema.getName().toUpperCase())){

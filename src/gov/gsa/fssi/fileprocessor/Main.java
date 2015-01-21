@@ -5,21 +5,23 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.LoaderStatus;
+import gov.gsa.fssi.files.ValidatorStatus;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.providers.ProviderManager;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.SchemaLoader;
 import gov.gsa.fssi.files.schemas.SchemaValidator;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
-import gov.gsa.fssi.files.sourceFiles.SourceFileManager;
+import gov.gsa.fssi.files.sourceFiles.SourceFileLoader;
 import gov.gsa.fssi.helpers.FileHelper;
 
 
 
 
 /**
- * This is the main class for the FSSI File Processor Project
+ * This is the main class for the FSSI File Processor Project.
  * 
  * @author David Larrimore
  * @version 0.1
@@ -33,9 +35,9 @@ public class Main {
 		ArrayList<Provider> providers = ProviderManager.initializeProviders();
 		ProviderManager.printAllProviders(providers);
 	    ArrayList<Schema> schemas = initializeSchemas();
-	    //SchemaLoader.printAllSchemas(schemas);
-		//ArrayList<SourceFile> sourceFiles = SourceFileManager.initializeSourceFiles();
-		//ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
+	    SchemaLoader.printAllSchemas(schemas);
+		ArrayList<SourceFile> sourceFiles = SourceFileLoader.initializeSourceFiles();
+		ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
 	    logger.info("Completed FSSI File Processor");	
 	}
 
@@ -57,29 +59,29 @@ public class Main {
 	 */
 	private static void ingestProcessAndExportSourceFile(ArrayList<Provider> providers, ArrayList<Schema> schemas, SourceFile sourceFile) {
 		logger.debug("Processing sourceFile '{}'", sourceFile.getFileName());	
-		if (!sourceFile.getBuilderStatusLevel().equals(LoaderStatus.ERROR)){
+		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
 		    logger.info("Mapping Provider to SourceFile '{}'", sourceFile.getFileName());	
-			SourceFileManager.validateSourceFileProvider(providers, sourceFile);	
+			SourceFileLoader.validateSourceFileProvider(providers, sourceFile);	
 		    logger.info("Completed Mapping Provider to SourceFile '{}'", sourceFile.getFileName());			
 		}
-		if (!sourceFile.getBuilderStatusLevel().equals(LoaderStatus.ERROR)){
+		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
 		    logger.info("Mapping Schema to SourceFile '{}'", sourceFile.getFileName());	
-		    SourceFileManager.validateSourceFileSchema(schemas, sourceFile); 
+		    SourceFileLoader.validateSourceFileSchema(schemas, sourceFile); 
 		    logger.info("Completed Mapping Schema to SourceFile '{}'", sourceFile.getFileName());	
 		}
-		if (!sourceFile.getBuilderStatusLevel().equals(LoaderStatus.ERROR)){
+		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
 		    logger.info("Ingesting SourceFile '{}'", sourceFile.getFileName());	
 			sourceFile.ingest();
 		    logger.info("Completed Ingesting SourceFile '{}'", sourceFile.getFileName());	
 		}
 		
-		if (!sourceFile.getBuilderStatusLevel().equals(LoaderStatus.ERROR)){
+		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
 		    logger.info("Processing SourceFile '{}'", sourceFile.getFileName());	
 			sourceFile.processToSchema();
 		    logger.info("Completed Processing SourceFile '{}'", sourceFile.getFileName());	
 		}	
 		
-		if (!sourceFile.getBuilderStatusLevel().equals(LoaderStatus.ERROR)){
+		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
 		    logger.info("Outputting SourceFile '{}'", sourceFile.getFileName());	
 		    sourceFile.outputStagedSourceFile();
 		    logger.info("Completed Outputting SourceFile '{}'", sourceFile.getFileName());	
@@ -96,18 +98,40 @@ public class Main {
 			SchemaLoader schemaBuilder = new SchemaLoader();
 			
 			Schema schema = schemaBuilder.load(fileName);
-			logger.info("Printing '{}' Schema", schema.getName());
-			schema.printAll();
+			if(logger.isDebugEnabled()){
+				logger.info("Printing '{}' Schema that has been loaded", schema.getName());
+				schema.printAll();
+			}
 			
 			schema = SchemaValidator.validate(schema);
-			schema.printAll();
+			if(logger.isDebugEnabled()){
+				logger.info("Printing '{}' Schema that has been validated", schema.getName());
+				schema.printAll();
+			}
 			
-			schemas.add(schema);
+			if(schema.getValidatorStatus().equals(ValidatorStatus.ERROR)){ //We currently prevent invalid schemas from being loaded
+				logger.error("Schema '{}' from file '{}' not being added to schemas because it is in error state", schema.getName(), schema.getFileName());
+			}else if(isDuplicateSchemaName(schemas, schema)){ //duplicate schema names can screw up a lot.
+				logger.error("Schema '{}' from file '{}' is a duplicate, it will not be added", schema.getName(), schema.getFileName());
+			}else{
+				logger.info("Completed Schema setup. Added " + schemas.size() + " Schemas");	
+				schemas.add(schema);				
+			}
+			
 		}
-		logger.info("Completed Schema setup. Added " + schemas.size() + " Schemas");
-			
 		return schemas;		
 	}
 	
+	
+	private static boolean isDuplicateSchemaName(ArrayList<Schema> schemas, Schema newSchema){
+		for(Schema schema: schemas){
+			if(schema.getName().equals(newSchema.getName())){
+				logger.error("Schema '{}' from file '{}' is a duplicate from file '{}", schema.getName(), newSchema.getFileName(), schema.getFileName());
+				return true;
+			}
+				
+		}
+		return false;
+	}
 	
 }

@@ -1,6 +1,6 @@
 package gov.gsa.fssi.files;
 
-import gov.gsa.fssi.fileprocessor.Config;
+import gov.gsa.fssi.config.Config;
 
 import java.util.ArrayList;
 
@@ -113,44 +113,44 @@ public class File {
 	/**
 	 * @return
 	 */
-	public LoaderStatus getBuilderStatus() {
-		return builderStatus;
+	public LoaderStatus getLoaderStatus() {
+		return loaderStatus;
 	}
 	/**
 	 * @return
 	 */
-	public String getBuilderStatusMessage(){
-		return builderStatus.getStatusMessage();
+	public String getLoaderStatusMessage(){
+		return loaderStatus.getStatusMessage();
 	}
 	/**
 	 * @return
 	 */
-	public String getBuilderStatusLevel(){
-		return builderStatus.getLevel();
+	public String getLoaderStatusLevel(){
+		return loaderStatus.getLevel();
 	}	
 	/**
 	 * @param buildStatus
 	 */
-	public void setBuilderStatus(LoaderStatus buildStatus) {
-		this.builderStatus = buildStatus;
+	public void setLoaderStatus(LoaderStatus buildStatus) {
+		this.loaderStatus = buildStatus;
 	}
 	/**
 	 * @param level
 	 */
-	public void setBuilderStatusError() {
-		this.builderStatus.setLevel(LoaderStatus.ERROR);
+	public void setLoaderStatusError() {
+		this.loaderStatus.setLevel(LoaderStatus.ERROR);
 	}	
 	/**
 	 * @param level
 	 */
-	public void setBuilderStatusLevel(String level) {
-		this.builderStatus.setLevel(level);
+	public void setLoaderStatusLevel(String level) {
+		this.loaderStatus.setLevel(level);
 	}
 	/**
 	 * @param message
 	 */
-	public void setBuilderStatusMessage(String message) {
-		this.builderStatus.setStatusMessage(message);
+	public void setLoaderStatusMessage(String message) {
+		this.loaderStatus.setStatusMessage(message);
 	}
 	/**
 	 * This constructor class takes a file name and uses it to initialize the basic elements of a SourceFile
@@ -161,7 +161,7 @@ public class File {
 		this.setFileName(fileName);
 		int startOfExtension = fileName.lastIndexOf(".")+1;
 		this.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
-		this.builderStatus.setLevel(LoaderStatus.INITIALIZED);;
+		this.loaderStatus.setLevel(LoaderStatus.INITIALIZED);;
 		//defaulted to underscore
 		this.setFileNameParts(SEPARATOR_UNDERSCORE);
 	}
@@ -207,7 +207,7 @@ public class File {
 	//private String status = null;
 	protected static Logger logger = LoggerFactory.getLogger(File.class);
 	protected static Config config = new Config();	    
-	private LoaderStatus builderStatus = new LoaderStatus();
+	private LoaderStatus loaderStatus = new LoaderStatus();
 	private ValidatorStatus validatorStatus = new ValidatorStatus();	
 	public static final byte SEPARATOR_UNDERSCORE = '_';
 	public static final byte SEPARATOR_DASH = '-';

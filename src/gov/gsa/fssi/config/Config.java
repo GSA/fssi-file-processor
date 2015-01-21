@@ -1,4 +1,4 @@
-package gov.gsa.fssi.fileprocessor;
+package gov.gsa.fssi.config;
 
 import java.io.FileInputStream;
 import java.io.IOException;

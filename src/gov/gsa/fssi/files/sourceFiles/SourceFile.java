@@ -1,6 +1,6 @@
 package gov.gsa.fssi.files.sourceFiles;
 
-import gov.gsa.fssi.fileprocessor.Config;
+import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.LoaderStatus;
 import gov.gsa.fssi.files.File;
 import gov.gsa.fssi.files.providers.Provider;
@@ -155,7 +155,7 @@ public class SourceFile extends File{
 	public void setReportingPeriod(){
 		if(this.getFileNameParts() == null || this.getFileNameParts().isEmpty()){
 			logger.error("File has no fileNameParts, which means we cannot discern a provider or schema. we can process the file no farther");
-			this.setBuilderStatusLevel(LoaderStatus.ERROR);
+			this.setLoaderStatusLevel(LoaderStatus.ERROR);
 		}else{
 			
 			for(String fileNamePart: this.getFileNameParts()){
@@ -176,10 +176,10 @@ public class SourceFile extends File{
 						
 						if(date.compareTo(todaysDate) > 0){
 							logger.error("ReportingPeriod '{}' found in FileName is later than current date. Please check file name", date.toString());
-							this.setBuilderStatusLevel(LoaderStatus.ERROR);
+							this.setLoaderStatusLevel(LoaderStatus.ERROR);
 						}else if(date.compareTo(minimumDate) < 0){
 							logger.error("ReportingPeriod '{}' found in FileName is before the year 2000 and may be inacurate. Please check file name", date.toString());
-							this.setBuilderStatusLevel(LoaderStatus.ERROR);				
+							this.setLoaderStatusLevel(LoaderStatus.ERROR);				
 						}else{
 							logger.info("Successfully added Reporting Period '{}'", date.toString());
 							this.setReportingPeriod(date);
@@ -462,7 +462,7 @@ public class SourceFile extends File{
 			schemaString = this.schema.getName();
 		}		
 		
-		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getBuilderStatusLevel(), this.getHeaders().size(), providerString, schemaString);
+		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoaderStatusLevel(), this.getHeaders().size(), providerString, schemaString);
 	}
 	
 	/**
@@ -479,7 +479,7 @@ public class SourceFile extends File{
 			schemaString = this.schema.getName();
 		}		
 		
-		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getBuilderStatusLevel(), this.getHeaders().size(), providerString, schemaString);
+		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoaderStatusLevel(), this.getHeaders().size(), providerString, schemaString);
 		printRecords();	
 	}
 	/**
@@ -566,7 +566,7 @@ public class SourceFile extends File{
 			}else{
 				logger.info("All {} Records successfully processed in {}", this.getTotalRecords(), this.getFileName());
 			}
-			this.setBuilderStatusLevel(LoaderStatus.LOADED);
+			this.setLoaderStatusLevel(LoaderStatus.LOADED);
 			parser.close();
 		} catch (FileNotFoundException e) {
 			logger.error("There was an FileNotFoundException error with file {}", this.getFileName());
@@ -630,7 +630,7 @@ public class SourceFile extends File{
 			}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XML")){
 				//logger.info("Exporting File {} as a 'XML'", sourceFile.getFileExtension());	
 				logger.error("Cannot export sourceFile '{}' as XML. We don't currently handle XML output at this point", this.getFileName());
-				this.setBuilderStatusError();
+				this.setLoaderStatusError();
 			}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XLS")){
 				this.outputAsExcel();
 			}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XLSX")){
