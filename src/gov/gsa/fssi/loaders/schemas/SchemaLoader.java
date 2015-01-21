@@ -29,5 +29,9 @@ public interface SchemaLoader {
 	static Config config = new Config();	
 	static String fileName = new String();
 	
+	/**
+	 * @param fileName
+	 * @return Schema
+	 */
 	public Schema load(String fileName);
 }

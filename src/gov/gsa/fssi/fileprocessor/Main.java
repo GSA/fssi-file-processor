@@ -11,11 +11,11 @@ import gov.gsa.fssi.files.ValidatorStatus;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.providers.ProviderManager;
 import gov.gsa.fssi.files.schemas.Schema;
-import gov.gsa.fssi.files.schemas.SchemaLoader;
 import gov.gsa.fssi.files.schemas.SchemaValidator;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.SourceFileLoader;
 import gov.gsa.fssi.helpers.FileHelper;
+import gov.gsa.fssi.loaders.schemas.SchemaXMLLoader;
 
 
 
@@ -35,7 +35,6 @@ public class Main {
 		ArrayList<Provider> providers = ProviderManager.initializeProviders();
 		ProviderManager.printAllProviders(providers);
 	    ArrayList<Schema> schemas = initializeSchemas();
-	    SchemaLoader.printAllSchemas(schemas);
 		ArrayList<SourceFile> sourceFiles = SourceFileLoader.initializeSourceFiles();
 		ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
 	    logger.info("Completed FSSI File Processor");	
@@ -95,7 +94,7 @@ public class Main {
 	    ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty(Config.SCHEMAS_DIRECTORY), ".xml");
 		
 		for (String fileName : fileNames) {
-			SchemaLoader schemaBuilder = new SchemaLoader();
+			SchemaXMLLoader schemaBuilder = new SchemaXMLLoader();
 			
 			Schema schema = schemaBuilder.load(fileName);
 			if(logger.isDebugEnabled()){

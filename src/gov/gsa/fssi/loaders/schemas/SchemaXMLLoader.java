@@ -16,25 +16,26 @@ import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.helpers.XmlHelper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * This class loads a schema from an XML file
+ * 
+ * @author davidlarrimore
+ *
+ */
 public class SchemaXMLLoader implements SchemaLoader{
-	static Logger logger = LoggerFactory.getLogger(SchemaXMLLoader.class);
-	static Config config = new Config();
+	private String fileName = null;
+	
 	@Override
 	public Schema load(String fileName) {
 		this.setFileName(fileName);
 		return this.load();
 	}	
-	
-	
-	private String fileName = null;
 
 	/**
 	 * @return the fileName
@@ -206,8 +207,8 @@ public class SchemaXMLLoader implements SchemaLoader{
 				
 				while (optionsIterator.hasNext()) {
 					Map.Entry<String, String> optionsPair = (Map.Entry)optionsIterator.next();
-						newConstraint.addOption(optionsPair.getKey(),optionsPair.getValue()) ;
-						logger.info("Adding Attribute {} - {} to Constraint {}", optionsPair.getKey(), optionsPair.getValue(), currentNode.getNodeName());		
+					newConstraint.addOption(optionsPair.getKey(),optionsPair.getValue()) ;
+					logger.info("Adding Attribute {} - {} to Constraint {}", optionsPair.getKey(), optionsPair.getValue(), currentNode.getNodeName());		
 				}
 				
 				return newConstraint;								
