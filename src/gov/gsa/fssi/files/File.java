@@ -1,7 +1,7 @@
 package gov.gsa.fssi.files;
 
 import gov.gsa.fssi.config.Config;
-import gov.gsa.fssi.files.sourceFiles.loaders.NewSourceFileLoader;
+import gov.gsa.fssi.files.sourceFiles.utils.loaders.SourceFileLoader;
 
 import java.util.ArrayList;
 

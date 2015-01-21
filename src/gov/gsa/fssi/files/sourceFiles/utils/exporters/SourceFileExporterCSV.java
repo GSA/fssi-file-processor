@@ -111,6 +111,11 @@ public class SourceFileExporterCSV implements SourceFileExporter{
 			logger.error("There was an IllegalArgumentException error with file {}", sourceFile.getFileName());
 			e.printStackTrace();
 		}
+	}
+
+	public void load(SourceFile sourceFile) {
+		// TODO Auto-generated method stub
+		
 	}		
 	
 

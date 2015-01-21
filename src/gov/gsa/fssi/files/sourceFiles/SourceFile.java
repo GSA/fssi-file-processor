@@ -6,19 +6,15 @@ import gov.gsa.fssi.files.File;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
-import gov.gsa.fssi.files.sourceFiles.loaders.SourceFileCSVLoader;
-import gov.gsa.fssi.files.sourceFiles.loaders.NewSourceFileLoader;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
+import gov.gsa.fssi.files.sourceFiles.utils.exporters.SourceFileExporterCSV;
 import gov.gsa.fssi.helpers.DateHelper;
 import gov.gsa.fssi.helpers.FileHelper;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,9 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVRecord;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -493,7 +487,7 @@ public class SourceFile extends File{
 	public void load() {
 		if(this.getFileExtension().toUpperCase().equals("CSV")){
 			logger.info("Loading file {} as a 'CSV'", this.getFileName()); 
-			SourceFileCSVLoader loader = new SourceFileCSVLoader();
+			SourceFileExporterCSV loader = new SourceFileExporterCSV();
 			loader.load(this);
 			//this.loadSourceFileObjectsFromCSV();
 		}else if(this.getFileExtension().toUpperCase().equals("XML")){

@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.sourceFiles.loaders;
+package gov.gsa.fssi.files.sourceFiles.utils.loaders;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,6 +16,7 @@ import gov.gsa.fssi.files.LoaderStatus;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
+import gov.gsa.fssi.files.sourceFiles.utils.loaders.SourceFileLoader;
 
 
 /**
@@ -24,7 +25,7 @@ import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
  * @author davidlarrimore
  *
  */
-public class SourceFileCSVLoader implements NewSourceFileLoader{
+public class SourceFileCSVLoader implements SourceFileLoader{
 
 	/**
 	 *

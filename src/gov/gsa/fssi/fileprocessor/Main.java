@@ -13,8 +13,7 @@ import gov.gsa.fssi.files.providers.ProviderManager;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.utils.loaders.SchemaXMLLoader;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
-import gov.gsa.fssi.files.sourceFiles.loaders.SourceFileCSVLoader;
-import gov.gsa.fssi.files.sourceFiles.loaders.NewSourceFileLoader;
+import gov.gsa.fssi.files.sourceFiles.utils.loaders.OldSourceFileLoader;
 import gov.gsa.fssi.helpers.FileHelper;
 import gov.gsa.fssi.validators.schemas.SchemaValidator;
 
