@@ -81,7 +81,7 @@ public class Main {
 		
 		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR) && sourceFile.getSchema() != null){
 		    logger.info("Validating SourceFile '{}'", sourceFile.getFileName());	
-		   // sourceFile.validate();
+		   sourceFile.validate();
 		    logger.info("Completed validating SourceFile '{}'", sourceFile.getFileName());	
 		}
 		

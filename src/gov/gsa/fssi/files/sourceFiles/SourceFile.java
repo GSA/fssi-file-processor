@@ -348,7 +348,19 @@ public class SourceFile extends File{
 					data.setHeaderIndex(headerTranslationMap.get(data.getHeaderIndex()));
 			}
 			//sourceFileRecord.print();
+			
+			//Now we fill in the blanks
+			Iterator<?> sourceFileHeaderIterator2 = this.getHeaders().entrySet().iterator();
+			while (sourceFileHeaderIterator2.hasNext()){
+				Map.Entry<Integer, String> newHeaderPairs = (Map.Entry)sourceFileHeaderIterator2.next();
+				Data data = sourceFileRecord.getDataByHeaderIndex(newHeaderPairs.getKey());
+				if(data == null){
+					sourceFileRecord.addData(new Data(newHeaderPairs.getKey(), ""));
+				}
+			}
 		}
+		
+		
 	}
 	
 	

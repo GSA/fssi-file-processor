@@ -17,6 +17,20 @@ public class Data {
 	public static String STATUS_PASS = "pass";	
 	
 	
+	public Data() {
+		super();
+	}
+	
+	public Data(Integer headerIndex) {
+		super();
+		this.headerIndex = headerIndex;
+	}
+	
+	public Data(Integer headerIndex, String data) {
+		super();
+		this.headerIndex = headerIndex;
+		this.data = data;
+	}
 	/**
 	 * @return
 	 */

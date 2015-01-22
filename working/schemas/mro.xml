@@ -12,6 +12,7 @@
 			<description>Each order should be identified by a unique order identification number</description>         
 			<constraints>
 				<required level="error">true</required>
+				<required level="error" effectiveDate="2013-10-01">true</required>
 				<required level="warning"  effectiveDate="2015-10-01">false</required>
 			</constraints>
 			<alias>Ord_Num</alias>
@@ -49,6 +50,7 @@
 			<description>Description of product</description>
 			<constraints>
 				<required effectiveDate="2014-10-01">true</required>
+				<maxLength level="error">55</maxLength>
 			</constraints>
 			<alias>PROD_DESCR</alias>
 		</field>	
@@ -57,7 +59,7 @@
 			<title>DoDAAC</title>
 			<description>Department of Defense Activity Address Code</description>
 			<constraints>
-				<required>true</required>
+				<required level="error">true</required>
 			</constraints>
 			<alias>AAC</alias>
 		</field>
