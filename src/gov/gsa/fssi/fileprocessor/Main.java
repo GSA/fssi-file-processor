@@ -12,10 +12,10 @@ import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.providers.ProviderManager;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.utils.loaders.SchemaXMLLoader;
+import gov.gsa.fssi.files.schemas.utils.validators.SchemaValidator;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
-import gov.gsa.fssi.files.sourceFiles.utils.loaders.OldSourceFileLoader;
+import gov.gsa.fssi.files.sourceFiles.utils.validators.SourceFilePreProcessor;
 import gov.gsa.fssi.helpers.FileHelper;
-import gov.gsa.fssi.validators.schemas.SchemaValidator;
 
 
 
@@ -35,8 +35,7 @@ public class Main {
 		ArrayList<Provider> providers = ProviderManager.initializeProviders();
 		ProviderManager.printAllProviders(providers);
 	    ArrayList<Schema> schemas = initializeSchemas();
-		ArrayList<SourceFile> sourceFiles = OldSourceFileLoader.initializeSourceFiles();
-		ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
+		ingestProcessAndExportSourceFiles(providers, schemas);	    
 	    logger.info("Completed FSSI File Processor");	
 	}
 
@@ -44,8 +43,8 @@ public class Main {
 	 * The purpose of this function is to process a all files through the entire process from ingestion to processing to validation and finally to output.
 	 * @param sourceFileDirectory
 	 */
-	public static void ingestProcessAndExportSourceFiles(ArrayList<Provider> providers, ArrayList<Schema> schemas, ArrayList<SourceFile> sourceFiles) {	
-	    for ( SourceFile sourceFile : sourceFiles) {
+	public static void ingestProcessAndExportSourceFiles(ArrayList<Provider> providers, ArrayList<Schema> schemas) {	
+		for ( SourceFile sourceFile : SourceFilePreProcessor.preProcess()) {
 	    	ingestProcessAndExportSourceFile(providers, schemas, sourceFile);		    	
 		}		    
 	}
@@ -60,12 +59,12 @@ public class Main {
 		logger.debug("Processing sourceFile '{}'", sourceFile.getFileName());	
 		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
 		    logger.info("Mapping Provider to SourceFile '{}'", sourceFile.getFileName());	
-			OldSourceFileLoader.validateSourceFileProvider(providers, sourceFile);	
+			validateSourceFileProvider(providers, sourceFile);	
 		    logger.info("Completed Mapping Provider to SourceFile '{}'", sourceFile.getFileName());			
 		}
 		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
 		    logger.info("Mapping Schema to SourceFile '{}'", sourceFile.getFileName());	
-		    OldSourceFileLoader.validateSourceFileSchema(schemas, sourceFile); 
+		    validateSourceFileSchema(schemas, sourceFile); 
 		    logger.info("Completed Mapping Schema to SourceFile '{}'", sourceFile.getFileName());	
 		}
 		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
@@ -80,9 +79,15 @@ public class Main {
 		    logger.info("Completed Processing SourceFile '{}'", sourceFile.getFileName());	
 		}	
 		
+		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR) && sourceFile.getSchema() != null){
+		    logger.info("Validating SourceFile '{}'", sourceFile.getFileName());	
+		   // sourceFile.validate();
+		    logger.info("Completed validating SourceFile '{}'", sourceFile.getFileName());	
+		}
+		
 		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
 		    logger.info("Outputting SourceFile '{}'", sourceFile.getFileName());	
-		    sourceFile.outputStagedSourceFile();
+		    sourceFile.export();
 		    logger.info("Completed Outputting SourceFile '{}'", sourceFile.getFileName());	
 		}
 	}	
@@ -134,5 +139,53 @@ public class Main {
 		}
 		return false;
 	}
+	
+	/**
+	 * @param providers
+	 * @param sourceFile
+	 */
+	public static void validateSourceFileProvider(
+			ArrayList<Provider> providers, SourceFile sourceFile) {
+		if(!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
+			logger.info("Attempting to map Provider to file {}", sourceFile.getFileName());
+			for (Provider provider : providers) {
+				if(sourceFile.getFileName().toUpperCase().contains(provider.getProviderIdentifier().toUpperCase())){
+					logger.info("Mapped provider {} - {} to file '{}'", provider.getProviderName(), provider.getProviderIdentifier(),sourceFile.getFileName());
+					sourceFile.setProvider(provider);
+					sourceFile.setLoaderStatusLevel(LoaderStatus.MAPPED);
+				}
+			}
+		}
+		if (sourceFile.getProvider() == null){
+			logger.error("Could not find provider for file: '{}'", sourceFile.getFileName());
+			sourceFile.setLoaderStatusLevel(LoaderStatus.ERROR);
+		}
+	}	
+	
+
+	/**
+	 * @param schemas
+	 * @param sourceFile
+	 */
+	public static void validateSourceFileSchema(ArrayList<Schema> schemas,
+			SourceFile sourceFile) {
+		logger.info("Attempting to map Schema to file {}", sourceFile.getFileName());
+		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
+			Provider provider = sourceFile.getProvider();
+			for ( Schema schema : schemas) {
+				if(provider.getProviderName().toUpperCase().equals(schema.getName().toUpperCase())){
+					logger.info("Mapped schema {} to file '{}'", schema.getName(), sourceFile.getFileName());
+					Schema newSchema = SourceFilePreProcessor.personalizeSourceFileSchema(sourceFile.getReportingPeriod(), schema);
+					logger.info("Printing personalized '{}' schema", newSchema.getName());
+					newSchema.printAll();
+					sourceFile.setSchema(newSchema);
+				}
+			}
+			if (sourceFile.getSchema() == null){
+				logger.error("Could not find schema for file: '{}'", sourceFile.getFileName());
+				sourceFile.setValidatorStatusLevel(ValidatorStatus.WARNING);
+			}
+		}
+	}		
 	
 }

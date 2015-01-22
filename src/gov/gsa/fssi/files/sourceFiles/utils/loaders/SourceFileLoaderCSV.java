@@ -25,7 +25,7 @@ import gov.gsa.fssi.files.sourceFiles.utils.loaders.SourceFileLoader;
  * @author davidlarrimore
  *
  */
-public class SourceFileCSVLoader implements SourceFileLoader{
+public class SourceFileLoaderCSV implements SourceFileLoader{
 
 	/**
 	 *

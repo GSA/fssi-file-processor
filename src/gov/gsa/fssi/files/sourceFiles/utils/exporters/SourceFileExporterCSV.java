@@ -113,10 +113,4 @@ public class SourceFileExporterCSV implements SourceFileExporter{
 		}
 	}
 
-	public void load(SourceFile sourceFile) {
-		// TODO Auto-generated method stub
-		
-	}		
-	
-
 }

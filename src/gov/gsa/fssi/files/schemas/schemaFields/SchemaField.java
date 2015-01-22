@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class SchemaField {
 	static Logger logger = LoggerFactory.getLogger(SchemaField.class);
 	
-	
+	private int headerIndex = 0;
 	private String name = null;
 	private String title = null;	
 	private String type = null;		
@@ -300,4 +300,11 @@ public class SchemaField {
 	 * This constructor class takes a file name and uses it to initialize the basic elements of a SourceFile
 	 * @param fileName - This should be in name.ext format.
 	 */
+	public int getHeaderIndex() {
+		return headerIndex;
+	}
+	public void setHeaderIndex(int headerIndex) {
+		this.headerIndex = headerIndex;
+	}
+	
 }

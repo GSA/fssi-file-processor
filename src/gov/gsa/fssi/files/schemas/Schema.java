@@ -16,7 +16,6 @@ public class Schema extends File{
 	private String name = null;
 	private String providerName = null;	
 	private String version = null;
-
 	private ArrayList<String> primaryKeys = null;
 	private ArrayList<String> foreignKeys = null;	
 	private ArrayList<SchemaField> fields = new ArrayList<SchemaField>();	
