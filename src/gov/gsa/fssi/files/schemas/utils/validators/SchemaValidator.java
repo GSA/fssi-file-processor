@@ -79,7 +79,7 @@ public class SchemaValidator {
 					newField.setConstraints(validateFieldConstraints(newSchema, newField));	
 				}
 				
-				//TODO: Validate format	to make sure it is compatible with type
+				//TODO: Validate format to make sure it is compatible with type
 				newSchema.addField(newField);
 			}
 		}
