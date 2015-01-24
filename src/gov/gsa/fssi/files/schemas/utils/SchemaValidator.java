@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.schemas.utils.validators;
+package gov.gsa.fssi.files.schemas.utils;
 
 import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.ValidatorStatus;

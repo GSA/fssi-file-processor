@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.sourceFiles.utils.validators.type;
+package gov.gsa.fssi.files.sourceFiles.utils.strategies;
 
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
@@ -9,4 +9,5 @@ import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
  */
 public interface TypeValidationStrategy {
 	public void validate(SchemaField field, Data data);
+	public boolean isValid(SchemaField field, Data data);
 }

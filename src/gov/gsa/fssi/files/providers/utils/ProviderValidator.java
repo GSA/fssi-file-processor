@@ -1,36 +1,26 @@
-package gov.gsa.fssi.files.providers;
+package gov.gsa.fssi.files.providers.utils;
 
 import gov.gsa.fssi.config.Config;
-import gov.gsa.fssi.files.providers.utils.loaders.ExcelProviderLoaderStrategy;
-import gov.gsa.fssi.files.providers.utils.loaders.ProviderLoaderContext;
-import gov.gsa.fssi.files.schemas.Schema;
+import gov.gsa.fssi.files.providers.Provider;
+import gov.gsa.fssi.files.providers.utils.contexts.ProviderLoaderContext;
+import gov.gsa.fssi.files.providers.utils.strategies.loader.ExcelProviderLoaderStrategy;
 import gov.gsa.fssi.helpers.FileHelper;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 
 /**
- * The purpose of this class is to quickly load provider data. It goes out to the provider.xls file
- * and loads all of its data into provider objects
+ * The purpose of this class is to quickly validate the loaded providers.
  * 
  * @author davidlarrimore
  *
  */
-public class ProviderManager {
-	static Logger logger = LoggerFactory.getLogger(ProviderManager.class);
+public class ProviderValidator {
+	static Logger logger = LoggerFactory.getLogger(ProviderValidator.class);
 	static Config config = new Config();	    
 	
 	public static ArrayList<Provider> initializeProviders() {	

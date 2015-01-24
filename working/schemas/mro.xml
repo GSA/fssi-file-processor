@@ -217,7 +217,7 @@
 			<type>string</type>
 			<constraints>
 				<required level="error">true</required>
-				<pattern>Yes|yes|YES|No|no|NO</pattern>
+				<pattern>Yes|No</pattern>
 			</constraints>
 			<alias>Mkt_Basket_Flag</alias>
 		</field>			
@@ -228,7 +228,7 @@
 			<type>string</type>
 			<constraints>
 				<required level="error">true</required>
-				<pattern>Yes|yes|YES|No|no|NO</pattern>
+				<pattern>Yes|No</pattern>
 			</constraints>
 			<alias>AbilityOne_Flag</alias>
 		</field>			
@@ -239,7 +239,7 @@
 			<type>string</type>
 			<constraints>
 				<required level="error">true</required>
-				<pattern>Yes|yes|YES|No|no|NO</pattern>
+				<pattern>Yes|No</pattern>
 			</constraints>
 			<alias>Berry_Amend_Flag</alias>
 		</field>			
@@ -250,7 +250,7 @@
 			<type>string</type>
 			<constraints>
 				<required level="error">true</required>
-				<pattern>Yes|yes|YES|No|no|NO</pattern>
+				<pattern>Yes|No</pattern>
 			</constraints>
 			<alias>CPG_ind</alias>
 		</field>		
@@ -261,7 +261,7 @@
 			<type>string</type>
 			<constraints>
 				<required level="error">true</required>
-				<pattern>Yes|yes|YES|No|no|NO</pattern>
+				<pattern>Yes|No</pattern>
 			</constraints>
 			<alias>BioPreferred_Ind</alias>
 		</field>			
@@ -272,7 +272,7 @@
 			<type>string</type>
 			<constraints>
 				<required level="error">true</required>
-				<pattern>Yes|yes|YES|No|no|NO</pattern>
+				<pattern>Yes|No</pattern>
 			</constraints>
 			<alias>ENERGYSTAR_Ind</alias>
 		</field>			
@@ -283,7 +283,7 @@
 			<type>string</type>
 			<constraints>
 				<required level="error">true</required>
-				<pattern>Yes|yes|YES|No|no|NO</pattern>
+				<pattern>Yes|No</pattern>
 			</constraints>
 			<alias>WaterSense_Ind</alias>
 		</field>			
@@ -316,7 +316,7 @@
 			<type>string</type>
 			<constraints>
 				<required level="error">true</required>
-				<pattern level="error">Standard|Next Business DayDesktop|Secure Desktop|Next Day Desktop|Next Day Secure Desktop|International.</pattern>
+				<pattern level="error">Standard|Next Business DayDesktop|Secure Desktop|Next Day Desktop|Next Day Secure Desktop|International</pattern>
 			</constraints>
 			<alias>Dlvry_Method</alias>
 		</field>		

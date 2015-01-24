@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.providers.utils.loaders;
+package gov.gsa.fssi.files.providers.utils.strategies.loader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,6 +14,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.providers.Provider;
+import gov.gsa.fssi.files.providers.utils.strategies.ProviderLoaderStrategy;
 
 
 public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
@@ -98,7 +99,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 			    				failCounter++;
 			    			}else{
 			    				providers.add(newProvider);
-			    				logger.info("Added new provider to list", newProvider.getProviderIdentifier());
+			    				logger.info("Added new provider '{}' to list of Providers", newProvider.getProviderIdentifier());
 			    			}
 			    			
 		    		} catch (java.lang.NullPointerException e) {

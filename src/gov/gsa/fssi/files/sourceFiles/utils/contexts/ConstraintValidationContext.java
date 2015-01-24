@@ -1,15 +1,15 @@
-package gov.gsa.fssi.files.sourceFiles.utils.validators;
+package gov.gsa.fssi.files.sourceFiles.utils.contexts;
 
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.constraint.ConstraintValidationStrategy;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.constraint.MaxLengthConstraintValidationStrategy;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.constraint.MaximumConstraintValidationStrategy;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.constraint.MinLengthConstraintValidationStrategy;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.constraint.MinimumConstraintValidationStrategy;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.constraint.PatternConstraintValidationStrategy;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.constraint.RequiredConstraintValidationStrategy;
+import gov.gsa.fssi.files.sourceFiles.utils.strategies.ConstraintValidationStrategy;
+import gov.gsa.fssi.files.sourceFiles.utils.strategies.constraintValidation.MaxLengthConstraintValidationStrategy;
+import gov.gsa.fssi.files.sourceFiles.utils.strategies.constraintValidation.MaximumConstraintValidationStrategy;
+import gov.gsa.fssi.files.sourceFiles.utils.strategies.constraintValidation.MinLengthConstraintValidationStrategy;
+import gov.gsa.fssi.files.sourceFiles.utils.strategies.constraintValidation.MinimumConstraintValidationStrategy;
+import gov.gsa.fssi.files.sourceFiles.utils.strategies.constraintValidation.PatternConstraintValidationStrategy;
+import gov.gsa.fssi.files.sourceFiles.utils.strategies.constraintValidation.RequiredConstraintValidationStrategy;
 
 public class ConstraintValidationContext {
 	   private ConstraintValidationStrategy strategy;   
@@ -55,4 +55,8 @@ public class ConstraintValidationContext {
 			}
 			strategy.validate(field, constraint, data); //Validate Constraint
 	   }
+		
+		public boolean isValid(SchemaField field, FieldConstraint constraint, Data data){
+			return strategy.isValid(field, constraint, data); //is Valid
+		}
 }

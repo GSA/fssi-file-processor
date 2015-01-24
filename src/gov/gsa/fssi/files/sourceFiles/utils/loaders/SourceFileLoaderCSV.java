@@ -51,7 +51,7 @@ public class SourceFileLoaderCSV implements SourceFileLoader{
 				sourceFile.incrementTotalRecords();
 				
 				SourceFileRecord thisRecord = new SourceFileRecord();
-				
+				thisRecord.setRowIndex((int)csvRecord.getRecordNumber());
 				//Ignoring null rows
 				if (csvRecord.size() > 1 && sourceFile.getHeaders().size() > 1){
 					Iterator<?> headerIterator = sourceFile.getHeaders().entrySet().iterator();
@@ -71,7 +71,7 @@ public class SourceFileLoaderCSV implements SourceFileLoader{
 						
 					}
 					
-					//Checking to see if any data was in the row. if so, we consider this an Empty Record
+					//Checking to see if any data was in the row. if nothing is found, we consider this an Empty Record
 					boolean emptyRowCheck = false;
 					for (Data data : thisRecord.getDatas()) {
 						if(data.getData() == null || data.getData().isEmpty() || data.getData().equals("")){

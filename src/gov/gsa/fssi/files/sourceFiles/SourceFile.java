@@ -8,10 +8,10 @@ import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
+import gov.gsa.fssi.files.sourceFiles.utils.SourceFileValidator;
 import gov.gsa.fssi.files.sourceFiles.utils.exporters.SourceFileExporterCSV;
 import gov.gsa.fssi.files.sourceFiles.utils.exporters.SourceFileExporterExcel;
 import gov.gsa.fssi.files.sourceFiles.utils.loaders.SourceFileLoaderCSV;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.SourceFileValidator;
 import gov.gsa.fssi.helpers.DateHelper;
 
 import java.util.ArrayList;

@@ -1,8 +1,9 @@
-package gov.gsa.fssi.files.providers.utils.loaders;
+package gov.gsa.fssi.files.providers.utils.contexts;
 
 import java.util.ArrayList;
 
 import gov.gsa.fssi.files.providers.Provider;
+import gov.gsa.fssi.files.providers.utils.strategies.ProviderLoaderStrategy;
 
 public class ProviderLoaderContext {
 	   private ProviderLoaderStrategy strategy;   
