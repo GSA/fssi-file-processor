@@ -68,7 +68,7 @@ public class FieldConstraint {
 	private String level = null;
 	private Date effectiveDate = null;
 	private HashMap<String, String> options = new HashMap<String, String>();
-	
+	//TODO:Add support for option "IgnoreCase" that will ignore case during validation
 	
 	public String getType() {
 		return type;

@@ -20,7 +20,7 @@ public class DateHelper {
 	
 	public static final String FORMAT_MMYYYY = "MMyyyy";
 	public static final String FORMAT_MMDDYYYY = "MMddyyyy";
-	public static final String FORMAT_ISO8601 = "yyyy-MM-ddThh:mm:ssZ";
+	public static final String FORMAT_ISO8601 = "yyyy-MM-dd'T'HH:mm'Z'";
 	public static final String FORMAT_YYYY_MM_DD = "yyyy-MM-dd";
 	public static final String TIMEZONE_UTC = "UTC";
 	

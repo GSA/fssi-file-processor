@@ -7,12 +7,6 @@ import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.strategies.MaxLengthDataValidationStrategy;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.strategies.MaximumDataValidationStrategy;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.strategies.MinLengthDataValidationStrategy;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.strategies.MinimumDataValidationStrategy;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.strategies.PatternDataValidationStrategy;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.strategies.RequiredDataValidationStrategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +40,7 @@ public class SourceFileValidator{
 						//context.validateConstraint(field, constraint, data);
 						//TODO: Validate Format
 						for(FieldConstraint constraint:field.getConstraints()){
-							DataValidationContext context = new DataValidationContext();
+							ConstraintValidationContext context = new ConstraintValidationContext();
 							context.validateConstraint(field, constraint, data); //Validate Constraint
 							if(data.getStatus().equals(FieldConstraint.LEVEL_ERROR) ||data.getStatus().equals(FieldConstraint.LEVEL_WARNING)){
 								logger.debug("Row {} - Field '{}' validation {}: '{}' = {}, Value = '{}'", sourceFileRecord.getRowIndex(), field.getName(), constraint.getLevel().toUpperCase(), constraint.getType(), constraint.getValue(), data.getData());	

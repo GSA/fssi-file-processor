@@ -1,6 +1,7 @@
 package gov.gsa.fssi.files.providers;
 
 import gov.gsa.fssi.files.File;
+import gov.gsa.fssi.files.schemas.Schema;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,8 @@ import org.slf4j.LoggerFactory;
 public class Provider extends File{
 
 	static Logger logger = LoggerFactory.getLogger(Provider.class);
+	private Schema	schema = new Schema();
+	private String schemaName = null;
 	private String providerId = null;
 	private String providerName = null;	
 	private String providerIdentifier = null;
@@ -81,6 +84,31 @@ public class Provider extends File{
 	 */
 	public String getFileOutputType() {
 		return fileOutputType;
+	}
+	/**
+	 * @return
+	 */
+	public Schema getSchema() {
+		return schema;
+	}
+
+	/**
+	 * @param schema
+	 */
+	public void setSchema(Schema schema) {
+		this.schema = schema;
+	}
+	/**
+	 * @return
+	 */
+	public String getSchemaName() {
+		return schemaName;
+	}
+	/**
+	 * @param schemaName
+	 */
+	public void setSchemaName(String schemaName) {
+		this.schemaName = schemaName;
 	}
 
 	/**

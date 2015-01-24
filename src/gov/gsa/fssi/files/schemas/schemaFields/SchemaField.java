@@ -71,6 +71,30 @@ public class SchemaField {
 	/**
 	 * @return the name
 	 */
+
+//TODO:Add the following Types
+//		string — http://www.w3.org/2001/XMLSchema#string
+//		integer — http://www.w3.org/2001/XMLSchema#int
+//		float — http://www.w3.org/2001/XMLSchema#float
+//		double — http://www.w3.org/2001/XMLSchema#double
+//		URL — http://www.w3.org/2001/XMLSchema#anyURI
+//		boolean — http://www.w3.org/2001/XMLSchema#boolean
+//		non-positive integer — http://www.w3.org/2001/XMLSchema#nonPositiveInteger
+//		positive integer — http://www.w3.org/2001/XMLSchema#positiveInteger
+//		non-negative integer — http://www.w3.org/2001/XMLSchema#nonNegativeInteger
+//		negative integer — http://www.w3.org/2001/XMLSchema#negativeInteger
+//		date — http://www.w3.org/2001/XMLSchema#date
+//		date & time — http://www.w3.org/2001/XMLSchema#dateTime
+//		year — http://www.w3.org/2001/XMLSchema#gYear
+//		year & month — http://www.w3.org/2001/XMLSchema#gYearMonth
+//		time — http://www.w3.org/2001/XMLSchema#time
+	
+	
+	
+	
+	
+	
+	
 	public String getName() {
 		return name;
 	}

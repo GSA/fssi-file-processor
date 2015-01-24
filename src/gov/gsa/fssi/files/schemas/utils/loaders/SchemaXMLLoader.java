@@ -113,7 +113,7 @@ public class SchemaXMLLoader implements SchemaLoader{
 						}else if (currentNode.getNodeName().equals("format")){
 							field.setFormat(currentNode.getTextContent());	
 						}else if (currentNode.getNodeName().equals("type")){
-							field.setType(currentNode.getTextContent());	
+							field.setType(currentNode.getTextContent().toLowerCase().trim());	
 						}else if(currentNode.getNodeName().equals("constraints")){
 							logger.info("Processing Constraints");
 							NodeList constraintList = currentNode.getChildNodes();

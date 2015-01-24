@@ -14,7 +14,7 @@ import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.utils.loaders.SchemaXMLLoader;
 import gov.gsa.fssi.files.schemas.utils.validators.SchemaValidator;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.SourceFilePreProcessor;
+import gov.gsa.fssi.files.sourceFiles.utils.organizers.SourceFileOrganizer;
 import gov.gsa.fssi.helpers.FileHelper;
 
 
@@ -44,7 +44,7 @@ public class Main {
 	 * @param sourceFileDirectory
 	 */
 	public static void ingestProcessAndExportSourceFiles(ArrayList<Provider> providers, ArrayList<Schema> schemas) {	
-		for ( SourceFile sourceFile : SourceFilePreProcessor.preProcess()) {
+		for ( SourceFile sourceFile : SourceFileOrganizer.preProcess()) {
 	    	ingestProcessAndExportSourceFile(providers, schemas, sourceFile);		    	
 		}		    
 	}
@@ -175,7 +175,7 @@ public class Main {
 			for ( Schema schema : schemas) {
 				if(provider.getProviderName().toUpperCase().equals(schema.getName().toUpperCase())){
 					logger.info("Mapped schema {} to file '{}'", schema.getName(), sourceFile.getFileName());
-					Schema newSchema = SourceFilePreProcessor.personalizeSourceFileSchema(sourceFile.getReportingPeriod(), schema);
+					Schema newSchema = SourceFileOrganizer.personalizeSourceFileSchema(sourceFile.getReportingPeriod(), schema);
 					logger.info("Printing personalized '{}' schema", newSchema.getName());
 					newSchema.printAll();
 					sourceFile.setSchema(newSchema);

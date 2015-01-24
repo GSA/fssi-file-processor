@@ -1,11 +1,10 @@
-package gov.gsa.fssi.files.sourceFiles.utils.validators.strategies;
+package gov.gsa.fssi.files.sourceFiles.utils.validators.constraint;
 
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
-import gov.gsa.fssi.files.sourceFiles.utils.validators.DataValidationStrategy;
 
-public class MaxLengthDataValidationStrategy implements DataValidationStrategy {
+public class MaxLengthConstraintValidationStrategy implements ConstraintValidationStrategy {
 
 	@Override
 	public void validate(SchemaField field, FieldConstraint constraint, Data data) {

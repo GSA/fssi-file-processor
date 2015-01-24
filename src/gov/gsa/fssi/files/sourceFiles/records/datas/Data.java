@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 public class Data {
 	static Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);
-	private String data = null;
+	private String data = null; //TODO: turn this into a generic Object
 	private Integer headerIndex = 0;
 	private String status = null;
 	private String statusMessage = null;

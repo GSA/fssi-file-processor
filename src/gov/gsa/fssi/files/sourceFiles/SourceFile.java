@@ -549,6 +549,7 @@ public class SourceFile extends File{
 	public void export() {
 		 if (this.getRecords() != null){
 			if(this.getProvider().getFileOutputType().toUpperCase().equals("CSV")){
+				logger.info("Exporting file '{}' as a CSV", this.getFileName());
 				SourceFileExporterCSV exporter = new SourceFileExporterCSV();
 				exporter.export(this);	
 			}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XML")){
@@ -556,9 +557,11 @@ public class SourceFile extends File{
 				logger.error("Cannot export sourceFile '{}' as XML. We don't currently handle XML output at this point", this.getFileName());
 				this.setLoaderStatusError();
 			}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XLS")){
+				logger.info("Exporting file '{}' as a XLS", this.getFileName());
 				SourceFileExporterExcel exporter = new SourceFileExporterExcel();
 				exporter.export(this);
 			}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XLSX")){
+				logger.info("Exporting file '{}' as a XLSX", this.getFileName());
 				SourceFileExporterExcel exporter = new SourceFileExporterExcel();
 				exporter.export(this);	
 			}else{
