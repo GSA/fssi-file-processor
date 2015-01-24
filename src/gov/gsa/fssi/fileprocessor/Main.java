@@ -6,16 +6,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.gsa.fssi.config.Config;
-import gov.gsa.fssi.files.LoaderStatus;
-import gov.gsa.fssi.files.ValidatorStatus;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.providers.utils.ProviderValidator;
+import gov.gsa.fssi.files.providers.utils.contexts.ProviderLoaderContext;
+import gov.gsa.fssi.files.providers.utils.strategies.loader.ExcelProviderLoaderStrategy;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.utils.SchemaValidator;
 import gov.gsa.fssi.files.schemas.utils.loaders.SchemaXMLLoader;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
-import gov.gsa.fssi.files.sourceFiles.utils.organizers.SourceFileOrganizer;
+import gov.gsa.fssi.files.sourceFiles.utils.SourceFileOrganizer;
 import gov.gsa.fssi.helpers.FileHelper;
+import gov.gsa.fssi.helpers.LoaderStatus;
+import gov.gsa.fssi.helpers.ValidatorStatus;
 
 
 
@@ -32,9 +34,10 @@ public class Main {
 	
 	public static void main(String[] args) {
 	    logger.info("Starting FSSI File Processor");
-		ArrayList<Provider> providers = ProviderValidator.initializeProviders();
-		ProviderValidator.printAllProviders(providers);
-	    ArrayList<Schema> schemas = initializeSchemas();
+		
+	    ArrayList<Provider> providers = loadProviders();
+		
+		ArrayList<Schema> schemas = loadSchemas();
 		ingestProcessAndExportSourceFiles(providers, schemas);	    
 	    logger.info("Completed FSSI File Processor");	
 	}
@@ -92,7 +95,7 @@ public class Main {
 		}
 	}	
 	
-	public static ArrayList<Schema> initializeSchemas() {
+	public static ArrayList<Schema> loadSchemas() {
 	    logger.debug("Starting initializeSchemas('{}')", config.getProperty(Config.SCHEMAS_DIRECTORY));		
 		
 	    ArrayList<Schema> schemas = new ArrayList<Schema>();	
@@ -125,8 +128,27 @@ public class Main {
 			}
 			
 		}
+		
+		
 		return schemas;		
 	}
+	
+	public static ArrayList<Provider> loadProviders(){
+	    logger.debug("Loading Providers");
+		ArrayList<Provider> providers = new ArrayList<Provider>();
+		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty(Config.PROVIDERS_DIRECTORY), ".xlsx");
+		ProviderLoaderContext context = new ProviderLoaderContext();
+		for (String fileName : fileNames) {
+			context.setProviderLoaderStrategy(new ExcelProviderLoaderStrategy());
+			context.load(fileName, providers);
+		}	
+		
+		ProviderValidator providerValidator = new ProviderValidator();
+		providerValidator.validateProvider(providers);   
+		
+		return providers;
+	}
+	
 	
 	
 	private static boolean isDuplicateSchemaName(ArrayList<Schema> schemas, Schema newSchema){
@@ -186,6 +208,7 @@ public class Main {
 				sourceFile.setValidatorStatusLevel(ValidatorStatus.WARNING);
 			}
 		}
-	}		
+	}	
+	
 	
 }

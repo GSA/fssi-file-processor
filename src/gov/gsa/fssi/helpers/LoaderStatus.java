@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files;
+package gov.gsa.fssi.helpers;
 
 public class LoaderStatus {
 	public static final String ERROR = "error";

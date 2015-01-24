@@ -1,11 +1,11 @@
 package gov.gsa.fssi.files.schemas.utils;
 
 import gov.gsa.fssi.config.Config;
-import gov.gsa.fssi.files.ValidatorStatus;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.helpers.DateHelper;
+import gov.gsa.fssi.helpers.ValidatorStatus;
 
 import java.util.ArrayList;
 import java.util.Date;

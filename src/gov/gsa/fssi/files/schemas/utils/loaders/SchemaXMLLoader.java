@@ -11,10 +11,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import gov.gsa.fssi.config.Config;
-import gov.gsa.fssi.files.LoaderStatus;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
+import gov.gsa.fssi.helpers.LoaderStatus;
 import gov.gsa.fssi.helpers.XmlHelper;
 
 import org.w3c.dom.DOMException;

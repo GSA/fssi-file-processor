@@ -23,42 +23,38 @@ public class ProviderValidator {
 	static Logger logger = LoggerFactory.getLogger(ProviderValidator.class);
 	static Config config = new Config();	    
 	
-	public static ArrayList<Provider> initializeProviders() {	
-		ArrayList<Provider> providers = new ArrayList<Provider>();
-	    
-	    logger.debug("Starting initializeProviders('{}')", config.getProperty(Config.PROVIDERS_DIRECTORY));
-		
-		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty(Config.PROVIDERS_DIRECTORY), ".xlsx");
-		ProviderLoaderContext context = new ProviderLoaderContext();
-		for (String fileName : fileNames) {
-			context.setProviderLoaderStrategy(new ExcelProviderLoaderStrategy());
-			context.load(fileName, providers);
-		}			
-		//logger.info("Completed Provider setup. Added " + providers.size() + " Providers");	
-		return providers;
-	}
-
 	
-	public void validateProvider(ArrayList<Provider> providers, Provider newProvider){
+	public void validateProvider(ArrayList<Provider> providers){
+		ArrayList<Provider> newProviders = new ArrayList<Provider>();
 		//We need to check for duplicative Providers.
 		boolean unique = true;
 		for (Provider provider : providers) {
-			if(provider.getProviderIdentifier().equals(newProvider.getProviderIdentifier())){
-				//logger.debug("{} - {}", newProvider.getProviderIdentifier(), provider.getProviderIdentifier());
-				unique = false;
+			for(Provider newProvider:newProviders){
+				if(provider.getProviderIdentifier().equals(newProvider.getProviderIdentifier())){
+					//logger.debug("{} - {}", newProvider.getProviderIdentifier(), provider.getProviderIdentifier());
+					unique = false;
+				}
 			}
+			if(unique == false){
+				logger.warn("Found duplicate provider '{}'. removing", provider.getProviderIdentifier());	
+			}else{
+				newProviders.add(provider);	
+			}			
 		}
-		if(unique == false){
-			logger.warn("Found provider with same identifier '{}' in '{}'. Providers must be unique", newProvider.getProviderIdentifier());	
-			//failCounter++;
-		}else{
-			providers.add(newProvider);	
-			//passCounter++;
-		}
+		//commiting all of the changes
+		providers = newProviders;
 	}
+	
+	
 	public static void printAllProviders(ArrayList<Provider> providers){
 		for(Provider provider: providers){
 			provider.print();
 		}
 	}
+	
+	
+	
+	
+	
+	
 }

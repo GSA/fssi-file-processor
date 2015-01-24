@@ -1,7 +1,6 @@
 package gov.gsa.fssi.files.sourceFiles;
 
 import gov.gsa.fssi.config.Config;
-import gov.gsa.fssi.files.LoaderStatus;
 import gov.gsa.fssi.files.File;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.schemas.Schema;
@@ -9,10 +8,12 @@ import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import gov.gsa.fssi.files.sourceFiles.utils.SourceFileValidator;
+import gov.gsa.fssi.files.sourceFiles.utils.contexts.SourceFileLoaderContext;
 import gov.gsa.fssi.files.sourceFiles.utils.exporters.SourceFileExporterCSV;
 import gov.gsa.fssi.files.sourceFiles.utils.exporters.SourceFileExporterExcel;
-import gov.gsa.fssi.files.sourceFiles.utils.loaders.SourceFileLoaderCSV;
+import gov.gsa.fssi.files.sourceFiles.utils.strategies.sourceFileLoader.CSVSourceFileLoaderStrategy;
 import gov.gsa.fssi.helpers.DateHelper;
+import gov.gsa.fssi.helpers.LoaderStatus;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -496,15 +497,20 @@ public class SourceFile extends File{
 	 * @param sourceFile
 	 */
 	public void load() {
-		if(this.getFileExtension().toUpperCase().equals("CSV")){
-			logger.info("Loading file {} as a 'CSV'", this.getFileName()); 
-			SourceFileLoaderCSV loader = new SourceFileLoaderCSV();
-			loader.load(this);
-			//this.loadSourceFileObjectsFromCSV();
-		}else if(this.getFileExtension().toUpperCase().equals("XML")){
-			 logger.info("Loading File {} as a 'XML'", this.getFileExtension());					
-		}else if(this.getFileExtension().toUpperCase().equals("XLSX")){
-			 logger.info("Loading File {} as a 'XLSX'", this.getFileExtension());						
+		SourceFileLoaderContext context = new SourceFileLoaderContext();
+		switch(this.getFileExtension().toLowerCase()){
+		case FILETYPE_CSV:
+			logger.info("Loading file {} as a '{}'", this.getFileName(), this.getFileExtension()); 
+			context.setSourceFileLoaderStrategy(new CSVSourceFileLoaderStrategy());
+			break;		 
+		default:
+			logger.warn("Could not load file '{}' as a '{}'", this.getFileName(), this.getFileExtension());	
+			this.setLoaderStatusError();
+			break;
+		}
+		
+		if(!this.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
+			context.load(this.getFileName(), this);
 		}
 	}
 	

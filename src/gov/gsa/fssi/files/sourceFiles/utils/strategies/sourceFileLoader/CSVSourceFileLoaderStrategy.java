@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.sourceFiles.utils.loaders;
+package gov.gsa.fssi.files.sourceFiles.utils.strategies.sourceFileLoader;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,11 +12,11 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import gov.gsa.fssi.config.Config;
-import gov.gsa.fssi.files.LoaderStatus;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
-import gov.gsa.fssi.files.sourceFiles.utils.loaders.SourceFileLoader;
+import gov.gsa.fssi.files.sourceFiles.utils.strategies.SourceFileLoaderStrategy;
+import gov.gsa.fssi.helpers.LoaderStatus;
 
 
 /**
@@ -25,13 +25,13 @@ import gov.gsa.fssi.files.sourceFiles.utils.loaders.SourceFileLoader;
  * @author davidlarrimore
  *
  */
-public class SourceFileLoaderCSV implements SourceFileLoader{
+public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
 	 */
-	public void load(SourceFile sourceFile) {
+	public void load(String fileName, SourceFile sourceFile) {
 		// SourceFile sourceFile = new SourceFile(this.getFileName());
 		try {
 			Reader in = new FileReader(config.getProperty(Config.SOURCEFILES_DIRECTORY) + sourceFile.getFileName());

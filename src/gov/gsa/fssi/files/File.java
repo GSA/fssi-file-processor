@@ -1,7 +1,8 @@
 package gov.gsa.fssi.files;
 
 import gov.gsa.fssi.config.Config;
-import gov.gsa.fssi.files.sourceFiles.utils.loaders.SourceFileLoader;
+import gov.gsa.fssi.helpers.LoaderStatus;
+import gov.gsa.fssi.helpers.ValidatorStatus;
 
 import java.util.ArrayList;
 
@@ -216,4 +217,8 @@ public class File {
 	public static final byte SEPARATOR_TILDE = '~';
 	public static final byte SEPARATOR_FORWARDSLASH = '/';
 	public static final byte SEPARATOR_BACKSLASH = '\\';
+	public static final String FILETYPE_CSV = "csv";
+	public static final String FILETYPE_XLSX = "xlsx";
+	public static final String FILETYPE_XLS = "xls";
+	public static final String FILETYPE_XML = "xml";
 }

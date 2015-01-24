@@ -1,13 +1,13 @@
 package gov.gsa.fssi.files.sourceFiles.utils;
 
 import gov.gsa.fssi.config.Config;
-import gov.gsa.fssi.files.LoaderStatus;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import gov.gsa.fssi.files.sourceFiles.utils.contexts.ConstraintValidationContext;
+import gov.gsa.fssi.helpers.LoaderStatus;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

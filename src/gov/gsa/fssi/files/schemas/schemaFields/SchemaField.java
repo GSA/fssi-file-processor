@@ -1,8 +1,8 @@
 package gov.gsa.fssi.files.schemas.schemaFields;
 
-import gov.gsa.fssi.files.LoaderStatus;
-import gov.gsa.fssi.files.ValidatorStatus;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
+import gov.gsa.fssi.helpers.LoaderStatus;
+import gov.gsa.fssi.helpers.ValidatorStatus;
 
 import java.util.ArrayList;
 
@@ -73,21 +73,21 @@ public class SchemaField {
 	 */
 
 //TODO:Add the following Types
-//		string — http://www.w3.org/2001/XMLSchema#string
-//		integer — http://www.w3.org/2001/XMLSchema#int
-//		float — http://www.w3.org/2001/XMLSchema#float
-//		double — http://www.w3.org/2001/XMLSchema#double
-//		URL — http://www.w3.org/2001/XMLSchema#anyURI
-//		boolean — http://www.w3.org/2001/XMLSchema#boolean
-//		non-positive integer — http://www.w3.org/2001/XMLSchema#nonPositiveInteger
-//		positive integer — http://www.w3.org/2001/XMLSchema#positiveInteger
-//		non-negative integer — http://www.w3.org/2001/XMLSchema#nonNegativeInteger
-//		negative integer — http://www.w3.org/2001/XMLSchema#negativeInteger
-//		date — http://www.w3.org/2001/XMLSchema#date
-//		date & time — http://www.w3.org/2001/XMLSchema#dateTime
-//		year — http://www.w3.org/2001/XMLSchema#gYear
-//		year & month — http://www.w3.org/2001/XMLSchema#gYearMonth
-//		time — http://www.w3.org/2001/XMLSchema#time
+//		string ï¿½ http://www.w3.org/2001/XMLSchema#string
+//		integer ï¿½ http://www.w3.org/2001/XMLSchema#int
+//		float ï¿½ http://www.w3.org/2001/XMLSchema#float
+//		double ï¿½ http://www.w3.org/2001/XMLSchema#double
+//		URL ï¿½ http://www.w3.org/2001/XMLSchema#anyURI
+//		boolean ï¿½ http://www.w3.org/2001/XMLSchema#boolean
+//		non-positive integer ï¿½ http://www.w3.org/2001/XMLSchema#nonPositiveInteger
+//		positive integer ï¿½ http://www.w3.org/2001/XMLSchema#positiveInteger
+//		non-negative integer ï¿½ http://www.w3.org/2001/XMLSchema#nonNegativeInteger
+//		negative integer ï¿½ http://www.w3.org/2001/XMLSchema#negativeInteger
+//		date ï¿½ http://www.w3.org/2001/XMLSchema#date
+//		date & time ï¿½ http://www.w3.org/2001/XMLSchema#dateTime
+//		year ï¿½ http://www.w3.org/2001/XMLSchema#gYear
+//		year & month ï¿½ http://www.w3.org/2001/XMLSchema#gYearMonth
+//		time ï¿½ http://www.w3.org/2001/XMLSchema#time
 	
 	
 	

@@ -16,11 +16,11 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 
 import gov.gsa.fssi.config.Config;
-import gov.gsa.fssi.files.LoaderStatus;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import gov.gsa.fssi.helpers.FileHelper;
+import gov.gsa.fssi.helpers.LoaderStatus;
 
 
 /**
