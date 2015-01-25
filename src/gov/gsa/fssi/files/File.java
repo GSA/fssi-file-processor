@@ -74,6 +74,8 @@ public class File {
 		int startOfExtension = fileName.lastIndexOf(".")+1;
 		this.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
 		this.setLoadStatusLevel(STATUS_LOADED);
+		this.setValidatorStatusLevel(STATUS_LOADED);
+		this.setStatusLevel(STATUS_INITIALIZED);
 		//defaulted to underscore
 		this.setFileNameParts(SEPARATOR_UNDERSCORE);
 	}
@@ -215,4 +217,5 @@ public class File {
 	public static final String STATUS_WARNING = "warning";
 	public static final String STATUS_LOADED = "loaded";
 	public static final String STATUS_PASS = "pass";
+	public static final String STATUS_INITIALIZED = "initialized";
 }

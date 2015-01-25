@@ -1,6 +1,7 @@
 package gov.gsa.fssi.files.providers;
 
 import gov.gsa.fssi.files.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,15 @@ public class Provider extends File{
 	private String providerIdentifier = null;
 	private String providerEmail = "StrategicSourcing@gsa.gov";		
 	private String fileOutputType = null;
+	
 
+	public Provider() {
+	}
+	
+	public Provider(String fileName) {
+		super(fileName);
+	}
+	
 	/**
 	 * @return the contactEmail
 	 */

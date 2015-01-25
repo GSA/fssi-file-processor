@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.schemas.utils.loaders;
+package gov.gsa.fssi.files.schemas.utils.strategies;
 
 import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.schemas.Schema;
@@ -6,8 +6,8 @@ import gov.gsa.fssi.files.schemas.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public interface SchemaLoader {
-	static Logger logger = LoggerFactory.getLogger(SchemaLoader.class);
+public interface SchemaLoaderStrategy {
+	static Logger logger = LoggerFactory.getLogger(SchemaLoaderStrategy.class);
 	static Config config = new Config();	
 	
 	/**

@@ -259,6 +259,10 @@ public class SourceFile extends File{
 	public SourceFile(String fileName) {
 		super(fileName);
 		this.setReportingPeriodUsingFileNameParts();
+		if(this.getReportingPeriod() == null){
+			logger.error("No reporting period found, unable to process");
+			this.setStatusLevel(STATUS_ERROR);
+		}
 	}
 		
 	
@@ -332,6 +336,7 @@ public class SourceFile extends File{
 			context.load(this.getFileName(), this);
 		}
 	}
+	
 	
 	/**
 	 * This method processes a file against its schema

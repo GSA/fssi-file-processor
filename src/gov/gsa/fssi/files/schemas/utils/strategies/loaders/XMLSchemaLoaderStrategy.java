@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.schemas.utils.loaders;
+package gov.gsa.fssi.files.schemas.utils.strategies.loaders;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
+import gov.gsa.fssi.files.schemas.utils.strategies.SchemaLoaderStrategy;
 import gov.gsa.fssi.helpers.XmlHelper;
 
 import org.w3c.dom.DOMException;
@@ -28,7 +29,7 @@ import org.w3c.dom.NodeList;
  * @author davidlarrimore
  *
  */
-public class SchemaXMLLoader implements SchemaLoader{
+public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy{
 
 	/**
 	 *

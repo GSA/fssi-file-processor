@@ -18,26 +18,64 @@ import org.slf4j.LoggerFactory;
  * @author davidlarrimore
  *
  */
-public class SourceFilePreProcessor {
+public class SourceFileBuilder {
 	static Config config = new Config();	    
-	static Logger logger = LoggerFactory.getLogger(SourceFilePreProcessor.class);
+	static Logger logger = LoggerFactory.getLogger(SourceFileBuilder.class);
 	
 	/**
 	 * The purpose of this function is just to prep file processing. We are not actually loading data yet
 	 * @param sourceFileDirectory
 	 */
-	public void preProcessAll(ArrayList<Schema> schemas,ArrayList<Provider> providers,ArrayList<SourceFile> sourceFiles) {	
-		//Loop through files in sourceFileDirectory and populate SourceFile objects
-		for (String fileName : FileHelper.getFilesFromDirectory(config.getProperty(Config.SOURCEFILES_DIRECTORY), ".csv")) {
-	    	SourceFile newSourceFile = new SourceFile(fileName);
-	    	mapProviderToSourceFile(providers, newSourceFile);
-	    	logger.info("'{}'", newSourceFile.getProvider().getProviderIdentifier());
-	    	mapSchemaToSourceFile(schemas, newSourceFile);
-	    	if(newSourceFile.getSchema() != null){
-	    		personalizeSourceFileSchema(newSourceFile);
-	    	}
-			sourceFiles.add(newSourceFile);		        
-		}	
+	public SourceFile build(String fileName, ArrayList<Schema> schemas,ArrayList<Provider> providers) {	
+		SourceFile sourceFile = new SourceFile(fileName);
+    	mapProviderToSourceFile(providers, sourceFile);
+    	
+    	if(sourceFile.getProvider() == null){
+			logger.error("Could not find Provider for file '{}'. Ignoring", fileName);
+			sourceFile.setStatusLevel(SourceFile.STATUS_ERROR);
+			return null;
+    	}
+    	
+    	//Map Schema to SourceFile
+    	if(!sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR) && sourceFile.getProvider().getSchemaName() != null && !sourceFile.getProvider().getSchemaName().isEmpty()){
+    		logger.warn("Attemping to map Schema to SourceFile '{}'", sourceFile.getFileName());
+    		mapSchemaToSourceFile(schemas, sourceFile);	
+    		
+    	}else{
+    		logger.warn("Provider '{}' for SourceFile '{}' does not have a Schema", sourceFile.getProvider().getProviderName(), fileName);
+    	}
+    	
+    	//Provider noted a schema, but couldn't find it
+    	if((sourceFile.getProvider().getSchemaName() != null || !sourceFile.getProvider().getSchemaName().isEmpty()) && sourceFile.getSchema() == null){
+    		logger.error("Provider '{}' for sourceFile '{}' noted schema '{}', but it could not be found", sourceFile.getProvider().getProviderName(), sourceFile.getFileName(), sourceFile.getProvider().getSchemaName());
+    	}else if(sourceFile.getSchema() == null){
+    		logger.error("No schema for file '{}', ignoring Schema processing activitie", fileName);
+    	}else{
+    		personalizeSourceFileSchema(sourceFile); 
+    	}
+
+		//Load File
+		if (!sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR)){
+		    logger.info("Loading SourceFile '{}'", sourceFile.getFileName());	
+		    sourceFile.load();
+		    logger.info("Completed loading SourceFile '{}'", sourceFile.getFileName());	
+		}
+		
+		//Organize file based upon schema
+		if (!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR) && sourceFile.getSchema() != null && sourceFile.getRecords() != null){
+		    logger.info("Processing SourceFile '{}'", sourceFile.getFileName());	
+			sourceFile.organize();
+		    logger.info("Completed Processing SourceFile '{}'", sourceFile.getFileName());	
+		}
+		
+		//Validate file based upon schema
+		if (!sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR) && sourceFile.getSchema() != null && sourceFile.getRecords() != null){
+		    logger.info("Validating SourceFile '{}'", sourceFile.getFileName());	
+		   sourceFile.validate();
+		    logger.info("Completed validating SourceFile '{}'", sourceFile.getFileName());	
+		}
+		
+		return sourceFile;
 	}
 	
 	/**
@@ -45,20 +83,26 @@ public class SourceFilePreProcessor {
 	 * @param sourceFile
 	 */
 	public void mapProviderToSourceFile(ArrayList<Provider> providers, SourceFile sourceFile) {
-		if(!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR)){
+		if(sourceFile.getStatusLevel() == null || !sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR)){
 			logger.info("Attempting to map Provider to file {}", sourceFile.getFileName());
 			for (Provider provider : providers) {
-				if(sourceFile.getFileName().toUpperCase().contains(provider.getProviderIdentifier().toUpperCase())){
-					logger.info("Mapped provider {} - {} to file '{}'", provider.getProviderName(), provider.getProviderIdentifier(),sourceFile.getFileName());
-					sourceFile.setProvider(provider);
-					//sourceFile.setLoaderStatusLevel(LoaderStatus.MAPPED);
+				for(String fileNamePart:sourceFile.getFileNameParts()){
+					//logger.debug("does '{}' equal '{}'", fileNamePart, provider.getProviderIdentifier());
+					if(provider.getProviderIdentifier().toUpperCase().matches(fileNamePart.toUpperCase().trim().toUpperCase())){
+						logger.info("Mapped provider {} - {} to file '{}'", provider.getProviderName(), provider.getProviderIdentifier(),sourceFile.getFileName());
+						sourceFile.setProvider(provider);
+						break;					
+					}
 				}
 			}
 		}
 		if (sourceFile.getProvider() == null){
 			logger.error("Could not find provider for file: '{}'", sourceFile.getFileName());
-			sourceFile.setLoadStatusLevel(SourceFile.STATUS_ERROR);
+			sourceFile.setStatusLevel(SourceFile.STATUS_ERROR);
+		}else{
+			logger.info("Mapped Provider '{}' successfully", sourceFile.getProvider().getProviderIdentifier());
 		}
+		
 	}		
 	
 	
@@ -78,7 +122,7 @@ public class SourceFilePreProcessor {
 				}
 				if (sourceFile.getSchema() == null){
 					logger.error("Could not find schema for file: '{}'", sourceFile.getFileName());
-					sourceFile.setValidatorStatusLevel(SourceFile.STATUS_WARNING);
+					sourceFile.setStatusLevel(SourceFile.STATUS_WARNING);
 				}
 			}
 		}
@@ -94,7 +138,13 @@ public class SourceFilePreProcessor {
 	 * @return
 	 */
 	public void personalizeSourceFileSchema(SourceFile sourceFile){
-    	if(sourceFile.getSchema() != null){
+    	if(sourceFile.getSchema() == null){
+    		logger.error("SourceFile '{}' does not have a schema, unable to personalize", sourceFile.getFileName());
+    	}else if(sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR)){
+       		logger.error("SourceFile '{}' is in error status, unable to personalize", sourceFile.getFileName());
+    	}else if(sourceFile.getReportingPeriod() == null){
+       		logger.error("SourceFile '{}' does not have a reporting period, unable to personalize", sourceFile.getFileName());
+    	}else{   		
 			logger.info("Personalizing schema '{}' to effectiveDate '{}'", sourceFile.getSchema().getName(), sourceFile.getReportingPeriod());
 			Schema newSchema = sourceFile.getSchema();
 			ArrayList<SchemaField> newFields = new ArrayList<SchemaField>();
@@ -149,8 +199,6 @@ public class SourceFilePreProcessor {
 			}
 			newSchema.setFields(newFields);
 			sourceFile.setSchema(newSchema);
-    	}else{
-    		logger.error("SourceFile '{}' does not have a schema, unable to process", sourceFile.getFileName());
     	}
 	}
 	
