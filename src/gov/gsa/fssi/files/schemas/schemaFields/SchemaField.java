@@ -1,9 +1,6 @@
 package gov.gsa.fssi.files.schemas.schemaFields;
 
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
-import gov.gsa.fssi.helpers.LoaderStatus;
-import gov.gsa.fssi.helpers.ValidatorStatus;
-
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -17,12 +14,38 @@ public class SchemaField {
 	private String title = null;	
 	private String type = null;		
 	private String format = null;	
-	private LoaderStatus builderStatus = new LoaderStatus();
-	private ValidatorStatus validatorStatus = new ValidatorStatus();	
 	private String description = null;
 	private ArrayList<FieldConstraint> constraints = new ArrayList<FieldConstraint>();	
 	private ArrayList<String> alias = new ArrayList<String>();	
+	private String loadStatusLevel = null;
+	private String loadStatusMessage = null;
+	private String validatorStatusMessage = null;
+	private String validatorStatusLevel = null;
 	
+	public String getValidatorStatusMessage() {
+		return validatorStatusMessage;
+	}
+	public void setValidatorStatusMessage(String validatorStatusMessage) {
+		this.validatorStatusMessage = validatorStatusMessage;
+	}
+	public String getValidatorStatusLevel() {
+		return validatorStatusLevel;
+	}
+	public void setValidatorStatusLevel(String validatorStatusLevel) {
+		this.validatorStatusLevel = validatorStatusLevel;
+	}
+	public String getLoadStatusLevel() {
+		return loadStatusLevel;
+	}
+	public void setLoadStatusLevel(String loadStatusLevel) {
+		this.loadStatusLevel = loadStatusLevel;
+	}
+	public String getLoadStatusMessage() {
+		return loadStatusMessage;
+	}
+	public void setLoadStatusMessage(String loadStatusMessage) {
+		this.loadStatusMessage = loadStatusMessage;
+	}
 	/**
 	 * a string (of arbitrary length)
 	 */
@@ -234,91 +257,6 @@ public class SchemaField {
 		arrayList.add(TYPE_ARRAY);
 		arrayList.add(TYPE_ANY);
 		return arrayList;
-	}
-	
-	/**
-	 * @return
-	 */
-	public ValidatorStatus getValidatorStatus() {
-		return validatorStatus;
-	}
-	/**
-	 * @return
-	 */
-	public String getValidatorStatusMessage(){
-		return validatorStatus.getStatusMessage();
-	}
-	/**
-	 * @return
-	 */
-	public String getValidatorStatusLevel(){
-		return validatorStatus.getLevel();
-	}	
-	/**
-	 * @param buildStatus
-	 */
-	public void setValidatorStatus(ValidatorStatus validatorStatus) {
-		this.validatorStatus = validatorStatus;
-	}
-	/**
-	 * @param level
-	 */
-	public void setValidatorStatusLevel(String level) {
-		this.validatorStatus.setLevel(level);
-	}
-	/**
-	 * @param level
-	 */
-	public void setValidatorStatusError() {
-		this.validatorStatus.setLevel(ValidatorStatus.ERROR);
-	}	
-	/**
-	 * @param message
-	 */
-	public void setValidatorStatusMessage(String message) {
-		this.validatorStatus.setStatusMessage(message);
-	}	
-	/**
-	 * @return
-	 */
-	public LoaderStatus getBuilderStatus() {
-		return builderStatus;
-	}
-	/**
-	 * @return
-	 */
-	public String getBuilderStatusMessage(){
-		return builderStatus.getStatusMessage();
-	}
-	/**
-	 * @return
-	 */
-	public String getBuilderStatusLevel(){
-		return builderStatus.getLevel();
-	}	
-	/**
-	 * @param buildStatus
-	 */
-	public void setBuilderStatus(LoaderStatus buildStatus) {
-		this.builderStatus = buildStatus;
-	}
-	/**
-	 * @param level
-	 */
-	public void setBuilderStatusError() {
-		this.builderStatus.setLevel(LoaderStatus.ERROR);
-	}	
-	/**
-	 * @param level
-	 */
-	public void setBuilderStatusLevel(String level) {
-		this.builderStatus.setLevel(level);
-	}
-	/**
-	 * @param message
-	 */
-	public void setBuilderStatusMessage(String message) {
-		this.builderStatus.setStatusMessage(message);
 	}
 	/**
 	 * This constructor class takes a file name and uses it to initialize the basic elements of a SourceFile

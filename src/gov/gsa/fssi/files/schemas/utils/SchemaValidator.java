@@ -5,8 +5,6 @@ import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.helpers.DateHelper;
-import gov.gsa.fssi.helpers.ValidatorStatus;
-
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -44,18 +42,18 @@ public class SchemaValidator {
 		
 		if(schema.getName() == null || schema.getName().isEmpty()){
 			logger.error("Schema in file '{}' does not have a name", schema.getFileName());
-			schema.setValidatorStatusLevel(ValidatorStatus.ERROR);
+			schema.setValidatorStatusLevel(Schema.STATUS_ERROR);
 		}
 		
 		schema.setFields(validateFields(schema));
 		
 		if(schema.getFields() == null || schema.getFields().isEmpty()){
 			logger.warn("Schema '{}' in file '{}' does not have any fields", schema.getName(), schema.getFileName());
-			schema.setValidatorStatusLevel(ValidatorStatus.WARNING);
+			schema.setValidatorStatusLevel(Schema.STATUS_WARNING);
 		}	
 		
 		if(schema.getValidatorStatusLevel() == null){
-			schema.setValidatorStatusLevel(ValidatorStatus.PASS);
+			schema.setValidatorStatusLevel(Schema.STATUS_PASS);
 		}
 	
 	}

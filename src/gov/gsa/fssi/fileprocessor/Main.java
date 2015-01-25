@@ -9,15 +9,13 @@ import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.providers.utils.ProviderValidator;
 import gov.gsa.fssi.files.providers.utils.contexts.ProviderLoaderContext;
-import gov.gsa.fssi.files.providers.utils.strategies.loader.ExcelProviderLoaderStrategy;
+import gov.gsa.fssi.files.providers.utils.strategies.loaders.ExcelProviderLoaderStrategy;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.utils.SchemaValidator;
 import gov.gsa.fssi.files.schemas.utils.loaders.SchemaXMLLoader;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.utils.SourceFilePreProcessor;
 import gov.gsa.fssi.helpers.FileHelper;
-import gov.gsa.fssi.helpers.LoaderStatus;
-import gov.gsa.fssi.helpers.ValidatorStatus;
 
 
 
@@ -39,6 +37,9 @@ public class Main {
 	    printAllProviders(providers);
 	    
 		ArrayList<Schema> schemas = loadSchemas();
+		
+		printAllSchemas(schemas);
+		
 		ArrayList<SourceFile> sourceFiles = new ArrayList<SourceFile>();
 		ingestProcessAndExportSourceFiles(providers, schemas, sourceFiles);	    
 	    logger.info("Completed FSSI File Processor");	
@@ -64,25 +65,25 @@ public class Main {
 	 */
 	private static void ingestProcessAndExportSourceFile(ArrayList<Provider> providers, ArrayList<Schema> schemas, SourceFile sourceFile) {
 		logger.debug("Processing sourceFile '{}'", sourceFile.getFileName());	
-		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
+		if (!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR)){
 		    logger.info("Loading SourceFile '{}'", sourceFile.getFileName());	
 		    sourceFile.load();
 		    logger.info("Completed loading SourceFile '{}'", sourceFile.getFileName());	
 		}
 		
-		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
+		if (!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR)){
 		    logger.info("Processing SourceFile '{}'", sourceFile.getFileName());	
 			sourceFile.processToSchema();
 		    logger.info("Completed Processing SourceFile '{}'", sourceFile.getFileName());	
 		}	
 		
-		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR) && sourceFile.getSchema() != null){
+		if (!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR) && sourceFile.getSchema() != null){
 		    logger.info("Validating SourceFile '{}'", sourceFile.getFileName());	
 		   sourceFile.validate();
 		    logger.info("Completed validating SourceFile '{}'", sourceFile.getFileName());	
 		}
 		
-		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
+		if (!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR)){
 		    logger.info("Outputting SourceFile '{}'", sourceFile.getFileName());	
 		    sourceFile.export();
 		    logger.info("Completed Outputting SourceFile '{}'", sourceFile.getFileName());	
@@ -113,7 +114,7 @@ public class Main {
 				schema.printAll();
 			}
 			
-			if(schema.getValidatorStatus().equals(ValidatorStatus.ERROR)){ //We currently prevent invalid schemas from being loaded
+			if(schema.getValidatorStatusLevel().equals(Schema.STATUS_ERROR)){ //We currently prevent invalid schemas from being loaded
 				logger.error("Schema '{}' from file '{}' not being added to schemas because it is in error state", schema.getName(), schema.getFileName());
 			}else if(isDuplicateSchemaName(schemas, schema)){ //duplicate schema names can screw up a lot.
 				logger.error("Schema '{}' from file '{}' is a duplicate, it will not be added", schema.getName(), schema.getFileName());
@@ -160,6 +161,12 @@ public class Main {
 	public static void printAllProviders(ArrayList<Provider> providers){
 		for(Provider provider: providers){
 			provider.print();
+		}
+	}
+	
+	public static void printAllSchemas(ArrayList<Schema> schemas){
+		for(Schema schema: schemas){
+			schema.printAll();
 		}
 	}
 }

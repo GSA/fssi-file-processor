@@ -11,10 +11,8 @@ import gov.gsa.fssi.files.sourceFiles.utils.SourceFileValidator;
 import gov.gsa.fssi.files.sourceFiles.utils.contexts.SourceFileLoaderContext;
 import gov.gsa.fssi.files.sourceFiles.utils.exporters.SourceFileExporterCSV;
 import gov.gsa.fssi.files.sourceFiles.utils.exporters.SourceFileExporterExcel;
-import gov.gsa.fssi.files.sourceFiles.utils.strategies.sourceFileLoader.CSVSourceFileLoaderStrategy;
+import gov.gsa.fssi.files.sourceFiles.utils.strategies.loaders.CSVSourceFileLoaderStrategy;
 import gov.gsa.fssi.helpers.DateHelper;
-import gov.gsa.fssi.helpers.LoaderStatus;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -136,7 +134,7 @@ public class SourceFile extends File{
 	public void setReportingPeriod(){
 		if(this.getFileNameParts() == null || this.getFileNameParts().isEmpty()){
 			logger.error("File has no fileNameParts, which means we cannot discern a provider or schema. we can process the file no farther");
-			this.setLoaderStatusLevel(LoaderStatus.ERROR);
+			this.setLoadStatusLevel(STATUS_ERROR);
 		}else{
 			
 			for(String fileNamePart: this.getFileNameParts()){
@@ -157,10 +155,10 @@ public class SourceFile extends File{
 						
 						if(date.compareTo(todaysDate) > 0){
 							logger.error("ReportingPeriod '{}' found in FileName is later than current date. Please check file name", date.toString());
-							this.setLoaderStatusLevel(LoaderStatus.ERROR);
+							this.setLoadStatusLevel(STATUS_ERROR);
 						}else if(date.compareTo(minimumDate) < 0){
 							logger.error("ReportingPeriod '{}' found in FileName is before the year 2000 and may be inacurate. Please check file name", date.toString());
-							this.setLoaderStatusLevel(LoaderStatus.ERROR);				
+							this.setLoadStatusLevel(STATUS_ERROR);				
 						}else{
 							logger.info("Successfully added Reporting Period '{}'", date.toString());
 							this.setReportingPeriod(date);
@@ -231,18 +229,6 @@ public class SourceFile extends File{
 	 */
 	public void setRecords(ArrayList<SourceFileRecord> records) {
 		this.records = records;
-	}
-	/**
-	 * @return the fileName
-	 */
-	public String getFileName() {
-		return fileName;
-	}
-	/**
-	 * @param fileName the fileName to set
-	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
 	}
 	/**
 	 * @param record
@@ -464,7 +450,7 @@ public class SourceFile extends File{
 			schemaString = this.schema.getName();
 		}		
 		
-		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoaderStatusLevel(), this.getHeaders().size(), providerString, schemaString);
+		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoadStatusLevel(), this.getHeaders().size(), providerString, schemaString);
 	}
 	
 	/**
@@ -481,7 +467,7 @@ public class SourceFile extends File{
 			schemaString = this.schema.getName();
 		}		
 		
-		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoaderStatusLevel(), this.getHeaders().size(), providerString, schemaString);
+		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoadStatusLevel(), this.getHeaders().size(), providerString, schemaString);
 		printRecords();	
 	}
 	/**
@@ -505,11 +491,11 @@ public class SourceFile extends File{
 			break;		 
 		default:
 			logger.warn("Could not load file '{}' as a '{}'", this.getFileName(), this.getFileExtension());	
-			this.setLoaderStatusError();
+			this.setLoadStatusLevel(STATUS_ERROR);
 			break;
 		}
 		
-		if(!this.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
+		if(!this.getLoadStatusLevel().equals(STATUS_ERROR)){
 			context.load(this.getFileName(), this);
 		}
 	}
@@ -536,12 +522,6 @@ public class SourceFile extends File{
 		}
 	}	
 	
-	public void processToSchema(Schema schema) {
-		this.setSchema(schema);
-		this.processToSchema();
-	}	
-	
-	
 	public void export() {
 		 if (this.getRecords() != null){
 			if(this.getProvider().getFileOutputType().toUpperCase().equals("CSV")){
@@ -551,7 +531,7 @@ public class SourceFile extends File{
 			}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XML")){
 				//logger.info("Exporting File {} as a 'XML'", sourceFile.getFileExtension());	
 				logger.error("Cannot export sourceFile '{}' as XML. We don't currently handle XML output at this point", this.getFileName());
-				this.setLoaderStatusError();
+				this.setLoadStatusLevel(STATUS_ERROR);
 			}else if(this.getProvider().getFileOutputType().toUpperCase().equals("XLS")){
 				logger.info("Exporting file '{}' as a XLS", this.getFileName());
 				SourceFileExporterExcel exporter = new SourceFileExporterExcel();

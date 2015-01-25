@@ -14,7 +14,6 @@ import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
-import gov.gsa.fssi.helpers.LoaderStatus;
 import gov.gsa.fssi.helpers.XmlHelper;
 
 import org.w3c.dom.DOMException;
@@ -62,15 +61,15 @@ public class SchemaXMLLoader implements SchemaLoader{
 				schema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
 				schema.setFields(loadFields(doc.getElementsByTagName("field")));
 				
-				if(schema.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
+				if(schema.getLoadStatusLevel().equals(Schema.STATUS_ERROR)){
 					logger.error("Could not load Schema '{}' in file '{}' as it is in error status", schema.getName(), schema.getFileName());
 				}
 				
 				logger.info("successfully loaded Schema '{}' from file '{}'", schema.getName(), schema.getFileName());
-				schema.setLoaderStatusLevel(LoaderStatus.LOADED);
+				schema.setLoadStatusLevel(Schema.STATUS_LOADED);
 			}
 			logger.error("No document found in file '{}'. Unable to load any schema", schema.getFileName());
-			schema.setLoaderStatusLevel(LoaderStatus.ERROR);
+			schema.setLoadStatusLevel(Schema.STATUS_ERROR);
 			
 		}else{
 			logger.error("Could not build Schema, no fileName was set");

@@ -7,9 +7,6 @@ import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.helpers.FileHelper;
-import gov.gsa.fssi.helpers.LoaderStatus;
-import gov.gsa.fssi.helpers.ValidatorStatus;
-
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,19 +45,19 @@ public class SourceFilePreProcessor {
 	 * @param sourceFile
 	 */
 	public void mapProviderToSourceFile(ArrayList<Provider> providers, SourceFile sourceFile) {
-		if(!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
+		if(!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR)){
 			logger.info("Attempting to map Provider to file {}", sourceFile.getFileName());
 			for (Provider provider : providers) {
 				if(sourceFile.getFileName().toUpperCase().contains(provider.getProviderIdentifier().toUpperCase())){
 					logger.info("Mapped provider {} - {} to file '{}'", provider.getProviderName(), provider.getProviderIdentifier(),sourceFile.getFileName());
 					sourceFile.setProvider(provider);
-					sourceFile.setLoaderStatusLevel(LoaderStatus.MAPPED);
+					//sourceFile.setLoaderStatusLevel(LoaderStatus.MAPPED);
 				}
 			}
 		}
 		if (sourceFile.getProvider() == null){
 			logger.error("Could not find provider for file: '{}'", sourceFile.getFileName());
-			sourceFile.setLoaderStatusLevel(LoaderStatus.ERROR);
+			sourceFile.setLoadStatusLevel(SourceFile.STATUS_ERROR);
 		}
 	}		
 	
@@ -72,7 +69,7 @@ public class SourceFilePreProcessor {
 	 */
 	public void mapSchemaToSourceFile(ArrayList<Schema> schemas,SourceFile sourceFile) {
 		logger.info("Attempting to map Schema to file {}", sourceFile.getFileName());
-		if (!sourceFile.getLoaderStatusLevel().equals(LoaderStatus.ERROR)){
+		if (!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR)){
 			if(sourceFile.getProvider().getSchemaName() != null){
 				for (Schema schema : schemas) {
 					if(sourceFile.getProvider().getSchemaName().toUpperCase().equals(schema.getName().toUpperCase())){
@@ -81,7 +78,7 @@ public class SourceFilePreProcessor {
 				}
 				if (sourceFile.getSchema() == null){
 					logger.error("Could not find schema for file: '{}'", sourceFile.getFileName());
-					sourceFile.setValidatorStatusLevel(ValidatorStatus.WARNING);
+					sourceFile.setValidatorStatusLevel(SourceFile.STATUS_WARNING);
 				}
 			}
 		}

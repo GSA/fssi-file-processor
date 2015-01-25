@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.providers.utils.strategies.loader;
+package gov.gsa.fssi.files.providers.utils.strategies.loaders;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.sourceFiles.utils.strategies.sourceFileLoader;
+package gov.gsa.fssi.files.sourceFiles.utils.strategies.loaders;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,11 +12,11 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import gov.gsa.fssi.config.Config;
+import gov.gsa.fssi.files.File;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import gov.gsa.fssi.files.sourceFiles.utils.strategies.SourceFileLoaderStrategy;
-import gov.gsa.fssi.helpers.LoaderStatus;
 
 
 /**
@@ -100,7 +100,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 			}else{
 				logger.info("All {} Records successfully processed in {}", sourceFile.getTotalRecords(), sourceFile.getFileName());
 			}
-			sourceFile.setLoaderStatusLevel(LoaderStatus.LOADED);
+			sourceFile.setLoadStatusLevel(File.STATUS_LOADED);
 			parser.close();
 		} catch (FileNotFoundException e) {
 			logger.error("There was an FileNotFoundException error with file {}", sourceFile.getFileName());

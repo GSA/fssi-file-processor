@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.sourceFiles.utils.strategies.TypeValidation;
+package gov.gsa.fssi.files.sourceFiles.utils.strategies.typeValidation;
 
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;

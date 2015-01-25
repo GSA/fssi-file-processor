@@ -7,8 +7,6 @@ import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import gov.gsa.fssi.files.sourceFiles.utils.contexts.ConstraintValidationContext;
-import gov.gsa.fssi.helpers.LoaderStatus;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +27,7 @@ public class SourceFileValidator{
 		
 		if(sourceFile.getSchema() == null){
 			logger.error("Cannot validate file '{}', no Schema", sourceFile.getFileName());	
-		}else if(sourceFile.getLoaderStatus().equals(LoaderStatus.ERROR)){
+		}else if(sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR)){
 			logger.error("file '{}', had a load error, cannot validate", sourceFile.getFileName());
 		}else{
 			for(SourceFileRecord sourceFileRecord: sourceFile.getRecords()){

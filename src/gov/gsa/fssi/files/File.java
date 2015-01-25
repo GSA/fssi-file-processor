@@ -1,9 +1,6 @@
 package gov.gsa.fssi.files;
 
 import gov.gsa.fssi.config.Config;
-import gov.gsa.fssi.helpers.LoaderStatus;
-import gov.gsa.fssi.helpers.ValidatorStatus;
-
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -67,99 +64,6 @@ public class File {
 	public void setFileNameParts(ArrayList<String> fileParts) {
 		this.fileNameParts = fileParts;
 	}	
-	
-	
-	
-	/**
-	 * @return
-	 */
-	public ValidatorStatus getValidatorStatus() {
-		return validatorStatus;
-	}
-	/**
-	 * @return
-	 */
-	public String getValidatorStatusMessage(){
-		return validatorStatus.getStatusMessage();
-	}
-	/**
-	 * @return
-	 */
-	public String getValidatorStatusLevel(){
-		return validatorStatus.getLevel();
-	}	
-	/**
-	 * @param buildStatus
-	 */
-	public void setValidatorStatus(ValidatorStatus validatorStatus) {
-		this.validatorStatus = validatorStatus;
-	}
-	/**
-	 * @param level
-	 */
-	public void setValidatorStatusLevel(String level) {
-		this.validatorStatus.setLevel(level);
-	}
-	/**
-	 * @param level
-	 */
-	public void setValidatorStatusError() {
-		this.validatorStatus.setLevel(ValidatorStatus.ERROR);
-	}	
-	/**
-	 * @param level
-	 */
-	public void setValidatorStatusPass() {
-		this.validatorStatus.setLevel(ValidatorStatus.PASS);
-	}		
-	/**
-	 * @param message
-	 */
-	public void setValidatorStatusMessage(String message) {
-		this.validatorStatus.setStatusMessage(message);
-	}	
-	/**
-	 * @return
-	 */
-	public LoaderStatus getLoaderStatus() {
-		return loaderStatus;
-	}
-	/**
-	 * @return
-	 */
-	public String getLoaderStatusMessage(){
-		return loaderStatus.getStatusMessage();
-	}
-	/**
-	 * @return
-	 */
-	public String getLoaderStatusLevel(){
-		return loaderStatus.getLevel();
-	}	
-	/**
-	 * @param buildStatus
-	 */
-	public void setLoaderStatus(LoaderStatus buildStatus) {
-		this.loaderStatus = buildStatus;
-	}
-	/**
-	 * @param level
-	 */
-	public void setLoaderStatusError() {
-		this.loaderStatus.setLevel(LoaderStatus.ERROR);
-	}	
-	/**
-	 * @param level
-	 */
-	public void setLoaderStatusLevel(String level) {
-		this.loaderStatus.setLevel(level);
-	}
-	/**
-	 * @param message
-	 */
-	public void setLoaderStatusMessage(String message) {
-		this.loaderStatus.setStatusMessage(message);
-	}
 	/**
 	 * This constructor class takes a file name and uses it to initialize the basic elements of a SourceFile
 	 * @param fileName - This should be in name.ext format.
@@ -169,7 +73,7 @@ public class File {
 		this.setFileName(fileName);
 		int startOfExtension = fileName.lastIndexOf(".")+1;
 		this.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
-		this.loaderStatus.setLevel(LoaderStatus.INITIALIZED);;
+		this.setLoadStatusLevel(STATUS_LOADED);
 		//defaulted to underscore
 		this.setFileNameParts(SEPARATOR_UNDERSCORE);
 	}
@@ -208,14 +112,44 @@ public class File {
 		this.setFileNameParts(fileNameParts);
 	}	
 
-	public String fileName = null;
+	private String fileName = null;
 	private String fileExtension = null;
 	private ArrayList<String> fileNameParts = new ArrayList<String>();
 	//private String status = null;
 	protected static Logger logger = LoggerFactory.getLogger(File.class);
 	protected static Config config = new Config();	    
-	private LoaderStatus loaderStatus = new LoaderStatus();
-	private ValidatorStatus validatorStatus = new ValidatorStatus();	
+	public String getLoadStatusLevel() {
+		return loadStatusLevel;
+	}
+	public void setLoadStatusLevel(String loadStatusLevel) {
+		this.loadStatusLevel = loadStatusLevel;
+	}
+	public String getLoadStatusMessage() {
+		return loadStatusMessage;
+	}
+	public void setLoadStatusMessage(String loadStatusMessage) {
+		this.loadStatusMessage = loadStatusMessage;
+	}
+	public String getValidatorStatusMessage() {
+		return validatorStatusMessage;
+	}
+
+	public void setValidatorStatusMessage(String validatorStatusMessage) {
+		this.validatorStatusMessage = validatorStatusMessage;
+	}
+
+	public String getValidatorStatusLevel() {
+		return validatorStatusLevel;
+	}
+
+	public void setValidatorStatusLevel(String validatorStatusLevel) {
+		this.validatorStatusLevel = validatorStatusLevel;
+	}
+
+	private String loadStatusLevel = null;
+	private String loadStatusMessage = null;
+	private String validatorStatusMessage = null;
+	private String validatorStatusLevel = null;
 	public static final byte SEPARATOR_UNDERSCORE = '_';
 	public static final byte SEPARATOR_DASH = '-';
 	public static final byte SEPARATOR_COMMA = ',';
@@ -227,4 +161,8 @@ public class File {
 	public static final String FILETYPE_XLSX = "xlsx";
 	public static final String FILETYPE_XLS = "xls";
 	public static final String FILETYPE_XML = "xml";
+	public static final String STATUS_ERROR = "error";
+	public static final String STATUS_WARNING = "warning";
+	public static final String STATUS_LOADED = "loaded";
+	public static final String STATUS_PASS = "pass";
 }
