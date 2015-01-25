@@ -11,8 +11,6 @@ import gov.gsa.fssi.helpers.LoaderStatus;
 import gov.gsa.fssi.helpers.ValidatorStatus;
 
 import java.util.ArrayList;
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

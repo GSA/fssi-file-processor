@@ -4,7 +4,6 @@ import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.helpers.LoaderStatus;
 import gov.gsa.fssi.helpers.ValidatorStatus;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 

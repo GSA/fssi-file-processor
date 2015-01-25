@@ -1,8 +1,6 @@
 package gov.gsa.fssi.files.providers;
 
 import gov.gsa.fssi.files.File;
-import gov.gsa.fssi.files.schemas.Schema;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

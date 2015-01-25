@@ -530,21 +530,11 @@ public class SourceFile extends File{
 				logger.info("No export node provided. leaving file as-is");
 				//sourceFile.implodeSourceFileToSchema();	
 			}	
-			this.fixSchema();
 
 		}else{
 			logger.info("No schema was found for file {}. Ignoring sourceFile schema processing", this.getFileName());
 		}
 	}	
-
-	
-	public void fixSchema(){
-		Schema newSchema = this.getSchema();
-		
-		
-	}
-	
-	
 	
 	public void processToSchema(Schema schema) {
 		this.setSchema(schema);

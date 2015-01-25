@@ -1,30 +1,21 @@
 package gov.gsa.fssi.files.sourceFiles.utils.exporters;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+import gov.gsa.fssi.config.Config;
+import gov.gsa.fssi.files.sourceFiles.SourceFile;
+import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
+import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
+import gov.gsa.fssi.helpers.FileHelper;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import gov.gsa.fssi.config.Config;
-import gov.gsa.fssi.files.sourceFiles.SourceFile;
-import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
-import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
-import gov.gsa.fssi.helpers.FileHelper;
-import gov.gsa.fssi.helpers.LoaderStatus;
 
 
 /**
