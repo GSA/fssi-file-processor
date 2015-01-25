@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.sourceFiles.utils.strategies.constraintValidation;
+package gov.gsa.fssi.files.sourceFiles.utils.strategies.constraintValidations;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

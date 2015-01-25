@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.sourceFiles.utils.strategies.constraintValidation;
+package gov.gsa.fssi.files.sourceFiles.utils.strategies.constraintValidations;
 
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;

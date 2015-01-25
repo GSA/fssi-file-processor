@@ -1,4 +1,4 @@
-package gov.gsa.fssi.files.sourceFiles.utils.exporters;
+package gov.gsa.fssi.files.sourceFiles.utils.strategies.exporters;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,8 +9,10 @@ import java.util.Map;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
+import gov.gsa.fssi.files.sourceFiles.utils.strategies.SourceFileExporterStrategy;
 import gov.gsa.fssi.helpers.FileHelper;
 
 
@@ -20,7 +22,7 @@ import gov.gsa.fssi.helpers.FileHelper;
  * @author davidlarrimore
  *
  */
-public class SourceFileExporterCSV implements SourceFileExporter{
+public class CSVSourceFileExporterStrategy implements SourceFileExporterStrategy{
 
 	/**
 	 *

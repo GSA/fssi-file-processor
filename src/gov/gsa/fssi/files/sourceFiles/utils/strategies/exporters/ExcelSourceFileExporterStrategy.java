@@ -1,9 +1,10 @@
-package gov.gsa.fssi.files.sourceFiles.utils.exporters;
+package gov.gsa.fssi.files.sourceFiles.utils.strategies.exporters;
 
 import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
+import gov.gsa.fssi.files.sourceFiles.utils.strategies.SourceFileExporterStrategy;
 import gov.gsa.fssi.helpers.FileHelper;
 
 import java.io.FileOutputStream;
@@ -24,7 +25,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @author davidlarrimore
  *
  */
-public class SourceFileExporterExcel implements SourceFileExporter{
+public class ExcelSourceFileExporterStrategy implements SourceFileExporterStrategy{
 
 	/**
 	 *

@@ -145,11 +145,61 @@ public class File {
 	public void setValidatorStatusLevel(String validatorStatusLevel) {
 		this.validatorStatusLevel = validatorStatusLevel;
 	}
+	
+	/**
+	 * @return the statusLevel
+	 */
+	public String getStatusLevel() {
+		return statusLevel;
+	}
 
+	/**
+	 * @param statusLevel the statusLevel to set
+	 */
+	public void setStatusLevel(String statusLevel) {
+		this.statusLevel = statusLevel;
+	}
+	
+	/**
+	 * @return the exportStatusMessage
+	 */
+	public String getExportStatusMessage() {
+		return exportStatusMessage;
+	}
+
+	/**
+	 * @param exportStatusMessage the exportStatusMessage to set
+	 */
+	public void setExportStatusMessage(String exportStatusMessage) {
+		this.exportStatusMessage = exportStatusMessage;
+	}
+
+	/**
+	 * @return the exportStatusLevel
+	 */
+	public String getExportStatusLevel() {
+		return exportStatusLevel;
+	}
+
+	/**
+	 * @param exportStatusLevel the exportStatusLevel to set
+	 */
+	public void setExportStatusLevel(String exportStatusLevel) {
+		this.exportStatusLevel = exportStatusLevel;
+	}
+
+	
 	private String loadStatusLevel = null;
 	private String loadStatusMessage = null;
 	private String validatorStatusMessage = null;
 	private String validatorStatusLevel = null;
+	private String exportStatusMessage = null;
+	private String exportStatusLevel = null;
+	/**
+	 * Overall Status of File
+	 */
+	private String statusLevel = null;	
+	
 	public static final byte SEPARATOR_UNDERSCORE = '_';
 	public static final byte SEPARATOR_DASH = '-';
 	public static final byte SEPARATOR_COMMA = ',';

@@ -73,7 +73,7 @@ public class Main {
 		
 		if (!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR)){
 		    logger.info("Processing SourceFile '{}'", sourceFile.getFileName());	
-			sourceFile.processToSchema();
+			sourceFile.organize();
 		    logger.info("Completed Processing SourceFile '{}'", sourceFile.getFileName());	
 		}	
 		
