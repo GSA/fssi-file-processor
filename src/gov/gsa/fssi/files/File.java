@@ -107,6 +107,12 @@ public class File {
 		this.validatorStatus.setLevel(ValidatorStatus.ERROR);
 	}	
 	/**
+	 * @param level
+	 */
+	public void setValidatorStatusPass() {
+		this.validatorStatus.setLevel(ValidatorStatus.PASS);
+	}		
+	/**
 	 * @param message
 	 */
 	public void setValidatorStatusMessage(String message) {
@@ -183,7 +189,7 @@ public class File {
 			String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf("."));
 			boolean loopQuit = false;
 			
-			logger.debug("Attemtping to get file parts from fileName '{}'", fileName);
+			logger.debug("Attempting to get file parts from fileName '{}'", fileName);
 			while (!loopQuit){
 				logger.debug("fileNameWithoutExtension: {}", fileNameWithoutExtension);
 				if(fileNameWithoutExtension.contains("_")){

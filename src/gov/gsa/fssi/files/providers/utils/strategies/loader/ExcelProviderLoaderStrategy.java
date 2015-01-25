@@ -55,7 +55,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 			    			case "FILE_OUTPUT_TYPE":
 			    				fileOutputTypeColumn = cell.getColumnIndex();	
 			    				break;
-			    			case "SCHEMA_NAME":
+			    			case "SCHEMA":
 			    				schemaNameColumn = cell.getColumnIndex();	
 			    				break;			    				
 			    			case "PROVIDER_EMAIL":
@@ -66,42 +66,34 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 		    			}
 		    		}
 		    	}else{
-		    		
 		    		try {
 		    			
-			    			if (!(row.getCell(providerIdColumn) == null) && !(row.getCell(providerIdColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-			    				newProvider.setProviderId(row.getCell(providerIdColumn).getStringCellValue().toUpperCase());
-			    			}
-			    				    			
-			    			if (!(row.getCell(providerNameColumn) == null) && !(row.getCell(providerNameColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerNameColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-			    				newProvider.setProviderName(row.getCell(providerNameColumn).getStringCellValue().toUpperCase());
-			    			}
-			    			
-			    			if (!(row.getCell(providerIdentifierColumn) == null) && !(row.getCell(providerIdentifierColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdentifierColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-			    				newProvider.setProviderIdentifier(row.getCell(providerIdentifierColumn).getStringCellValue().toUpperCase());
-			    			}				    			
-			    			
-			    			if (!(row.getCell(fileOutputTypeColumn) == null) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().isEmpty()) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-			    				newProvider.setFileOutputType(row.getCell(fileOutputTypeColumn).getStringCellValue().toUpperCase());
-			    			}			    					    			
-			    			
-			    			if (!(row.getCell(schemaNameColumn) == null) && !(row.getCell(schemaNameColumn).getStringCellValue().isEmpty()) && !(row.getCell(schemaNameColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-			    				newProvider.setSchemaName(row.getCell(schemaNameColumn).getStringCellValue().toUpperCase());
-			    			}				    			
-			    			
-			    			if (!(row.getCell(providerEmailColumn) == null) && !(row.getCell(providerEmailColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerEmailColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-			    				newProvider.setProviderEmail(row.getCell(providerEmailColumn).getStringCellValue().toUpperCase());
-			    				//logger.debug("{}", row.getCell(providerEmailColumn).getStringCellValue());
-			    			}					    			
-			    			//Certain fields are required.
-			    			if (newProvider.getProviderId() == null || newProvider.getProviderName() == null || newProvider.getProviderIdentifier() == null){
-			    				logger.warn("Found provider record on row " + row.getRowNum() + " without all of the required fields (ID, Name, Identifier)...ignoring");
-			    				failCounter++;
-			    			}else{
-			    				providers.add(newProvider);
-			    				logger.info("Added new provider '{}' to list of Providers", newProvider.getProviderIdentifier());
-			    			}
-			    			
+		    			if (!(row.getCell(providerIdColumn) == null) && !(row.getCell(providerIdColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdColumn).getStringCellValue().toUpperCase().equals("NULL"))){
+		    				newProvider.setProviderId(row.getCell(providerIdColumn).getStringCellValue().toUpperCase());
+		    			}
+		    				    			
+		    			if (!(row.getCell(providerNameColumn) == null) && !(row.getCell(providerNameColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerNameColumn).getStringCellValue().toUpperCase().equals("NULL"))){
+		    				newProvider.setProviderName(row.getCell(providerNameColumn).getStringCellValue().toUpperCase());
+		    			}
+		    			
+		    			if (!(row.getCell(providerIdentifierColumn) == null) && !(row.getCell(providerIdentifierColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdentifierColumn).getStringCellValue().toUpperCase().equals("NULL"))){
+		    				newProvider.setProviderIdentifier(row.getCell(providerIdentifierColumn).getStringCellValue().toUpperCase());
+		    			}				    			
+		    			
+		    			if (!(row.getCell(fileOutputTypeColumn) == null) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().isEmpty()) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().toUpperCase().equals("NULL"))){
+		    				newProvider.setFileOutputType(row.getCell(fileOutputTypeColumn).getStringCellValue().toUpperCase());
+		    			}			    					    			
+		    			
+		    			if (!(row.getCell(schemaNameColumn) == null) && !(row.getCell(schemaNameColumn).getStringCellValue().isEmpty()) && !(row.getCell(schemaNameColumn).getStringCellValue().toUpperCase().equals("NULL"))){
+		    				newProvider.setSchemaName(row.getCell(schemaNameColumn).getStringCellValue().toUpperCase());
+		    			}				    			
+		    			
+		    			if (!(row.getCell(providerEmailColumn) == null) && !(row.getCell(providerEmailColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerEmailColumn).getStringCellValue().toUpperCase().equals("NULL"))){
+		    				newProvider.setProviderEmail(row.getCell(providerEmailColumn).getStringCellValue().toUpperCase());
+		    				//logger.debug("{}", row.getCell(providerEmailColumn).getStringCellValue());
+		    			}					    			
+	    				providers.add(newProvider);
+	    				logger.info("Added new provider '{}' to list of Providers", newProvider.getProviderIdentifier());
 		    		} catch (java.lang.NullPointerException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

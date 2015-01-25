@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 public class Provider extends File{
 
 	static Logger logger = LoggerFactory.getLogger(Provider.class);
-	private Schema	schema = new Schema();
 	private String schemaName = null;
 	private String providerId = null;
 	private String providerName = null;	
@@ -88,19 +87,6 @@ public class Provider extends File{
 	/**
 	 * @return
 	 */
-	public Schema getSchema() {
-		return schema;
-	}
-
-	/**
-	 * @param schema
-	 */
-	public void setSchema(Schema schema) {
-		this.schema = schema;
-	}
-	/**
-	 * @return
-	 */
 	public String getSchemaName() {
 		return schemaName;
 	}
@@ -119,7 +105,7 @@ public class Provider extends File{
 	}
 	
 	public void print(){
-		logger.debug("Id: '{}' Name: '{}' Identifier: '{}' Email: '{}' OutputType '{}'", this.getProviderId(), this.getProviderName(), this.getProviderIdentifier(), this.getProviderEmail(), this.getFileOutputType());	
+		logger.debug("Id: '{}' Name: '{}' Identifier: '{}' Email: '{}' OutputType '{}' SchemaName '{}'", this.getProviderId(), this.getProviderName(), this.getProviderIdentifier(), this.getProviderEmail(), this.getFileOutputType(), this.getSchemaName());	
 	}
 	
 	

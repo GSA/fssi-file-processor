@@ -26,6 +26,13 @@ public class SchemaValidator {
 	static Logger logger = LoggerFactory.getLogger(SchemaValidator.class);
 	static Config config = new Config();	    
 
+	
+	
+	
+	public void validateAll(ArrayList<Schema> schemas) {
+	}
+	
+	
 	/**
 	 * This is the only public facing method. you send it a schema, it validates it and sends one back.
 	 * @param schema
