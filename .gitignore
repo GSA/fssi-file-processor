@@ -1,7 +1,5 @@
 /working/logs/*
 /working/srcfiles/*
-/working/schemas/*
 /working/staged/*
 /working/datamaps/*
-*.log
-logs/fileprocessor.log
+logs/*

@@ -24,7 +24,7 @@
 			<name>ORDER_DATE</name>
 			<title>Order Date</title>
 			<type>date</type>
-			<format>yyyy-MM-dd</format>
+			<format>ddMMyyyy</format>
 			<description>The date the order was placed</description>
 			<constraints>
 				<required level="error">true</required>
@@ -63,6 +63,7 @@
 				<maxLength level="error">50</maxLength>
 			</constraints>
 			<alias>Contractor_Part_No</alias>
+			<alias>VENDOR_PART_NUMBER</alias>
 		</field>
 		<field>
 			<name>UPC_A_CODE</name>
@@ -87,6 +88,7 @@
 				<maxLength level="error">255</maxLength>
 			</constraints>
 			<alias>product_descr</alias>
+			<alias>PRODUCT_DESCRIPTION</alias>
 		</field>
 		<field>
 			<name>PSC_CODE</name>
@@ -132,7 +134,7 @@
 			</constraints>
 			<alias>unit_of_measure</alias>
 			<alias>unit_of_issue</alias>
-			<alias>uom</alias>			
+			<alias>uom</alias>		
 		</field>					
 		<field>
 			<name>QTY</name>
@@ -149,7 +151,8 @@
 			<title>Unit of Issue Quantity</title>
 			<type>number</type>
 			<description>Unit of Issue Quantity (The physical measurement count of quantity in which the item was sold (ex. 100 per box, 12 per carton))</description>
-			<alias>Items_Sold</alias>	
+			<alias>Items_Sold</alias>
+			<alias>package_quantity</alias>	
 		</field>
 		<field>
 			<name>BPA_PRICE</name>
@@ -202,6 +205,7 @@
 				<pattern level="error">D|C</pattern>
 			</constraints>
 			<alias>Dbt_Crt_Ind</alias>
+			<alias>debit_credit_ind</alias>			
 		</field>														
 		<field>
 			<name>MAS_PRICE</name>
@@ -379,6 +383,7 @@
 				<pattern level="error">Phone|Fax|E-mail|GSA Advantage|e-Buy|DoD EMALL|Vendor Portal|Walk-in Store|Other</pattern>
 			</constraints>
 			<alias>Sales_Channel</alias>
+			<alias>ORDERING_PROCESS</alias>
 		</field>			
 		<field>
 			<name>PAY_METHOD</name>
@@ -395,7 +400,7 @@
 			<name>PAY_DATE</name>
 			<title>Payment Date</title>
 			<description>Date of Payment</description>
-			<format>yyyy-MM-dd</format>
+			<format>ddMMyyyy</format>
 			<type>date</type>
 		</field>				
 		<field>
@@ -460,7 +465,7 @@
 		<field>
 			<name>FULLFILL_DATE</name>
 			<title>FulFillment Date</title>
-			<format>yyyy-MM-dd</format>
+			<format>ddMMyyyy</format>
 			<description>The date when product in the order was fulfilled</description>
 			<type>date</type>
 			<alias>FULLFILLMENT_DATE</alias>
