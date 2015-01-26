@@ -148,9 +148,11 @@ public class SourceFile extends File{
 					Date date = new Date();
 					//if 6 digits, we attempt to get a Reporting Period in mmYYYY format, example 072015 is July 2015
 					if(fileNamePart.length() == 6){
+						logger.info("attempting to map fileName Part '{}' to a MMyyyy date", fileNamePart);
 						date = DateHelper.getDate(fileNamePart, DateHelper.FORMAT_MMYYYY);
 					//if 8 digits, we attempt to get a Reporting Period in MMddyyyy format, example 07252015 is July 25, 2015	
 					}else if(fileNamePart.length() == 8){
+						logger.info("attempting to map fileName Part '{}' to a MMddyyyy date", fileNamePart);
 						date = DateHelper.getDate(fileNamePart, DateHelper.FORMAT_MMDDYYYY);
 					}
 					if(date != null){
@@ -169,10 +171,8 @@ public class SourceFile extends File{
 							this.setReportingPeriod(date);
 							break;
 						}
-
 					}
 				}
-
 			}
 		}
 	}

@@ -7,15 +7,10 @@ import org.slf4j.LoggerFactory;
 
 public class Data {
 	static Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);
-	private String data = null; //TODO: turn this into a generic Object
+	private String data = ""; //TODO: turn this into a generic Object
 	private Integer headerIndex = 0;
-	private String status = null;
-	private String statusMessage = null;
-	public static String STATUS_LOADED = "loaded";	
-	public static String STATUS_ERROR = "error";	
-	public static String STATUS_WARNING = "warning";
-	public static String STATUS_PASS = "pass";	
-	
+	private String status = "";
+	private String statusMessage = "";
 	
 	public Data() {
 		super();
@@ -81,11 +76,7 @@ public class Data {
 	}
 
 	public void print(){
-		if(this.status.equals(STATUS_PASS)){
-			logger.debug(" Data: {} Status: {}", this.getData(), this.getStatus());
-		}else{
 			logger.debug(" Data: {} Status: {}, ", this.getData(), this.getStatus(), this.getStatusMessage());
-		}
 	}
 	
 }

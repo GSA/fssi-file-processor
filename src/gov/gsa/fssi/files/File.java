@@ -87,7 +87,7 @@ public class File {
 	 * This Method sets fileNameParts based upon input file name.
 	 */
 	public void setFileNameParts(byte filePartSeparator) {
-		ArrayList<String> fileNameParts = new ArrayList<String>();
+		ArrayList<String> newfileNameParts = new ArrayList<String>();
 		
 		if(fileName == null || fileName.isEmpty()){
 			logger.warn("FileName was empty or null, unable to set FileNameParts");
@@ -100,18 +100,17 @@ public class File {
 				logger.debug("fileNameWithoutExtension: {}", fileNameWithoutExtension);
 				if(fileNameWithoutExtension.contains("_")){
 					logger.debug("Adding File Part: '{}'", fileNameWithoutExtension.substring(0, fileNameWithoutExtension.indexOf("_")));
-					fileNameParts.add(fileName.substring(0, fileNameWithoutExtension.indexOf("_")));
+					newfileNameParts.add(fileNameWithoutExtension.substring(0, fileNameWithoutExtension.indexOf("_")));
 					fileNameWithoutExtension = fileNameWithoutExtension.substring(fileNameWithoutExtension.indexOf("_")+1,fileNameWithoutExtension.length());	
 				}else{
 					logger.debug("Adding File Part: '{}'", fileNameWithoutExtension);
-					fileNameParts.add(fileNameWithoutExtension);
+					newfileNameParts.add(fileNameWithoutExtension);
 					loopQuit = true;
 				}	
 			}
-			logger.info("FileName '{}' had the following filename parts: {}", fileName, fileNameParts);
+			this.setFileNameParts(newfileNameParts);
+			logger.info("FileName '{}' had the following filename parts: {}", fileName, newfileNameParts);
 		}
-		
-		this.setFileNameParts(fileNameParts);
 	}	
 
 	private String fileName = null;
@@ -213,9 +212,12 @@ public class File {
 	public static final String FILETYPE_XLSX = "xlsx";
 	public static final String FILETYPE_XLS = "xls";
 	public static final String FILETYPE_XML = "xml";
+	public static final String STATUS_FATAL = "fatal";
 	public static final String STATUS_ERROR = "error";
 	public static final String STATUS_WARNING = "warning";
 	public static final String STATUS_LOADED = "loaded";
 	public static final String STATUS_PASS = "pass";
+	public static final String STATUS_VALIDATED = "validated";
+	public static final String STATUS_EXPORTED = "exported";
 	public static final String STATUS_INITIALIZED = "initialized";
 }

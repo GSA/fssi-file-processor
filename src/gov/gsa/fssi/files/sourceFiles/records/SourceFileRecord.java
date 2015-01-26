@@ -17,11 +17,6 @@ public class SourceFileRecord {
 	private ArrayList<Data> datas = new ArrayList<Data>();	
 	private String status = null;
 	
-	public static String STATUS_LOADED = "loaded";		
-	public static String STATUS_ERROR = "error";	
-	public static String STATUS_WARNING = "warning";
-	public static String STATUS_PASS = "pass";		
-	
 	public ArrayList<Data> getDatas() {
 		return datas;
 	}

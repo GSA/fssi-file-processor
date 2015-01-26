@@ -51,7 +51,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 				sourceFile.incrementTotalRecords();
 				
 				SourceFileRecord thisRecord = new SourceFileRecord();
-				thisRecord.setRowIndex((int)csvRecord.getRecordNumber());
+				thisRecord.setRowIndex((int)csvRecord.getRecordNumber()+1);
 				//Ignoring null rows
 				if (csvRecord.size() > 1 && sourceFile.getHeaders().size() > 1){
 					Iterator<?> headerIterator = sourceFile.getHeaders().entrySet().iterator();
@@ -61,12 +61,12 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 						try {
 							data.setData(csvRecord.get(dataPairs.getValue().toString()).trim());
 							data.setHeaderIndex((Integer)dataPairs.getKey());
-							data.setStatus(Data.STATUS_LOADED);
+							data.setStatus(File.STATUS_LOADED);
 							thisRecord.addData(data);
 						} catch (IllegalArgumentException e) {
 							//logger.error("Failed to process record '{} - {}' in file '{}'", pairs.getKey().toString(), pairs.getValue().toString(), sourceFile.getFileName());
 							logger.error("{}", e.getMessage());
-							data.setStatus(Data.STATUS_ERROR);
+							data.setStatus(File.STATUS_ERROR);
 						}
 						
 					}
@@ -83,7 +83,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 					}
 					
 					if(emptyRowCheck == false){
-						thisRecord.setStatus(SourceFileRecord.STATUS_LOADED);
+						thisRecord.setStatus(File.STATUS_LOADED);
 						sourceFile.addRecord(thisRecord);
 					}else{
 						sourceFile.incrementTotalEmptyRecords();

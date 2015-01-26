@@ -58,13 +58,14 @@ public class FieldConstraint {
 	public static final String OPTION_LEVEL = "level";
 	
 	//List of Constraint Levels
+	public static final String LEVEL_FATAL = "fatal";
 	public static final String LEVEL_ERROR = "error";
 	public static final String LEVEL_WARNING = "warning";
 	public static final String LEVEL_DEBUG = "debug";
 	
-	private String type = null;
-	private String value = null;	
-	private String level = null;
+	private String type = "";
+	private String value = "";	
+	private String level = "";
 	private Date effectiveDate = null;
 	private HashMap<String, String> options = new HashMap<String, String>();
 	//TODO:Add support for option "IgnoreCase" that will ignore case during validation

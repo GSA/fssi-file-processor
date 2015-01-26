@@ -18,6 +18,7 @@
 			<alias>Ord_Num</alias>
 			<alias>Order_Num</alias>
 			<alias>Ord_Number</alias>
+			<alias>order_id</alias>
 		</field>
 		<field>
 			<name>ORDER_DATE</name>
@@ -53,8 +54,8 @@
 			<alias>Mfr_Part_No</alias>
 		</field>	
 		<field>
-			<name>CONTRACTOR_PART_NUMBER</name>
-			<title>Contractor's Part Number</title>
+			<name>SUPPLIER_PART_NUMBER</name>
+			<title>Suppliers Part Number</title>
 			<type>string</type>
 			<description>The part number or SKU assigned by the supplying Contractor, must match part number format submitted on approved product list </description>
 			<constraints>
@@ -64,7 +65,7 @@
 			<alias>Contractor_Part_No</alias>
 		</field>
 		<field>
-			<name>UPC_A</name>
+			<name>UPC_A_CODE</name>
 			<title>UPC_A</title>
 			<description>The 12 numerical digits found on a products barcode</description>
 			<type>string</type>
@@ -74,9 +75,10 @@
 				<minLength level="warning">12</minLength>
 			</constraints>
 			<alias>UPC-A</alias>
+			<alias>UPC_A</alias>
 		</field>											
 		<field>
-			<name>PRODUCT_DESCRIPTION</name>
+			<name>PROD_DESCR</name>
 			<title>Product Description</title>
 			<description>Description of product</description>
 			<type>string</type>
@@ -84,11 +86,31 @@
 				<required level="error">true</required>
 				<maxLength level="error">255</maxLength>
 			</constraints>
-			<alias>PROD_DESCR</alias>
 			<alias>product_descr</alias>
+		</field>
+		<field>
+			<name>PSC_CODE</name>
+			<title>Product and Supply Code</title>
+			<description>FPDS Product and Supply Code</description>
+			<type>string</type>
+			<alias>psc</alias>
 		</field>	
 		<field>
-			<name>PRODUCT_SUBCATEGORY</name>
+			<name>FSC_CODE</name>
+			<title>Federal Supply Code</title>
+			<description>Federal Supply Code</description>
+			<type>string</type>
+			<alias>fsc</alias>
+		</field>	
+		<field>
+			<name>UNSPSC_CODE</name>
+			<title>United Nations Standard Product and Service Code</title>
+			<description>United Nations Standard Product and Service Code</description>
+			<type>string</type>
+			<alias>unspsc</alias>
+		</field>									
+		<field>
+			<name>SOLUTION_SUBCATEGORY</name>
 			<title>MRO Subcategory</title>
 			<type>string</type>
 			<description>Identifies which subcategory the product falls into based on SIN awarded (Hardware; Tools and Tool Cabinets; Paints, Adhesives and Sealants)</description>
@@ -96,70 +118,91 @@
 				<required level="error">true</required>
 				<pattern level="warning">Hardware|HARDWARE|Tools and Tool Cabinets|TOOLS AND TOOL CABINETS|Paints|PAINTS|Adhesives and Sealants|ADHESIVES AND SEALANTS</pattern>
 			</constraints>
-			<alias>Subcategory</alias>
+			<alias>subcategory</alias>
+			<alias>sub_category</alias>
+			<alias>jansan_subcategory</alias>
 		</field>
 		<field>
-			<name>UNIT_OF_MEASURE</name>
-			<title>Unit of Measure</title>
+			<name>UOI</name>
+			<title>Unit of Issue</title>
 			<type>string</type>
 			<description>The physical measurement of quantity in which the item was sold (ex. each, box, carton, gallon) abbreviated in standard two character code.</description>
 			<constraints>
 				<required level="error">true</required>
 			</constraints>
-			<alias>UOI</alias>
-			<alias>UOM</alias>			
+			<alias>unit_of_measure</alias>
+			<alias>unit_of_issue</alias>
+			<alias>uom</alias>			
 		</field>					
 		<field>
-			<name>QUANTITY</name>
+			<name>QTY</name>
 			<title>Quantity</title>
 			<type>number</type>
 			<description>The number of units purchased</description>
 			<constraints>
 				<required level="error">true</required>
 			</constraints>
-			<alias>qty</alias>	
-		</field>	
+			<alias>quantity</alias>	
+		</field>			
 		<field>
-			<name>ITEMS_SOLD</name>
-			<title>Items Sold</title>
+			<name>UOI_QTY</name>
+			<title>Unit of Issue Quantity</title>
 			<type>number</type>
-			<description>Number of Items per Unit of Issue (UOI)</description>
-			<constraints>
-			</constraints>
+			<description>Unit of Issue Quantity (The physical measurement count of quantity in which the item was sold (ex. 100 per box, 12 per carton))</description>
 			<alias>Items_Sold</alias>	
 		</field>
 		<field>
 			<name>BPA_PRICE</name>
 			<title>Blanket Purchase Agreement Price</title>
 			<type>number</type>
-			<description>The price charged for a single unit. AKA Price Paid.</description>
+			<description>The price charged for a single unit</description>
 			<constraints>
 				<required level="error">true</required>
 			</constraints>
+			<alias>OS3_PRICE</alias>
 		</field>	
 		<field>
 			<name>BPA_EXTENDED_PRICE</name>
 			<title>Blanket Purchase Agreement Extended Price</title>
 			<description>Quantity of items sold multiplied by BPA price.</description>
 			<type>number</type>
-			<description>The price charged for a single unit. AKA Price Paid.</description>
 			<constraints>
 				<required level="error">true</required>
 			</constraints>
 			<alias>BPA_Ext_Price</alias>
-		</field>		
+			<alias>OS3_EXTENDED_PRICE</alias>
+		</field>	
+		<field>
+			<name>COMM_LIST_PRICE</name>
+			<title>Commercial List Price</title>
+			<description>Commercial List Price</description>
+			<type>number</type>
+			<alias>COMM_LIST_PRICE*</alias>
+		</field>
+		<field>
+			<name>PRICE_PAID</name>
+			<title>Price Paid</title>
+			<description>Price Paid</description>
+			<type>number</type>
+		</field>	
+		<field>
+			<name>PRICE_PAID_EXT</name>
+			<title>Price Paid Extended</title>
+			<description>Price Paid Extended</description>
+			<type>number</type>
+			<alias>price_paid_extended</alias>
+		</field>
 		<field>
 			<name>DEBIT_CREDIT_INDICATOR</name>
 			<title>Debit Credit Indicator</title>
 			<description>Identifies if the sales value was provided to the supplier (debit) or returned to the customer (credit).</description>
 			<type>number</type>
-			<description>The price charged for a single unit. AKA Price Paid.</description>
 			<constraints>
 				<required level="error">true</required>
-				<pattern level="error">(D|C|d|c)</pattern>
+				<pattern level="error">D|C</pattern>
 			</constraints>
 			<alias>Dbt_Crt_Ind</alias>
-		</field>
+		</field>														
 		<field>
 			<name>MAS_PRICE</name>
 			<title>Multiple Award Schedule Price</title>
@@ -178,19 +221,27 @@
 				<required level="error">true</required>
 			</constraints>
 			<alias>MAS_Ext_Price</alias>
-		</field>	
+		</field>
 		<field>
 			<name>DISCOUNT_AMOUNT</name>
 			<title>Discount Amount</title>
 			<description>The price charged for a single unit on MAS 51V</description>
 			<type>number</type>
-			<constraints>
-				<required level="error">true</required>
-			</constraints>
 			<alias>Disc_Amt</alias>
 		</field>	
 		<field>
-			<name>ORDERING_AGENCY_NAME</name>
+			<name>FMIS_AGENCY_CODE</name>
+			<title>Treasury Code</title>
+			<description>Treasury Code</description>
+			<type>string</type>
+			<constraints>
+				<required level="error" effectiveDate="2015-03-01">true</required>
+			</constraints>
+			<alias>FMIS_AGENCY_BUREAU_CODE</alias>
+			<alias>ORDERING_AGENCY_TREASURY_CODE</alias>
+		</field>			
+		<field>
+			<name>AGENCY_NAME</name>
 			<title>Ordering Agency Name</title>
 			<description>The purchasing Agency or Department.</description>
 			<type>string</type>
@@ -201,17 +252,38 @@
 			<alias>Cust_Agency</alias>
 		</field>	
 		<field>
-			<name>ORDERING_SUB_AGENCY_NAME</name>
-			<title>Ordering Sub Agency Name</title>
+			<name>SUB_AGENCY_NAME_1</name>
+			<title>Ordering Sub Agency Name 1</title>
 			<description>The purchasing Sub-Agency or Bureau.</description>
 			<type>string</type>
 			<constraints>
 				<maxLength>255</maxLength>
 			</constraints>
 			<alias>Sub_Agency</alias>
+			<alias>SUB_AGENCY_1</alias>
+		</field>
+		<field>
+			<name>SUB_AGENCY_NAME_2</name>
+			<title>Ordering Sub Agency Name 2</title>
+			<description>The purchasing Sub-Agency level 2.</description>
+			<type>string</type>
+			<constraints>
+				<maxLength>255</maxLength>
+			</constraints>
+			<alias>SUB_AGENCY_2</alias>
 		</field>	
 		<field>
-			<name>MARKET_BASKET_FLAG</name>
+			<name>SUB_AGENCY_NAME_3</name>
+			<title>Ordering Sub Agency Name 3</title>
+			<description>The purchasing Sub-Agency level 3.</description>
+			<type>string</type>
+			<constraints>
+				<maxLength>255</maxLength>
+			</constraints>
+			<alias>SUB_AGENCY_3</alias>
+		</field>						
+		<field>
+			<name>MKT_BASKET_IND</name>
 			<title>Market Basket Flag</title>
 			<description>Identifies if the item is a part of the market basket</description>
 			<type>string</type>
@@ -220,6 +292,7 @@
 				<pattern>Yes|No</pattern>
 			</constraints>
 			<alias>Mkt_Basket_Flag</alias>
+			<alias>REFERENCE_ID</alias>
 		</field>			
 		<field>
 			<name>ABILITY_ONE_FLAG</name>
@@ -231,18 +304,7 @@
 				<pattern>Yes|No</pattern>
 			</constraints>
 			<alias>AbilityOne_Flag</alias>
-		</field>			
-		<field>
-			<name>BERRY_AMENDMENT_FLAG</name>
-			<title>Berry Amendment Flag</title>
-			<description>Identifies if the item was produced by an Berry Amendment manufacturer.</description>
-			<type>string</type>
-			<constraints>
-				<required level="error">true</required>
-				<pattern>Yes|No</pattern>
-			</constraints>
-			<alias>Berry_Amend_Flag</alias>
-		</field>			
+		</field>
 		<field>
 			<name>CPG_INDICATOR</name>
 			<title>Comprehensive Procurement Guideline Identifier</title>
@@ -253,9 +315,10 @@
 				<pattern>Yes|No</pattern>
 			</constraints>
 			<alias>CPG_ind</alias>
-		</field>		
+			<alias>CPGIND</alias>
+		</field>	
 		<field>
-			<name>BIOPREFERRED_INDICATOR</name>
+			<name>BIOPREFERRED_IND</name>
 			<title>Bio Preferred Indicator</title>
 			<description>Identifies if the item is a Bio-Preferred Product. </description>
 			<type>string</type>
@@ -264,9 +327,22 @@
 				<pattern>Yes|No</pattern>
 			</constraints>
 			<alias>BioPreferred_Ind</alias>
-		</field>			
+		</field>							
 		<field>
-			<name>ENERGYSTAR_INDICATOR</name>
+			<name>BERRY_AMENDMENT_IND</name>
+			<title>Berry Amendment Flag</title>
+			<description>Identifies if the item was produced by an Berry Amendment manufacturer.</description>
+			<type>string</type>
+			<constraints>
+				<required level="error">true</required>
+				<pattern>Yes|No</pattern>
+			</constraints>
+			<alias>Berry_Amend_Flag</alias>
+			<alias>berryamend_flag</alias>
+			<alias>BERRY_AMENDMENT_FLAG</alias>
+		</field>							
+		<field>
+			<name>ENERGYSTAR_IND</name>
 			<title>Energy Star Indicator</title>
 			<description>Identifies if the item is an EnergyStar Product.</description>
 			<type>string</type>
@@ -277,7 +353,7 @@
 			<alias>ENERGYSTAR_Ind</alias>
 		</field>			
 		<field>
-			<name>WATERSENSE_INDICATOR</name>
+			<name>WATERSENSE_IND</name>
 			<title>WaterSense Indicator</title>
 			<description>Identifies if the item is a WaterSense Product.</description>
 			<type>string</type>
@@ -285,10 +361,16 @@
 				<required level="error">true</required>
 				<pattern>Yes|No</pattern>
 			</constraints>
-			<alias>WaterSense_Ind</alias>
-		</field>			
+			<alias>WaterSense_Indicator</alias>
+		</field>	
 		<field>
-			<name>SALES_CHANNEL</name>
+			<name>REMANUFACTURED_IND</name>
+			<title>WaterSense Indicator</title>
+			<description>Identifies if the item is a WaterSense Product.</description>
+			<type>string</type>
+		</field>						
+		<field>
+			<name>SALES_CH</name>
 			<title>Sales Channel</title>
 			<description>Phone, Fax, E-mail, GSA Advantage, e-Buy, DoD EMALL, Vendor Portal, Walk-in Store.</description>
 			<type>string</type>
@@ -296,10 +378,10 @@
 				<required level="error">true</required>
 				<pattern level="error">Phone|Fax|E-mail|GSA Advantage|e-Buy|DoD EMALL|Vendor Portal|Walk-in Store|Other</pattern>
 			</constraints>
-			<alias>Sales_Ch</alias>
+			<alias>Sales_Channel</alias>
 		</field>			
 		<field>
-			<name>PAYMENT_METHOD</name>
+			<name>PAY_METHOD</name>
 			<title>Payment Method</title>
 			<description>Purchase card, purchase order, etc.</description>
 			<type>string</type>
@@ -307,8 +389,15 @@
 				<required level="error">true</required>
 				<pattern level="error">Government SmartPay Card|Employee Credit Card|AAC/DODAAC|EFT|Check|Other</pattern>
 			</constraints>
-			<alias>Pay_Method</alias>
-		</field>			
+			<alias>Payment_Method</alias>
+		</field>		
+		<field>
+			<name>PAY_DATE</name>
+			<title>Payment Date</title>
+			<description>Date of Payment</description>
+			<format>yyyy-MM-dd</format>
+			<type>date</type>
+		</field>				
 		<field>
 			<name>DELIVERY_METHOD</name>
 			<title>Delivery Method</title>
@@ -321,11 +410,12 @@
 			<alias>Dlvry_Method</alias>
 		</field>		
 		<field>
-			<name>SHIPPING_WEIGHT</name>
+			<name>SHIP_WEIGHT</name>
 			<title>Shipping Weight</title>
 			<description>Weight of shipment in pounds.</description>
 			<type>number</type>
-			<alias>Ship_Wt</alias>
+			<alias>shipping_weight</alias>
+			<alias>SHIP_WT</alias>
 		</field>					
 		<field>
 			<!-- TODO: if($Dlvry_Method/is("International"),notEmpty,length(5,10)) notEmpty @ignoreCase-->
@@ -337,7 +427,8 @@
 				<!-- <pattern>^\d{5}(?:[-\s]\d{4})?$</pattern> -->
 				<required level="error">true</required>
 			</constraints>
-			<alias>To_Zip_Code</alias>
+			<alias>To_Zip</alias>
+			<alias>RECEIVING_OFFICE_ZIP</alias>
 		</field>		
 		<field>
 			<!-- TODO: if($Dlvry_Method/is("International"),notEmpty,length(5,10)) notEmpty @ignoreCase-->
@@ -349,56 +440,82 @@
 				<!-- <pattern>^\d{5}(?:[-\s]\d{4})?$</pattern> -->
 				<required level="error">true</required>
 			</constraints>
-			<alias>From_Zip_Code</alias>
+			<alias>From_Zip</alias>
 		</field>				
 		<field>
-			<name>FREIGHT_CHARGE</name>
+			<name>FRGT_CHARGE</name>
 			<title>Freight Charge</title>
 			<description>Shipping cost of expedited or overnight shipping - FOB Destination.</description>
 			<type>number</type>
-			<alias>Frgt_Charge</alias>
+			<alias>Freight_Charge</alias>
 		</field>
 		<field>
-			<name>SUPPLIMENTAL_FEES</name>
+			<name>SUPPL_FEE</name>
 			<title>Supplimental Fees</title>
 			<description>Supplemental fees charged (e.g., processing orders below the minimum, etc.)  </description>
 			<type>number</type>
-			<alias>Suppl_Fee</alias>
+			<alias>SUPPLEMENTAL_FEES</alias>
+			<alias>SUPL_FEE</alias>
 		</field>							
 		<field>
-			<name>FULFILLMENT_DATE</name>
+			<name>FULLFILL_DATE</name>
 			<title>FulFillment Date</title>
-			<description>The date when product in the order was delivered to the recipient.</description>
+			<format>yyyy-MM-dd</format>
+			<description>The date when product in the order was fulfilled</description>
 			<type>date</type>
+			<alias>FULLFILLMENT_DATE</alias>
 			<alias>Fulfill_Date</alias>
 		</field>			
 		<field>
-			<name>CONTRACTOR_NAME</name>
-			<title>Contractor Name</title>
-			<description>Name of the BPA holder fulfilling the order.</description>
-			<type>date</type>
+			<name>SUPPLIER_NAME</name>
+			<title>Vendor Name</title>
+			<description>Name of the contract holder fulfilling the order.</description>
+			<type>any</type>
 			<constraints>
-				<required>true</required>
+				<required level="error">true</required>
 			</constraints>
 			<alias>Contr_Name</alias>
+			<alias>VENDOR_NAME</alias>
 		</field>		
 		<field>
-			<name>CONTRACT_NUMBER</name>
+			<name>FSSI_CONTRACT_NO</name>
 			<title>Contract Number</title>
-			<description>BPA Contract number the purchase was made under.</description>
-			<type>date</type>
+			<description>Contract number the purchase was made under.</description>
+			<type>string</type>
 			<constraints>
 				<required>true</required>
 				<maxLength>10</maxLength>
 				<minLength>10</minLength>
 			</constraints>
 			<alias>Contr_No</alias>
-		</field>																									
+			<alias>contract_number</alias>
+			<alias>BPA_NUMBER</alias>
+		</field>	
+		<field>
+			<name>TRANSACTION_NO</name>
+			<title>Transaction Number</title>
+			<description>Transaction Number</description>
+			<type>string</type>
+			<alias>transaction_number</alias>
+		</field>	
+		<field>
+			<name>MAJCOM</name>
+			<title>Major Command</title>
+			<description>Major Command</description>
+			<type>string</type>
+		</field>																																
 		<field>
 			<name>DODAAC</name>
 			<title>DoDAAC</title>
 			<description>Department of Defense Activity Address Code</description>
 			<alias>AAC</alias>
-		</field>		
+		</field>
+		<field>
+			<name>DUNS_NO</name>
+			<title>DUNS Number</title>
+			<description>Duns and Bradstreet Universal Numbering System Number</description>
+			<type>number</type>
+			<alias>DUNS_NUMBER</alias>
+		</field>						
 	</fields>	
 </schema>

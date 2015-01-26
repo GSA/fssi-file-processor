@@ -45,7 +45,7 @@ public class SourceFileValidator{
 								//if(data.getStatus() == null || !data.getStatus().equals(FieldConstraint.LEVEL_ERROR)){
 									ConstraintValidationContext context = new ConstraintValidationContext();
 									context.validateConstraint(field, constraint, data); //Validate Constraint	
-									if(data.getStatus().equals(FieldConstraint.LEVEL_ERROR) ||data.getStatus().equals(FieldConstraint.LEVEL_WARNING)){
+									if(data.getStatus().equals(FieldConstraint.LEVEL_ERROR) || data.getStatus().equals(FieldConstraint.LEVEL_WARNING)){
 										logger.debug("Row {} - Field '{}' validation {}: '{}' = {}, Value = '{}'", sourceFileRecord.getRowIndex(), field.getName(), constraint.getLevel().toUpperCase(), constraint.getType(), constraint.getValue(), data.getData());	
 									}
 								//}

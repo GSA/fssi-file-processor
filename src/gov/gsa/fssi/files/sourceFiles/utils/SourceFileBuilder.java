@@ -6,7 +6,6 @@ import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
-import gov.gsa.fssi.helpers.FileHelper;
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
