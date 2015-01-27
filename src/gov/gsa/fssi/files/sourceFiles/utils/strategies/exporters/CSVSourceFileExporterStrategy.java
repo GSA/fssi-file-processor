@@ -49,7 +49,7 @@ public class CSVSourceFileExporterStrategy implements SourceFileExporterStrategy
 		    
 			List<String> csvHeaders = new ArrayList<String>();
 			//Writing Headers
-			Map<Integer,String> headerMap = sourceFile.getHeaders(); 	
+			Map<Integer,String> headerMap = sourceFile.getSourceHeaders(); 	
 			Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
 			while (headerMapIterator.hasNext()) {
 				Map.Entry pairs = (Map.Entry)headerMapIterator.next();
@@ -63,7 +63,7 @@ public class CSVSourceFileExporterStrategy implements SourceFileExporterStrategy
 		    //Writing Data
 			for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
 				List<String> csvRecord = new ArrayList<String>();
-				for(int i = 0;i < sourceFile.getHeaders().size();i++){
+				for(int i = 0;i < sourceFile.getSourceHeaders().size();i++){
 					if(sourceFileRecord.getDataByHeaderIndex(i)!= null && sourceFileRecord.getDataByHeaderIndex(i).getData() != null){
 						//sourceFileRecord.print();
 						csvRecord.add(sourceFileRecord.getDataByHeaderIndex(i).getData());						

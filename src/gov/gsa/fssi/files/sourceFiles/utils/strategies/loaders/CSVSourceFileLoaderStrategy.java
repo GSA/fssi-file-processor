@@ -42,7 +42,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 			Iterator<?> parserHeaderMapIterator = parserHeaderMap.entrySet().iterator();
 			while (parserHeaderMapIterator.hasNext()) {
 				Map.Entry pairs = (Map.Entry)parserHeaderMapIterator.next();
-				sourceFile.addHeader((Integer)pairs.getValue(), pairs.getKey().toString());
+				sourceFile.addSourceHeader((Integer)pairs.getValue(), pairs.getKey().toString());
 			}
 			
 			//logger.info("{}",parser.getHeaderMap());
@@ -53,8 +53,8 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 				SourceFileRecord thisRecord = new SourceFileRecord();
 				thisRecord.setRowIndex((int)csvRecord.getRecordNumber()+1);
 				//Ignoring null rows
-				if (csvRecord.size() > 1 && sourceFile.getHeaders().size() > 1){
-					Iterator<?> headerIterator = sourceFile.getHeaders().entrySet().iterator();
+				if (csvRecord.size() > 1 && sourceFile.getSourceHeaders().size() > 1){
+					Iterator<?> headerIterator = sourceFile.getSourceHeaders().entrySet().iterator();
 					while (headerIterator.hasNext()) {
 						Map.Entry dataPairs = (Map.Entry)headerIterator.next();
 						Data data = new Data();

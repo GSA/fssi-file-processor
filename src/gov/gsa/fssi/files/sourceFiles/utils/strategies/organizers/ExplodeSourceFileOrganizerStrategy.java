@@ -54,7 +54,7 @@ public class ExplodeSourceFileOrganizerStrategy implements SourceFileOrganizerSt
 		//logger.debug("{}", this.getHeaders());
 		//logger.debug("{}", newHeader);
 		//Now we iterate through the existing header and add any additional fields as well as create our "Translation Map"
-		Map<Integer, String> thisHeader = sourceFile.getHeaders();
+		Map<Integer, String> thisHeader = sourceFile.getSourceHeaders();
 		//The headerTranslationMap object translates the old headerIndex, to the new header index.
 		//Key = Old Index, Value = New Index
 		HashMap<Integer, Integer> headerTranslationMap = new HashMap<Integer, Integer>();
@@ -84,9 +84,9 @@ public class ExplodeSourceFileOrganizerStrategy implements SourceFileOrganizerSt
 		}               
 	
 		//Now we reset the HeaderIndex's in the data object
-		logger.info("Old Header:{}", sourceFile.getHeaders());
-		sourceFile.setHeaders(newHeader);
-		logger.debug("New Header: {}", sourceFile.getHeaders());
+		logger.info("Old Header:{}", sourceFile.getSourceHeaders());
+		sourceFile.setSourceHeaders(newHeader);
+		logger.debug("New Header: {}", sourceFile.getSourceHeaders());
 		logger.debug("Header Translation (Old/New): {}", headerTranslationMap);
 		for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
 			//sourceFileRecord.print();
@@ -96,7 +96,7 @@ public class ExplodeSourceFileOrganizerStrategy implements SourceFileOrganizerSt
 			//sourceFileRecord.print();
 			
 			//Now we fill in the blanks
-			Iterator<?> sourceFileHeaderIterator2 = sourceFile.getHeaders().entrySet().iterator();
+			Iterator<?> sourceFileHeaderIterator2 = sourceFile.getSourceHeaders().entrySet().iterator();
 			while (sourceFileHeaderIterator2.hasNext()){
 				Map.Entry<Integer, String> newHeaderPairs = (Map.Entry)sourceFileHeaderIterator2.next();
 				Data data = sourceFileRecord.getDataByHeaderIndex(newHeaderPairs.getKey());
@@ -113,13 +113,13 @@ public class ExplodeSourceFileOrganizerStrategy implements SourceFileOrganizerSt
 	public void updateFieldNamesToMatchSchema(SourceFile sourceFile){
 		if(sourceFile.getSchema() != null){
 			logger.info("Atempting to map field names from Schema {} to File {}", sourceFile.getSchema().getName(), sourceFile.getFileName());
-			Map<Integer, String> thisHeader = sourceFile.getHeaders();
+			Map<Integer, String> thisHeader = sourceFile.getSourceHeaders();
 			//HashMap<Integer, String> newHeader = new HashMap<Integer, String>();
 			Iterator<?> thisHeaderIterator = thisHeader.entrySet().iterator();
 			while (thisHeaderIterator.hasNext()) {
 				Map.Entry<Integer, String> thisHeaderPairs = (Map.Entry<Integer, String>)thisHeaderIterator.next();
 				String sourceFileFieldName = thisHeaderPairs.getValue().toString().trim().toUpperCase();
-				sourceFile.addHeader((Integer)thisHeaderPairs.getKey(), (sourceFile.getSchema().getFieldAndAliasNames().contains(sourceFileFieldName))? sourceFile.getSchema().getFieldName(sourceFileFieldName): sourceFileFieldName);
+				sourceFile.addSourceHeader((Integer)thisHeaderPairs.getKey(), (sourceFile.getSchema().getFieldAndAliasNames().contains(sourceFileFieldName))? sourceFile.getSchema().getFieldName(sourceFileFieldName): sourceFileFieldName);
 			}
 			logger.info("Headers have been updated");	
 		}else{

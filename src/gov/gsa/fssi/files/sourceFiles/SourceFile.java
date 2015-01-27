@@ -4,9 +4,7 @@ import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.File;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.schemas.Schema;
-import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
-import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import gov.gsa.fssi.files.sourceFiles.utils.SourceFileValidator;
 import gov.gsa.fssi.files.sourceFiles.utils.contexts.SourceFileExporterContext;
 import gov.gsa.fssi.files.sourceFiles.utils.contexts.SourceFileLoaderContext;
@@ -21,7 +19,6 @@ import gov.gsa.fssi.helpers.DateHelper;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -46,7 +43,18 @@ public class SourceFile extends File{
 	private Integer totalProcessedRecords = 0;
 	private Integer totalNullRecords = 0;
 	private Integer totalEmptyRecords = 0;
-	private Map<Integer, String> headers = new HashMap<Integer, String>();
+	private Integer totalFatalRecords = 0;
+	private Integer totalErrorRecords = 0;
+	private Integer totalWarningRecords = 0;
+	/**
+	 * SourceHeaders are the input headers that we received from the source files
+	 * Once the file is loaded, this is used for posterities sake for logging
+	 */
+	private Map<Integer, String> sourceHeaders = new HashMap<Integer, String>();
+	/**
+	 * Once organization has ocurred, this header consists of all new header naming for exporting.
+	 */
+	private Map<Integer, String> headers = new HashMap<Integer, String>();	
 	private ArrayList<SourceFileRecord> records = new ArrayList<SourceFileRecord>();
 	
 	/**
@@ -121,6 +129,60 @@ public class SourceFile extends File{
 	public void incrementTotalEmptyRecords() {
 		this.totalEmptyRecords ++;
 	}	
+	/**
+	 * @return
+	 */
+	public Integer getTotalFatalRecords() {
+		return totalFatalRecords;
+	}
+	/**
+	 * @param totalFatalRecords
+	 */
+	public void setTotalFatalRecords(Integer totalFatalRecords) {
+		this.totalFatalRecords = totalFatalRecords;
+	}
+	/**
+	 * 
+	 */
+	public void incrementTotalFatalRecords(){
+		this.totalFatalRecords ++;
+	}
+	/**
+	 * @return
+	 */
+	public Integer getTotalErrorRecords() {
+		return totalErrorRecords;
+	}
+	/**
+	 * @param totalErrorRecords
+	 */
+	public void setTotalErrorRecords(Integer totalErrorRecords) {
+		this.totalErrorRecords = totalErrorRecords;
+	}
+	/**
+	 * 
+	 */
+	public void incrementTotalErrorlRecords(){
+		this.totalErrorRecords ++;
+	}
+	/**
+	 * @return
+	 */
+	public Integer getTotalWarningRecords() {
+		return totalWarningRecords;
+	}
+	/**
+	 * @param totalWarningRecords
+	 */
+	public void setTotalWarningRecords(Integer totalWarningRecords) {
+		this.totalWarningRecords = totalWarningRecords;
+	}
+	/**
+	 * 
+	 */
+	public void incrementTotalWarningRecords(){
+		this.totalWarningRecords ++;
+	}
 	/**
 	 * @return the reportingPeriod
 	 */
@@ -203,6 +265,33 @@ public class SourceFile extends File{
 	/**
 	 * @return the headers
 	 */
+	public Map<Integer, String> getSourceHeaders() {
+		return sourceHeaders;
+	}
+	/**
+	 * @param map the headers to set
+	 */
+	public void setSourceHeaders(Map<Integer, String> map) {
+		this.sourceHeaders = map;
+	}
+	/**
+	 * @param map the headers to set
+	 */
+	public void addSourceHeader(Integer key, String value) {
+		this.sourceHeaders.put(key, value);
+	}
+	/**
+	 * @param map the headers to set
+	 */
+	public void removeSourceHeader(String key) {
+		this.sourceHeaders.remove(key);
+	}
+	
+
+	
+	/**
+	 * @return the headers
+	 */
 	public Map<Integer, String> getHeaders() {
 		return headers;
 	}
@@ -223,7 +312,11 @@ public class SourceFile extends File{
 	 */
 	public void removeHeader(String key) {
 		this.headers.remove(key);
-	}
+	}	
+	
+	
+	
+	
 	/**
 	 * @return the records
 	 */
@@ -287,7 +380,7 @@ public class SourceFile extends File{
 			schemaString = this.schema.getName();
 		}		
 		
-		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoadStatusLevel(), this.getHeaders().size(), providerString, schemaString);
+		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoadStatusLevel(), this.getSourceHeaders().size(), providerString, schemaString);
 	}
 	
 	/**
@@ -304,7 +397,7 @@ public class SourceFile extends File{
 			schemaString = this.schema.getName();
 		}		
 		
-		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoadStatusLevel(), this.getHeaders().size(), providerString, schemaString);
+		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoadStatusLevel(), this.getSourceHeaders().size(), providerString, schemaString);
 		printRecords();	
 	}
 	/**

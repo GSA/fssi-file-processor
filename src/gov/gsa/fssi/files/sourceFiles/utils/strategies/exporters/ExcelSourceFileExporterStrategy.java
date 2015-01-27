@@ -49,9 +49,9 @@ public class ExcelSourceFileExporterStrategy implements SourceFileExporterStrate
 		//creating header row
 		r = s.createRow(0);
 
-		for(int i=0; i < sourceFile.getHeaders().size();i++){
+		for(int i=0; i < sourceFile.getSourceHeaders().size();i++){
 			c = r.createCell(i);
-			c.setCellValue(sourceFile.getHeaders().get(i));
+			c.setCellValue(sourceFile.getSourceHeaders().get(i));
 		}
 		
 		int counter = 0;
