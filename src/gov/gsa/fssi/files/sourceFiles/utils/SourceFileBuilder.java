@@ -6,7 +6,11 @@ import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
+
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,17 +58,21 @@ public class SourceFileBuilder {
     	}
 
 		//Load File
-		if (!sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR)){
+		if (!sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR) && !sourceFile.getStatusLevel().equals(SourceFile.STATUS_FATAL)){
 		    logger.info("Loading SourceFile '{}'", sourceFile.getFileName());	
 		    sourceFile.load();
 		    logger.info("Completed loading SourceFile '{}'", sourceFile.getFileName());	
 		}
+	
 		
 		//Organize file based upon schema
 		if (!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR) && sourceFile.getSchema() != null && sourceFile.getRecords() != null){
-		    logger.info("Processing SourceFile '{}'", sourceFile.getFileName());	
+		    logger.info("Mapping SourceFile '{}' fields to Schema '{}'", sourceFile.getFileName(), sourceFile.getSchema().getName());	
+		    mapSourceFileFieldsToSchema(sourceFile);
+		    logger.info("Completed Mapping");	
+		    logger.info("Organizing SourceFile '{}'", sourceFile.getFileName());	
 			sourceFile.organize();
-		    logger.info("Completed Processing SourceFile '{}'", sourceFile.getFileName());	
+		    logger.info("Completed Organizing SourceFile '{}'", sourceFile.getFileName());	
 		}
 		
 		//Validate file based upon schema
@@ -201,6 +209,40 @@ public class SourceFileBuilder {
     	}
 	}
 	
+	
+	/**
+	 * This method takes a populated sourcefile and maps the fields to the schema header indexes
+	 * This allows us to easily organize and validate.
+	 * 
+	 * This method should only be called if the sourceFile has been loaded or at least has headers
+	 * @param sourceFile
+	 */
+	public void mapSourceFileFieldsToSchema(SourceFile sourceFile){
+		if(sourceFile.getSourceHeaders() != null || sourceFile.getSchema() != null){
+			logger.info("Atempting to map field names from File '{}' to Schema '{}'", sourceFile.getFileName(), sourceFile.getSchema().getName());
+			for(SchemaField field: sourceFile.getSchema().getFields()){
+				ArrayList<String> aliasNames = new ArrayList<String>();//getting array list of field name and alias
+				aliasNames.add(field.getName()); //Adding Field Name
+				aliasNames.addAll(field.getAlias()); //Adding all of its aliases
+				Iterator<?> thisHeaderIterator =  sourceFile.getSourceHeaders().entrySet().iterator();
+				while (thisHeaderIterator.hasNext()) {
+					Map.Entry<Integer, String> thisHeaderPairs = (Map.Entry<Integer, String>)thisHeaderIterator.next();
+					if(aliasNames.contains(thisHeaderPairs.getValue())){
+						logger.info("Matched sourcFile field '{} - {}' with Schema field '{}'",thisHeaderPairs.getKey(),  thisHeaderPairs.getValue(), field.getName());
+						field.setHeaderIndex(thisHeaderPairs.getKey());
+					}
+				}
+			}
+			if(logger.isDebugEnabled()){
+				logger.debug("Printing Fields:");
+				for(SchemaField field: sourceFile.getSchema().getFields()){
+					logger.debug("FieldName: '{}' headerIndex: '{}'", field.getName(), field.getHeaderIndex());
+				}			
+			}
+		}else{
+			logger.info("No schema or header found was found for file {}. Will not Map header indexes to schema fields",  sourceFile.getFileName());
+		}
+	}
 	
 	
 	

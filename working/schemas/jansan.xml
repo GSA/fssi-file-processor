@@ -331,6 +331,7 @@
 				<pattern>Yes|No</pattern>
 			</constraints>
 			<alias>BioPreferred_Ind</alias>
+			<alias>BIO_PREFERRED_INDICATOR</alias>
 		</field>							
 		<field>
 			<name>BERRY_AMENDMENT_IND</name>
@@ -421,6 +422,7 @@
 			<type>number</type>
 			<alias>shipping_weight</alias>
 			<alias>SHIP_WT</alias>
+			<alias>SHIPMENT_WEIGHT</alias>
 		</field>					
 		<field>
 			<!-- TODO: if($Dlvry_Method/is("International"),notEmpty,length(5,10)) notEmpty @ignoreCase-->
@@ -461,15 +463,17 @@
 			<type>number</type>
 			<alias>SUPPLEMENTAL_FEES</alias>
 			<alias>SUPL_FEE</alias>
+			<alias>SUPPLY_FEE</alias>
 		</field>							
 		<field>
-			<name>FULLFILL_DATE</name>
+			<name>FULFILL_DATE</name>
 			<title>FulFillment Date</title>
 			<format>yyyy-MM-dd</format>
 			<description>The date when product in the order was fulfilled</description>
 			<type>date</type>
 			<alias>FULLFILLMENT_DATE</alias>
-			<alias>Fulfill_Date</alias>
+			<alias>Fullfill_Date</alias>
+			<alias>FULFILLMENT_DATE</alias>
 		</field>			
 		<field>
 			<name>SUPPLIER_NAME</name>

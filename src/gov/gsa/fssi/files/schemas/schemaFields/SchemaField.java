@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 public class SchemaField {
 	static Logger logger = LoggerFactory.getLogger(SchemaField.class);
 	
-	private int headerIndex = 0;
+	private int headerIndex = -1;
 	private String name = null;
 	private String title = null;	
 	private String type = null;		
@@ -222,7 +222,7 @@ public class SchemaField {
 	 * Print Field
 	 */
 	public void print() {
-		logger.debug("     Field Name:'{}' Title:'{}' Type:'{}' Description:'{}' Format:'{}' Alias:{}}",  this.getName(), this.getTitle(), this.getType(), this.getDescription(), this.getFormat(), this.getAlias());
+		logger.debug("     Field Name:'{}' HeaderIndex: '{}' Title:'{}' Type:'{}' Description:'{}' Format:'{}' Alias:{}}",  this.getName(), this.getHeaderIndex(), this.getTitle(), this.getType(), this.getDescription(), this.getFormat(), this.getAlias());
 		printConstraints();
 	}
 	

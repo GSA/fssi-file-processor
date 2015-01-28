@@ -51,10 +51,6 @@ public class SourceFile extends File{
 	 * Once the file is loaded, this is used for posterities sake for logging
 	 */
 	private Map<Integer, String> sourceHeaders = new HashMap<Integer, String>();
-	/**
-	 * Once organization has ocurred, this header consists of all new header naming for exporting.
-	 */
-	private Map<Integer, String> headers = new HashMap<Integer, String>();	
 	private ArrayList<SourceFileRecord> records = new ArrayList<SourceFileRecord>();
 	
 	/**
@@ -286,37 +282,6 @@ public class SourceFile extends File{
 	public void removeSourceHeader(String key) {
 		this.sourceHeaders.remove(key);
 	}
-	
-
-	
-	/**
-	 * @return the headers
-	 */
-	public Map<Integer, String> getHeaders() {
-		return headers;
-	}
-	/**
-	 * @param map the headers to set
-	 */
-	public void setHeaders(Map<Integer, String> map) {
-		this.headers = map;
-	}
-	/**
-	 * @param map the headers to set
-	 */
-	public void addHeader(Integer key, String value) {
-		this.headers.put(key, value);
-	}
-	/**
-	 * @param map the headers to set
-	 */
-	public void removeHeader(String key) {
-		this.headers.remove(key);
-	}	
-	
-	
-	
-	
 	/**
 	 * @return the records
 	 */
