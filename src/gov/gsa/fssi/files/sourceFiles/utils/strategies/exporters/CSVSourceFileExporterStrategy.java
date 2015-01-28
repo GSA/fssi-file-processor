@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
+import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.utils.strategies.SourceFileExporterStrategy;
@@ -52,8 +53,16 @@ public class CSVSourceFileExporterStrategy implements SourceFileExporterStrategy
 			Map<Integer,String> headerMap = sourceFile.getSourceHeaders(); 	
 			Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
 			while (headerMapIterator.hasNext()) {
-				Map.Entry pairs = (Map.Entry)headerMapIterator.next();
-				csvHeaders.add(pairs.getValue().toString());
+				String fieldName = null;
+				Map.Entry<Integer,String> headerMapIteratorPairs = (Map.Entry)headerMapIterator.next();
+				//getting correct header name from Schema 
+				for(SchemaField field:sourceFile.getSchema().getFields()){
+					if(field.getHeaderIndex() == headerMapIteratorPairs.getKey()){
+						logger.info("Using Schema name '{}' for field '{}'", field.getName(), headerMapIteratorPairs.getValue().toString());
+						fieldName = field.getName();
+					}
+				}
+				csvHeaders.add((fieldName == null? headerMapIteratorPairs.getValue().toString(): fieldName));
 			}
 		    
 		    

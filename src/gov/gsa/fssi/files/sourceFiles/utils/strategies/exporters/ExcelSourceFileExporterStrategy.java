@@ -1,6 +1,7 @@
 package gov.gsa.fssi.files.sourceFiles.utils.strategies.exporters;
 
 import gov.gsa.fssi.config.Config;
+import gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
 import gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
@@ -10,6 +11,8 @@ import gov.gsa.fssi.helpers.FileHelper;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -48,11 +51,23 @@ public class ExcelSourceFileExporterStrategy implements SourceFileExporterStrate
 
 		//creating header row
 		r = s.createRow(0);
-
-		for(int i=0; i < sourceFile.getSourceHeaders().size();i++){
-			c = r.createCell(i);
-			c.setCellValue(sourceFile.getSourceHeaders().get(i));
-		}
+		Map<Integer,String> headerMap = sourceFile.getSourceHeaders(); 	
+		Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
+		while (headerMapIterator.hasNext()) {
+			String fieldName = null;
+			Map.Entry<Integer,String> headerMapIteratorPairs = (Map.Entry)headerMapIterator.next();
+			c = r.createCell(headerMapIteratorPairs.getKey());
+			//getting correct header name from Schema 
+			for(SchemaField field:sourceFile.getSchema().getFields()){
+				if(field.getHeaderIndex() == headerMapIteratorPairs.getKey()){
+					logger.info("Using Schema name '{}' for field '{}'", field.getName(), headerMapIteratorPairs.getValue().toString());
+					fieldName = field.getName();
+				}
+			}
+			c.setCellValue((fieldName == null? headerMapIteratorPairs.getValue().toString(): fieldName));
+		}		
+		
+		
 		
 		int counter = 0;
 		
