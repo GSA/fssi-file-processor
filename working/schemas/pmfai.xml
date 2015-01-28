@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema>
+	<name>PM_FAI</name>
+	<provider>PM</provider>
+	<version>1.0</version>
+	<title>Print Management Functional Area I</title>
+	<fields>
+		<field>
+			<name>BPA_NUMBER</name>
+			<title>BPA Number</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+			</constraints>
+			<alias>BPA Number                                    (Select from Drop Down List)</alias>
+			<alias>BPA_No</alias>
+		</field>
+		<field>
+			<name>TASK_ORDER_NUMBER</name>
+			<title>Task Order Number</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+			</constraints>
+			<alias>Task_Order_No</alias>
+			<alias>Task Order Number                             *Do not include dashes or spaces</alias>
+		</field>	
+		<field>
+			<name>DEVICE_MODEL</name>
+			<title>Device Model</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+			</constraints>
+			<alias>Device_Model</alias>
+			<alias>Device Model                                 *Do not include dashes or spaces</alias>
+		</field>
+		<field>
+			<name>VOLUME_BAND</name>
+			<title>Volume Band</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+			</constraints>
+			<alias>Volume Band</alias>
+			<alias>Volume_Band</alias>
+		</field>	
+		<field>
+			<name>QUANTITY_OF_DEVICES</name>
+			<title>Quantity of Devices</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+			</constraints>
+			<alias>Qty of Devices</alias>
+			<alias>Device_Quantity</alias>
+		</field>	
+		<field>
+			<name>FUNCTIONAL_AREA</name>
+			<title>Functional Area</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+				<pattern level="fatal">FA I|FA II|FA III|FA IV</pattern>
+			</constraints>
+			<alias>FA</alias>
+			<alias>Functional &#9094; Area</alias> <!-- Need to figure out "Enter code" -->
+		</field>		
+		<field>
+			<name>BRIEF_DESCRIPTION</name>
+			<title>Brief Description</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+			</constraints>
+			<alias>Brief_Desc</alias>
+			<alias>Brief Description &#9094; (Select from Drop Down List)</alias><!-- Need to figure out "Enter code" -->
+		</field>	
+		<field>
+			<name>PURCHASE_TYPE</name>
+			<title>Purchase Type</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+			</constraints>
+			<alias>Purchase_Type</alias>
+			<alias>Type of Purchase &#9094; (Select from Drop Down List)</alias><!-- Need to figure out "Enter code" -->
+		</field>			
+		<field>
+			<name>AGREEMENT_LENGTH</name>
+			<title>AGREEMENT Length</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+			</constraints>
+			<alias>Agreement_Length</alias>
+			<alias>Length of Lease/Maintenance&#9094;(if applicable)</alias><!-- Need to figure out "Enter code" -->
+		</field>	
+		<field>
+			<name>MONTH_NAME</name>
+			<title>Month Name</title>
+			<type>string</type>
+			<description></description>
+			<alias>Month</alias>
+			<alias>To:                    Month                                                (Select from Drop Down List)</alias>
+		</field>	
+		<field>
+			<name>CALENDAR_YEAR</name>
+			<title>Calendar Year</title>
+			<type>string</type>
+			<description></description>
+			<alias>Year</alias>
+			<alias>To:                         Year                                                (Select from Drop Down List)</alias>
+		</field>
+		<field>
+			<name>EFFECTIVE_DATE</name>
+			<title>Effective Date</title>
+			<type>Date</type>
+			<format>MM/dd/yyyy</format>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+			</constraints>
+			<alias>Effective Date of purchase/lease (date installed at customer site)</alias>
+		</field>
+		<field>
+			<name>DEVICE_SCHEDULE_PRICE</name>
+			<title>Device (Lease/Purchase) Schedule Price</title>
+			<type>number</type>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+			</constraints>
+			<alias>Dev_Schedule_Price</alias>
+			<alias>Schedule Price&#9094;(Lease/Purchase)</alias><!-- Need to figure out "Enter code" -->
+		</field>
+		<field>
+			<name>DEVICE_BPA_PRICE</name>
+			<title>Device (Lease/Purchase) BPA Price</title>
+			<type>number</type>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+			</constraints>
+			<alias>Dev_BPA_Price</alias>
+			<alias>BPA Price&#9094;(Lease/Purchase)</alias><!-- Need to figure out "Enter code" -->
+		</field>	
+		<field>
+			<name>DEVICE_TASK_ORDER_PRICE</name>
+			<title>Device (Lease/Purchase) Task Order Price</title>
+			<type>number</type>
+			<description></description>
+			<constraints>
+				<required level="error">true</required>
+			</constraints>
+			<alias>Dev_Task_Price</alias>
+			<alias>Task Order Price&#9094;(Lease/Purchase)</alias><!-- Need to figure out "Enter code" -->
+		</field>	
+		<field>
+			<name>MAINTENANCE_SCHEDULE_PRICE</name>
+			<title>Maintenance Schedule Price (Base Fee)</title>
+			<type>number</type>
+			<description></description>
+			<alias>Maint_Schedule_Price</alias>
+			<alias>Schedule Price&#9094;(Base Fee)</alias><!-- Need to figure out "Enter code" -->
+		</field>	
+		<field>
+			<name>MAINTENANCE_BPA_PRICE</name>
+			<title>Maintenance BPA Price (Base Fee)</title>
+			<type>number</type>
+			<description></description>
+			<alias>Maint_BPA_Price</alias>
+			<alias>BPA Price&#9094;(Base Fee)</alias><!-- Need to figure out "Enter code" -->
+		</field>
+		<field>
+			<name>MAINTENANCE_TASK_ORDER_PRICE</name>
+			<title>Maintenance BPA Price (Base Fee)</title>
+			<type>number</type>
+			<description></description>
+			<alias>Maint_Task_Price</alias>
+			<alias>Task Order Price&#9094;(Base Fee)</alias><!-- Need to figure out "Enter code" -->
+		</field>	
+		<field>
+			<name>MAINTENANCE_SCHEDULE_BW_PRICE</name>
+			<title>Maintenance Schedule Click Rate for B/W</title>
+			<type>number</type>
+			<description></description>
+			<alias>Maint_Schedule_BW_Rate</alias>
+			<alias>Schedule Click Rates B/W Rate</alias>						
+		</field>		
+		<field>
+			<name>MAINTENANCE_SCHEDULE_COLOR_PRICE</name>
+			<title>Maintenance Schedule Click Rate for Color</title>
+			<type>number</type>
+			<description></description>
+			<alias>Maint_Schedule_Color_Rate</alias>
+			<alias>Schedule Click Rates Color Rate</alias>						
+		</field>																																								
+		<field>
+			<name>MAINTENANCE_BPA_BW_PRICE</name>
+			<title>Maintenance BPA Click Rate for B/W</title>
+			<type>number</type>
+			<description></description>
+			<alias>Maint_BPA_BW_Rate</alias>
+			<alias>BPA Click Rates B/W Rate</alias>						
+		</field>		
+		<field>
+			<name>MAINTENANCE_BPA_COLOR_PRICE</name>
+			<title>Maintenance BPA Click Rate for Color</title>
+			<type>number</type>
+			<description></description>
+			<alias>Maint_BPA_Color_Rate</alias>
+			<alias>BPA Click Rates Color Rate</alias>			
+		</field>
+		<field>
+			<name>MAINTENANCE_TASK_ORDER_BW_PRICE</name>
+			<title>Maintenance Task Order Click Rate for B/W</title>
+			<type>number</type>
+			<description></description>
+			<alias>Maint_Task_BW_Rate</alias>
+			<alias>Task Order B/W Rate</alias>			
+		</field>		
+		<field>
+			<name>MAINTENANCE_TASK_ORDER_COLOR_PRICE</name>
+			<title>Maintenance Task Order Click Rate for Color</title>
+			<type>number</type>
+			<description></description>
+			<alias>Maint_Task_Color_Rate</alias>
+			<alias>Task Order Color Rate</alias>
+		</field>
+		<field>
+			<name>MAINTENANCE_TASK_ORDER_BW_PRICE</name>
+			<title>Maintenance Task Order Click Rate for B/W</title>
+			<type>number</type>
+			<description></description>
+			<alias>Monthly_Usage_BW</alias>
+			<alias>Monthly Usage Black/White</alias>
+		</field>		
+		<field>
+			<name>MAINTENANCE_TASK_ORDER_COLOR_PRICE</name>
+			<title>Maintenance Task Order Click Rate for Color</title>
+			<type>number</type>
+			<description></description>
+			<alias>Monthly_Usage_Color</alias>
+			<alias>Monthly Usage Color</alias>
+		</field>	
+		<field>
+			<name>ESTIMATED_METER_READ_IND</name>
+			<title>Estimated Meter Read Indicator</title>
+			<type>string</type>
+			<description></description>
+			<alias>Est_Read</alias>
+			<alias>Was Meter Read Estimated? (Select from drop down)</alias>
+		</field>		
+		<field>
+			<name>GREEN_PRODUCT_IND</name>
+			<title>Green Product Indicator</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<pattern level="error">Yes|No</pattern>
+			</constraints>
+			<alias>Green_Product</alias>
+			<alias>Is this product registered on Advantage as a Green Product? (Select from Drop Down)</alias>
+		</field>
+		<field>
+			<name>EPEAT_RATING</name>
+			<title>Electronic Product Environmental Assessment Tool Rating</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<pattern level="error">Bronze|Silver|Gold|N/A</pattern>
+			</constraints>
+			<alias>EPEAT_Rating</alias>
+			<alias>EPEAT Rating (Select from Drop Down)</alias>
+		</field>	
+		<field>
+			<name>AGENCY</name>
+			<title>Agency</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<required>true</required>
+			</constraints>
+			<alias>Agency</alias>
+			<alias>Agency&#9094;(Select from Drop Down List)</alias>
+		</field>				
+		<field>
+			<name>SUB_AGENCY</name>
+			<title>Sub Agency or Bureau</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<required>true</required>
+			</constraints>
+			<alias>sub_agency</alias>
+			<alias>Sub-Agency</alias>
+		</field>	
+		<field>
+			<name>POC_Email</name>
+			<title>Point of Contact Email</title>
+			<type>string</type>
+			<description></description>
+			<constraints>
+				<required>true</required>
+			</constraints>
+			<alias>Point of Contact email</alias>
+		</field>																																																								
+	</fields>		
+</schema>
