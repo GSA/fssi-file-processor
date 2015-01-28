@@ -13,7 +13,7 @@ import gov.gsa.fssi.files.sourceFiles.utils.strategies.SourceFileOrganizerStrate
 
 
 /**
- * This class loads a schema from an XML file
+ * This class 
  * 
  * @author davidlarrimore
  *

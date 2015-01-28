@@ -22,19 +22,66 @@ public class Config {
 	static Logger logger = LoggerFactory.getLogger(Config.class);
 	private Properties prop = null;
 
-	public static String WORKING_DIRECTORY = "working_directory";
-	public static String SOURCEFILES_DIRECTORY = "sourcefiles_directory";
-	public static String SCHEMAS_DIRECTORY = "schemas_directory";	
-	public static String DATAMAPS_DIRECTORY = "datamaps_directory";		
-	public static String LOGS_DIRECTORY = "logs_directory";			
-	public static String PROVIDERS_DIRECTORY = "providers_directory";	
-	public static String STAGED_DIRECTORY = "staged_directory";	
 	/**
-	 * Valid "Export Modes" include: implode, explode
+	 * @deprecated
 	 */
-	public static String EXPORT_MODE = "export_mode";	
+	public static String WORKING_DIRECTORY = "working_directory";
+	
+	
+	/**
+	 * SourceFiles Directory denotes where all of the "source files" are located 
+	 * that you wish to load and process
+	 */
+	public static String SOURCEFILES_DIRECTORY = "sourcefiles_directory";
+	
+	/**
+	 * Schemas Directory is where schemas are stored
+	 */
+	public static String SCHEMAS_DIRECTORY = "schemas_directory";	
+	
+	/**
+	 * This Directory was originally designed to handle "Capture" activities
+	 * with semi-structured and unstructured data sets. Not in use.
+	 * @deprecated
+	 */
+	public static String DATAMAPS_DIRECTORY = "datamaps_directory";		
+	/**
+	 * business facing logs, not system logs.
+	 */
+	public static String LOGS_DIRECTORY = "logs_directory";
+	
+	/**
+	 * Location of files where provider information is stored
+	 */
+	public static String PROVIDERS_DIRECTORY = "providers_directory";	
+	
+	/**
+	 * Directory where all post processed files are placed.
+	 */
+	public static String STAGED_DIRECTORY = "staged_directory";	
+	
+
+	/**
+	 * Export mode manages how the application organizes the file. See valid export modes below:
+	 * @see EXPORT_MODE_EXPLODE
+	 * @see EXPORT_MODE_IMPLODE
+	 */
+	public static String EXPORT_MODE = "export_mode";
+	
+	/**
+	 * Not currently in use
+	 * @deprecated
+	 */
 	public static String VALIDATION_MODE = "validation_mode";	
+	
+	/**
+	 * @see gov.gsa.fssi.files.sourceFiles.utils.strategies.organizers.ExplodeSourceFileOrganizerStrategy#organize
+	 */
 	public static final String EXPORT_MODE_EXPLODE = "explode";
+	
+	/**
+	 * @see gov.gsa.fssi.files.sourceFiles.utils.strategies.organizers.ImplodeSourceFileOrganizerStrategy#organize
+	 */
 	public static final String EXPORT_MODE_IMPLODE = "implode";
 	
 	
@@ -53,22 +100,29 @@ public class Config {
 	
 	
 	/**
-	 * @return the property
+	 * @param key the property you want to get
+	 * @return Properties the property you want
+	 * @see java.util.Properties#getProperty()
 	 */
-	public String getProperty(String propName) {
-		return this.prop.getProperty(propName);
+	public String getProperty(String key) {
+		return this.prop.getProperty(key);
 		//return "test";
 	}
 
 
 	/**
-	 * @param property the property to set
+	 * @param key the key to be placed into this property list.
+	 * @param value the value corresponding to key.
+	 * @see java.util.Properties#setProperty(String key, String value)
 	 */
 	public void setProperty(String key, String value) {
 		this.prop.setProperty(key, value);
 	}
 
 
+	/**
+	 * Constructor
+	 */
 	public Config() {
 		try {
 			getPropValues();
