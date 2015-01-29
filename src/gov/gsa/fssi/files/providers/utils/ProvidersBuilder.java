@@ -4,7 +4,6 @@ import gov.gsa.fssi.config.Config;
 import gov.gsa.fssi.files.providers.Provider;
 import gov.gsa.fssi.files.providers.utils.contexts.ProviderLoaderContext;
 import gov.gsa.fssi.files.providers.utils.strategies.loaders.ExcelProviderLoaderStrategy;
-import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.helpers.FileHelper;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This method builds an ArrayList of Schemas
+ * This is our ProvidersBuilder object. It is used to build providers.
  * 
  * @author davidlarrimore
  *
@@ -22,6 +21,11 @@ public class ProvidersBuilder {
 	static Logger logger = LoggerFactory.getLogger(ProvidersBuilder.class);
 	static Config config = new Config();	  
 	
+	/**
+	 * This is the main method for ProvidersBuilder that reads all files from the "config.getProperty(Config.PROVIDERS_DIRECTORY))", validates them, and returns an ArrayList of Provider objects.
+	 * 
+	 * @return ArryList<Provider> of providers
+	 */
 	public ArrayList<Provider> build() {
 	    logger.debug("Starting Provider Builder", config.getProperty(Config.PROVIDERS_DIRECTORY));
 	    

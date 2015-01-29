@@ -58,13 +58,20 @@ public class Main {
 	    logger.info("Completed FSSI File Processor");	
 	}
 
+	/**
+	 * Prints all Providers
+	 * @param providers an ArrayList of Provider class objects
+	 */
 	public static void printAllProviders(ArrayList<Provider> providers){
 		for(Provider provider: providers){
 			provider.print();
 		}
 	}
 	
-	
+	/**
+	 * Prints all Schemas
+	 * @param schemas an ArrayList of Schema class objects
+	 */	
 	public static void printAllSchemas(ArrayList<Schema> schemas){
 		for(Schema schema: schemas){
 			schema.printAll();

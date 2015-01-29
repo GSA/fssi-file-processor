@@ -12,54 +12,46 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class File {
+	protected static Logger logger = LoggerFactory.getLogger(File.class);
+	protected static Config config = new Config();	    
 	/**
-	 * @return
+	 * @return current fileName
 	 */
 	public String getFileName() {
 		return fileName;
 	}
-	
 	/**
-	 * @param fileName
+	 * @param fileName String fileName to set
 	 */
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-	
 	/**
-	 * @return
+	 * @return current fileExtension
 	 */
 	public String getFileExtension() {
 		return fileExtension;
 	}
-	
 	/**
-	 * @param fileExtension
+	 * @param fileExtension String fileExtension to set
 	 */
 	public void setFileExtension(String fileExtension) {
 		this.fileExtension = fileExtension;
 	}
-	
 	/**
-	 * @param filepart
+	 * @param filepart String filepart to add
 	 */
 	public void addFileNameParts(String filepart) {
 		this.fileNameParts.add(filepart);
 	}
 	/**
-	 * @return the fileParts
-	 */
-	/**
-	 * @return
+	 * @return current fileNameParts
 	 */
 	public ArrayList<String> getFileNameParts() {
 		return fileNameParts;
 	}
 	/**
-	 * @param fileParts the fileParts to set
-	 */
-	/**
-	 * @param fileParts
+	 * @param fileParts ArrayList<String> fileParts to set
 	 */
 	public void setFileNameParts(ArrayList<String> fileParts) {
 		this.fileNameParts = fileParts;
@@ -80,15 +72,19 @@ public class File {
 		this.setFileNameParts(SEPARATOR_UNDERSCORE);
 	}
 	
+	/**
+	 * Blank Constructor
+	 */
 	public File() {
 	}
 	
 	/**
-	 * This Method sets fileNameParts based upon input file name.
+	 * This method breaks apart the files fileName into descrete parts and pops them into an ArrayList. requires a byte, like '_' an underscore or '-' dash to step through the name and break things apart.
+	 * @param filePartSeparator byte filePartSeparator
 	 */
 	public void setFileNameParts(byte filePartSeparator) {
 		ArrayList<String> newfileNameParts = new ArrayList<String>();
-		
+		 
 		if(fileName == null || fileName.isEmpty()){
 			logger.warn("FileName was empty or null, unable to set FileNameParts");
 		}else{
@@ -112,84 +108,98 @@ public class File {
 			logger.info("FileName '{}' had the following filename parts: {}", fileName, newfileNameParts);
 		}
 	}	
-
-	private String fileName = null;
-	private String fileExtension = null;
-	private ArrayList<String> fileNameParts = new ArrayList<String>();
-	//private String status = null;
-	protected static Logger logger = LoggerFactory.getLogger(File.class);
-	protected static Config config = new Config();	    
+	/**
+	 * @return current loadStatusLevel
+	 */
 	public String getLoadStatusLevel() {
 		return loadStatusLevel;
 	}
+	/**
+	 * @param loadStatusLevel String loadStatusLevel to set
+	 */
 	public void setLoadStatusLevel(String loadStatusLevel) {
 		this.loadStatusLevel = loadStatusLevel;
 	}
+	/**
+	 * @return current loadStatusMessage
+	 */
 	public String getLoadStatusMessage() {
 		return loadStatusMessage;
 	}
 	public void setLoadStatusMessage(String loadStatusMessage) {
 		this.loadStatusMessage = loadStatusMessage;
 	}
+	/**
+	 * @return current validatorStatusMessage
+	 */
 	public String getValidatorStatusMessage() {
 		return validatorStatusMessage;
 	}
-
+	/**
+	 * @param validatorStatusMessage String validatorStatusMessage to set
+	 */
 	public void setValidatorStatusMessage(String validatorStatusMessage) {
 		this.validatorStatusMessage = validatorStatusMessage;
 	}
-
+	/**
+	 * @return current validatorStatusLevel
+	 */
 	public String getValidatorStatusLevel() {
 		return validatorStatusLevel;
 	}
-
+	/**
+	 * @param validatorStatusLevel String validatorStatusLevel to set
+	 */
 	public void setValidatorStatusLevel(String validatorStatusLevel) {
 		this.validatorStatusLevel = validatorStatusLevel;
 	}
-	
 	/**
-	 * @return the statusLevel
+	 * @return current statusLevel
 	 */
 	public String getStatusLevel() {
 		return statusLevel;
 	}
-
 	/**
-	 * @param statusLevel the statusLevel to set
+	 * @param statusLevel String statusLevel to set
 	 */
 	public void setStatusLevel(String statusLevel) {
 		this.statusLevel = statusLevel;
 	}
-	
 	/**
-	 * @return the exportStatusMessage
+	 * @return current exportStatusMessage
 	 */
 	public String getExportStatusMessage() {
 		return exportStatusMessage;
 	}
-
 	/**
-	 * @param exportStatusMessage the exportStatusMessage to set
+	 * @param exportStatusMessage String exportStatusMessage to set
 	 */
 	public void setExportStatusMessage(String exportStatusMessage) {
 		this.exportStatusMessage = exportStatusMessage;
 	}
-
 	/**
-	 * @return the exportStatusLevel
+	 * @return current exportStatusLevel
 	 */
 	public String getExportStatusLevel() {
 		return exportStatusLevel;
 	}
-
 	/**
-	 * @param exportStatusLevel the exportStatusLevel to set
+	 * @param exportStatusLevel String exportStatusLevel to set
 	 */
 	public void setExportStatusLevel(String exportStatusLevel) {
 		this.exportStatusLevel = exportStatusLevel;
 	}
 
-	
+	/**
+	 * Full filename including file extension.....Example: "filename.txt"
+	 */
+	private String fileName = null;
+	private String fileExtension = null;
+	/**
+	 * Individual parts of a files Name. For example the file "example_oo2.txt" consists of the "parts" [exmaple,002]
+	 * @see gov.gsa.fssi.files.File#setFileNameParts(byte filePartSeparator)
+	 */
+	private ArrayList<String> fileNameParts = new ArrayList<String>();
 	private String loadStatusLevel = null;
 	private String loadStatusMessage = null;
 	private String validatorStatusMessage = null;
@@ -200,20 +210,49 @@ public class File {
 	 * Overall Status of File
 	 */
 	private String statusLevel = null;	
-	
+	/**
+	 * @see gov.gsa.fssi.files.File#setFileNameParts(byte filePartSeparator)
+	 */
 	public static final byte SEPARATOR_UNDERSCORE = '_';
+	/**
+	 * @see gov.gsa.fssi.files.File#setFileNameParts(byte filePartSeparator)
+	 */
 	public static final byte SEPARATOR_DASH = '-';
+	/**
+	 * @see gov.gsa.fssi.files.File#setFileNameParts(byte filePartSeparator)
+	 */	
 	public static final byte SEPARATOR_COMMA = ',';
+	/**
+	 * @see gov.gsa.fssi.files.File#setFileNameParts(byte filePartSeparator)
+	 */	
 	public static final byte SEPARATOR_PIPE = '|';
+	/**
+	 * @see gov.gsa.fssi.files.File#setFileNameParts(byte filePartSeparator)
+	 */	
 	public static final byte SEPARATOR_TILDE = '~';
+	/**
+	 * @see gov.gsa.fssi.files.File#setFileNameParts(byte filePartSeparator)
+	 */	
 	public static final byte SEPARATOR_FORWARDSLASH = '/';
+	/**
+	 * @see gov.gsa.fssi.files.File#setFileNameParts(byte filePartSeparator)
+	 */	
 	public static final byte SEPARATOR_BACKSLASH = '\\';
 	public static final String FILETYPE_CSV = "csv";
 	public static final String FILETYPE_XLSX = "xlsx";
 	public static final String FILETYPE_XLS = "xls";
 	public static final String FILETYPE_XML = "xml";
+	/**
+	 * A status of "fatal" means that an unrecoverable issue was found. The file MUST stop processing
+	 */
 	public static final String STATUS_FATAL = "fatal";
+	/**
+	 * A status of "error" means that the file is able to be processed but contains issues that MUST be addressed.
+	 */
 	public static final String STATUS_ERROR = "error";
+	/**
+	 * A status of "warning" means that the file is able to be addressed but contains issues.
+	 */
 	public static final String STATUS_WARNING = "warning";
 	public static final String STATUS_LOADED = "loaded";
 	public static final String STATUS_PASS = "pass";

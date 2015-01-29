@@ -121,7 +121,7 @@ public class Config {
 
 
 	/**
-	 * Constructor
+	 * Config
 	 */
 	public Config() {
 		try {
@@ -135,20 +135,22 @@ public class Config {
 	
 	
 	/**
+	 * Get Property values from 'config.properties' file in project root.
+	 * If file is found, it will read, validate,  and then load the values in to the Properties prop object.
 	 * @throws IOException
 	 */
 	public void getPropValues() throws IOException {
 		Properties prop = new Properties();
 		InputStream inputStream = new FileInputStream(DEFAULT_PROPFILE_NAME);
-		prop.load(inputStream);
-		validatePropFile(prop);
+		prop.load(inputStream); //Attempting to Load File
+		validatePropFile(prop); //Now we validate the file
 		this.prop = prop;
 	}
 	
 	
 	/**
 	 * This method is only envoked if no config.properties file is provided. 
-	 * This loads in default values..
+	 * This loads in default values.
 	 */
 	private void getDefaultPropValue() {
 		Properties prop = new Properties();
@@ -167,10 +169,10 @@ public class Config {
 	
 	/**
 	 * This method validates provided properties files
-	 * and makes sure that the required properties have been provided.
+	 * and makes sure that the required properties have been provided. If not, it uses the default values
 	 * 
-	 * @param prop
-	 * @return
+	 * @param Properties prop
+	 * @return Properties prop
 	 */
 	private Properties validatePropFile(Properties prop){
 		
