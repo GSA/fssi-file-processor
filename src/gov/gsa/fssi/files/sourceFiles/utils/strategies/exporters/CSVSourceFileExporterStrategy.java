@@ -56,11 +56,13 @@ public class CSVSourceFileExporterStrategy implements SourceFileExporterStrategy
 				String fieldName = null;
 				Map.Entry<Integer,String> headerMapIteratorPairs = (Map.Entry)headerMapIterator.next();
 				//getting correct header name from Schema 
-				for(SchemaField field:sourceFile.getSchema().getFields()){
-					if(field.getHeaderIndex() == headerMapIteratorPairs.getKey()){
-						logger.info("Using Schema name '{}' for field '{}'", field.getName(), headerMapIteratorPairs.getValue().toString());
-						fieldName = field.getName();
-					}
+				if(sourceFile.getSchema() != null){
+					for(SchemaField field:sourceFile.getSchema().getFields()){
+						if(field.getHeaderIndex() == headerMapIteratorPairs.getKey()){
+							logger.info("Using Schema name '{}' for field '{}'", field.getName(), headerMapIteratorPairs.getValue().toString());
+							fieldName = field.getName();
+						}
+					}					
 				}
 				csvHeaders.add((fieldName == null? headerMapIteratorPairs.getValue().toString(): fieldName));
 			}

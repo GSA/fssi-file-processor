@@ -25,7 +25,7 @@ public class ProviderValidator {
 	 * @param providers ArrayList<Provider> of Provider class
 	 */	
 	public void validateAll(ArrayList<Provider> providers){
-		ArrayList<Provider> newProviders = new ArrayList<Provider>();
+		ArrayList<Provider> deleteProvidersList = new ArrayList<Provider>();
 		//We need to check for duplicative Providers.
 
 		for (Provider provider : providers) {
@@ -33,7 +33,7 @@ public class ProviderValidator {
 			validate(provider);
 			if(!provider.getValidatorStatusLevel().equals(Provider.STATUS_ERROR)){
 				//Checking for unique identifier
-				for(Provider newProvider:newProviders){
+				for(Provider newProvider:deleteProvidersList){
 					if(provider.getProviderIdentifier().equals(newProvider.getProviderIdentifier())){
 						//logger.debug("{} - {}", newProvider.getProviderIdentifier(), provider.getProviderIdentifier());
 						unique = false;
@@ -41,13 +41,16 @@ public class ProviderValidator {
 				}
 				if(unique == false){
 					logger.warn("Found duplicate provider '{}'. removing", provider.getProviderIdentifier());	
-				}else{
-					newProviders.add(provider);	
-				}	
+					deleteProvidersList.add(provider);	
+				}
+			}else{
+				deleteProvidersList.add(provider);	
 			}
 		}
-		//commiting all of the changes
-		providers = newProviders;
+		//Deleting providers
+		for(Provider provider: deleteProvidersList){
+			providers.remove(provider);
+		}
 	}
 	
 	

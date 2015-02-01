@@ -69,6 +69,8 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 		    		}
 		    		logger.info("Completed mapping header indexes");
 		    	}else{
+		    		
+		    		//TODO: Add logic to ignore empty rows
 			    	logger.info("Loading data row - '{}'", row.getRowNum());
 	    			if (!(row.getCell(providerIdColumn) == null) && !(row.getCell(providerIdColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdColumn).getStringCellValue().toUpperCase().equals("NULL"))){
 	    				newProvider.setProviderId(row.getCell(providerIdColumn).getStringCellValue().toUpperCase());
