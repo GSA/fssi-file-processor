@@ -1,0 +1,11 @@
+/Users/davidlarrimore/Documents/workspace/fssi-file-processor/src/test/java/gov/gsa/fssi/files/sourceFiles/utils/strategies/constraintValidations/MaximumConstraintValidationStrategyTest.java
+/Users/davidlarrimore/Documents/workspace/fssi-file-processor/src/test/java/gov/gsa/fssi/files/sourceFiles/utils/strategies/constraintValidations/MaxLengthConstraintValidationStrategyTest.java
+/Users/davidlarrimore/Documents/workspace/fssi-file-processor/src/test/java/gov/gsa/fssi/files/sourceFiles/utils/strategies/constraintValidations/MinLengthConstraintValidationStrategyTest.java
+/Users/davidlarrimore/Documents/workspace/fssi-file-processor/src/test/java/gov/gsa/fssi/mockData/MockFieldConstraint.java
+/Users/davidlarrimore/Documents/workspace/fssi-file-processor/src/test/java/gov/gsa/fssi/mockData/MockSchema.java
+/Users/davidlarrimore/Documents/workspace/fssi-file-processor/src/test/java/gov/gsa/fssi/mockData/MockSchemaField.java
+/Users/davidlarrimore/Documents/workspace/fssi-file-processor/src/test/java/gov/gsa/fssi/mockData/MockSourceFile.java
+/Users/davidlarrimore/Documents/workspace/fssi-file-processor/src/test/java/gov/gsa/fssi/mockData/MockData.java
+/Users/davidlarrimore/Documents/workspace/fssi-file-processor/src/test/java/gov/gsa/fssi/mockData/MockProvider.java
+/Users/davidlarrimore/Documents/workspace/fssi-file-processor/src/test/java/gov/gsa/fssi/files/sourceFiles/utils/strategies/constraintValidations/RequiredConstraintValidationStrategyTest.java
+/Users/davidlarrimore/Documents/workspace/fssi-file-processor/src/test/java/gov/gsa/fssi/mockData/MockSourceFileRecord.java
