@@ -1,6 +1,7 @@
 package gov.gsa.fssi.helpers;
 
 import gov.gsa.fssi.files.sourceFiles.SourceFile;
+import gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -56,6 +57,25 @@ public class DateHelper {
 		return date;
 	}
 
+	public static Date YesterdaysDate(){
+		Date newDate = new Date();
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(newDate); 
+		c.add(Calendar.DATE, -1);
+		newDate = c.getTime();
+		return newDate;
+	}
+	
+	
+	public static Date TomorrowsDate(){
+		Date newDate = new Date();
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(newDate); 
+		c.add(Calendar.DATE, 1);
+		newDate = c.getTime();
+		return newDate;
+	}	
+	
 	
 	private static Date parseDate(String string, String dateFormat) throws ParseException{
 		TimeZone timeZone = TimeZone.getTimeZone(TIMEZONE_UTC);

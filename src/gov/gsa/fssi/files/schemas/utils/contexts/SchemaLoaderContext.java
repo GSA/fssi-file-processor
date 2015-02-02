@@ -2,8 +2,6 @@ package gov.gsa.fssi.files.schemas.utils.contexts;
 
 import gov.gsa.fssi.files.schemas.Schema;
 import gov.gsa.fssi.files.schemas.utils.strategies.SchemaLoaderStrategy;
-import gov.gsa.fssi.files.sourceFiles.SourceFile;
-import gov.gsa.fssi.files.sourceFiles.utils.strategies.SourceFileLoaderStrategy;
 
 public class SchemaLoaderContext {
 	   private SchemaLoaderStrategy strategy;   

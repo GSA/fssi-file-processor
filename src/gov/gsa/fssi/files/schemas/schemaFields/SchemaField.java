@@ -49,31 +49,31 @@ public class SchemaField {
 	/**
 	 * a string (of arbitrary length)
 	 */
-	public static String TYPE_STRING = "string"; 
+	public static final String TYPE_STRING = "string"; 
 	/**
 	 * a number including floating point numbers.
 	 */
-	public static String TYPE_NUMBER = "number";
+	public static final String TYPE_NUMBER = "number";
 	/**
 	 * an integer.
 	 */
-	public static String TYPE_INTEGER = "integer";
+	public static final String TYPE_INTEGER = "integer";
 	/**
 	 * a date. This MUST be in ISO6801 format YYYY-MM-DD or, if not, a format field must be provided describing the structure.
 	 */
-	public static String TYPE_DATE = "date"; 
+	public static final String TYPE_DATE = "date"; 
 	/**
 	 * a time without a date
 	 */
-	public static String TYPE_TIME = "time";
+	public static final String TYPE_TIME = "time";
 	/**
 	 * a date-time. This MUST be in ISO 8601 format of YYYY-MM-DDThh:mm:ssZ in UTC time or, if not, a format field must be provided.
 	 */
-	public static String TYPE_DATETIME = "datetime";//a time without a date
+	public static final String TYPE_DATETIME = "datetime";//a time without a date
 	/**
 	 * a boolean value (1/0, true/false).
 	 */
-	public static String TYPE_BOOLEAN = "boolean"; 
+	public static final String TYPE_BOOLEAN = "boolean"; 
 	
 	//public static String TYPE_BINARY = "binary"; //a boolean value (1/0, true/false).
 	//public static String TYPE_OBJECT = "object"; //(alias xml) an XML-encoded object
@@ -81,16 +81,16 @@ public class SchemaField {
 	/**
 	 * has one of the following structures: "longitude, latitude
 	 */
-	public static String TYPE_GEOPOINT = "geopoint";
+	public static final String TYPE_GEOPOINT = "geopoint";
 	
 	/**
 	 * an array in "value,value,value" format
 	 */
-	public static String TYPE_ARRAY = "array";
+	public static final String TYPE_ARRAY = "array";
 	/**
 	 * value of field may be any type
 	 */
-	public static String TYPE_ANY = "any"; 
+	public static final String TYPE_ANY = "any"; 
 	/**
 	 * @return the name
 	 */

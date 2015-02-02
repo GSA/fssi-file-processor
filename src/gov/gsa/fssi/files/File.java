@@ -1,6 +1,7 @@
 package gov.gsa.fssi.files;
 
 import gov.gsa.fssi.config.Config;
+
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -259,4 +260,5 @@ public class File {
 	public static final String STATUS_VALIDATED = "validated";
 	public static final String STATUS_EXPORTED = "exported";
 	public static final String STATUS_INITIALIZED = "initialized";
+	public static final String STATUS_FAIL = "failed";
 }

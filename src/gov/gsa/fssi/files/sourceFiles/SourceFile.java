@@ -324,6 +324,9 @@ public class SourceFile extends File{
 	}
 		
 	
+	public SourceFile() {
+		// TODO Auto-generated constructor stub
+	}
 	public void validate(){
 		SourceFileValidator validator = new SourceFileValidator();
 		validator.validate(this);

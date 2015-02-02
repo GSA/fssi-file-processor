@@ -11,7 +11,39 @@ public class Data {
 	private Integer headerIndex = 0;
 	private String status = "";
 	private String statusMessage = "";
+	private String validatorStatus = "";
+	private String validatorStatusMessage = "";
 	
+	
+	
+	/**
+	 * @return the validatorStatus
+	 */
+	public String getValidatorStatus() {
+		return validatorStatus;
+	}
+
+	/**
+	 * @param validatorStatus the validatorStatus to set
+	 */
+	public void setValidatorStatus(String validatorStatus) {
+		this.validatorStatus = validatorStatus;
+	}
+
+	/**
+	 * @return the validatorStatusMessage
+	 */
+	public String getValidatorStatusMessage() {
+		return validatorStatusMessage;
+	}
+
+	/**
+	 * @param validatorStatusMessage the validatorStatusMessage to set
+	 */
+	public void setValidatorStatusMessage(String validatorStatusMessage) {
+		this.validatorStatusMessage = validatorStatusMessage;
+	}
+
 	public Data() {
 		super();
 	}
