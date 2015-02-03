@@ -31,25 +31,26 @@ public class FileHelper {
 		int fileCount = 0;
 		int totalFileCount = 0;
 		
-		for (File file : listOfFiles) {
-			if (file.isFile()) {
-				totalFileCount ++;
-				String fileExtension = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
-			    if(file.isDirectory()){
-			    	logger.info("Ignoring '{}' because it is a directory", whitelist);	    
-			    }else if(whitelist != null && whitelist != "" && !whitelist.contains(fileExtension)){
-			    	logger.info("Ignoring '{}' because it is not in whitelist", file.getName());	 
-			    }else if(whitelist != null && whitelist != "" && whitelist.contains(fileExtension)){
-			    	logger.info("Added '{}' to ArrayList", file.getName());	 	 
-			    	fileList.add(file.getName());
-				    fileCount++;
-			    }else{
-			    	logger.info("Added '{}' to ArrayList", file.getName());	 
-			    	fileList.add(file.getName());
-				    fileCount++;
-			    }
+		if (listOfFiles != null){
+			for (File file : listOfFiles) {
+				if (file.isFile()) {
+					totalFileCount ++;
+					String fileExtension = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
+				    if(file.isDirectory()){
+				    	logger.info("Ignoring '{}' because it is a directory", whitelist);	    
+				    }else if(whitelist != null && whitelist != "" && !whitelist.contains(fileExtension)){
+				    	logger.info("Ignoring '{}' because it is not in whitelist", file.getName());	 
+				    }else if(whitelist != null && whitelist != "" && whitelist.contains(fileExtension)){
+				    	logger.info("Added '{}' to ArrayList", file.getName());	 	 
+				    	fileList.add(file.getName());
+					    fileCount++;
+				    }else{
+				    	logger.info("Added '{}' to ArrayList", file.getName());	 
+				    	fileList.add(file.getName());
+					    fileCount++;
+				    }
+				}
 			}
-
 		}
 		
 	    logger.info("Added {} out of {} files", fileCount, totalFileCount);			    

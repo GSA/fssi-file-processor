@@ -13,22 +13,16 @@ public class MaximumConstraintValidationStrategy implements ConstraintValidation
 
 	@Override
 	public void validate(SchemaField field, FieldConstraint constraint, Data data) {
-		switch(field.getType()){
-			case SchemaField.TYPE_STRING:
-				validateString(field, constraint, data);
-				break;	
-			case SchemaField.TYPE_INTEGER:
-				validateInteger(field, constraint, data);
-				break;		
-			case SchemaField.TYPE_NUMBER:
-				validateNumber(field, constraint, data);
-				break;	
-			case SchemaField.TYPE_DATE:
-				validateDate(field, constraint, data);
-				break;				
-			default:
-				validateString(field, constraint, data);
-				break;
+		if (field.getType().equals(SchemaField.TYPE_STRING)){
+			validateString(field, constraint, data);
+		}else if (field.getType().equals(SchemaField.TYPE_INTEGER)){
+			validateInteger(field, constraint, data);
+		}else if (field.getType().equals(SchemaField.TYPE_NUMBER)){
+			validateNumber(field, constraint, data);
+		}else if (field.getType().equals(SchemaField.TYPE_DATE)){
+			validateDate(field, constraint, data);
+		}else{
+			validateString(field, constraint, data);
 		}
 		
 		if(data.getValidatorStatus() == null || data.getValidatorStatus().isEmpty() || data.getValidatorStatus().equals("")){

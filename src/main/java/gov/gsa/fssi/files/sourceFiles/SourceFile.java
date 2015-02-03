@@ -382,19 +382,12 @@ public class SourceFile extends File{
 	 */
 	public void load() {
 		SourceFileLoaderContext context = new SourceFileLoaderContext();
-		switch(this.getFileExtension().toLowerCase()){
-		case FILETYPE_CSV:
+		if (this.getFileExtension().toLowerCase().equals(FILETYPE_CSV)){
 			logger.info("Loading file {} as a '{}'", this.getFileName(), this.getFileExtension()); 
-			context.setSourceFileLoaderStrategy(new CSVSourceFileLoaderStrategy());
-			break;		 
-		default:
+			context.setSourceFileLoaderStrategy(new CSVSourceFileLoaderStrategy());			
+		}else{
 			logger.warn("Could not load file '{}' as a '{}'", this.getFileName(), this.getFileExtension());	
-			this.setLoadStatusLevel(STATUS_ERROR);
-			break;
-		}
-		
-		if(!this.getLoadStatusLevel().equals(STATUS_ERROR)){
-			context.load(this.getFileName(), this);
+			this.setLoadStatusLevel(STATUS_ERROR);			
 		}
 	}
 	
@@ -405,18 +398,15 @@ public class SourceFile extends File{
 	public void organize() {
 		SourceFileOrganizerContext context = new SourceFileOrganizerContext();
 		if(this.getSchema() != null){
-		switch(config.getProperty(Config.EXPORT_MODE)){
-			case Config.EXPORT_MODE_EXPLODE:
-				context.setSourceFileOrganizerStrategy(new ExplodeSourceFileOrganizerStrategy());
-				break;
-			case Config.EXPORT_MODE_IMPLODE:
+			if(config.getProperty(Config.EXPORT_MODE).equals(Config.EXPORT_MODE_EXPLODE)){
+				context.setSourceFileOrganizerStrategy(new ExplodeSourceFileOrganizerStrategy());	
+			}if(config.getProperty(Config.EXPORT_MODE).equals(Config.EXPORT_MODE_IMPLODE)){
 				context.setSourceFileOrganizerStrategy(new ImplodeSourceFileOrganizerStrategy());
-				break;
-			default:
+			}else{
 				logger.warn("No Export Mode provided, defaulting to Implode");
-				context.setSourceFileOrganizerStrategy(new ImplodeSourceFileOrganizerStrategy());
-				break;
-		}
+				context.setSourceFileOrganizerStrategy(new ImplodeSourceFileOrganizerStrategy());	
+			}
+			
 		context.organize(this);
 		}else{
 			logger.info("No schema was found for file {}. Ignoring sourceFile schema organizing", this.getFileName());
@@ -426,21 +416,17 @@ public class SourceFile extends File{
 	public void export() {
 		 SourceFileExporterContext context = new SourceFileExporterContext();
 		if (this.getRecords() != null){
-		 switch(this.getProvider().getFileOutputType().toLowerCase()){
-		 	case SourceFile.FILETYPE_CSV:
+			if(this.getProvider().getFileOutputType().toLowerCase().equals(SourceFile.FILETYPE_CSV)){
+				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
+			}else if(this.getProvider().getFileOutputType().toLowerCase().equals(SourceFile.FILETYPE_XLS)){
+				context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
+			}else if(this.getProvider().getFileOutputType().toLowerCase().equals(SourceFile.FILETYPE_XLSX)){
+				context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
+			}else{
+				logger.warn("We cannot currently export to a '{}'. defaulting to '{}'", this.getProvider().getFileOutputType(), SourceFile.FILETYPE_CSV);
 		 		context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
-		 		break;
-		 	case SourceFile.FILETYPE_XLS:
-		 		context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
-		 		break;
-		 	case SourceFile.FILETYPE_XLSX:
-		 		context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
-		 		break;		 		
-		 	default:
-		 		logger.warn("We cannot currently export to a '{}'. defaulting to '{}'", this.getProvider().getFileOutputType(), SourceFile.FILETYPE_CSV);
-		 		context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
-		 		break;
-		 }
+			}
+			
 		 context.export(this);
 		}else{
 			logger.error("Cannot export sourceFile '{}'. No data found", this.getFileName());

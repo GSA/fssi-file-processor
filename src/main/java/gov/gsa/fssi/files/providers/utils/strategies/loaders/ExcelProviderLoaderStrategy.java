@@ -44,27 +44,19 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 		    	if (row.getRowNum() == 0){
 		    		for (Cell cell : row) {
 		    			logger.debug("{} - {}", cell.getColumnIndex(), cell.getStringCellValue().toUpperCase());
-		    			switch(cell.getStringCellValue().toUpperCase().toString()) {
-			    			case "PROVIDER_ID":
-			    				providerIdColumn = cell.getColumnIndex();
-			    				break;
-			    			case "PROVIDER_NAME":			    				
-			    				providerNameColumn = cell.getColumnIndex();
-			    				break;
-			    			case "PROVIDER_IDENTIFIER":
-			    				providerIdentifierColumn = cell.getColumnIndex();
-			    				break;
-			    			case "FILE_OUTPUT_TYPE":
-			    				fileOutputTypeColumn = cell.getColumnIndex();	
-			    				break;
-			    			case "SCHEMA":
-			    				schemaNameColumn = cell.getColumnIndex();	
-			    				break;			    				
-			    			case "PROVIDER_EMAIL":
-			    				providerEmailColumn = cell.getColumnIndex();	
-			    				break;
-			    			default:
-			    				break;
+		    			
+		    			if(cell.getStringCellValue().toUpperCase().toString().equals("PROVIDER_ID")){
+		    				providerIdColumn = cell.getColumnIndex();	
+		    			}else if(cell.getStringCellValue().toUpperCase().toString().equals("PROVIDER_NAME")){
+		    				providerNameColumn = cell.getColumnIndex();
+		    			}else if(cell.getStringCellValue().toUpperCase().toString().equals("PROVIDER_IDENTIFIER")){
+		    				providerIdentifierColumn = cell.getColumnIndex();
+		    			}else if(cell.getStringCellValue().toUpperCase().toString().equals("FILE_OUTPUT_TYPE")){
+		    				fileOutputTypeColumn = cell.getColumnIndex();
+		    			}else if(cell.getStringCellValue().toUpperCase().toString().equals("SCHEMA")){
+		    				schemaNameColumn = cell.getColumnIndex();	
+		    			}else if(cell.getStringCellValue().toUpperCase().toString().equals("PROVIDER_EMAIL")){
+		    				providerEmailColumn = cell.getColumnIndex();	
 		    			}
 		    		}
 		    		logger.info("Completed mapping header indexes");

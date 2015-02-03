@@ -32,25 +32,18 @@ public class ConstraintValidationContext {
 		 */
 		public void validateConstraint(SchemaField field, FieldConstraint constraint, Data data) {
 			if(this.getDataValidationStrategy() == null){
-				switch (constraint.getType()){
-					case FieldConstraint.TYPE_MAXIMUM:
-						this.setDataValidationStrategy(new MaximumConstraintValidationStrategy());
-						break;
-					case FieldConstraint.TYPE_MINIMUM:
-						this.setDataValidationStrategy(new MinimumConstraintValidationStrategy());
-						break;		
-					case FieldConstraint.TYPE_MAXLENGTH:
-						this.setDataValidationStrategy(new MaxLengthConstraintValidationStrategy());
-						break;		
-					case FieldConstraint.TYPE_MINLENGTH:
-						this.setDataValidationStrategy(new MinLengthConstraintValidationStrategy());
-						break;		
-					case FieldConstraint.TYPE_PATTERN:
-						this.setDataValidationStrategy(new PatternConstraintValidationStrategy());
-						break;		
-					case FieldConstraint.TYPE_REQUIRED:
-						this.setDataValidationStrategy(new RequiredConstraintValidationStrategy());
-						break;				
+				if(constraint.getType().equals(FieldConstraint.TYPE_MAXIMUM)){
+					this.setDataValidationStrategy(new MaximumConstraintValidationStrategy());
+				}else if(constraint.getType().equals(FieldConstraint.TYPE_MINIMUM)){ 
+					this.setDataValidationStrategy(new MinimumConstraintValidationStrategy());
+				}else if(constraint.getType().equals(FieldConstraint.TYPE_MAXLENGTH)){ 
+					this.setDataValidationStrategy(new MaxLengthConstraintValidationStrategy());
+				}else if(constraint.getType().equals(FieldConstraint.TYPE_MINLENGTH)){ 
+					this.setDataValidationStrategy(new MinLengthConstraintValidationStrategy());
+				}else if(constraint.getType().equals(FieldConstraint.TYPE_PATTERN)){ 
+					this.setDataValidationStrategy(new PatternConstraintValidationStrategy());
+				}else if(constraint.getType().equals(FieldConstraint.TYPE_REQUIRED)){ 
+					this.setDataValidationStrategy(new RequiredConstraintValidationStrategy());
 				}
 			}
 			strategy.validate(field, constraint, data); //Validate Constraint

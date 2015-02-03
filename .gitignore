@@ -2,4 +2,6 @@
 /working/srcfiles/*
 /working/staged/*
 /working/datamaps/*
-logs/*
+*.log
+/target/*
+/target
