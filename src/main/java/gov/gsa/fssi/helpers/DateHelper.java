@@ -10,7 +10,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
-import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

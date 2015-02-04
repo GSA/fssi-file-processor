@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
-import main.java.gov.gsa.fssi.files.schemas.utils.contexts.SchemaLoaderContext;
-import main.java.gov.gsa.fssi.files.schemas.utils.strategies.loaders.XMLSchemaLoaderStrategy;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 
 import org.slf4j.Logger;
