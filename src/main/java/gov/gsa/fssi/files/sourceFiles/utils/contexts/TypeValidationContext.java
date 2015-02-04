@@ -23,7 +23,7 @@ public class TypeValidationContext {
 		 * @param constraint
 		 * @param data
 		 */
-		public void validateType(SchemaField field, Data data) {
+		public void validate(SchemaField field, Data data) {
 			strategy.validate(field, data); //Validate Constraint
 	   }
 		

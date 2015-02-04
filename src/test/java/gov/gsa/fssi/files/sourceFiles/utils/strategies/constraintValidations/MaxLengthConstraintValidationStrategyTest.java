@@ -27,7 +27,7 @@ public class MaxLengthConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_STRING, fieldConstraint);
 		Data data = MockData.make("12345");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals("failure - MaxLengthConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatus());
 	}
@@ -45,7 +45,7 @@ public class MaxLengthConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_STRING, fieldConstraint);
 		Data data = MockData.make("12345");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals("failure - MaxLengthConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
 	}	
@@ -62,7 +62,7 @@ public class MaxLengthConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_STRING, fieldConstraint);
 		Data data = MockData.make("12345");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals("failure - MaxLengthConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
 	}	

@@ -28,7 +28,7 @@ public class RequiredConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("REQUIRED", SchemaField.TYPE_STRING, fieldConstraint);
 		Data data = MockData.make();
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
@@ -47,7 +47,7 @@ public class RequiredConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("REQUIRED", SchemaField.TYPE_STRING, fieldConstraint);
 		Data data = MockData.make("");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not make failure", File.STATUS_FAIL, data.getValidatorStatus());			
@@ -66,7 +66,7 @@ public class RequiredConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("REQUIRED", SchemaField.TYPE_STRING, fieldConstraint);
 		Data data = MockData.make("Value");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals("failure - RequiredConstraintValidationStrategyTest caughtError", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not pass", File.STATUS_PASS, data.getValidatorStatus());				

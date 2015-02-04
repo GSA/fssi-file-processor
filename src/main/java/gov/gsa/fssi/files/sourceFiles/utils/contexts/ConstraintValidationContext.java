@@ -30,7 +30,7 @@ public class ConstraintValidationContext {
 		 * @param constraint
 		 * @param data
 		 */
-		public void validateConstraint(SchemaField field, FieldConstraint constraint, Data data) {
+		public void validate(SchemaField field, FieldConstraint constraint, Data data) {
 			if(this.getDataValidationStrategy() == null){
 				if(constraint.getType().equals(FieldConstraint.TYPE_MAXIMUM)){
 					this.setDataValidationStrategy(new MaximumConstraintValidationStrategy());

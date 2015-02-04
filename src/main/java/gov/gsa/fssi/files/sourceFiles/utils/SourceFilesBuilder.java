@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
-import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
-import main.java.gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 

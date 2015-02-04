@@ -389,6 +389,8 @@ public class SourceFile extends File{
 			logger.warn("Could not load file '{}' as a '{}'", this.getFileName(), this.getFileExtension());	
 			this.setLoadStatusLevel(STATUS_ERROR);			
 		}
+		
+		context.load(this.getFileName(), this);
 	}
 	
 	

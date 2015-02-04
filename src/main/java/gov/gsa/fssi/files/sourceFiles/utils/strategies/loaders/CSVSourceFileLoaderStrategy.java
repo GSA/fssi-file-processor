@@ -45,7 +45,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 				sourceFile.addSourceHeader((Integer)pairs.getValue(), pairs.getKey().toString());
 			}
 			
-			//logger.info("{}",parser.getHeaderMap());
+			logger.info("file '{}' had the following headers: {}",fileName, parser.getHeaderMap());
 			
 			for (final CSVRecord csvRecord : parser) {
 				sourceFile.incrementTotalRecords();

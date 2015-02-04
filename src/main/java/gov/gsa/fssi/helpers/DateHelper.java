@@ -48,11 +48,15 @@ public class DateHelper {
 		logger.info("Attempting to extract date from string: '{}' using format '{}", string, dateFormat);
 		try {
 			date = parseDate(string, dateFormat);
+			if(date.compareTo(getDate("2000-01-01", "yyyy-MM-dd")) > 1){
+				
+			}
 		} catch (ParseException e) {
 			date = null;
 			logger.error("There was an ParseException error '{}' attempting to get date from string: '{}'",e.getMessage(), string);
 			//e.printStackTrace();
 		}
+		
 		return date;
 	}
 

@@ -28,7 +28,7 @@ public class MaximumConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_STRING, fieldConstraint);
 		Data data = MockData.make("12345");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());
@@ -46,7 +46,7 @@ public class MaximumConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_STRING, fieldConstraint);
 		Data data = MockData.make("12345");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());		
@@ -64,7 +64,7 @@ public class MaximumConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_STRING, fieldConstraint);
 		Data data = MockData.make("12345");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());				
@@ -85,7 +85,7 @@ public class MaximumConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE, fieldConstraint);
 		Data data = MockData.make("2015-01-02");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
@@ -103,7 +103,7 @@ public class MaximumConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE, fieldConstraint);
 		Data data = MockData.make("2014-12-31");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());			
@@ -121,7 +121,7 @@ public class MaximumConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE, fieldConstraint);
 		Data data = MockData.make("2015-01-01");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());			
@@ -142,7 +142,7 @@ public class MaximumConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_NUMBER, fieldConstraint);
 		Data data = MockData.make("9999.99");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());	
@@ -160,7 +160,7 @@ public class MaximumConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_NUMBER, fieldConstraint);
 		Data data = MockData.make("999.99");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());				
@@ -178,7 +178,7 @@ public class MaximumConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_NUMBER, fieldConstraint);
 		Data data = MockData.make("99.99");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());				
@@ -199,7 +199,7 @@ public class MaximumConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_INTEGER, fieldConstraint);
 		Data data = MockData.make("9999");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());			
@@ -217,7 +217,7 @@ public class MaximumConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_INTEGER, fieldConstraint);
 		Data data = MockData.make("999");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());				
@@ -235,7 +235,7 @@ public class MaximumConstraintValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_INTEGER, fieldConstraint);
 		Data data = MockData.make("99");
 		
-		context.validateConstraint(field, fieldConstraint, data);
+		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());				
