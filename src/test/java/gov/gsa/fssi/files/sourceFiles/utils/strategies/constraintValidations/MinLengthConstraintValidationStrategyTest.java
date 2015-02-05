@@ -30,7 +30,7 @@ public class MinLengthConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertNotEquals("failure - MinLengthConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertNotEquals("failure - MinLengthConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MinLengthConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());					
 	}
 	
@@ -49,7 +49,7 @@ public class MinLengthConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - MinLengthConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertEquals("failure - MinLengthConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MinLengthConstraintValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());				
 	}	
 
@@ -67,7 +67,7 @@ public class MinLengthConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertNotEquals("failure - MinLengthConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertNotEquals("failure - MinLengthConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MinLengthConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());				
 	}	
 	

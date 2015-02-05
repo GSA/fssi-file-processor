@@ -9,7 +9,7 @@ public class Data {
 	static Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);
 	private String data = ""; //TODO: turn this into a generic Object
 	private Integer headerIndex = 0;
-	private String status = "";
+	private String statusLevel = "";
 	private String statusMessage = "";
 	private String validatorStatus = "";
 	private String validatorStatusMessage = "";
@@ -85,14 +85,14 @@ public class Data {
 	/**
 	 * @return
 	 */
-	public String getStatus() {
-		return status;
+	public String getStatusLevel() {
+		return statusLevel;
 	}
 	/**
 	 * @param status
 	 */
-	public void setStatus(String status) {
-		this.status = status;
+	public void setStatusLevel(String status) {
+		this.statusLevel = status;
 	}
 	/**
 	 * @return
@@ -108,7 +108,7 @@ public class Data {
 	}
 
 	public void print(){
-			logger.debug(" Data: {} Status: {}, ", this.getData(), this.getStatus(), this.getStatusMessage());
+			logger.debug(" Data: {} Status: {}, ", this.getData(), this.getStatusLevel(), this.getStatusMessage());
 	}
 	
 }

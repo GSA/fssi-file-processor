@@ -30,7 +30,7 @@ public class MaximumConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());
 	}
 	
@@ -48,7 +48,7 @@ public class MaximumConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());		
 	}	
 
@@ -66,7 +66,7 @@ public class MaximumConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());				
 	}	
 	
@@ -87,7 +87,7 @@ public class MaximumConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
 	}
 	
@@ -105,7 +105,7 @@ public class MaximumConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());			
 	}	
 
@@ -123,7 +123,7 @@ public class MaximumConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());			
 	}	
 	
@@ -144,7 +144,7 @@ public class MaximumConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());	
 	}
 	
@@ -162,7 +162,7 @@ public class MaximumConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());				
 	}	
 
@@ -180,7 +180,7 @@ public class MaximumConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());				
 	}	
 	
@@ -201,7 +201,7 @@ public class MaximumConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not catch error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());			
 	}
 	
@@ -219,7 +219,7 @@ public class MaximumConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());				
 	}	
 
@@ -237,7 +237,7 @@ public class MaximumConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertNotEquals("failure - MaximumConstraintValidationStrategy caught error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - MaximumConstraintValidationStrategy did not pass", File.STATUS_PASS, data.getValidatorStatus());				
 	}	
 				

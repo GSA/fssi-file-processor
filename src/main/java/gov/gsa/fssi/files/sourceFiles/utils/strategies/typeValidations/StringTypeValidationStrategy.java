@@ -10,8 +10,8 @@ public class StringTypeValidationStrategy implements TypeValidationStrategy {
 	@Override
 	public void validate(SchemaField field, Data data) {
 
-		if(data.getStatus() == null || data.getStatus().isEmpty() || data.getStatus().equals("")){
-			data.setStatus(File.STATUS_PASS);
+		if(data.getStatusLevel() == null || data.getStatusLevel().isEmpty() || data.getStatusLevel().equals("")){
+			data.setStatusLevel(File.STATUS_PASS);
 		}	
 			
 		if(data.getValidatorStatus() == null || data.getValidatorStatus().isEmpty() || data.getValidatorStatus().equals("")){

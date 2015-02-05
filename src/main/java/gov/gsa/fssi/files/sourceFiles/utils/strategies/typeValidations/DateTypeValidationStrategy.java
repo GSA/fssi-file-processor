@@ -19,21 +19,21 @@ public class DateTypeValidationStrategy implements TypeValidationStrategy {
 			}
 			Date date = DateHelper.getDate(data.getData(), dateFormatString);
 			if(date == null){
-				data.setStatus(File.STATUS_FATAL);
+				data.setStatusLevel(File.STATUS_FATAL);
 				data.setValidatorStatus(File.STATUS_FAIL);
 			}else if(date.compareTo(DateHelper.getMinDate()) < 0){
 				logger.warn("This date is before our accessible threshold for a date");
-				data.setStatus(File.STATUS_ERROR);
+				data.setStatusLevel(File.STATUS_ERROR);
 				data.setValidatorStatus(File.STATUS_FAIL);
 			}else if(date.compareTo(DateHelper.getMaxDate())  > 0){
 				logger.warn("This date is past our accessible threshold for a date");
-				data.setStatus(File.STATUS_ERROR);
+				data.setStatusLevel(File.STATUS_ERROR);
 				data.setValidatorStatus(File.STATUS_FAIL);			
 			}		
 		}
 		
-		if(data.getStatus() == null || data.getStatus().isEmpty() || data.getStatus().equals("")){
-			data.setStatus(File.STATUS_PASS);
+		if(data.getStatusLevel() == null || data.getStatusLevel().isEmpty() || data.getStatusLevel().equals("")){
+			data.setStatusLevel(File.STATUS_PASS);
 		}	
 			
 		if(data.getValidatorStatus() == null || data.getValidatorStatus().isEmpty() || data.getValidatorStatus().equals("")){

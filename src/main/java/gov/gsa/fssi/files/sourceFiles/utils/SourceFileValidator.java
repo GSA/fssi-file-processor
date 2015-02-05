@@ -7,6 +7,7 @@ import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.contexts.ConstraintValidationContext;
+import main.java.gov.gsa.fssi.files.sourceFiles.utils.contexts.TypeValidationContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,21 +36,18 @@ public class SourceFileValidator{
 				for(SchemaField field:sourceFile.getSchema().getFields()){
 					Data data = sourceFileRecord.getDataByHeaderIndex(field.getHeaderIndex());
 					if(data != null){
-						//logger.debug("HeaderIndex - '{}'", field.getHeaderIndex());
-						//TODO: Validate Type
-						//context.validateConstraint(field, constraint, data);
-						//TODO: Validate Format
-						//Already in error state, we can ignore
-						if(data.getStatus() == null || !data.getStatus().equals(FieldConstraint.LEVEL_ERROR)){
+					 TypeValidationContext typeContext = new TypeValidationContext();
+					 typeContext.validate(field, data);
+						if(data.getStatusLevel() == null || !data.getStatusLevel().equals(FieldConstraint.LEVEL_ERROR)){
 							for(FieldConstraint constraint:field.getConstraints()){
-								//Already in error state, we can ignore
-								//if(data.getStatus() == null || !data.getStatus().equals(FieldConstraint.LEVEL_ERROR)){
-									ConstraintValidationContext context = new ConstraintValidationContext();
-									context.validate(field, constraint, data); //Validate Constraint	
-									if(data.getStatus().equals(FieldConstraint.LEVEL_ERROR) || data.getStatus().equals(FieldConstraint.LEVEL_WARNING)){
-										logger.debug("Row {} - Field '{}' validation {}: '{}' = {}, Value = '{}'", sourceFileRecord.getRowIndex(), field.getName(), constraint.getLevel().toUpperCase(), constraint.getType(), constraint.getValue(), data.getData());	
-									}
-								//}
+							//Already in error state, we can ignore
+							//if(data.getStatus() == null || !data.getStatus().equals(FieldConstraint.LEVEL_ERROR)){
+								ConstraintValidationContext context = new ConstraintValidationContext();
+								context.validate(field, constraint, data); //Validate Constraint	
+								if(data.getStatusLevel().equals(FieldConstraint.LEVEL_ERROR) || data.getStatusLevel().equals(FieldConstraint.LEVEL_WARNING)){
+									logger.debug("Row {} - Field '{}' validation {}: '{}' = {}, Value = '{}'", sourceFileRecord.getRowIndex(), field.getName(), constraint.getLevel().toUpperCase(), constraint.getType(), constraint.getValue(), data.getData());	
+								}
+							//}
 							}
 						}
 					}

@@ -11,7 +11,7 @@ public class MinLengthConstraintValidationStrategy implements ConstraintValidati
 	@Override
 	public void validate(SchemaField field, FieldConstraint constraint, Data data) {
 		if(data.getData().length() < Integer.parseInt(constraint.getValue())){
-			data.setStatus(constraint.getLevel());
+			data.setStatusLevel(constraint.getLevel());
 			data.setValidatorStatus(File.STATUS_FAIL);
 		}
 		

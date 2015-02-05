@@ -47,7 +47,7 @@ public class MaximumConstraintValidationStrategy implements ConstraintValidation
 	 */
 	private void validateString(SchemaField field, FieldConstraint constraint, Data data){
 		if(data.getData().length() > Integer.parseInt(constraint.getValue())){
-			data.setStatus(constraint.getLevel());
+			data.setStatusLevel(constraint.getLevel());
 			data.setValidatorStatus(File.STATUS_FAIL);
 		}
 	}
@@ -61,7 +61,7 @@ public class MaximumConstraintValidationStrategy implements ConstraintValidation
 	 */
 	private void validateInteger(SchemaField field, FieldConstraint constraint, Data data){
 		if(Integer.parseInt(data.getData()) > Integer.parseInt(constraint.getValue())){
-			data.setStatus(constraint.getLevel());
+			data.setStatusLevel(constraint.getLevel());
 			data.setValidatorStatus(File.STATUS_FAIL);
 		}
 	}	
@@ -75,7 +75,7 @@ public class MaximumConstraintValidationStrategy implements ConstraintValidation
 	 */
 	private void validateNumber(SchemaField field, FieldConstraint constraint, Data data){
 		if(Float.valueOf(data.getData()) > Float.valueOf(constraint.getValue())){
-			data.setStatus(constraint.getLevel());
+			data.setStatusLevel(constraint.getLevel());
 			data.setValidatorStatus(File.STATUS_FAIL);
 		}
 	}	
@@ -101,7 +101,7 @@ public class MaximumConstraintValidationStrategy implements ConstraintValidation
 		if(dataDate != null && constraintDate != null){
 		  if(dataDate.compareTo(constraintDate) > 0){
 			  //logger.debug("'{}' - '{}'", dataDate, constraintDate);
-			  data.setStatus(constraint.getLevel());
+			  data.setStatusLevel(constraint.getLevel());
 			  data.setValidatorStatus(File.STATUS_FAIL);
 		  }
 		}

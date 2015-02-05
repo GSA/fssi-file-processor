@@ -30,7 +30,7 @@ public class RequiredConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
 	}
 
@@ -49,7 +49,7 @@ public class RequiredConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not make failure", File.STATUS_FAIL, data.getValidatorStatus());			
 	}	
 	
@@ -68,7 +68,7 @@ public class RequiredConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertNotEquals("failure - RequiredConstraintValidationStrategyTest caughtError", fieldConstraint.getLevel(), data.getStatus());
+		Assert.assertNotEquals("failure - RequiredConstraintValidationStrategyTest caughtError", fieldConstraint.getLevel(), data.getStatusLevel());
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not pass", File.STATUS_PASS, data.getValidatorStatus());				
 	}	
 

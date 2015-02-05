@@ -16,7 +16,7 @@ public class PatternConstraintValidationStrategy implements ConstraintValidation
 		
 		Pattern pattern = Pattern.compile(constraint.getValue(), Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(data.getData());
-		if(!matcher.matches()) data.setStatus(constraint.getLevel());
+		if(!matcher.matches()) data.setStatusLevel(constraint.getLevel());
 		
 		//if(!data.getStatus().matches(constraint.getValue())) data.setStatus(constraint.getLevel());
 	}

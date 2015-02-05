@@ -12,7 +12,7 @@ public class RequiredConstraintValidationStrategy implements ConstraintValidatio
 	public void validate(SchemaField field, FieldConstraint constraint, Data data) {
 		if(constraint.getValue().toUpperCase().equals("TRUE")){
 			if(data == null || data.getData() == null || data.getData().equals("") || data.getData().isEmpty()){
-				data.setStatus(constraint.getLevel());
+				data.setStatusLevel(constraint.getLevel());
 				data.setValidatorStatus(File.STATUS_FAIL);
 			}
 		}

@@ -45,11 +45,16 @@ public class DateHelper {
 		return date;
 	}
 	
+	/**
+	 * Based upon the wisdom of the powers at be, we determined that a date that 
+	 * 
+	 * @return date minimum acceptable date
+	 */
 	public static Date getMinDate(){
 		Date date = new Date();
 		Calendar c = Calendar.getInstance(); 
 		c.setTime(date); 
-		c.add(Calendar.YEAR, -10);
+		c.add(Calendar.YEAR, -50);
 		date = c.getTime();
 		return date;
 	}

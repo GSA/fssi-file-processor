@@ -28,7 +28,7 @@ public class StringTypeValidationStrategyTest {
 		
 		context.validate(field, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", File.STATUS_PASS, data.getStatus());
+		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", File.STATUS_PASS, data.getStatusLevel());
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not make failure", File.STATUS_PASS, data.getValidatorStatus());		
 	}
 
@@ -44,11 +44,11 @@ public class StringTypeValidationStrategyTest {
 		SchemaField field = MockSchemaField.make("STRING", SchemaField.TYPE_STRING);
 		Data data = MockData.make();
 		data.setValidatorStatus(File.STATUS_FAIL);
-		data.setStatus(File.STATUS_ERROR);
+		data.setStatusLevel(File.STATUS_ERROR);
 		
 		context.validate(field, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", File.STATUS_ERROR, data.getStatus());
+		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", File.STATUS_ERROR, data.getStatusLevel());
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
 	}
 		
