@@ -12,19 +12,24 @@ public class DateTypeValidationStrategy implements TypeValidationStrategy {
 
 	@Override
 	public void validate(SchemaField field, Data data) {
-		System.out.println(data.getData());
 		if(data.getData() != null && !data.getData().isEmpty() && !data.getData().equals("")){
 			String dateFormatString = DateHelper.FORMAT_YYYY_MM_DD;
 			if(field.getFormat() != null && !field.getFormat().isEmpty() && !field.getFormat().equals("")){
 				dateFormatString = field.getFormat();
 			}
-			Date date = DateHelper.getDate(data.getData(), dateFormatString);			
+			Date date = DateHelper.getDate(data.getData(), dateFormatString);
 			if(date == null){
 				data.setStatus(File.STATUS_FATAL);
-				data.setValidatorStatus(File.STATUS_PASS);
-			}
-			System.out.println(date);
-			
+				data.setValidatorStatus(File.STATUS_FAIL);
+			}else if(date.compareTo(DateHelper.getMinDate()) < 0){
+				logger.warn("This date is before our accessible threshold for a date");
+				data.setStatus(File.STATUS_ERROR);
+				data.setValidatorStatus(File.STATUS_FAIL);
+			}else if(date.compareTo(DateHelper.getMaxDate())  > 0){
+				logger.warn("This date is past our accessible threshold for a date");
+				data.setStatus(File.STATUS_ERROR);
+				data.setValidatorStatus(File.STATUS_FAIL);			
+			}		
 		}
 		
 		if(data.getStatus() == null || data.getStatus().isEmpty() || data.getStatus().equals("")){

@@ -56,6 +56,23 @@ public class DateTypeValidationStrategyTest {
 		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
 		
 		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE);
+		Data data = MockData.make("432154123");
+		
+		context.validate(field, data);
+		//data.setStatus(FieldConstraint.LEVEL_ERROR);
+		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", File.STATUS_FATAL, data.getStatus());
+		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testMaxDateWithoutFormat() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
+		
+		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE);
 		Data data = MockData.make("4321-54-123");
 		
 		context.validate(field, data);
@@ -63,6 +80,24 @@ public class DateTypeValidationStrategyTest {
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", File.STATUS_ERROR, data.getStatus());
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
 	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testMinDateWithoutFormat() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
+		
+		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE);
+		Data data = MockData.make("1024-54-123");
+		
+		context.validate(field, data);
+		//data.setStatus(FieldConstraint.LEVEL_ERROR);
+		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", File.STATUS_ERROR, data.getStatus());
+		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
+	}
+	
 	/**
 	 * 
 	 */
