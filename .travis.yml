@@ -1,1 +1,4 @@
 language: java
+notifications:
+    flowdock:
+        secure: "gx1otzOuydSFhxCTQahCEmS/uV6KIQf5YoLQIAqtU9E/RQZDy3FMeNixhli8HzLvsWAvoQoe5aJV2cLz0Sm5SPpdeSwfkNKXeBx4ZR+JLHPfo4WXaVJz1G6ZRBfiALTODriAEmu1QZnKPTWsK/svM19cDqzMCxOGH0pd0ikVY/I="
