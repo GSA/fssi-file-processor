@@ -5,7 +5,7 @@ import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.TypeValidationStrategy;
 
-public class StringTypeValidationStrategy implements TypeValidationStrategy {
+public class AnyTypeValidationStrategy implements TypeValidationStrategy {
 
 	@Override
 	public void validate(SchemaField field, Data data) {
