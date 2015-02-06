@@ -1,3 +1,9 @@
+[![Build Status](https://travis-ci.org/GSA/fssi-file-processor.svg?branch=master)](https://travis-ci.org/GSA/fssi-file-processor)
+<a href="https://scan.coverity.com/projects/4177">
+  <img alt="Coverity Scan Build Status"
+       src="https://scan.coverity.com/projects/4177/badge.svg"/>
+</a>
+
 #FSSI File Processor
 
 Traditional Data warehouses and Data Integration platforms provide a great way to manage structured data. But what happens when your data is semi-structured? or unstructured? This application aims to "Assist" with turning semi-structured and unstructured data into structured data.
@@ -29,10 +35,3 @@ TBD
 
 ##Point of Contact
 If you have any questions on this repository, please feel free to contact [strategicsourcing@gsa.gov](mailto:strategicsourcing@gsa.gov).
-
-
-
-<a href="https://scan.coverity.com/projects/4177">
-  <img alt="Coverity Scan Build Status"
-       src="https://scan.coverity.com/projects/4177/badge.svg"/>
-</a>
