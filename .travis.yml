@@ -15,7 +15,7 @@ addons:
       name: "GSA/fssi-file-processor"
       description: "Build submitted via Travis CI"
     notification_email: davidlarrimore@gmail.com
-    build_command_prepend: "mvn clean"
+    build_command_prepend: "mvn test"
     build_command:   "mvn -DskipTests=true compile"
     branch_pattern: coverity_scan
     
