@@ -7,8 +7,7 @@ env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
-   - secure:
-"HMdpRyW8oECphf7tB3vC8pgxFFYs0nLrThk69vva28whDqAZlNoaDAR9WqCJz4Q6WNyiQbEBQZ0xaMBW/j1OD+OZYV2brVBifQdcixaPLyjcc4GMfCGr0cF7PVFtDmFCFbqy5eGLONCas3W2hU5ftkszgv5QasbH/+AQ5SCUTog="
+   - secure: "HMdpRyW8oECphf7tB3vC8pgxFFYs0nLrThk69vva28whDqAZlNoaDAR9WqCJz4Q6WNyiQbEBQZ0xaMBW/j1OD+OZYV2brVBifQdcixaPLyjcc4GMfCGr0cF7PVFtDmFCFbqy5eGLONCas3W2hU5ftkszgv5QasbH/+AQ5SCUTog="
 
 addons:
   coverity_scan:
@@ -16,7 +15,7 @@ addons:
       name: "GSA/fssi-file-processor"
       description: "Build submitted via Travis CI"
     notification_email: davidlarrimore@gmail.com
-    build_command_prepend: "mvn test"
+    build_command_prepend: "mvn clean"
     build_command:   "mvn -DskipTests=true compile"
     branch_pattern: coverity_scan
     
