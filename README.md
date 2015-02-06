@@ -29,3 +29,10 @@ TBD
 
 ##Point of Contact
 If you have any questions on this repository, please feel free to contact [strategicsourcing@gsa.gov](mailto:strategicsourcing@gsa.gov).
+
+
+
+<a href="https://scan.coverity.com/projects/4177">
+  <img alt="Coverity Scan Build Status"
+       src="https://scan.coverity.com/projects/4177/badge.svg"/>
+</a>
