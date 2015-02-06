@@ -10,9 +10,7 @@ public class IntegerTypeValidationStrategy implements TypeValidationStrategy {
 	@Override
 	public void validate(SchemaField field, Data data) {
 		if(data.getStatusLevel() == null || (!data.getStatusLevel().equals(File.STATUS_ERROR) && !data.getStatusLevel().equals(File.STATUS_FATAL))){
-			if(data.getData() == null || data.getData().isEmpty() || data.getData().equals("")){
-				
-			}else{
+			if(data.getData() != null && !data.getData().isEmpty() && !data.getData().equals("")){
 				Integer integer = null;
 				Double number = null;
 				

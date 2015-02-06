@@ -82,7 +82,7 @@ public class SchemaValidator {
 				}
 				
 				if(newField.getConstraints() != null && !newField.getConstraints().isEmpty()){
-					newField.setConstraints(validateFieldConstraints(newSchema, newField));	
+					newField.setConstraints(validateFieldConstraints(newField));	
 				}
 				
 				//TODO: Validate format to make sure it is compatible with type
@@ -129,7 +129,7 @@ public class SchemaValidator {
 	}	
 	
 	
-	private ArrayList<FieldConstraint> validateFieldConstraints(Schema newSchema, SchemaField newField) {
+	private ArrayList<FieldConstraint> validateFieldConstraints(SchemaField newField) {
 		ArrayList<FieldConstraint> fieldConstraints = new ArrayList<FieldConstraint>();
 		for(FieldConstraint constraint:newField.getConstraints()){
 			FieldConstraint newConstraint = constraint;
