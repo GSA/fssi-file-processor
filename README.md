@@ -17,6 +17,13 @@ The FSSI File Processor has 4 main objects that server as inputs to the process;
 The FSSI File processor itself is run on files. It uses the above objects to run itself. At a minimum you must have [Providers](../working/providers/) and [Source Files](../working/srcfiles/). 
 
 
+##Configuration
+The FSSI File Processor is configured in 2 main ways:
+
+1. Global configuration via the ##config.properties file
+2. Local configuration via ##Providers files.
+
+
 ##Running the FSSI File Processor
 TBD
 
