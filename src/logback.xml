@@ -11,7 +11,7 @@
   </appender>
 
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file>./logs/fileprocessor.log</file>
+    <file>./fileProcessor.log</file>
     <!-- encoders are assigned the type
          ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
     <append>false</append>
