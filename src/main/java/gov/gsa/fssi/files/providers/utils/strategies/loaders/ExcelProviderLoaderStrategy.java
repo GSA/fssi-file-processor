@@ -38,12 +38,12 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 			
 			logger.info("Found '{}' rows in file '{}'", sheet1.getLastRowNum(), fileName);
 		    for (Row row : sheet1) {
-		    	logger.info("Loading header row - '{}'", row.getRowNum());
+		    	//logger.info("Loading header row - '{}'", row.getRowNum());
 		    	Provider newProvider = new Provider();	
 		    	//If this is the header row, we need to figure out where the columns we need are
 		    	if (row.getRowNum() == 0){
 		    		for (Cell cell : row) {
-		    			logger.debug("{} - {}", cell.getColumnIndex(), cell.getStringCellValue().toUpperCase());
+		    			logger.debug("Loading Header Row {} - {}", cell.getColumnIndex(), cell.getStringCellValue().toUpperCase());
 		    			
 		    			if(cell.getStringCellValue().toUpperCase().toString().equals("PROVIDER_ID")){
 		    				providerIdColumn = cell.getColumnIndex();	
@@ -63,33 +63,35 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 		    	}else{
 		    		
 		    		//TODO: Add logic to ignore empty rows
-			    	logger.info("Loading data row - '{}'", row.getRowNum());
-	    			if (!(row.getCell(providerIdColumn) == null) && !(row.getCell(providerIdColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-	    				newProvider.setProviderId(row.getCell(providerIdColumn).getStringCellValue().toUpperCase());
-	    			}
-	    				    			
-	    			if (!(row.getCell(providerNameColumn) == null) && !(row.getCell(providerNameColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerNameColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-	    				newProvider.setProviderName(row.getCell(providerNameColumn).getStringCellValue().toUpperCase());
-	    			}
-	    			
-	    			if (!(row.getCell(providerIdentifierColumn) == null) && !(row.getCell(providerIdentifierColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdentifierColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-	    				newProvider.setProviderIdentifier(row.getCell(providerIdentifierColumn).getStringCellValue().toUpperCase());
-	    			}				    			
-	    			
-	    			if (!(row.getCell(fileOutputTypeColumn) == null) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().isEmpty()) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-	    				newProvider.setFileOutputType(row.getCell(fileOutputTypeColumn).getStringCellValue().toUpperCase());
-	    			}			    					    			
-	    			
-	    			if (!(row.getCell(schemaNameColumn) == null) && !(row.getCell(schemaNameColumn).getStringCellValue().isEmpty()) && !(row.getCell(schemaNameColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-	    				newProvider.setSchemaName(row.getCell(schemaNameColumn).getStringCellValue().toUpperCase());
-	    			}				    			
-	    			
-	    			if (!(row.getCell(providerEmailColumn) == null) && !(row.getCell(providerEmailColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerEmailColumn).getStringCellValue().toUpperCase().equals("NULL"))){
-	    				newProvider.setProviderEmail(row.getCell(providerEmailColumn).getStringCellValue().toUpperCase());
-	    			}
-	    			
-    				providers.add(newProvider);
-    				logger.info("Added new provider '{}' to list of Providers", newProvider.getProviderIdentifier());
+			    	if(!isRowEmpty(row)){
+		    			if (!(row.getCell(providerIdColumn) == null) && !(row.getCell(providerIdColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdColumn).getStringCellValue().toUpperCase().equals("NULL"))){
+		    				newProvider.setProviderId(row.getCell(providerIdColumn).getStringCellValue().toUpperCase());
+		    			}
+		    				    			
+		    			if (!(row.getCell(providerNameColumn) == null) && !(row.getCell(providerNameColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerNameColumn).getStringCellValue().toUpperCase().equals("NULL"))){
+		    				newProvider.setProviderName(row.getCell(providerNameColumn).getStringCellValue().toUpperCase());
+		    			}
+		    			
+		    			if (!(row.getCell(providerIdentifierColumn) == null) && !(row.getCell(providerIdentifierColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerIdentifierColumn).getStringCellValue().toUpperCase().equals("NULL"))){
+		    				newProvider.setProviderIdentifier(row.getCell(providerIdentifierColumn).getStringCellValue().toUpperCase());
+		    			}				    			
+		    			
+		    			if (!(row.getCell(fileOutputTypeColumn) == null) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().isEmpty()) && !(row.getCell(fileOutputTypeColumn).getStringCellValue().toUpperCase().equals("NULL"))){
+		    				newProvider.setFileOutputType(row.getCell(fileOutputTypeColumn).getStringCellValue().toUpperCase());
+		    			}			    					    			
+		    			
+		    			if (!(row.getCell(schemaNameColumn) == null) && !(row.getCell(schemaNameColumn).getStringCellValue().isEmpty()) && !(row.getCell(schemaNameColumn).getStringCellValue().toUpperCase().equals("NULL"))){
+		    				newProvider.setSchemaName(row.getCell(schemaNameColumn).getStringCellValue().toUpperCase());
+		    			}				    			
+		    			
+		    			if (!(row.getCell(providerEmailColumn) == null) && !(row.getCell(providerEmailColumn).getStringCellValue().isEmpty()) && !(row.getCell(providerEmailColumn).getStringCellValue().toUpperCase().equals("NULL"))){
+		    				newProvider.setProviderEmail(row.getCell(providerEmailColumn).getStringCellValue().toUpperCase());
+		    			}
+		    			
+	    				providers.add(newProvider);
+	    				logger.info("Added new provider '{}' to list of Providers", newProvider.getProviderIdentifier());
+		    		
+			    	}
 		    	}
 		    }
 		    
@@ -111,6 +113,16 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 		}
 		
 		
+	}
+	
+	
+	public static boolean isRowEmpty(Row row) {
+	    for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
+	        Cell cell = row.getCell(c);
+	        if (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK)
+	            return false;
+	    }
+	    return true;
 	}
 
 }
