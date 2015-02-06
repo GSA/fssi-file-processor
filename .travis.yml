@@ -13,8 +13,13 @@ addons:
   coverity_scan:
     project:
       name: "GSA/fssi-file-processor"
-      description: "<Your project description here>"
+      description: "Build submitted via Travis CI"
     notification_email: davidlarrimore@gmail.com
-    build_command_prepend: "<Your build preprocessing command here>"
-    build_command:   "<Your build command here>"
+    build_command_prepend: "mvn clean"
+    build_command:   "mvn -DskipTests=true compile"
     branch_pattern: coverity_scan
+    
+    
+    
+    
+    
