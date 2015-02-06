@@ -25,40 +25,40 @@ public class Config {
 	/**
 	 * @deprecated
 	 */
-	public static String WORKING_DIRECTORY = "working_directory";
+	public static final String WORKING_DIRECTORY = "working_directory";
 	
 	
 	/**
 	 * SourceFiles Directory denotes where all of the "source files" are located 
 	 * that you wish to load and process
 	 */
-	public static String SOURCEFILES_DIRECTORY = "sourcefiles_directory";
+	public static final String SOURCEFILES_DIRECTORY = "sourcefiles_directory";
 	
 	/**
 	 * Schemas Directory is where schemas are stored
 	 */
-	public static String SCHEMAS_DIRECTORY = "schemas_directory";	
+	public static final String SCHEMAS_DIRECTORY = "schemas_directory";	
 	
 	/**
 	 * This Directory was originally designed to handle "Capture" activities
 	 * with semi-structured and unstructured data sets. Not in use.
 	 * @deprecated
 	 */
-	public static String DATAMAPS_DIRECTORY = "datamaps_directory";		
+	public static final String DATAMAPS_DIRECTORY = "datamaps_directory";		
 	/**
 	 * business facing logs, not system logs.
 	 */
-	public static String LOGS_DIRECTORY = "logs_directory";
+	public static final String LOGS_DIRECTORY = "logs_directory";
 	
 	/**
 	 * Location of files where provider information is stored
 	 */
-	public static String PROVIDERS_DIRECTORY = "providers_directory";	
+	public static final String PROVIDERS_DIRECTORY = "providers_directory";	
 	
 	/**
 	 * Directory where all post processed files are placed.
 	 */
-	public static String STAGED_DIRECTORY = "staged_directory";	
+	public static final String STAGED_DIRECTORY = "staged_directory";	
 	
 
 	/**
@@ -66,13 +66,13 @@ public class Config {
 	 * @see EXPORT_MODE_EXPLODE
 	 * @see EXPORT_MODE_IMPLODE
 	 */
-	public static String EXPORT_MODE = "export_mode";
+	public static final String EXPORT_MODE = "export_mode";
 	
 	/**
 	 * Not currently in use
 	 * @deprecated
 	 */
-	public static String VALIDATION_MODE = "validation_mode";	
+	public static final String VALIDATION_MODE = "validation_mode";	
 	
 	/**
 	 * @see main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.organizers.ExplodeSourceFileOrganizerStrategy#organize
@@ -86,16 +86,16 @@ public class Config {
 	
 	
 	
-	public static String DEFAULT_WORKING_DIRECTORY = "./working/";
-	public static String DEFAULT_SOURCEFILES_DIRECTORY = "./working/srcfiles/";
-	public static String DEFAULT_SCHEMAS_DIRECTORY = "./working/schemas/";	
-	public static String DEFAULT_DATAMAPS_DIRECTORY = "./working/schemas/";		
-	public static String DEFAULT_LOGS_DIRECTORY = "./working/logs/";			
-	public static String DEFAULT_PROVIDERS_DIRECTORY = "./working/providers/";	
-	public static String DEFAULT_STAGED_DIRECTORY = "./working/staged/";	
-	public static String DEFAULT_EXPORT_MODE = "implode";
-	public static String DEFAULT_VALIDATION_MODE = "";
-	public static String DEFAULT_PROPFILE_NAME = "config.properties";
+	public static final String DEFAULT_WORKING_DIRECTORY = "./working/";
+	public static final String DEFAULT_SOURCEFILES_DIRECTORY = "./working/srcfiles/";
+	public static final String DEFAULT_SCHEMAS_DIRECTORY = "./working/schemas/";	
+	public static final String DEFAULT_DATAMAPS_DIRECTORY = "./working/schemas/";		
+	public static final String DEFAULT_LOGS_DIRECTORY = "./working/logs/";			
+	public static final String DEFAULT_PROVIDERS_DIRECTORY = "./working/providers/";	
+	public static final String DEFAULT_STAGED_DIRECTORY = "./working/staged/";	
+	public static final String DEFAULT_EXPORT_MODE = "implode";
+	public static final String DEFAULT_VALIDATION_MODE = "";
+	public static final String DEFAULT_PROPFILE_NAME = "config.properties";
 	
 	
 	
