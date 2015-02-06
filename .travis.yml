@@ -2,3 +2,19 @@ language: java
 notifications:
     flowdock:
         secure: "gx1otzOuydSFhxCTQahCEmS/uV6KIQf5YoLQIAqtU9E/RQZDy3FMeNixhli8HzLvsWAvoQoe5aJV2cLz0Sm5SPpdeSwfkNKXeBx4ZR+JLHPfo4WXaVJz1G6ZRBfiALTODriAEmu1QZnKPTWsK/svM19cDqzMCxOGH0pd0ikVY/I="
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "fIYeKUokO9psJDyt/UX1A32+Kp7IJZyhQVN9xkNAElnFuv+mqJ0MIPOjCJre8MEcEu4iA9KGF2iiQ4WH9C4wgyA0IhsMCap29ozE+R/FmhZOMLzUXQlUXmj7LhnMM9kL/dvcbS2YDmHauFNLR1q7UCJ+FSMSrcDnogFJNSvVEQU="
+
+addons:
+  coverity_scan:
+    project:
+      name: "GSA/fssi-file-processor"
+      description: "<Your project description here>"
+    notification_email: davidlarrimore@gmail.com
+    build_command_prepend: "<Your build preprocessing command here>"
+    build_command:   "<Your build command here>"
+    branch_pattern: coverity_scan
