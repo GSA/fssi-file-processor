@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public interface SourceFileOrganizerStrategy {
-	static Logger logger = LoggerFactory.getLogger(SourceFileOrganizerStrategy.class);
-	static Config config = new Config();	
-	public void organize(SourceFile sourceFile);
+	Logger logger = LoggerFactory.getLogger(SourceFileOrganizerStrategy.class);
+	Config config = new Config();	
+	void organize(SourceFile sourceFile);
 }

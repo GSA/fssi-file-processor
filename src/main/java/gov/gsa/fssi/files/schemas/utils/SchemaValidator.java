@@ -142,20 +142,23 @@ public class SchemaValidator {
 			}else{
 				
 				//Checking default level value. Level cannot be null
-				if(newConstraint.getLevel() == null || newConstraint.getLevel().isEmpty() || !isValidLevel(newConstraint.getLevel())){
+				if(newConstraint.getLevelName() == null || newConstraint.getLevelName().isEmpty() || !isValidLevel(newConstraint.getLevelName())){
 					logger.warn("Level in '{} - {}' is null, checking to options", newField.getName(), newConstraint.getType());
 					
 					//checking options
 					if(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL) != null && isValidLevel(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL))){
 						logger.info("Found good level in '{} - {}' options, using that",newConstraint.getType());
-						newConstraint.setLevel(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL));
+						newConstraint.setLevelName(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL));
+						newConstraint.setLevel(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL));						
 					}else{
 						logger.warn("No good level in in '{} - {}' found, defaulting to error", newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL) , newConstraint.getType());
-						newConstraint.setLevel(FieldConstraint.LEVEL_ERROR);
+						newConstraint.setLevelName(FieldConstraint.LEVEL_ERROR);
+						newConstraint.setLevel(FieldConstraint.LEVEL_ERROR);						
 					}
 				}else{
 					logger.warn("No good level found in in '{} - {}' , defaulting to error", newField.getName(), newConstraint.getType());
-					newConstraint.setLevel(FieldConstraint.LEVEL_ERROR);
+					newConstraint.setLevelName(FieldConstraint.LEVEL_ERROR);
+					newConstraint.setLevel(FieldConstraint.LEVEL_ERROR);					
 				}
 				
 				

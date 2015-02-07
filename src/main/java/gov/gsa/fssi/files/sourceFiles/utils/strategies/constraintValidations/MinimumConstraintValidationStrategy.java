@@ -9,9 +9,13 @@ public class MinimumConstraintValidationStrategy implements ConstraintValidation
 
 	@Override
 	public void validate(SchemaField field, FieldConstraint constraint, Data data) {
-		if(field.getType().equals(SchemaField.TYPE_ANY) || field.getType().equals(SchemaField.TYPE_STRING)){
-			if(data.getData().length() < Integer.parseInt(constraint.getValue())) data.setStatusLevel(constraint.getLevel());
-		}
+		if(data != null && data.getData() != null){		
+			if(field.getType().equals(SchemaField.TYPE_ANY) || field.getType().equals(SchemaField.TYPE_STRING)){
+				if(data.getData().length() < Integer.parseInt(constraint.getValue())) data.addValidationResult(false, constraint.getLevel(), constraint.getRuleText());
+			}else{
+				data.addValidationResult(true, 0, constraint.getRuleText());	
+			}
+		}else data.addValidationResult(true, 0, constraint.getRuleText());	
 	}
 
 	@Override

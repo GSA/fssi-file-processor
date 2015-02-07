@@ -155,10 +155,7 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy{
 			for (int i = 0; i < constraintList.getLength(); i++) {
 				currentNode = constraintList.item(i);
 				FieldConstraint fieldConstraint = loadConstraint(currentNode);
-				if(fieldConstraint == null){
-				}else{
-					constraints.add(fieldConstraint);	
-				}
+				if(fieldConstraint != null) constraints.add(fieldConstraint);
 			}
 			return constraints;
 		}

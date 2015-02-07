@@ -26,7 +26,7 @@ public class MockFieldConstraint{
 		return fieldConstraint;
 	}
 	
-	public static FieldConstraint make(String type, String value, String level){
+	public static FieldConstraint make(String type, String value, int level){
 		FieldConstraint fieldConstraint = new FieldConstraint();
 		fieldConstraint.setType(type);
 		fieldConstraint.setLevel(level);

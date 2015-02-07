@@ -38,14 +38,14 @@ public class SourceFileValidator{
 					if(data != null){
 					 TypeValidationContext typeContext = new TypeValidationContext();
 					 typeContext.validate(field, data);
-						if(data.getStatusLevel() == null || !data.getStatusLevel().equals(FieldConstraint.LEVEL_ERROR)){
+						if(data.getMaxErrorLevel() < 2 && data.getStatus() == true){
 							for(FieldConstraint constraint:field.getConstraints()){
 							//Already in error state, we can ignore
 							//if(data.getStatus() == null || !data.getStatus().equals(FieldConstraint.LEVEL_ERROR)){
 								ConstraintValidationContext context = new ConstraintValidationContext();
 								context.validate(field, constraint, data); //Validate Constraint	
-								if(data.getStatusLevel().equals(FieldConstraint.LEVEL_ERROR) || data.getStatusLevel().equals(FieldConstraint.LEVEL_WARNING)){
-									logger.debug("Row {} - Field '{}' validation {}: '{}' = {}, Value = '{}'", sourceFileRecord.getRowIndex(), field.getName(), constraint.getLevel().toUpperCase(), constraint.getType(), constraint.getValue(), data.getData());	
+								if(logger.isDebugEnabled() && data.getMaxErrorLevel() > 0){
+									logger.debug("Row {} - Field '{}' validation {}: '{}' = {}, Value = '{}'", sourceFileRecord.getRowIndex(), field.getName(), constraint.getLevelName(), constraint.getType(), constraint.getValue(), data.getData());	
 								}
 							//}
 							}

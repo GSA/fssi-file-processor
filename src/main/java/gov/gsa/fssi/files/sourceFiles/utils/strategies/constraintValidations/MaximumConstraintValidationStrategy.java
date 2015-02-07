@@ -2,7 +2,6 @@ package main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.constraintVali
 
 import java.util.Date;
 
-import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
@@ -13,28 +12,24 @@ public class MaximumConstraintValidationStrategy implements ConstraintValidation
 
 	@Override
 	public void validate(SchemaField field, FieldConstraint constraint, Data data) {
-		if (field.getType().equals(SchemaField.TYPE_STRING)){
-			validateString(field, constraint, data);
-		}else if (field.getType().equals(SchemaField.TYPE_INTEGER)){
-			validateInteger(field, constraint, data);
-		}else if (field.getType().equals(SchemaField.TYPE_NUMBER)){
-			validateNumber(field, constraint, data);
-		}else if (field.getType().equals(SchemaField.TYPE_DATE)){
-			validateDate(field, constraint, data);
-		}else{
-			validateString(field, constraint, data);
-		}
-		
-		if(data.getValidatorStatus() == null || data.getValidatorStatus().isEmpty() || data.getValidatorStatus().equals("")){
-			data.setValidatorStatus(File.STATUS_PASS);
-		}
+		if(data != null && data.getData() != null){
+			if (field.getType().equals(SchemaField.TYPE_STRING)){
+				validateString(constraint, data);
+			}else if (field.getType().equals(SchemaField.TYPE_INTEGER)){
+				validateInteger(constraint, data);
+			}else if (field.getType().equals(SchemaField.TYPE_NUMBER)){
+				validateNumber(constraint, data);
+			}else if (field.getType().equals(SchemaField.TYPE_DATE)){
+				validateDate(field, constraint, data);
+			}else{
+				validateString(constraint, data);
+			}
+		}else data.addValidationResult(true, 0, constraint.getRuleText());	
 	}
 
 	@Override
 	public boolean isValid(SchemaField field, FieldConstraint constraint,Data data) {
 		// TODO Auto-generated method stub
-		
-		
 		return true;
 	}
 	
@@ -45,10 +40,11 @@ public class MaximumConstraintValidationStrategy implements ConstraintValidation
 	 * @param constraint
 	 * @param data
 	 */
-	private void validateString(SchemaField field, FieldConstraint constraint, Data data){
+	private void validateString(FieldConstraint constraint, Data data){
 		if(data.getData().length() > Integer.parseInt(constraint.getValue())){
-			data.setStatusLevel(constraint.getLevel());
-			data.setValidatorStatus(File.STATUS_FAIL);
+			data.addValidationResult(false, constraint.getLevel(), constraint.getRuleText());
+		}else{
+			  data.addValidationResult(true, 0, constraint.getRuleText());	
 		}
 	}
 	
@@ -59,10 +55,11 @@ public class MaximumConstraintValidationStrategy implements ConstraintValidation
 	 * @param constraint
 	 * @param data
 	 */
-	private void validateInteger(SchemaField field, FieldConstraint constraint, Data data){
+	private void validateInteger(FieldConstraint constraint, Data data){
 		if(Integer.parseInt(data.getData()) > Integer.parseInt(constraint.getValue())){
-			data.setStatusLevel(constraint.getLevel());
-			data.setValidatorStatus(File.STATUS_FAIL);
+			data.addValidationResult(false, constraint.getLevel(), constraint.getRuleText());
+		}else{
+			  data.addValidationResult(true, 0, constraint.getRuleText());	
 		}
 	}	
 	
@@ -73,10 +70,11 @@ public class MaximumConstraintValidationStrategy implements ConstraintValidation
 	 * @param constraint
 	 * @param data
 	 */
-	private void validateNumber(SchemaField field, FieldConstraint constraint, Data data){
+	private void validateNumber(FieldConstraint constraint, Data data){
 		if(Float.valueOf(data.getData()) > Float.valueOf(constraint.getValue())){
-			data.setStatusLevel(constraint.getLevel());
-			data.setValidatorStatus(File.STATUS_FAIL);
+			data.addValidationResult(false, constraint.getLevel(), constraint.getRuleText());
+		}else{
+			  data.addValidationResult(true, 0, constraint.getRuleText());	
 		}
 	}	
 
@@ -100,9 +98,9 @@ public class MaximumConstraintValidationStrategy implements ConstraintValidation
 				
 		if(dataDate != null && constraintDate != null){
 		  if(dataDate.compareTo(constraintDate) > 0){
-			  //logger.debug("'{}' - '{}'", dataDate, constraintDate);
-			  data.setStatusLevel(constraint.getLevel());
-			  data.setValidatorStatus(File.STATUS_FAIL);
+			  data.addValidationResult(false, constraint.getLevel(), constraint.getRuleText());
+		  }else{
+			  data.addValidationResult(true, 0, constraint.getRuleText());	
 		  }
 		}
 		

@@ -61,12 +61,10 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 						try {
 							data.setData(csvRecord.get(dataPairs.getValue().toString()).trim());
 							data.setHeaderIndex((Integer)dataPairs.getKey());
-							data.setStatusLevel(File.STATUS_LOADED);
 							thisRecord.addData(data);
 						} catch (IllegalArgumentException e) {
 							//logger.error("Failed to process record '{} - {}' in file '{}'", pairs.getKey().toString(), pairs.getValue().toString(), sourceFile.getFileName());
 							logger.error("{}", e.getMessage());
-							data.setStatusLevel(File.STATUS_ERROR);
 						}
 						
 					}

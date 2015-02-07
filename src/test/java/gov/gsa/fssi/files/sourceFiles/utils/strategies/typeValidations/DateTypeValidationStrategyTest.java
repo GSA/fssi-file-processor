@@ -1,6 +1,5 @@
 package test.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.typeValidations;
 
-import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.contexts.TypeValidationContext;
@@ -26,8 +25,8 @@ public class DateTypeValidationStrategyTest {
 		
 		context.validate(field, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", File.STATUS_PASS, data.getStatusLevel());
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", File.STATUS_PASS, data.getValidatorStatus());		
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", 0, data.getMaxErrorLevel());
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", true, data.getStatus());		
 	}
 
 	/**
@@ -43,8 +42,8 @@ public class DateTypeValidationStrategyTest {
 		
 		context.validate(field, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", File.STATUS_PASS, data.getStatusLevel());
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", File.STATUS_PASS, data.getValidatorStatus());		
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", 0, data.getMaxErrorLevel());
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", true, data.getStatus());		
 	}
 	
 	/**
@@ -60,8 +59,8 @@ public class DateTypeValidationStrategyTest {
 		
 		context.validate(field, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", File.STATUS_FATAL, data.getStatusLevel());
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", 3, data.getMaxErrorLevel());
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", false, data.getStatus());		
 	}
 	
 	/**
@@ -77,8 +76,8 @@ public class DateTypeValidationStrategyTest {
 		
 		context.validate(field, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", File.STATUS_ERROR, data.getStatusLevel());
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", 2, data.getMaxErrorLevel());
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", false, data.getStatus());		
 	}
 	
 	/**
@@ -94,9 +93,27 @@ public class DateTypeValidationStrategyTest {
 		
 		context.validate(field, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", File.STATUS_ERROR, data.getStatusLevel());
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", 2, data.getMaxErrorLevel());
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", false, data.getStatus());		
 	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testNotDate() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
+		
+		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE);
+		Data data = MockData.make("value");
+		
+		context.validate(field, data);
+		//data.setStatus(FieldConstraint.LEVEL_ERROR);
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", 3, data.getMaxErrorLevel());
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", false, data.getStatus());		
+	}
+	
 	
 	/**
 	 * 
@@ -112,8 +129,8 @@ public class DateTypeValidationStrategyTest {
 		
 		context.validate(field, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", File.STATUS_PASS, data.getStatusLevel());
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", File.STATUS_PASS, data.getValidatorStatus());		
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", 0, data.getMaxErrorLevel());
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", true, data.getStatus());		
 	}
 	
 	/**
@@ -130,8 +147,8 @@ public class DateTypeValidationStrategyTest {
 		
 		context.validate(field, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", File.STATUS_ERROR, data.getStatusLevel());
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", 2, data.getMaxErrorLevel());
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", false, data.getStatus());		
 	}	
 	
 	
@@ -145,13 +162,13 @@ public class DateTypeValidationStrategyTest {
 		
 		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE);
 		Data data = MockData.make();
-		data.setValidatorStatus(File.STATUS_FAIL);
-		data.setStatusLevel(File.STATUS_ERROR);
+		data.setStatus(2);
+		data.setMaxErrorLevel(2);
 		
 		context.validate(field, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", File.STATUS_ERROR, data.getStatusLevel());
-		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not catch error", 2, data.getMaxErrorLevel());
+		Assert.assertEquals("failure - DateTypeValidationStrategy did not make failure", false, data.getStatus());		
 	}
 	
 }

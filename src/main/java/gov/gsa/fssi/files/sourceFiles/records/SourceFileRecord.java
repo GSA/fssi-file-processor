@@ -20,6 +20,9 @@ public class SourceFileRecord {
 	public ArrayList<Data> getDatas() {
 		return datas;
 	}
+	public Data getData(int index) {
+		return datas.get(index);
+	}	
 	public Data getDataByHeaderIndex(int headerIndex) {
 		for (Data data : this.datas) {
 			if(data.getHeaderIndex() == headerIndex){

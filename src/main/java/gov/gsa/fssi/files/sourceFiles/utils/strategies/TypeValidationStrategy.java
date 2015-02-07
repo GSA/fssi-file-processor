@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
  *
  */
 public interface TypeValidationStrategy {
-	static Logger logger = LoggerFactory.getLogger(TypeValidationStrategy.class);
-	static Config config = new Config();	
-	public void validate(SchemaField field, Data data);
-	public boolean isValid(SchemaField field, Data data);
+	Logger logger = LoggerFactory.getLogger(TypeValidationStrategy.class);
+	Config config = new Config();	
+	void validate(SchemaField field, Data data);
+	boolean isValid(SchemaField field, Data data);
 }

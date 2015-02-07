@@ -1,6 +1,5 @@
 package main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.typeValidations;
 
-import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.TypeValidationStrategy;
@@ -9,15 +8,15 @@ public class IntegerTypeValidationStrategy implements TypeValidationStrategy {
 
 	@Override
 	public void validate(SchemaField field, Data data) {
-		if(data.getStatusLevel() == null || (!data.getStatusLevel().equals(File.STATUS_ERROR) && !data.getStatusLevel().equals(File.STATUS_FATAL))){
-			if(data.getData() != null && !data.getData().isEmpty() && !data.getData().equals("")){
+		if(data != null){
+			if(!data.getData().isEmpty() && !data.getData().equals("")){
 				Integer integer = null;
 				Double number = null;
 				
 				try {
 					integer = Integer.parseInt(data.getData());
 				} catch (NumberFormatException e) {
-					logger.debug("Received error '{}' when trying to convert '{}' to integer", e.getMessage(), data.getData());
+					if(logger.isDebugEnabled()) logger.debug("Received error '{}' when trying to convert '{}' to integer", e.getMessage(), data.getData());
 					//e.printStackTrace();
 				}
 				
@@ -26,36 +25,18 @@ public class IntegerTypeValidationStrategy implements TypeValidationStrategy {
 					try {
 						number = Double.valueOf(data.getData()); 
 					} catch (NumberFormatException e) {
-						logger.debug("Received error '{}' when trying to convert '{}' to Number", e.getMessage(), data.getData());
+						if(logger.isDebugEnabled()) logger.debug("Received error '{}' when trying to convert '{}' to Number", e.getMessage(), data.getData());
 						//e.printStackTrace();
 					}
-					
-					logger.debug("'{}'", number);
-					if(number == null){
-						data.setValidatorStatus(File.STATUS_FAIL);
-						data.setStatusLevel(File.STATUS_FATAL);
-					}else{
-						data.setValidatorStatus(File.STATUS_FAIL);
-						data.setStatusLevel(File.STATUS_ERROR);
-						
-						//TODO: Need to keep highest level of failure in-tact
-					}
-				}else{
-					data.setValidatorStatus(File.STATUS_PASS);	
-					data.setStatusLevel(File.STATUS_PASS);
-					
-					//TODO: Need to keep highest level of failure in-tact
-				}
-			}
-				
+					//if(logger.isDebugEnabled()) logger.debug("'{}'", number);
+					//If we find out that it is a "Number" (aka has a float) then it is just an error....otherwise its a fatal
+					if(number == null) data.addValidationResult(false, 3, "Type(Integer)");	//Fatal
+					else data.addValidationResult(false, 2, "Type(Integer)"); //Error	
+				}else data.addValidationResult(true, 0, "Type(Integer)");	
+			}else data.addValidationResult(true, 0, "Type(Integer)");			
 			
-			if(data.getStatusLevel() == null || data.getStatusLevel().isEmpty() || data.getStatusLevel().equals("")){
-				data.setStatusLevel(File.STATUS_PASS);
-			}
-			if(data.getValidatorStatus() == null || data.getValidatorStatus().isEmpty() || data.getValidatorStatus().equals("")){
-				data.setValidatorStatus(File.STATUS_PASS);
-			}	
-		}
+			
+		}		
 	}
 
 	@Override

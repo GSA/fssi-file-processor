@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public interface SourceFileLoaderStrategy {
-	static Logger logger = LoggerFactory.getLogger(SourceFileLoaderStrategy.class);
-	static Config config = new Config();	
-	public void load(String fileName, SourceFile sourceFile);
+	Logger logger = LoggerFactory.getLogger(SourceFileLoaderStrategy.class);
+	Config config = new Config();	
+	void load(String fileName, SourceFile sourceFile);
 }

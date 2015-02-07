@@ -145,6 +145,7 @@ public class Config {
 		prop.load(inputStream); //Attempting to Load File
 		validatePropFile(prop); //Now we validate the file
 		this.prop = prop;
+		inputStream.close();
 	}
 	
 	

@@ -3,6 +3,7 @@ package main.java.gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints;
 import java.util.Date;
 import java.util.HashMap;
 
+import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 
 import org.slf4j.Logger;
@@ -19,6 +20,11 @@ public class FieldConstraint {
 	private String loadStatusLevel = null;
 	private String loadStatusMessage = null;
 	private String validatorStatusMessage = null;
+	
+
+	/**
+	 * This denotes as to whether or not the Schema Field Constraint is valid and can be used
+	 */
 	private String validatorStatusLevel = null;
 	
 	//List of constraint types
@@ -65,11 +71,33 @@ public class FieldConstraint {
 	
 	private String type = "";
 	private String value = "";	
-	private String level = "";
+	private String levelName = "";
+	private int level = 0;
 	private Date effectiveDate = null;
 	private HashMap<String, String> options = new HashMap<String, String>();
 	//TODO:Add support for option "IgnoreCase" that will ignore case during validation
 	
+	
+	public int getLevel() {
+		return level;
+	}
+	
+	public void setLevel(int level) {
+		this.level = level;
+	}	
+	
+	public void setLevel(String levelName) {
+		if(levelName.equals(File.STATUS_FATAL)){
+			this.level = 3;
+		}else if(levelName.equals(File.STATUS_ERROR)){
+			this.level = 2;			
+		}else if(levelName.equals(File.STATUS_WARNING)){
+			this.level = 1;				
+		}
+	}	
+	public void setLoadStatusLevel(int loadStatusLevel) {
+		this.level = loadStatusLevel;
+	}		
 	public String getType() {
 		return type;
 	}
@@ -97,11 +125,11 @@ public class FieldConstraint {
 	public void addOption(String key, String value) {
 		this.options.put(key, value);
 	}
-	public String getLevel() {
-		return level;
+	public String getLevelName() {
+		return levelName;
 	}
-	public void setLevel(String level) {
-		this.level = level;
+	public void setLevelName(String levelName) {
+		this.levelName = levelName;
 	}
 	public Date getEffectiveDate() {
 		return effectiveDate;
@@ -109,9 +137,8 @@ public class FieldConstraint {
 	public void setEffectiveDate(Date effectiveDate) {
 		this.effectiveDate = effectiveDate;
 	}
-
 	public void print() {
-		logger.debug("          Constraint Type:'{}' Value:'{}' Level:'{}' EffectiveDate:'{}' Options:{}",  this.getType(),  this.getValue(), this.getLevel(), this.getEffectiveDate(), this.getOptions());
+		logger.debug("          Constraint Type:'{}' Value:'{}' Level:'{}' EffectiveDate:'{}' Options:{}",  this.getType(),  this.getValue(), this.getLevelName(), this.getEffectiveDate(), this.getOptions());
 	}
 	public String getLoadStatusLevel() {
 		return loadStatusLevel;
@@ -136,5 +163,8 @@ public class FieldConstraint {
 	}
 	public void setValidatorStatusLevel(String validatorStatusLevel) {
 		this.validatorStatusLevel = validatorStatusLevel;
+	}
+	public String getRuleText(){
+		return this.getType() + "(" + this.getValue() + ")";
 	}
 }

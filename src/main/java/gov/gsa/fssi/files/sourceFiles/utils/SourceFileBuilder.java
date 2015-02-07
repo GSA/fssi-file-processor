@@ -49,7 +49,7 @@ public class SourceFileBuilder {
     	}
     	
     	//Provider noted a schema, but couldn't find it
-    	if((sourceFile.getProvider().getSchemaName() != null || !sourceFile.getProvider().getSchemaName().isEmpty()) && sourceFile.getSchema() == null){
+    	if(sourceFile.getProvider() != null && (sourceFile.getProvider().getSchemaName() != null || !sourceFile.getProvider().getSchemaName().isEmpty()) && sourceFile.getSchema() == null){
     		logger.error("Provider '{}' for sourceFile '{}' noted schema '{}', but it could not be found", sourceFile.getProvider().getProviderName(), sourceFile.getFileName(), sourceFile.getProvider().getSchemaName());
     	}else if(sourceFile.getSchema() == null){
     		logger.error("No schema for file '{}', ignoring Schema processing activitie", fileName);
@@ -120,17 +120,15 @@ public class SourceFileBuilder {
 	 */
 	public void mapSchemaToSourceFile(ArrayList<Schema> schemas,SourceFile sourceFile) {
 		logger.info("Attempting to map Schema to file {}", sourceFile.getFileName());
-		if (!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR)){
-			if(sourceFile.getProvider().getSchemaName() != null){
-				for (Schema schema : schemas) {
-					if(sourceFile.getProvider().getSchemaName().toUpperCase().equals(schema.getName().toUpperCase())){
-						sourceFile.setSchema(schema);
-					}
+		if (!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR) && sourceFile.getProvider().getSchemaName() != null){
+			for (Schema schema : schemas) {
+				if(sourceFile.getProvider().getSchemaName().toUpperCase().equals(schema.getName().toUpperCase())){
+					sourceFile.setSchema(schema);
 				}
-				if (sourceFile.getSchema() == null){
-					logger.error("Could not find schema for file: '{}'", sourceFile.getFileName());
-					sourceFile.setStatusLevel(SourceFile.STATUS_WARNING);
-				}
+			}
+			if (sourceFile.getSchema() == null){
+				logger.error("Could not find schema for file: '{}'", sourceFile.getFileName());
+				sourceFile.setStatusLevel(SourceFile.STATUS_WARNING);
 			}
 		}
 	}		

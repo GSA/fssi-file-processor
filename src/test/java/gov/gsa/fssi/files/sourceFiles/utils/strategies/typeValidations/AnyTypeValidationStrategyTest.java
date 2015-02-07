@@ -1,6 +1,5 @@
 package test.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.typeValidations;
 
-import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.contexts.TypeValidationContext;
@@ -26,8 +25,8 @@ public class AnyTypeValidationStrategyTest {
 		
 		context.validate(field, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - AnyTypeValidationStrategy did not catch error", File.STATUS_PASS, data.getStatusLevel());
-		Assert.assertEquals("failure - AnyTypeValidationStrategy did not make failure", File.STATUS_PASS, data.getValidatorStatus());		
+		Assert.assertEquals("failure - AnyTypeValidationStrategy did not catch error", 0, data.getMaxErrorLevel());
+		Assert.assertEquals("failure - AnyTypeValidationStrategy did not make failure", true, data.getStatus());		
 	}
 
 	
@@ -40,14 +39,14 @@ public class AnyTypeValidationStrategyTest {
 		context.setTypeValidationStrategy(new AnyTypeValidationStrategy());
 		
 		SchemaField field = MockSchemaField.make("ANY", SchemaField.TYPE_ANY);
-		Data data = MockData.make();
-		data.setValidatorStatus(File.STATUS_FAIL);
-		data.setStatusLevel(File.STATUS_ERROR);
+		Data data = MockData.make("value");
+		data.setStatus(2);
+		data.setMaxErrorLevel(2);
 		
 		context.validate(field, data);
 		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - AnyTypeValidationStrategy did not catch error", File.STATUS_ERROR, data.getStatusLevel());
-		Assert.assertEquals("failure - AnyTypeValidationStrategy did not make failure", File.STATUS_FAIL, data.getValidatorStatus());		
+		Assert.assertEquals("failure - AnyTypeValidationStrategy did not catch error", 2, data.getMaxErrorLevel());
+		Assert.assertEquals("failure - AnyTypeValidationStrategy did not make failure", false, data.getStatus());		
 	}
 		
 	
