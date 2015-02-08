@@ -22,7 +22,7 @@ public class SourceFileExporterContext {
 		 * @param constraint
 		 * @param data
 		 */
-		public void export(SourceFile sourceFile) {
-			strategy.export(sourceFile);
+		public void export(String directory, SourceFile sourceFile) {
+			strategy.export(directory, sourceFile);
 	   }
 }

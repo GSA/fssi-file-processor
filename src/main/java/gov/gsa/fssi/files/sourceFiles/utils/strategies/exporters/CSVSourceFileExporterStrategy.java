@@ -29,7 +29,7 @@ public class CSVSourceFileExporterStrategy implements SourceFileExporterStrategy
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
 	 */
-	public void export(SourceFile sourceFile) {
+	public void export(String directory, SourceFile sourceFile) {
 		//Delimiter used in CSV file
 		String newFileName = FileHelper.buildNewFileName(sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType());
 		String newLineSeparator = "\n";
@@ -42,7 +42,7 @@ public class CSVSourceFileExporterStrategy implements SourceFileExporterStrategy
 		try {
 			
 			//initialize FileWriter object
-			fileWriter = new FileWriter(config.getProperty("staged_directory") + newFileName);
+			fileWriter = new FileWriter(directory + newFileName);
 			
 			//initialize CSVPrinter object 
 		    csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);

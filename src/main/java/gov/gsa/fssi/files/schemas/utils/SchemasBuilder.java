@@ -2,7 +2,6 @@ package main.java.gov.gsa.fssi.files.schemas.utils;
 
 import java.util.ArrayList;
 
-import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 
@@ -16,17 +15,16 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SchemasBuilder {
-	static Logger logger = LoggerFactory.getLogger(SchemasBuilder.class);
-	static Config config = new Config();	  
+	static Logger logger = LoggerFactory.getLogger(SchemasBuilder.class);  
 	
-	public ArrayList<Schema> build() {
-	    logger.debug("Starting initializeSchemas('{}')", config.getProperty(Config.SCHEMAS_DIRECTORY));		
+	public ArrayList<Schema> build(String directory) {
+	    logger.debug("Starting initializeSchemas('{}')", directory);		
 		
 	    ArrayList<Schema> schemas = new ArrayList<Schema>();	
-	    ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty(Config.SCHEMAS_DIRECTORY), ".xml");
+	    ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(directory, ".xml");
 		for (String fileName : fileNames) {
 			SchemaBuilder schemaBuilder = new SchemaBuilder();
-			Schema schema = schemaBuilder.build(fileName);
+			Schema schema = schemaBuilder.build(directory, fileName);
 			
 			if(schema.getStatusLevel() != null && schema.getStatusLevel().equals(Schema.STATUS_ERROR)){ //We currently prevent invalid schemas from being loaded
 				logger.error("Schema '{}' from file '{}' not being added to schemas because it is in error state", schema.getName(), schema.getFileName());

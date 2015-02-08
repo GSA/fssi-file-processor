@@ -2,8 +2,6 @@ package main.java.gov.gsa.fssi.files;
 
 import java.util.ArrayList;
 
-import main.java.gov.gsa.fssi.config.Config;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +11,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class File {
-	protected static Logger logger = LoggerFactory.getLogger(File.class);
-	protected static Config config = new Config();	    
+	protected static Logger logger = LoggerFactory.getLogger(File.class);	    
 	/**
 	 * @return current fileName
 	 */

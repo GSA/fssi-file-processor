@@ -29,19 +29,19 @@ public class Main {
 	    
 	    logger.info("Building Providers");
 	    ProvidersBuilder providersBuilder = new ProvidersBuilder();
-	    ArrayList<Provider> providers = providersBuilder.build();
+	    ArrayList<Provider> providers = providersBuilder.build(config.getProperty(Config.PROVIDERS_DIRECTORY));
 	    printAllProviders(providers);
 	    
 	    logger.info("Building Schemas");
 	    SchemasBuilder schemasBuilder = new SchemasBuilder();
-		ArrayList<Schema> schemas = schemasBuilder.build();
+		ArrayList<Schema> schemas = schemasBuilder.build(config.getProperty(Config.SCHEMAS_DIRECTORY));
 		printAllSchemas(schemas);
 		
 		for (String fileName : FileHelper.getFilesFromDirectory(config.getProperty(Config.SOURCEFILES_DIRECTORY), ".csv")) {
 	    	SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
-	    	SourceFile sourceFile = sourceFileBuilder.build(fileName, schemas, providers);   
+	    	SourceFile sourceFile = sourceFileBuilder.build(config.getProperty(Config.SOURCEFILES_DIRECTORY), fileName, config.getProperty(Config.EXPORT_MODE), schemas, providers);   
 	    	if(sourceFile != null && !sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR)){
-	    		sourceFile.export();
+	    		sourceFile.export(config.getProperty(Config.STAGED_DIRECTORY));
 	    	}
 		}
 		

@@ -20,7 +20,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 
 	@Override
-	public void load(String fileName, ArrayList<Provider> providers) {
+	public void load(String directory, String fileName, ArrayList<Provider> providers) {
 		logger.info("Running ExcelProviderLoaderStrategy to get providers from '{}'", fileName);
 		Workbook wb;
 		try {
@@ -30,7 +30,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 		    int fileOutputTypeColumn = 0;	
 		    int schemaNameColumn = 0;			    
 		    int providerEmailColumn = 0;
-			wb = WorkbookFactory.create(new File(config.getProperty(Config.PROVIDERS_DIRECTORY) + fileName));
+			wb = WorkbookFactory.create(new File(directory + fileName));
 			Sheet sheet1 = wb.getSheetAt(0);
 			
 			int passCounter = 0;

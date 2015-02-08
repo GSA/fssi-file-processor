@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
@@ -21,15 +20,14 @@ import org.slf4j.LoggerFactory;
  * @author davidlarrimore
  *
  */
-public class SourceFileBuilder {
-	static Config config = new Config();	    
+public class SourceFileBuilder {  
 	static Logger logger = LoggerFactory.getLogger(SourceFileBuilder.class);
 	
 	/**
 	 * The purpose of this function is just to prep file processing. We are not actually loading data yet
 	 * @param sourceFileDirectory
 	 */
-	public SourceFile build(String fileName, ArrayList<Schema> schemas,ArrayList<Provider> providers) {	
+	public SourceFile build(String directory, String fileName, String exportMode, ArrayList<Schema> schemas,ArrayList<Provider> providers) {	
 		SourceFile sourceFile = new SourceFile(fileName);
     	mapProviderToSourceFile(providers, sourceFile);
     	
@@ -60,7 +58,7 @@ public class SourceFileBuilder {
 		//Load File
 		if (!sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR) && !sourceFile.getStatusLevel().equals(SourceFile.STATUS_FATAL)){
 		    logger.info("Loading SourceFile '{}'", sourceFile.getFileName());	
-		    sourceFile.load();
+		    sourceFile.load(directory);
 		    logger.info("Completed loading SourceFile '{}'", sourceFile.getFileName());	
 		}
 	
@@ -71,7 +69,7 @@ public class SourceFileBuilder {
 		    mapSourceFileFieldsToSchema(sourceFile);
 		    logger.info("Completed Mapping");	
 		    logger.info("Organizing SourceFile '{}'", sourceFile.getFileName());	
-			sourceFile.organize();
+			sourceFile.organize(exportMode);
 		    logger.info("Completed Organizing SourceFile '{}'", sourceFile.getFileName());	
 		}
 		

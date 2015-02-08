@@ -22,7 +22,7 @@ public class SourceFileLoaderContext {
 		 * @param constraint
 		 * @param data
 		 */
-		public void load(String fileName, SourceFile sourceFile) {
-			strategy.load(fileName, sourceFile); //Validate Constraint
+		public void load(String directory, String fileName, SourceFile sourceFile) {
+			strategy.load(directory, fileName, sourceFile); //Validate Constraint
 	   }
 }

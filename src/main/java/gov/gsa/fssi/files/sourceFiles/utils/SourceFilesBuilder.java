@@ -2,7 +2,6 @@ package main.java.gov.gsa.fssi.files.sourceFiles.utils;
 
 import java.util.ArrayList;
 
-import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
@@ -18,8 +17,7 @@ import org.slf4j.LoggerFactory;
  * @author davidlarrimore
  *
  */
-public class SourceFilesBuilder {
-	static Config config = new Config();	    
+public class SourceFilesBuilder {	    
 	static Logger logger = LoggerFactory.getLogger(SourceFilesBuilder.class);
 	
 	/**
@@ -27,12 +25,12 @@ public class SourceFilesBuilder {
 	 * @param sourceFileDirectory
 	 * @return 
 	 */
-	public ArrayList<SourceFile> build(ArrayList<Schema> schemas,ArrayList<Provider> providers) {	
+	public ArrayList<SourceFile> build(String directory, ArrayList<Schema> schemas, String exportMode, ArrayList<Provider> providers) {	
 		ArrayList<SourceFile> sourceFiles = new ArrayList<SourceFile>();
 		//Loop through files in sourceFileDirectory and populate SourceFile objects
-		for (String fileName : FileHelper.getFilesFromDirectory(config.getProperty(Config.SOURCEFILES_DIRECTORY), ".csv")) {
+		for (String fileName : FileHelper.getFilesFromDirectory(directory, ".csv")) {
 	    	SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
-	    	sourceFiles.add(sourceFileBuilder.build(fileName, schemas, providers));   
+	    	sourceFiles.add(sourceFileBuilder.build(directory, fileName, exportMode, schemas, providers));   
 		}
 		return sourceFiles;	
 	}

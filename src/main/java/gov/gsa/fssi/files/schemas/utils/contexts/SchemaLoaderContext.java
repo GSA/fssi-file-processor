@@ -22,7 +22,7 @@ public class SchemaLoaderContext {
 		 * @param constraint
 		 * @param data
 		 */
-		public void load(Schema schema) {
-			strategy.load(schema); //Validate Constraint
+		public void load(String directory, Schema schema) {
+			strategy.load(directory, schema); //Validate Constraint
 	   }
 }

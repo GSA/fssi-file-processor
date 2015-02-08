@@ -7,7 +7,6 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.Map;
 
-import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
@@ -31,10 +30,10 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
 	 */
-	public void load(String fileName, SourceFile sourceFile) {
+	public void load(String directory, String fileName, SourceFile sourceFile) {
 		// SourceFile sourceFile = new SourceFile(this.getFileName());
 		try {
-			Reader in = new FileReader(config.getProperty(Config.SOURCEFILES_DIRECTORY) + sourceFile.getFileName());
+			Reader in = new FileReader(directory + sourceFile.getFileName());
 			final CSVParser parser = new CSVParser(in, CSVFormat.EXCEL.withHeader());
 			
 			//Converting Apache Commons CSV header map from <String, Integer> to <Integer,String>

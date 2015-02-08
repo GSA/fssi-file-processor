@@ -2,7 +2,6 @@ package main.java.gov.gsa.fssi.files.providers.utils;
 
 import java.util.ArrayList;
 
-import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
 
 import org.slf4j.Logger;
@@ -16,8 +15,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ProviderValidator {
-	static Logger logger = LoggerFactory.getLogger(ProviderValidator.class);
-	static Config config = new Config();	    
+	static Logger logger = LoggerFactory.getLogger(ProviderValidator.class);	    
 	
 	/**
 	 * This accepts an arraylist of providers and validates them. 

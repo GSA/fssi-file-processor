@@ -1,6 +1,5 @@
 package main.java.gov.gsa.fssi.files.sourceFiles.utils;
 
-import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
@@ -19,8 +18,7 @@ import org.slf4j.LoggerFactory;
  * @author davidlarrimore
  *
  */
-public class SourceFileValidator{
-	static Config config = new Config();	    
+public class SourceFileValidator{    
 	static Logger logger = LoggerFactory.getLogger(SourceFileValidator.class);
 	
 	

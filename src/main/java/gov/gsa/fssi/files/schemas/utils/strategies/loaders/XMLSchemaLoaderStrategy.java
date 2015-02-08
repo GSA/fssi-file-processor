@@ -35,11 +35,11 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy{
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
 	 */
-	public void load(Schema schema) {
+	public void load(String directory, Schema schema) {
 		Document doc = null;
 		if(schema.getFileName() != null){
 			try {
-				File fXmlFile = new File(config.getProperty(Config.SCHEMAS_DIRECTORY) + schema.getFileName());
+				File fXmlFile = new File(directory + schema.getFileName());
 				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 				doc = dBuilder.parse(fXmlFile);

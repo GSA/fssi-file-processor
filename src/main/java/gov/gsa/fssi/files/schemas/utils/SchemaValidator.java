@@ -3,7 +3,6 @@ package main.java.gov.gsa.fssi.files.schemas.utils;
 import java.util.ArrayList;
 import java.util.Date;
 
-import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
@@ -22,12 +21,8 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SchemaValidator {
-	static Logger logger = LoggerFactory.getLogger(SchemaValidator.class);
-	static Config config = new Config();	    
+	static Logger logger = LoggerFactory.getLogger(SchemaValidator.class);  
 
-	
-	
-	
 	public void validateAll(ArrayList<Schema> schemas) {
 	}
 	

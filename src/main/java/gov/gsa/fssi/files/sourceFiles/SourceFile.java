@@ -33,8 +33,7 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class SourceFile extends File{
-	static Logger logger = LoggerFactory.getLogger(SourceFile.class);
-	static Config config = new Config();	    
+	static Logger logger = LoggerFactory.getLogger(SourceFile.class);	    
 	
 	private Schema schema = null;
 	private Provider provider = null;
@@ -380,7 +379,7 @@ public class SourceFile extends File{
 	/**
 	 * @param sourceFile
 	 */
-	public void load() {
+	public void load(String directory) {
 		SourceFileLoaderContext context = new SourceFileLoaderContext();
 		if (this.getFileExtension().toLowerCase().equals(FILETYPE_CSV)){
 			logger.info("Loading file {} as a '{}'", this.getFileName(), this.getFileExtension()); 
@@ -390,19 +389,19 @@ public class SourceFile extends File{
 			this.setLoadStatusLevel(STATUS_ERROR);			
 		}
 		
-		context.load(this.getFileName(), this);
+		context.load(directory, this.getFileName(), this);
 	}
 	
 	
 	/**
 	 * This method processes a file against its schema
 	 */
-	public void organize() {
+	public void organize(String exportMode) {
 		SourceFileOrganizerContext context = new SourceFileOrganizerContext();
 		if(this.getSchema() != null){
-			if(config.getProperty(Config.EXPORT_MODE).equals(Config.EXPORT_MODE_EXPLODE)){
+			if(exportMode.equals(Config.EXPORT_MODE_EXPLODE)){
 				context.setSourceFileOrganizerStrategy(new ExplodeSourceFileOrganizerStrategy());	
-			}if(config.getProperty(Config.EXPORT_MODE).equals(Config.EXPORT_MODE_IMPLODE)){
+			}if(exportMode.equals(Config.EXPORT_MODE_IMPLODE)){
 				context.setSourceFileOrganizerStrategy(new ImplodeSourceFileOrganizerStrategy());
 			}else{
 				logger.warn("No Export Mode provided, defaulting to Implode");
@@ -415,7 +414,7 @@ public class SourceFile extends File{
 		}
 	}	
 	
-	public void export() {
+	public void export(String directory) {
 		 SourceFileExporterContext context = new SourceFileExporterContext();
 		if (this.getRecords() != null){
 			if(this.getProvider().getFileOutputType().toLowerCase().equals(SourceFile.FILETYPE_CSV)){
@@ -429,7 +428,7 @@ public class SourceFile extends File{
 		 		context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
 			}
 			
-		 context.export(this);
+		 context.export(directory, this);
 		}else{
 			logger.error("Cannot export sourceFile '{}'. No data found", this.getFileName());
 		}

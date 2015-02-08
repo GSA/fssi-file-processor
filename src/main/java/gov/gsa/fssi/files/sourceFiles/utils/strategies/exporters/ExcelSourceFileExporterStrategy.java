@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
@@ -34,11 +33,11 @@ public class ExcelSourceFileExporterStrategy implements SourceFileExporterStrate
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
 	 */
-	public void export(SourceFile sourceFile) {
+	public void export(String directory, SourceFile sourceFile) {
 		logger.info("Exporting File {} as a 'XLS'", sourceFile.getFileName());
 		FileOutputStream out;
 		try {
-			out = new FileOutputStream(config.getProperty(Config.STAGED_DIRECTORY) + FileHelper.buildNewFileName(sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType()));
+			out = new FileOutputStream(directory + FileHelper.buildNewFileName(sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType()));
 
 		// create a new workbook
 		Workbook wb = (sourceFile.getProvider().getFileOutputType().toUpperCase().equals("XLSX") ? new XSSFWorkbook() : new HSSFWorkbook());

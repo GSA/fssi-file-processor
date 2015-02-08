@@ -2,7 +2,6 @@ package main.java.gov.gsa.fssi.files.providers.utils;
 
 import java.util.ArrayList;
 
-import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.providers.utils.contexts.ProviderLoaderContext;
 import main.java.gov.gsa.fssi.files.providers.utils.strategies.loaders.ExcelProviderLoaderStrategy;
@@ -18,31 +17,30 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ProvidersBuilder {
-	static Logger logger = LoggerFactory.getLogger(ProvidersBuilder.class);
-	static Config config = new Config();	  
+	static Logger logger = LoggerFactory.getLogger(ProvidersBuilder.class); 
 	
 	/**
 	 * This is the main method for ProvidersBuilder that reads all files from the "config.getProperty(Config.PROVIDERS_DIRECTORY))", validates them, and returns an ArrayList of Provider objects.
 	 * 
 	 * @return ArryList<Provider> of providers
 	 */
-	public ArrayList<Provider> build() {
-	    logger.debug("Starting Provider Builder", config.getProperty(Config.PROVIDERS_DIRECTORY));
+	public ArrayList<Provider> build(String directory) {
+	    logger.debug("Starting Provider Builder", directory);
 	    
 	    ArrayList<Provider> providers = new ArrayList<Provider>();
 	    
 	    //First we load the providers
-	    ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(config.getProperty(Config.PROVIDERS_DIRECTORY), ".xlsx, .xls");
+	    ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(directory, ".xlsx, .xls");
 		for (String fileName : fileNames) {
 			logger.info("Loading providers from '{}'", fileName);
 			ProviderLoaderContext context = new ProviderLoaderContext();
 			context.setProviderLoaderStrategy(new ExcelProviderLoaderStrategy());
-			context.load(fileName, providers);
+			context.load(directory, fileName, providers);
 			logger.info("Loaded '{}' providers from '{}'", providers.size(), fileName);
 		}
 		
 		if(logger.isDebugEnabled()){
-			logger.debug("Printing loaded providers from '{}'", config.getProperty(Config.PROVIDERS_DIRECTORY));
+			logger.debug("Printing loaded providers from '{}'", directory);
 			for(Provider provider: providers){
 				provider.print();
 			}
@@ -53,7 +51,7 @@ public class ProvidersBuilder {
 		providerValidator.validateAll(providers);
 		
 		if(logger.isDebugEnabled()){
-			logger.debug("Printing validated providers from '{}'", config.getProperty(Config.PROVIDERS_DIRECTORY));
+			logger.debug("Printing validated providers from '{}'", directory);
 			for(Provider provider: providers){
 				provider.print();
 			}

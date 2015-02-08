@@ -30,7 +30,7 @@ public class ProviderLoaderContext {
 		 * @param fileName String fileName
 		 * @param providers ArrayList<Provider> of Provider
 		 */
-		public void load(String fileName, ArrayList<Provider> providers) {
-			strategy.load(fileName, providers); //Validate Constraint
+		public void load(String directory, String fileName, ArrayList<Provider> providers) {
+			strategy.load(directory, fileName, providers); //Validate Constraint
 	   }
 }
