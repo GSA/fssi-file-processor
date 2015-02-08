@@ -38,9 +38,9 @@ public class FileHelper {
 					String fileExtension = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
 				    if(file.isDirectory()){
 				    	logger.info("Ignoring '{}' because it is a directory", whitelist);	    
-				    }else if(whitelist != null && whitelist != "" && !whitelist.contains(fileExtension)){
+				    }else if(whitelist != null && !whitelist.isEmpty() && !whitelist.contains(fileExtension)){
 				    	logger.info("Ignoring '{}' because it is not in whitelist", file.getName());	 
-				    }else if(whitelist != null && whitelist != "" && whitelist.contains(fileExtension)){
+				    }else if(whitelist != null && !whitelist.isEmpty() && whitelist.contains(fileExtension)){
 				    	logger.info("Added '{}' to ArrayList", file.getName());	 	 
 				    	fileList.add(file.getName());
 					    fileCount++;
@@ -58,7 +58,10 @@ public class FileHelper {
 		return fileList;
 	}		
 	
-	
+	public static String getFullPath(String directory, String fileName){
+		String file = directory + fileName;
+		return file;
+	}
 	
 	public static String buildNewFileName(String oldFileName, String newExtension){
 		return oldFileName.substring(0, oldFileName.lastIndexOf('.') + 1)  + newExtension.toLowerCase();

@@ -278,7 +278,7 @@ public class SourceFile extends File{
 	/**
 	 * @param map the headers to set
 	 */
-	public void removeSourceHeader(String key) {
+	public void removeSourceHeader(Integer key) {
 		this.sourceHeaders.remove(key);
 	}
 	/**

@@ -1,7 +1,11 @@
 package main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.exporters;
 
-import java.io.FileWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,23 +33,21 @@ public class CSVSourceFileExporterStrategy implements SourceFileExporterStrategy
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
 	 */
-	public void export(String directory, SourceFile sourceFile) {
-		//Delimiter used in CSV file
-		String newFileName = FileHelper.buildNewFileName(sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType());
-		String newLineSeparator = "\n";
-		FileWriter fileWriter = null;
-		CSVPrinter csvFilePrinter = null;
-		
-		//Create the CSVFormat object with "\n" as a record delimiter
-		CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(newLineSeparator);
-				
+	public void export(String directory, SourceFile sourceFile) {		
 		try {
-			
+			//Delimiter used in CSV file
+			String newFileName = FileHelper.buildNewFileName(sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType());
+			String newLineSeparator = "\n";
+			//FileWriter fileWriter = null;
+			CSVPrinter csvFilePrinter = null;
+			//Create the CSVFormat object with "\n" as a record delimiter
+			CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(newLineSeparator);
 			//initialize FileWriter object
-			fileWriter = new FileWriter(directory + newFileName);
-			
+			File file = new File(FileHelper.getFullPath(directory, newFileName));
+			Writer writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+			PrintWriter printWriter = new PrintWriter(writer);
 			//initialize CSVPrinter object 
-		    csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
+		    csvFilePrinter = new CSVPrinter(printWriter, csvFileFormat);
 		    
 		    
 			List<String> csvHeaders = new ArrayList<String>();
@@ -69,7 +71,7 @@ public class CSVSourceFileExporterStrategy implements SourceFileExporterStrategy
 		    
 		    
 		    //Create CSV file header
-		    csvFilePrinter.printRecord(csvHeaders);
+			csvFilePrinter.printRecord(csvHeaders);
 			
 		    //Writing Data
 			for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
@@ -85,22 +87,13 @@ public class CSVSourceFileExporterStrategy implements SourceFileExporterStrategy
 				
 		        csvFilePrinter.printRecord(csvRecord);
 			}
-
+			csvFilePrinter.close();
+			printWriter.close();
 			logger.info("{} Created Successfully. {} Records processed", sourceFile.getFileName(), sourceFile.recordCount());
 			
-		} catch (Exception e) {
+		} catch (IOException e) {
 			logger.error("Received Exception '{}' while processing {}", e.getMessage(), sourceFile.getFileName());
-			e.printStackTrace();
-		} finally {
-			try {
-				fileWriter.flush();
-				fileWriter.close();
-				csvFilePrinter.close();
-			} catch (IOException e) {
-				logger.error("Received error while flushing/closing fileWriter for {}", sourceFile.getFileName());
-//		        e.printStackTrace();
-			}
+			//e.printStackTrace();
 		}
 	}
-
 }

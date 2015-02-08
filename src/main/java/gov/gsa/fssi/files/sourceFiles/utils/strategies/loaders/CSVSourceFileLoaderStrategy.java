@@ -1,8 +1,10 @@
 package main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.loaders;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.Map;
@@ -12,6 +14,7 @@ import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.SourceFileLoaderStrategy;
+import main.java.gov.gsa.fssi.helpers.FileHelper;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -33,8 +36,21 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 	public void load(String directory, String fileName, SourceFile sourceFile) {
 		// SourceFile sourceFile = new SourceFile(this.getFileName());
 		try {
-			Reader in = new FileReader(directory + sourceFile.getFileName());
-			final CSVParser parser = new CSVParser(in, CSVFormat.EXCEL.withHeader());
+			
+			//File file = new File(FileHelper.getFullPath(directory, fileName));
+			InputStream inputstream = new FileInputStream(FileHelper.getFullPath(directory, fileName));
+			Reader reader = new InputStreamReader(inputstream, "UTF-8");
+			final CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());
+	
+			
+			
+			//InputStream in = ...
+		    //Charset cs = new
+			//InputStreamReader reader = new InputStreamReader(in, cs);
+			//ReaderInputStream in2 = new ReaderInputStream(reader, cs);
+			
+			
+			
 			
 			//Converting Apache Commons CSV header map from <String, Integer> to <Integer,String>
 			Map<String, Integer> parserHeaderMap = parser.getHeaderMap();

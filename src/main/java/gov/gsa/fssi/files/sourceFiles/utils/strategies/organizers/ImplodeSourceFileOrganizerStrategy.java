@@ -74,7 +74,7 @@ public class ImplodeSourceFileOrganizerStrategy implements SourceFileOrganizerSt
 			//We need to loop through the translation map and see if we have already addressed this column
 			while (headerTranslationMapIterator.hasNext()) {
 				Map.Entry<Integer, String> headerTranslationMapIteratorPairs = (Map.Entry)headerTranslationMapIterator.next();
-					if (currentHeaderIteratorPairs.getKey() == headerTranslationMapIteratorPairs.getKey()){
+					if (currentHeaderIteratorPairs.getKey().equals(headerTranslationMapIteratorPairs.getKey())){
 						foundColumn = true;
 					}
 				}

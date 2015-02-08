@@ -93,7 +93,7 @@ public class SourceFileRecord {
 	private ArrayList<String> printDatas() {
 		ArrayList<String> row = new ArrayList<String>();
 		for (Data data : this.getDatas()) {
-			row.add(data.getHeaderIndex()+" = "+(data == null? "" : data.getData()));
+			row.add(data.getHeaderIndex() + " = " + (data.getData() == null? "" : data.getData()));
 		}
 		return row;
 	}

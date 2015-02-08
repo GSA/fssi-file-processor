@@ -116,9 +116,6 @@ public class FieldConstraint {
 	public String getOptionValue(String key) {
 		return options.get(key);
 	}
-	public String getOptionValue(int index) {
-		return options.get(index);
-	}	
 	public void setOptions(HashMap<String, String> options) {
 		this.options = options;
 	}

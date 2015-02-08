@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class File {
-	protected static Logger logger = LoggerFactory.getLogger(File.class);	    
+	protected static final Logger logger = LoggerFactory.getLogger(File.class);	    
 	/**
 	 * @return current fileName
 	 */

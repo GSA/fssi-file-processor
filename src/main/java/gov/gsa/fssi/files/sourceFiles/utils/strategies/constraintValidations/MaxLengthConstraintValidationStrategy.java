@@ -9,13 +9,15 @@ public class MaxLengthConstraintValidationStrategy implements ConstraintValidati
 
 	@Override
 	public void validate(SchemaField field, FieldConstraint constraint, Data data) {
-		if(data != null && data.getData() != null){
-			if(data.getData().length() > Integer.parseInt(constraint.getValue())){
-				  data.addValidationResult(false, constraint.getLevel(), constraint.getRuleText());
-			}else{
-				  data.addValidationResult(true, 0, constraint.getRuleText());	
-			}
-		}else data.addValidationResult(true, 0, constraint.getRuleText());	
+		if(data != null){
+			if(data.getData() != null){
+				if(data.getData().length() > Integer.parseInt(constraint.getValue())){
+					  data.addValidationResult(false, constraint.getLevel(), constraint.getRuleText());
+				}else{
+					  data.addValidationResult(true, 0, constraint.getRuleText());	
+				}
+			}else data.addValidationResult(true, 0, constraint.getRuleText());
+		}
 	}
 
 	@Override

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import main.java.gov.gsa.fssi.helpers.FileHelper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
  
@@ -125,7 +127,7 @@ public class Config {
 	 */
 	public Config() {
 		try {
-			getPropValues();
+			getPropValues("./", DEFAULT_PROPFILE_NAME);
 		} catch (IOException e) {
 			logger.error("Could not load config file '{}'. Received following error: {}", DEFAULT_PROPFILE_NAME, e.getMessage());
 			logger.info("Loading default config settings");
@@ -133,15 +135,28 @@ public class Config {
 		} 
 	}
 	
+
+	/**
+	 * Config
+	 */
+	public Config(String directory, String fileName) {
+		try {
+			getPropValues(directory, fileName);
+		} catch (IOException e) {
+			logger.error("Could not load config file '{}'. Received following error: {}", DEFAULT_PROPFILE_NAME, e.getMessage());
+			logger.info("Loading default config settings");
+			getDefaultPropValue();
+		} 
+	}	
 	
 	/**
 	 * Get Property values from 'config.properties' file in project root.
 	 * If file is found, it will read, validate,  and then load the values in to the Properties prop object.
 	 * @throws IOException
 	 */
-	public void getPropValues() throws IOException {
+	public void getPropValues(String directory, String fileName) throws IOException {
 		Properties prop = new Properties();
-		InputStream inputStream = new FileInputStream(DEFAULT_PROPFILE_NAME);
+		InputStream inputStream = new FileInputStream(FileHelper.getFullPath(directory, fileName));
 		prop.load(inputStream); //Attempting to Load File
 		validatePropFile(prop); //Now we validate the file
 		this.prop = prop;
@@ -177,10 +192,10 @@ public class Config {
 	 */
 	private Properties validatePropFile(Properties prop){
 		
-		if(!prop.containsKey(WORKING_DIRECTORY)){
-			logger.warn("No '{}' property found in config file, loading default: '{}'", WORKING_DIRECTORY, DEFAULT_WORKING_DIRECTORY);
-			prop.put(WORKING_DIRECTORY, DEFAULT_WORKING_DIRECTORY);
-		}
+//		if(!prop.containsKey(WORKING_DIRECTORY)){
+//			logger.warn("No '{}' property found in config file, loading default: '{}'", WORKING_DIRECTORY, DEFAULT_WORKING_DIRECTORY);
+//			prop.put(WORKING_DIRECTORY, DEFAULT_WORKING_DIRECTORY);
+//		}
 		
 		if(!prop.containsKey(SOURCEFILES_DIRECTORY)){
 			logger.warn("No '{}' property found in config file, loading default: '{}'", SOURCEFILES_DIRECTORY, DEFAULT_SOURCEFILES_DIRECTORY);
@@ -217,10 +232,10 @@ public class Config {
 			prop.put(EXPORT_MODE, DEFAULT_EXPORT_MODE);
 		}				
 		
-		if(!prop.containsKey(VALIDATION_MODE)){
-			logger.warn("No '{}' property found in config file, loading default: '{}'", VALIDATION_MODE, DEFAULT_VALIDATION_MODE);
-			prop.put(VALIDATION_MODE, DEFAULT_VALIDATION_MODE);
-		}				
+//		if(!prop.containsKey(VALIDATION_MODE)){
+//			logger.warn("No '{}' property found in config file, loading default: '{}'", VALIDATION_MODE, DEFAULT_VALIDATION_MODE);
+//			prop.put(VALIDATION_MODE, DEFAULT_VALIDATION_MODE);
+//		}				
 		return prop;
 	}
 	
