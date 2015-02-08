@@ -26,7 +26,7 @@ public class SchemasBuilder {
 			SchemaBuilder schemaBuilder = new SchemaBuilder();
 			Schema schema = schemaBuilder.build(directory, fileName);
 			
-			if(schema.getStatusLevel() != null && schema.getStatusLevel().equals(Schema.STATUS_ERROR)){ //We currently prevent invalid schemas from being loaded
+			if(!schema.getStatus()){ //We currently prevent invalid schemas from being loaded
 				logger.error("Schema '{}' from file '{}' not being added to schemas because it is in error state", schema.getName(), schema.getFileName());
 			}else if(isDuplicateSchemaName(schemas, schema)){ //duplicate schema names can screw up a lot.
 				logger.error("Schema '{}' from file '{}' is a duplicate, it will not be added", schema.getName(), schema.getFileName());

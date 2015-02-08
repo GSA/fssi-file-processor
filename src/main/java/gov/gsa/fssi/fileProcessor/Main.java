@@ -40,7 +40,7 @@ public class Main {
 		for (String fileName : FileHelper.getFilesFromDirectory(config.getProperty(Config.SOURCEFILES_DIRECTORY), ".csv")) {
 	    	SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
 	    	SourceFile sourceFile = sourceFileBuilder.build(config.getProperty(Config.SOURCEFILES_DIRECTORY), fileName, config.getProperty(Config.EXPORT_MODE), schemas, providers);   
-	    	if(sourceFile != null && !sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR)){
+	    	if(sourceFile != null && !sourceFile.getStatus()){
 	    		sourceFile.export(config.getProperty(Config.STAGED_DIRECTORY));
 	    	}
 		}

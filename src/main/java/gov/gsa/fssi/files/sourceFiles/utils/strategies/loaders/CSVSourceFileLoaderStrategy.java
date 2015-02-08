@@ -96,7 +96,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 					}
 					
 					if(emptyRowCheck == false){
-						thisRecord.setStatus(File.STATUS_LOADED);
+						thisRecord.setStatus(File.STAGE_LOADED);
 						sourceFile.addRecord(thisRecord);
 					}else{
 						sourceFile.incrementTotalEmptyRecords();
@@ -113,7 +113,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 			}else{
 				logger.info("All {} Records successfully processed in {}", sourceFile.getTotalRecords(), sourceFile.getFileName());
 			}
-			sourceFile.setLoadStatusLevel(File.STATUS_LOADED);
+			sourceFile.setLoadStage(File.STAGE_LOADED);
 			reader.close();
 			parser.close();
 		} catch (FileNotFoundException e) {

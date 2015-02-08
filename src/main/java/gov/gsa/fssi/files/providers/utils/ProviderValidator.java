@@ -30,7 +30,7 @@ public class ProviderValidator {
 		for (Provider provider : providers) {
 			boolean unique = true;
 			validate(provider);
-			if(!provider.getValidatorStatusLevel().equals(Provider.STATUS_ERROR)){
+			if(provider.getStatus()){
 				//Checking for unique identifier
 				for(Provider newProvider:deleteProvidersList){
 					if(provider.getProviderIdentifier().equals(newProvider.getProviderIdentifier())){
@@ -62,9 +62,7 @@ public class ProviderValidator {
 		//Certain fields are required.
 		if (provider.getProviderId() == null || provider.getProviderName() == null || provider.getProviderIdentifier() == null){
 			logger.error("Provider found Without all of the required fields (ID, Name, Identifier)...ignoring");
-			provider.setValidatorStatusLevel(Provider.STATUS_ERROR);
-		}else{
-			provider.setValidatorStatusLevel(Provider.STATUS_PASS);
+			provider.setValidatorStatus(false);
 		}
 	}	
 }

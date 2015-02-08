@@ -61,15 +61,15 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy{
 				schema.setVersion(schemaElement.getElementsByTagName("version").item(0).getTextContent());
 				schema.setFields(loadFields(doc.getElementsByTagName("field")));
 				
-				if(schema.getLoadStatusLevel().equals(Schema.STATUS_ERROR)){
+				if(schema.getLoadStage().equals(Schema.STATUS_ERROR)){
 					logger.error("Could not load Schema '{}' in file '{}' as it is in error status", schema.getName(), schema.getFileName());
 				}
 				
 				logger.info("successfully loaded Schema '{}' from file '{}'", schema.getName(), schema.getFileName());
-				schema.setLoadStatusLevel(Schema.STATUS_LOADED);
+				schema.setLoadStage(Schema.STAGE_LOADED);
 			}
 			logger.error("No document found in file '{}'. Unable to load any schema", schema.getFileName());
-			schema.setLoadStatusLevel(Schema.STATUS_ERROR);
+			schema.setLoadStage(Schema.STATUS_ERROR);
 			
 		}else{
 			logger.error("Could not build Schema, no fileName was set");

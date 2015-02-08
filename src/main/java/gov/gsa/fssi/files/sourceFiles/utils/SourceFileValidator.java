@@ -27,7 +27,7 @@ public class SourceFileValidator{
 		
 		if(sourceFile.getSchema() == null){
 			logger.error("Cannot validate file '{}', no Schema", sourceFile.getFileName());	
-		}else if(sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR)){
+		}else if(sourceFile.getLoadStage().equals(SourceFile.STATUS_ERROR)){
 			logger.error("file '{}', had a load error, cannot validate", sourceFile.getFileName());
 		}else{
 			for(SourceFileRecord sourceFileRecord: sourceFile.getRecords()){

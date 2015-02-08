@@ -33,12 +33,12 @@ public class SourceFileBuilder {
     	
     	if(sourceFile.getProvider() == null){
 			logger.error("Could not find Provider for file '{}'. Ignoring", fileName);
-			sourceFile.setStatusLevel(SourceFile.STATUS_ERROR);
+			sourceFile.setStatus(false);
 			return null;
     	}
     	
     	//Map Schema to SourceFile
-    	if(!sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR) && sourceFile.getProvider().getSchemaName() != null && !sourceFile.getProvider().getSchemaName().isEmpty()){
+    	if(sourceFile.getStatus() && sourceFile.getProvider().getSchemaName() != null && !sourceFile.getProvider().getSchemaName().isEmpty()){
     		logger.warn("Attemping to map Schema to SourceFile '{}'", sourceFile.getFileName());
     		mapSchemaToSourceFile(schemas, sourceFile);	
     		
@@ -56,7 +56,7 @@ public class SourceFileBuilder {
     	}
 
 		//Load File
-		if (!sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR) && !sourceFile.getStatusLevel().equals(SourceFile.STATUS_FATAL)){
+		if (sourceFile.getStatus()){
 		    logger.info("Loading SourceFile '{}'", sourceFile.getFileName());	
 		    sourceFile.load(directory);
 		    logger.info("Completed loading SourceFile '{}'", sourceFile.getFileName());	
@@ -64,7 +64,7 @@ public class SourceFileBuilder {
 	
 		
 		//Organize file based upon schema
-		if (!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR) && sourceFile.getSchema() != null && sourceFile.getRecords() != null){
+		if (sourceFile.getStatus() && sourceFile.getSchema() != null && sourceFile.getRecords() != null){
 		    logger.info("Mapping SourceFile '{}' fields to Schema '{}'", sourceFile.getFileName(), sourceFile.getSchema().getName());	
 		    mapSourceFileFieldsToSchema(sourceFile);
 		    logger.info("Completed Mapping");	
@@ -74,7 +74,7 @@ public class SourceFileBuilder {
 		}
 		
 		//Validate file based upon schema
-		if (!sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR) && sourceFile.getSchema() != null && sourceFile.getRecords() != null){
+		if (sourceFile.getStatus() && sourceFile.getSchema() != null && sourceFile.getRecords() != null){
 		    logger.info("Validating SourceFile '{}'", sourceFile.getFileName());	
 		   sourceFile.validate();
 		    logger.info("Completed validating SourceFile '{}'", sourceFile.getFileName());	
@@ -88,7 +88,7 @@ public class SourceFileBuilder {
 	 * @param sourceFile
 	 */
 	public void mapProviderToSourceFile(ArrayList<Provider> providers, SourceFile sourceFile) {
-		if(sourceFile.getStatusLevel() == null || !sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR)){
+		if(sourceFile.getStatus()){
 			logger.info("Attempting to map Provider to file {}", sourceFile.getFileName());
 			for (Provider provider : providers) {
 				for(String fileNamePart:sourceFile.getFileNameParts()){
@@ -103,7 +103,7 @@ public class SourceFileBuilder {
 		}
 		if (sourceFile.getProvider() == null){
 			logger.error("Could not find provider for file: '{}'", sourceFile.getFileName());
-			sourceFile.setStatusLevel(SourceFile.STATUS_ERROR);
+			sourceFile.setStatus(false);
 		}else{
 			logger.info("Mapped Provider '{}' successfully", sourceFile.getProvider().getProviderIdentifier());
 		}
@@ -118,7 +118,7 @@ public class SourceFileBuilder {
 	 */
 	public void mapSchemaToSourceFile(ArrayList<Schema> schemas,SourceFile sourceFile) {
 		logger.info("Attempting to map Schema to file {}", sourceFile.getFileName());
-		if (!sourceFile.getLoadStatusLevel().equals(SourceFile.STATUS_ERROR) && sourceFile.getProvider().getSchemaName() != null){
+		if (sourceFile.getStatus()){
 			for (Schema schema : schemas) {
 				if(sourceFile.getProvider().getSchemaName().toUpperCase().equals(schema.getName().toUpperCase())){
 					sourceFile.setSchema(schema);
@@ -126,7 +126,6 @@ public class SourceFileBuilder {
 			}
 			if (sourceFile.getSchema() == null){
 				logger.error("Could not find schema for file: '{}'", sourceFile.getFileName());
-				sourceFile.setStatusLevel(SourceFile.STATUS_WARNING);
 			}
 		}
 	}		
@@ -141,10 +140,11 @@ public class SourceFileBuilder {
 	 * @return
 	 */
 	public void personalizeSourceFileSchema(SourceFile sourceFile){
-    	if(sourceFile.getSchema() == null){
+	    
+		if(!sourceFile.getStatus()){
+			logger.error("SourceFile '{}' is in error status, unable to personalize", sourceFile.getFileName());   	
+	    }else if(sourceFile.getSchema() == null){
     		logger.error("SourceFile '{}' does not have a schema, unable to personalize", sourceFile.getFileName());
-    	}else if(sourceFile.getStatusLevel().equals(SourceFile.STATUS_ERROR)){
-       		logger.error("SourceFile '{}' is in error status, unable to personalize", sourceFile.getFileName());
     	}else if(sourceFile.getReportingPeriod() == null){
        		logger.error("SourceFile '{}' does not have a reporting period, unable to personalize", sourceFile.getFileName());
     	}else{   		

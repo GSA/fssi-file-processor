@@ -38,20 +38,15 @@ public class SchemaValidator {
 		
 		if(schema.getName() == null || schema.getName().isEmpty()){
 			logger.error("Schema in file '{}' does not have a name", schema.getFileName());
-			schema.setValidatorStatusLevel(Schema.STATUS_ERROR);
+			schema.setValidatorStatus(false);
 		}
 		
 		schema.setFields(validateFields(schema));
 		
 		if(schema.getFields() == null || schema.getFields().isEmpty()){
 			logger.warn("Schema '{}' in file '{}' does not have any fields", schema.getName(), schema.getFileName());
-			schema.setValidatorStatusLevel(Schema.STATUS_WARNING);
+			schema.setValidatorStatus(false);
 		}	
-		
-		if(schema.getValidatorStatusLevel() == null){
-			schema.setValidatorStatusLevel(Schema.STATUS_PASS);
-		}
-	
 	}
 
 

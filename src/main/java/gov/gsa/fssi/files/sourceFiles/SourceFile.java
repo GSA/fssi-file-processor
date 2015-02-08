@@ -196,7 +196,7 @@ public class SourceFile extends File{
 	public void setReportingPeriodUsingFileNameParts(){
 		if(this.getFileNameParts() == null || this.getFileNameParts().isEmpty()){
 			logger.error("File has no fileNameParts, which means we cannot discern a provider or schema. we can process the file no farther");
-			this.setLoadStatusLevel(STATUS_ERROR);
+			this.setLoadStage(STATUS_ERROR);
 		}else{
 			
 			for(String fileNamePart: this.getFileNameParts()){
@@ -219,10 +219,10 @@ public class SourceFile extends File{
 						
 						if(date.compareTo(todaysDate) > 0){
 							logger.error("ReportingPeriod '{}' found in FileName is later than current date. Please check file name", date.toString());
-							this.setLoadStatusLevel(STATUS_ERROR);
+							this.setLoadStage(STATUS_ERROR);
 						}else if(date.compareTo(minimumDate) < 0){
 							logger.error("ReportingPeriod '{}' found in FileName is before the year 2000 and may be inacurate. Please check file name", date.toString());
-							this.setLoadStatusLevel(STATUS_ERROR);				
+							this.setLoadStage(STATUS_ERROR);				
 						}else{
 							logger.info("Successfully added Reporting Period '{}'", date.toString());
 							this.setReportingPeriod(date);
@@ -318,7 +318,7 @@ public class SourceFile extends File{
 		this.setReportingPeriodUsingFileNameParts();
 		if(this.getReportingPeriod() == null){
 			logger.error("No reporting period found, unable to process");
-			this.setStatusLevel(STATUS_ERROR);
+			this.setStatus(false);
 		}
 	}
 		
@@ -347,7 +347,7 @@ public class SourceFile extends File{
 			schemaString = this.schema.getName();
 		}		
 		
-		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoadStatusLevel(), this.getSourceHeaders().size(), providerString, schemaString);
+		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoadStage(), this.getSourceHeaders().size(), providerString, schemaString);
 	}
 	
 	/**
@@ -364,7 +364,7 @@ public class SourceFile extends File{
 			schemaString = this.schema.getName();
 		}		
 		
-		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoadStatusLevel(), this.getSourceHeaders().size(), providerString, schemaString);
+		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoadStage(), this.getSourceHeaders().size(), providerString, schemaString);
 		printRecords();	
 	}
 	/**
@@ -386,7 +386,7 @@ public class SourceFile extends File{
 			context.setSourceFileLoaderStrategy(new CSVSourceFileLoaderStrategy());			
 		}else{
 			logger.warn("Could not load file '{}' as a '{}'", this.getFileName(), this.getFileExtension());	
-			this.setLoadStatusLevel(STATUS_ERROR);			
+			this.setLoadStage(STATUS_ERROR);			
 		}
 		
 		context.load(directory, this.getFileName(), this);

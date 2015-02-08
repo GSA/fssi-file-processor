@@ -63,9 +63,7 @@ public class File {
 		this.setFileName(fileName);
 		int startOfExtension = fileName.lastIndexOf(".")+1;
 		this.setFileExtension(fileName.substring(startOfExtension, fileName.length()));
-		this.setLoadStatusLevel(STATUS_LOADED);
-		this.setValidatorStatusLevel(STATUS_LOADED);
-		this.setStatusLevel(STATUS_INITIALIZED);
+		this.setLoadStage(STAGE_LOADED);
 		//defaulted to underscore
 		this.setFileNameParts(SEPARATOR_UNDERSCORE);
 	}
@@ -109,59 +107,61 @@ public class File {
 	/**
 	 * @return current loadStatusLevel
 	 */
-	public String getLoadStatusLevel() {
-		return loadStatusLevel;
+	public String getLoadStage() {
+		return loadStage;
 	}
 	/**
 	 * @param loadStatusLevel String loadStatusLevel to set
 	 */
-	public void setLoadStatusLevel(String loadStatusLevel) {
-		this.loadStatusLevel = loadStatusLevel;
+	public void setLoadStage(String loadStatusLevel) {
+		this.loadStage = loadStatusLevel;
 	}
 	/**
 	 * @return current loadStatusMessage
 	 */
-	public String getLoadStatusMessage() {
-		return loadStatusMessage;
+	public ArrayList<String> getLoadStatusMessage() {
+		return this.loadStatusMessages;
 	}
-	public void setLoadStatusMessage(String loadStatusMessage) {
-		this.loadStatusMessage = loadStatusMessage;
+	public void setLoadStatusMessage(ArrayList<String> loadStatusMessages) {
+		this.loadStatusMessages = loadStatusMessages;
 	}
+	public void addLoadStatusMessage(String loadStatusMessage) {
+		this.loadStatusMessages.add(loadStatusMessage);
+	}	
 	/**
 	 * @return current validatorStatusMessage
 	 */
-	public String getValidatorStatusMessage() {
-		return validatorStatusMessage;
+	public ArrayList<String> getValidatorStatusMessage() {
+		return this.validatorStatusMessages;
 	}
 	/**
 	 * @param validatorStatusMessage String validatorStatusMessage to set
 	 */
-	public void setValidatorStatusMessage(String validatorStatusMessage) {
-		this.validatorStatusMessage = validatorStatusMessage;
+	public void setValidatorStatusMessage(ArrayList<String> validatorStatusMessages) {
+		this.validatorStatusMessages = validatorStatusMessages;
 	}
+	public void addValidatorStatusMessage(String validatorStatusMessage) {
+		this.validatorStatusMessages.add(validatorStatusMessage);
+	}	
 	/**
 	 * @return current validatorStatusLevel
 	 */
-	public String getValidatorStatusLevel() {
-		return validatorStatusLevel;
+	public boolean getValidatorStatus() {
+		return validatorStatus;
 	}
 	/**
-	 * @param validatorStatusLevel String validatorStatusLevel to set
+	 * @return current validatorStatusMessage
 	 */
-	public void setValidatorStatusLevel(String validatorStatusLevel) {
-		this.validatorStatusLevel = validatorStatusLevel;
-	}
+	public String getValidatorStatusName() {
+		if(this.getValidatorStatus()) return STATUS_PASS;
+		else return STATUS_FAIL;
+	}	
 	/**
-	 * @return current statusLevel
+	 * @param validatorStatus boolean validatorStatus to set
 	 */
-	public String getStatusLevel() {
-		return statusLevel;
-	}
-	/**
-	 * @param statusLevel String statusLevel to set
-	 */
-	public void setStatusLevel(String statusLevel) {
-		this.statusLevel = statusLevel;
+	public void setValidatorStatus(boolean validatorStatus) {
+		this.setStatus(validatorStatus);
+		if(this.getValidatorStatus()) this.validatorStatus = validatorStatus;		
 	}
 	/**
 	 * @return current exportStatusMessage
@@ -178,14 +178,28 @@ public class File {
 	/**
 	 * @return current exportStatusLevel
 	 */
-	public String getExportStatusLevel() {
-		return exportStatusLevel;
+	public boolean getExportStatus() {
+		return exportStatus;
 	}
 	/**
 	 * @param exportStatusLevel String exportStatusLevel to set
 	 */
-	public void setExportStatusLevel(String exportStatusLevel) {
-		this.exportStatusLevel = exportStatusLevel;
+	public void setExportStatusLevel(boolean exportStatus) {
+		this.setStatus(exportStatus);
+		if(this.getExportStatus()) this.exportStatus = exportStatus;
+	}
+	public boolean getLoadStatus() {
+		return loadStatus;
+	}
+	public void setLoadStatus(boolean loadStatus) {
+		this.setStatus(loadStatus);
+		if(this.getLoadStatus()) this.loadStatus = loadStatus;
+	}
+	public boolean getStatus() {
+		return status;
+	}
+	public void setStatus(boolean status) {
+		if(this.getStatus()) this.status = status;
 	}
 
 	/**
@@ -198,16 +212,16 @@ public class File {
 	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte filePartSeparator)
 	 */
 	private ArrayList<String> fileNameParts = new ArrayList<String>();
-	private String loadStatusLevel = null;
-	private String loadStatusMessage = null;
-	private String validatorStatusMessage = null;
-	private String validatorStatusLevel = null;
+	private String loadStage = STAGE_INITIALIZED;
+	private boolean status = true;
+	private boolean loadStatus = true;
+	private boolean validatorStatus = true;
+	private boolean exportStatus = false;	
+	private ArrayList<String> loadStatusMessages = null;
+	private ArrayList<String> validatorStatusMessages = null;
+
 	private String exportStatusMessage = null;
-	private String exportStatusLevel = null;
-	/**
-	 * Overall Status of File
-	 */
-	private String statusLevel = null;	
+
 	/**
 	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte filePartSeparator)
 	 */
@@ -252,10 +266,12 @@ public class File {
 	 * A status of "warning" means that the file is able to be addressed but contains issues.
 	 */
 	public static final String STATUS_WARNING = "warning";
-	public static final String STATUS_LOADED = "loaded";
-	public static final String STATUS_PASS = "pass";
-	public static final String STATUS_VALIDATED = "validated";
-	public static final String STATUS_EXPORTED = "exported";
-	public static final String STATUS_INITIALIZED = "initialized";
 	public static final String STATUS_FAIL = "failed";
+	public static final String STATUS_PASS = "pass";
+	
+	public static final String STAGE_LOADED = "loaded";
+	public static final String STAGE_VALIDATED = "validated";
+	public static final String STAGE_EXPORTED = "exported";
+	public static final String STAGE_INITIALIZED = "initialized";
+
 }

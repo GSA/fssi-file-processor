@@ -7,7 +7,6 @@ import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.providers.utils.ProvidersBuilder;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
-import main.java.gov.gsa.fssi.files.schemas.utils.SchemaBuilder;
 import main.java.gov.gsa.fssi.files.schemas.utils.SchemasBuilder;
 import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
@@ -15,10 +14,7 @@ import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.SourceFileBuilder;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import test.java.gov.gsa.fssi.mockData.MockSchema;
 
 public class SourceFileLoadTest {
 	Config config = new Config("./bin/test/resources/gov/gsa/fssi/fileProcessor/","config.properties");
