@@ -8,6 +8,8 @@ cov-build --dir cov-int mvn -DskipTests=true compile
 tar czvf fssiFileProcessor.tgz cov-int
 
 curl --form token=H5Pdt8p-P2Tm46ep2tdnqg \
+  --progress-bar \
+  --verbose \
   --form email=davidlarrimore@gmail.com \
   --form file=@./fssiFileProcessor.tgz \
   --form version="9.0.1" \

@@ -38,8 +38,8 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 		try {
 			
 			//File file = new File(FileHelper.getFullPath(directory, fileName));
-			InputStream inputstream = new FileInputStream(FileHelper.getFullPath(directory, fileName));
-			Reader reader = new InputStreamReader(inputstream, "UTF-8");
+			InputStream inputStream = new FileInputStream(FileHelper.getFullPath(directory, fileName));
+			Reader reader = new InputStreamReader(inputStream, "UTF-8");
 			final CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());
 	
 			
@@ -114,6 +114,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 				logger.info("All {} Records successfully processed in {}", sourceFile.getTotalRecords(), sourceFile.getFileName());
 			}
 			sourceFile.setLoadStatusLevel(File.STATUS_LOADED);
+			reader.close();
 			parser.close();
 		} catch (FileNotFoundException e) {
 			logger.error("There was an FileNotFoundException error with file {}", sourceFile.getFileName());

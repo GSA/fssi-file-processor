@@ -3,10 +3,14 @@ package main.java.gov.gsa.fssi.config;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Properties;
 
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
  
@@ -156,10 +160,13 @@ public class Config {
 	 */
 	public void getPropValues(String directory, String fileName) throws IOException {
 		Properties prop = new Properties();
+		
 		InputStream inputStream = new FileInputStream(FileHelper.getFullPath(directory, fileName));
-		prop.load(inputStream); //Attempting to Load File
+		Reader reader = new InputStreamReader(inputStream, "UTF-8");
+		prop.load(reader); //Attempting to Load File
 		validatePropFile(prop); //Now we validate the file
 		this.prop = prop;
+		reader.close();
 		inputStream.close();
 	}
 	
