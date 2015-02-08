@@ -142,7 +142,7 @@ public class SchemaValidator {
 					
 					//checking options
 					if(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL) != null && isValidLevel(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL))){
-						logger.info("Found good level in '{} - {}' options, using that",newConstraint.getType());
+						logger.info("Found good level in '{} - {}' options, using that",newConstraint.getType(), newConstraint.getValue());
 						newConstraint.setLevelName(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL));
 						newConstraint.setLevel(newConstraint.getOptionValue(FieldConstraint.OPTION_LEVEL));						
 					}else{

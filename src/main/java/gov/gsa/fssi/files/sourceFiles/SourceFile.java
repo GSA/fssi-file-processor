@@ -215,7 +215,7 @@ public class SourceFile extends File{
 					if(date != null){
 						logger.info("Processed date as '{}'",date.toString());
 						Date todaysDate = DateHelper.getTodaysDate();
-						Date minimumDate = DateHelper.getDate("012000", DateHelper.FORMAT_MMYYYY);
+						Date minimumDate = DateHelper.getMinDate();
 						
 						if(date.compareTo(todaysDate) > 0){
 							logger.error("ReportingPeriod '{}' found in FileName is later than current date. Please check file name", date.toString());

@@ -223,7 +223,7 @@ public class SourceFileBuilder {
 				Iterator<?> thisHeaderIterator =  sourceFile.getSourceHeaders().entrySet().iterator();
 				while (thisHeaderIterator.hasNext()) {
 					Map.Entry<Integer, String> thisHeaderPairs = (Map.Entry<Integer, String>)thisHeaderIterator.next();
-					if(aliasNames.contains(thisHeaderPairs.getValue())){
+					if(aliasNames.contains(thisHeaderPairs.getValue().toUpperCase())){
 						logger.info("Matched sourcFile field '{} - {}' with Schema field '{}'",thisHeaderPairs.getKey(),  thisHeaderPairs.getValue(), field.getName());
 						field.setHeaderIndex(thisHeaderPairs.getKey());
 					}
