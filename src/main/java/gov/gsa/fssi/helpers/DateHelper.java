@@ -9,14 +9,11 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DateHelper {
-	static Logger logger = LoggerFactory.getLogger(SourceFile.class);
-	//static Config config = new Config();	    	
+	static Logger logger = LoggerFactory.getLogger(DateHelper.class);  	
 	
 	public static final String FORMAT_MMYYYY = "MMyyyy";
 	public static final String FORMAT_MMDDYYYY = "MMddyyyy";
@@ -66,8 +63,8 @@ public class DateHelper {
 	 * @return
 	 */
 	public static Date getDate(String string, String dateFormat){
-		Date date  = new Date();
-		logger.info("Attempting to extract date from string: '{}' using format '{}", string, dateFormat);
+		Date date;
+		logger.info("Attempting to extract date from string: '{}' using format '{}'", string, dateFormat);
 		try {
 			date = parseDate(string, dateFormat);
 		} catch (ParseException e) {
@@ -79,7 +76,7 @@ public class DateHelper {
 		return date;
 	}
 
-	public static Date YesterdaysDate(){
+	public static Date yesterdaysDate(){
 		Date newDate = new Date();
 		Calendar c = Calendar.getInstance(); 
 		c.setTime(newDate); 
@@ -89,7 +86,7 @@ public class DateHelper {
 	}
 	
 	
-	public static Date TomorrowsDate(){
+	public static Date tomorrowsDate(){
 		Date newDate = new Date();
 		Calendar c = Calendar.getInstance(); 
 		c.setTime(newDate); 

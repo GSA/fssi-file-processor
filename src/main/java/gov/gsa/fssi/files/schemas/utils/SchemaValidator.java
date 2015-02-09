@@ -161,6 +161,7 @@ public class SchemaValidator {
 						if(newDate != null){
 							logger.info("Found good effectiveDate in options, using that",newConstraint.getType());
 							newConstraint.setEffectiveDate(newDate);
+							//if(logger.isDebugEnabled()) logger.debug("Does date '{}' equal '{}'", newDate, newConstraint.getEffectiveDate());
 						}else{
 							logger.error("Could not convert date '{}' using yyyy-MM-dd format.", newConstraint.getOptionValue(FieldConstraint.OPTION_EFFECTIVEDATE));
 						}

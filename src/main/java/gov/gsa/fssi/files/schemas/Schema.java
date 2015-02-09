@@ -106,9 +106,7 @@ public class Schema extends File{
 		this.fields.remove(schemaField);
 	}
 	public void removeField(String fieldName){
-		SchemaField field = new SchemaField();
-		field = this.getField(fieldName);
-		if(field != null){
+		if(this.getField(fieldName) != null){
 			this.removeField(this.getField(fieldName));	
 		}else{
 			logger.error("Could not remove field '{}' from Schema '{}'", fieldName, this.getName());

@@ -41,12 +41,18 @@
 		<version>3.10.1</version>
 	</dependency>
   </dependencies>
+  
   <reporting>
     <plugins>
 	  <plugin>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>2.7</version>
-      </plugin>    
+      </plugin>  
+      <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-jxr-plugin</artifactId>
+         <version>2.3</version>
+     </plugin>       
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
@@ -73,6 +79,7 @@
     </plugins>
   </reporting>
   <build>
+  
 		<plugins>
 		  <plugin>
             <groupId>org.codehaus.mojo</groupId>

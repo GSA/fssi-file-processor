@@ -37,7 +37,7 @@ public class SourceFile extends File{
 	
 	private Schema schema = null;
 	private Provider provider = null;
-	private Date ReportingPeriod = null;
+	private Date reportingPeriod = null;
 	private Integer totalRecords = 0;
 	private Integer totalProcessedRecords = 0;
 	private Integer totalNullRecords = 0;
@@ -182,13 +182,13 @@ public class SourceFile extends File{
 	 * @return the reportingPeriod
 	 */
 	public Date getReportingPeriod() {
-		return ReportingPeriod;
+		return (reportingPeriod == null ? null: new Date(reportingPeriod.getTime()));
 	}
 	/**
 	 * @param reportingPeriod the reportingPeriod to set
 	 */
 	public void setReportingPeriod(Date reportingPeriod) {
-		ReportingPeriod = reportingPeriod;
+		this.reportingPeriod = new Date(reportingPeriod.getTime());
 	}
 	/**
 	 * 

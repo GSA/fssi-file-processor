@@ -29,7 +29,7 @@ public class RequiredConstraintValidationStrategyTest {
 		
 		context.validate(field, fieldConstraint, data);
 		//data.setStatus(2);
-		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", fieldConstraint.getLevel(), data.getMaxErrorLevel());
+		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not catch error", 2, data.getMaxErrorLevel());
 		Assert.assertEquals("failure - RequiredConstraintValidationStrategyTest did not make failure", false, data.getStatus());		
 	}
 

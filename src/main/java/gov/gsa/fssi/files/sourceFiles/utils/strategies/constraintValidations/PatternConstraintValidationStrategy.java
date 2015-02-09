@@ -12,15 +12,15 @@ public class PatternConstraintValidationStrategy implements ConstraintValidation
 
 	@Override
 	public void validate(SchemaField field, FieldConstraint constraint, Data data) {
-		if(data != null && data.getData() != null){		
-			if(data.getData() != null && !data.getData().isEmpty() && !data.getData().equals("")){	
+		if(data != null){	
+			if(data.getData() != null && !data.getData().isEmpty()){		
 				Pattern pattern = Pattern.compile(constraint.getValue(), Pattern.CASE_INSENSITIVE);
 				Matcher matcher = pattern.matcher(data.getData());
 				if(!matcher.matches()) {
 					data.addValidationResult(false, constraint.getLevel(), constraint.getRuleText());
 				}else data.addValidationResult(true, 0, constraint.getRuleText());
-			}
-		}else data.addValidationResult(true, 0, constraint.getRuleText());
+			}else data.addValidationResult(true, 0, constraint.getRuleText());
+		}
 	}
 
 	@Override

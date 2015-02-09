@@ -20,9 +20,9 @@ public class NumberTypeValidationStrategy implements TypeValidationStrategy {
 				}
 					
 				//logger.debug("'{}'", number);
-				if(number == null) data.addValidationResult(false, 3, "Type(Number)"); //Fatal
-				else data.addValidationResult(true, 0, "Type(Number)");
-			}else data.addValidationResult(true, 0, "Type(Number)");
+				if(number == null) data.addValidationResult(false, 3, "Type("+field.getType()+")"); //Fatal
+				else data.addValidationResult(true, 0, "Type("+field.getType()+")");
+			}else data.addValidationResult(true, 0, "Type("+field.getType()+")");
 		}
 	}
 

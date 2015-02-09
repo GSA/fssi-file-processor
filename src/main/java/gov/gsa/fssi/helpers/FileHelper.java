@@ -40,10 +40,6 @@ public class FileHelper {
 				    	logger.info("Ignoring '{}' because it is a directory", whitelist);	    
 				    }else if(whitelist != null && !whitelist.isEmpty() && !whitelist.contains(fileExtension)){
 				    	logger.info("Ignoring '{}' because it is not in whitelist", file.getName());	 
-				    }else if(whitelist != null && !whitelist.isEmpty() && whitelist.contains(fileExtension)){
-				    	logger.info("Added '{}' to ArrayList", file.getName());	 	 
-				    	fileList.add(file.getName());
-					    fileCount++;
 				    }else{
 				    	logger.info("Added '{}' to ArrayList", file.getName());	 
 				    	fileList.add(file.getName());

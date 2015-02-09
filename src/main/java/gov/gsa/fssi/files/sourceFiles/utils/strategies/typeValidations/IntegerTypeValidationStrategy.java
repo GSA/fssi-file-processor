@@ -9,7 +9,7 @@ public class IntegerTypeValidationStrategy implements TypeValidationStrategy {
 	@Override
 	public void validate(SchemaField field, Data data) {
 		if(data != null){
-			if(!data.getData().isEmpty() && !data.getData().equals("")){
+			if(data.getData() != null && !data.getData().isEmpty()){
 				Integer integer = null;
 				Double number = null;
 				
@@ -30,12 +30,10 @@ public class IntegerTypeValidationStrategy implements TypeValidationStrategy {
 					}
 					//if(logger.isDebugEnabled()) logger.debug("'{}'", number);
 					//If we find out that it is a "Number" (aka has a float) then it is just an error....otherwise its a fatal
-					if(number == null) data.addValidationResult(false, 3, "Type(Integer)");	//Fatal
-					else data.addValidationResult(false, 2, "Type(Integer)"); //Error	
-				}else data.addValidationResult(true, 0, "Type(Integer)");	
-			}else data.addValidationResult(true, 0, "Type(Integer)");			
-			
-			
+					if(number == null) data.addValidationResult(false, 3, "Type("+field.getType()+")");	//Fatal
+					else data.addValidationResult(false, 2, "Type("+field.getType()+")"); //Error	
+				}else data.addValidationResult(true, 0, "Type("+field.getType()+")");	
+			}else data.addValidationResult(true, 0, "Type("+field.getType()+")");			
 		}		
 	}
 

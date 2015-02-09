@@ -9,11 +9,11 @@ public class RequiredConstraintValidationStrategy implements ConstraintValidatio
 
 	@Override
 	public void validate(SchemaField field, FieldConstraint constraint, Data data) {
-		if(constraint.getValue().toUpperCase().equals("TRUE")){
-			if(data == null || data.getData() == null || data.getData().equals("") || data.getData().isEmpty()){
+		if(data != null){	
+			if((data.getData() == null || data.getData().isEmpty()) && constraint.getValue().toUpperCase().equals("TRUE")){		
 				 data.addValidationResult(false, constraint.getLevel(), constraint.getRuleText());
 			}else data.addValidationResult(true, 0, constraint.getRuleText());	
-		}else data.addValidationResult(true, 0, constraint.getRuleText());	
+		}
 	}
 
 	@Override

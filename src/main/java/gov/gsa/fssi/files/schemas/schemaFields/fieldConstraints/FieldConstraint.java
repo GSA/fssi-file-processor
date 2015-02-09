@@ -129,13 +129,13 @@ public class FieldConstraint {
 		this.levelName = levelName;
 	}
 	public Date getEffectiveDate() {
-		return effectiveDate;
+		return (effectiveDate == null? null : new Date(effectiveDate.getTime()));
 	}
 	public void setEffectiveDate(Date effectiveDate) {
-		this.effectiveDate = effectiveDate;
+		this.effectiveDate = new Date(effectiveDate.getTime());
 	}
 	public void print() {
-		logger.debug("          Constraint Type:'{}' Value:'{}' Level:'{}' EffectiveDate:'{}' Options:{}",  this.getType(),  this.getValue(), this.getLevelName(), this.getEffectiveDate(), this.getOptions());
+		logger.debug("          Constraint Type:'{}' Value:'{}' Level:'{}' EffectiveDate:'{}' Options:{}",  this.getType(),  this.getValue(), this.getLevelName(), (this.getEffectiveDate() == null? "": this.getEffectiveDate()), this.getOptions());
 	}
 	public String getLoadStatusLevel() {
 		return loadStatusLevel;

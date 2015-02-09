@@ -9,7 +9,7 @@ public class AnyTypeValidationStrategy implements TypeValidationStrategy {
 	@Override
 	public void validate(SchemaField field, Data data) {
 		if(data != null){
-			data.addValidationResult(true, 0, "Type(Any)");	
+			data.addValidationResult(true, 0, "Type("+field.getType()+")");	
 		}
 	}
 

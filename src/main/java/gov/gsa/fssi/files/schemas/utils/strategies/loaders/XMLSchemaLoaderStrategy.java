@@ -119,11 +119,7 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy{
 							if(constraintList != null){
 								try {
 									ArrayList<FieldConstraint> constraints = loadConstraints(constraintList);
-									if(constraints == null){
-										logger.error("No constraints loaded");
-									}else{
-										field.setConstraints(constraints);	
-									}
+									field.setConstraints(constraints);	
 								} catch (DOMException e) {
 									logger.error("Received DOMException '{}'",e.getMessage());
 									//e.printStackTrace();

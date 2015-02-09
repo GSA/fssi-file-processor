@@ -12,19 +12,21 @@ public class MaximumConstraintValidationStrategy implements ConstraintValidation
 
 	@Override
 	public void validate(SchemaField field, FieldConstraint constraint, Data data) {
-		if(data != null && data.getData() != null){
-			if (field.getType().equals(SchemaField.TYPE_STRING)){
-				validateString(constraint, data);
-			}else if (field.getType().equals(SchemaField.TYPE_INTEGER)){
-				validateInteger(constraint, data);
-			}else if (field.getType().equals(SchemaField.TYPE_NUMBER)){
-				validateNumber(constraint, data);
-			}else if (field.getType().equals(SchemaField.TYPE_DATE)){
-				validateDate(field, constraint, data);
-			}else{
-				validateString(constraint, data);
-			}
-		}else data.addValidationResult(true, 0, constraint.getRuleText());	
+		if(data != null){
+			if(data.getData() != null && !data.getData().isEmpty()){	
+				if (field.getType().equals(SchemaField.TYPE_STRING)){
+					validateString(constraint, data);
+				}else if (field.getType().equals(SchemaField.TYPE_INTEGER)){
+					validateInteger(constraint, data);
+				}else if (field.getType().equals(SchemaField.TYPE_NUMBER)){
+					validateNumber(constraint, data);
+				}else if (field.getType().equals(SchemaField.TYPE_DATE)){
+					validateDate(field, constraint, data);
+				}else{
+					validateString(constraint, data);
+				}
+			}else data.addValidationResult(true, 0, constraint.getRuleText());	
+		}
 	}
 
 	@Override

@@ -1,7 +1,10 @@
 package main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.exporters;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,8 +38,13 @@ public class ExcelSourceFileExporterStrategy implements SourceFileExporterStrate
 	 */
 	public void export(String directory, SourceFile sourceFile) {
 		logger.info("Exporting File {} as a 'XLS'", sourceFile.getFileName());
-		FileOutputStream out;
+		
+		FileOutputStream out = null;
+		
+		
 		try {
+			//File file = new File(FileHelper.getFullPath(directory, sourceFile.getFileName()));
+			//Writer writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
 			out = new FileOutputStream(directory + FileHelper.buildNewFileName(sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType()));
 
 		// create a new workbook
@@ -86,10 +94,22 @@ public class ExcelSourceFileExporterStrategy implements SourceFileExporterStrate
 		// write the workbook to the output stream
 		// close our file (don't blow out our file handles
 			wb.write(out);
-			out.close();
+			closeOutputStream(out, sourceFile.getFileName());
 		} catch (IOException e) {
 			logger.error("There was an IOException error '{}' with file {}. ", sourceFile.getFileName(), e.getMessage());
 			e.printStackTrace();
+		}
+	}
+	
+	public static void closeOutputStream(FileOutputStream out, String fileName){
+		try {
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			logger.error("There was an IOException error '{}' with file {}.", e.getMessage(), fileName);
+			e.printStackTrace();
+		}finally{
+			out = null;
 		}
 	}
 
