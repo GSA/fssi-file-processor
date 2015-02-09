@@ -48,6 +48,8 @@ public class SourceFileValidator{
 							//}
 							}
 						}
+						sourceFileRecord.setMaxErrorLevel(data.getMaxErrorLevel());
+						sourceFileRecord.setStatus(data.getMaxErrorLevel());
 					}
 				}
 			}

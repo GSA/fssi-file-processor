@@ -2,6 +2,7 @@ package main.java.gov.gsa.fssi.files.sourceFiles.records;
 
 import java.util.ArrayList;
 
+import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ public class SourceFileRecord {
 	private int rowIndex = 0;
 	private ArrayList<Data> datas = new ArrayList<Data>();	
 	private boolean status = true;
+	private int maxErrorLevel = 0;
 	
 	public ArrayList<Data> getDatas() {
 		return datas;
@@ -66,9 +68,16 @@ public class SourceFileRecord {
 	public boolean getStatus() {
 		return status;
 	}
-	public void setStatus(boolean status) {
-		this.status = status;
+	/**
+	 * This sets the overall Pass/Fail status of the Data object. Once it is fail (false), it cannot change back
+	 * @param validatorStatus the validatorStatus to set
+	 */
+	public void setStatus(int errorLevel) {
+		if(this.getStatus() == true && errorLevel > 1) this.status = false;
 	}
+	public void setStatus(boolean status) {
+		if(this.getStatus()) this.status = status;
+	}	
 	/**
 	 * @return the row
 	 */
@@ -98,4 +107,44 @@ public class SourceFileRecord {
 		}
 		return row;
 	}
+
+	/**
+	 * @return
+	 */
+	public int getMaxErrorLevel() {
+		return maxErrorLevel;
+	}
+	/**
+	 * @return
+	 */
+	public String getErrorLevelName(int errorLevel) {
+		String name = null;
+		if(errorLevel <= 3){
+			switch (errorLevel){
+			case 0:
+				name = File.STATUS_PASS;
+				break;
+			case 1:
+				name = File.STATUS_WARNING;
+				break;
+			case 2:
+				name = File.STATUS_ERROR;
+				break;
+			case 3:
+				name = File.STATUS_FATAL;
+				break;
+			default:
+				break;
+			}	
+		}
+		return name;
+	}		
+	/**
+	 * @param status
+	 */
+	public void setMaxErrorLevel(int errorLevel) {
+		if(errorLevel > this.maxErrorLevel) this.maxErrorLevel = errorLevel;
+	}
+	
+	
 }

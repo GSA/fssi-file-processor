@@ -173,6 +173,15 @@ public class Schema extends File{
 		return fieldNames;
 	}
 	
+	public String getFieldName(int headerIndex){
+		for(SchemaField field: this.getFields()){
+			if(field.getHeaderIndex() == headerIndex){
+				return field.getName();
+			}
+		}
+		return null;
+	}	
+	
 
 	public ArrayList<String> getFieldAndAliasNames(){
 		ArrayList<String> aliasNames = new ArrayList<String>();

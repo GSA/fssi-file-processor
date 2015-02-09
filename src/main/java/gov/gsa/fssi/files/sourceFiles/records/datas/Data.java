@@ -70,6 +70,9 @@ public class Data {
 		if(this.getStatus() == true && errorLevel > 1) this.status = false;
 	}
 
+	public void setStatus(boolean status) {
+		if(this.getStatus()) this.status = status;
+	}	
 	public Data() {
 		super();
 	}
@@ -117,10 +120,10 @@ public class Data {
 	/**
 	 * @return
 	 */
-	public String getErrorLevelName(int statusLevel) {
+	public String getErrorLevelName(int errorLevel) {
 		String name = null;
-		if(statusLevel <= 3){
-			switch (statusLevel){
+		if(errorLevel <= 3){
+			switch (errorLevel){
 			case 0:
 				name = File.STATUS_PASS;
 				break;
@@ -142,8 +145,8 @@ public class Data {
 	/**
 	 * @param status
 	 */
-	public void setMaxErrorLevel(int statusLevel) {
-		if(statusLevel > this.maxErrorLevel && statusLevel <= 3) this.maxErrorLevel = statusLevel;
+	public void setMaxErrorLevel(int errorLevel) {
+		if(errorLevel > this.maxErrorLevel) this.maxErrorLevel = errorLevel;
 	}
 	public void print(){
 			logger.debug(" Data: {} Max Status: {}, ", this.getData(), this.getMaxErrorLevel());

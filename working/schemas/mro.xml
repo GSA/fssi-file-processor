@@ -199,7 +199,7 @@
 			<name>DEBIT_CREDIT_INDICATOR</name>
 			<title>Debit Credit Indicator</title>
 			<description>Identifies if the sales value was provided to the supplier (debit) or returned to the customer (credit).</description>
-			<type>number</type>
+			<type>string</type>
 			<constraints>
 				<required level="error">true</required>
 				<pattern level="error">D|C</pattern>

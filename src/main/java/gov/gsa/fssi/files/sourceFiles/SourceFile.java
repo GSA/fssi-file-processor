@@ -264,6 +264,12 @@ public class SourceFile extends File{
 		return sourceHeaders;
 	}
 	/**
+	 * @return the headers
+	 */
+	public String getSourceHeaderName(int key) {
+		return sourceHeaders.get(key);
+	}	
+	/**
 	 * @param map the headers to set
 	 */
 	public void setSourceHeaders(Map<Integer, String> map) {
