@@ -15,6 +15,7 @@ import main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.loggers.BasicTe
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class BasicTextSourceFileLoggerStrategyTest {
@@ -25,7 +26,7 @@ public class BasicTextSourceFileLoggerStrategyTest {
 	 * 
 	 */
 	@Test
-	public void createsFile() {
+	@Ignore public void createsFile() {
     	try{ 
     		String fileName = FileHelper.getFullPath(config.getProperty(Config.LOGS_DIRECTORY), "goodfileschematest_012015.log");
     		File file = new File(fileName);
