@@ -1,5 +1,5 @@
 
 ECHO Executing FSSI File Processor
-java -classpath ./lib/*;./bin gov.gsa.fssi.fileprocessor.Main
+java -jar fileProcessor-1.0-SNAPSHOT-jar-with-dependencies.jar
 ECHO Completed
 Pause

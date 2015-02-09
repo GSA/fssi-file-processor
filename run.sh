@@ -1,2 +1,2 @@
 
-java -classpath ./lib/*;./bin gov.gsa.fssi.fileprocessor.Main
+java -jar fileProcessor-1.0-SNAPSHOT-jar-with-dependencies.jar

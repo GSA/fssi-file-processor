@@ -100,7 +100,7 @@
 			<type>string</type>
 			<description></description>
 			<constraints>
-				<required level="error">true</required>
+				<required level="warning">true</required>
 			</constraints>
 			<alias>Agreement_Length</alias>
 			<alias>Length of Lease/Maintenance&#9094;(if applicable)</alias><!-- Need to figure out "Enter code" -->
@@ -308,6 +308,13 @@
 			<type>string</type>
 			<description></description>
 			<alias>Point of Contact email</alias>
-		</field>																																																								
+		</field>
+		<field>
+			<name>DUNS_NO</name>
+			<title>DUNS Number</title>
+			<description>Duns and Bradstreet Universal Numbering System Number</description>
+			<type>number</type>
+			<alias>DUNS_NUMBER</alias>
+		</field>																																																											
 	</fields>		
 </schema>
