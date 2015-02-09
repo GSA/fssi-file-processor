@@ -344,17 +344,7 @@ public class SourceFile extends File{
 	 * 
 	 */
 	public void print(){
-		String providerString = null;
-		if (!(this.getProvider() == null)){
-			providerString = this.getProvider().getProviderName() + " - " + this.getProvider().getProviderIdentifier();
-		}
-		
-		String schemaString = null;
-		if (!(this.getSchema() == null)){
-			schemaString = this.schema.getName();
-		}		
-		
-		logger.debug("FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'", this.getFileName(), this.getFileExtension(), this.getLoadStage(), this.getSourceHeaders().size(), providerString, schemaString);
+		printAll();
 	}
 	
 	/**

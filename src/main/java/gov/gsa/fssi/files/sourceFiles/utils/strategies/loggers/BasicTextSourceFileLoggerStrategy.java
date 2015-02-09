@@ -1,9 +1,10 @@
 package main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.loggers;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
@@ -26,7 +27,6 @@ public class BasicTextSourceFileLoggerStrategy implements SourceFileLoggerStrate
 	 */	
 	@Override
 	public void createLog(String directory, SourceFile sourceFile) {
-		File file = null;
 		
 		try {
 
@@ -36,15 +36,13 @@ public class BasicTextSourceFileLoggerStrategy implements SourceFileLoggerStrate
 //			PrintWriter printWriter = new PrintWriter(writer);
 			
 			String fileName = directory + FileHelper.buildNewFileName(sourceFile.getFileName(), "log");
-			file = new File(fileName);
- 
+			
+			//file = new File(fileName);
 			// if file doesnt exists, then create it
-			if (!file.exists()) {
-				file.createNewFile();
-			}
- 
-			FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);	
+			//if (!file.exists())file.createNewFile();
+			
+			BufferedWriter bufferedWriter = new BufferedWriter (new OutputStreamWriter(new FileOutputStream(fileName),"UTF-8"));
+			
 			for (SourceFileRecord record : sourceFile.getRecords()) {
 				bufferedWriter.write("Line: " + record.getRowIndex() + " Status: " + record.getStatus() + " Level: " + SourceFile.getErrorLevelName(record.getMaxErrorLevel()));
 				bufferedWriter.newLine();

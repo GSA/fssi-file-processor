@@ -48,12 +48,12 @@ public class SourceFileBuilder {
     	}
     	
     	//Provider noted a schema, but couldn't find it
-    	if(sourceFile.getProvider() != null && (sourceFile.getProvider().getSchemaName() != null || !sourceFile.getProvider().getSchemaName().isEmpty()) && sourceFile.getSchema() == null){
-    		logger.error("Provider '{}' for sourceFile '{}' noted schema '{}', but it could not be found", sourceFile.getProvider().getProviderName(), sourceFile.getFileName(), sourceFile.getProvider().getSchemaName());
-    	}else if(sourceFile.getSchema() == null){
-    		logger.error("No schema for file '{}', ignoring Schema processing activitie", fileName);
-    	}else{
+    	if(sourceFile.getStatus() && sourceFile.getSchema() != null){
     		personalizeSourceFileSchema(sourceFile); 
+    	}else if(sourceFile.getStatus() && sourceFile.getSchema() == null){
+    		logger.error("Provider '{}' for sourceFile '{}' noted schema '{}', but it could not be found", sourceFile.getProvider().getProviderName(), sourceFile.getFileName(), sourceFile.getProvider().getSchemaName());
+    	}else if(sourceFile.getStatus()){
+    		logger.error("No schema for file '{}', ignoring Schema processing activities", fileName);
     	}
 
 		//Load File
