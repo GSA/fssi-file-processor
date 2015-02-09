@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.providers.utils.ProvidersBuilder;
+import main.java.gov.gsa.fssi.helpers.mockData.MockProvider;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import test.java.gov.gsa.fssi.mockData.MockProvider;
 
 public class ProviderLoadTest {
 	Config config = new Config("./bin/test/resources/gov/gsa/fssi/fileProcessor/","config.properties");

@@ -1,10 +1,7 @@
 package main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.exporters;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;

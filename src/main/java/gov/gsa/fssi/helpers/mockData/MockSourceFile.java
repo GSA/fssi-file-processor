@@ -1,4 +1,4 @@
-package test.java.gov.gsa.fssi.mockData;
+package main.java.gov.gsa.fssi.helpers.mockData;
 
 import java.util.ArrayList;
 import java.util.HashMap;

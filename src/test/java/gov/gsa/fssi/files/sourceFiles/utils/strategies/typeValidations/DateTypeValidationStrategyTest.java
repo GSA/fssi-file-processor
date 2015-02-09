@@ -4,11 +4,11 @@ import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.contexts.TypeValidationContext;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.typeValidations.DateTypeValidationStrategy;
+import main.java.gov.gsa.fssi.helpers.mockData.MockData;
+import main.java.gov.gsa.fssi.helpers.mockData.MockSchemaField;
+
 import org.junit.Assert;
 import org.junit.Test;
-
-import test.java.gov.gsa.fssi.mockData.MockData;
-import test.java.gov.gsa.fssi.mockData.MockSchemaField;
 
 public class DateTypeValidationStrategyTest {
 

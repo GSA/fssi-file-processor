@@ -6,11 +6,11 @@ import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.utils.SchemaBuilder;
 import main.java.gov.gsa.fssi.files.schemas.utils.SchemasBuilder;
+import main.java.gov.gsa.fssi.helpers.mockData.MockSchema;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import test.java.gov.gsa.fssi.mockData.MockSchema;
 
 public class SchemaLoadTest {
 	Config config = new Config("./bin/test/resources/gov/gsa/fssi/fileProcessor/","config.properties");

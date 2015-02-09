@@ -1,0 +1,63 @@
+package test.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.loggers;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import main.java.gov.gsa.fssi.config.Config;
+import main.java.gov.gsa.fssi.files.providers.Provider;
+import main.java.gov.gsa.fssi.files.providers.utils.ProvidersBuilder;
+import main.java.gov.gsa.fssi.files.schemas.Schema;
+import main.java.gov.gsa.fssi.files.schemas.utils.SchemasBuilder;
+import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
+import main.java.gov.gsa.fssi.files.sourceFiles.utils.SourceFileBuilder;
+import main.java.gov.gsa.fssi.files.sourceFiles.utils.contexts.SourceFileLoggerContext;
+import main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.loggers.BasicTextSourceFileLoggerStrategy;
+import main.java.gov.gsa.fssi.helpers.FileHelper;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+public class BasicTextSourceFileLoggerStrategyTest {
+	Config config = new Config("./bin/test/resources/gov/gsa/fssi/fileProcessor/","config.properties");
+	
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void createsFile() {
+    	try{ 
+    		String fileName = FileHelper.getFullPath(config.getProperty(Config.LOGS_DIRECTORY), "goodfileschematest_012015.log");
+    		File file = new File(fileName);
+    		if(file.delete()){
+    			System.out.println(file.getName() + " is deleted!");
+    		}else{
+    			System.out.println("Delete operation is failed for file: " + fileName);
+    		}
+    	}catch(Exception e){
+    		//e.printStackTrace();
+    	}
+    	
+	    ProvidersBuilder providersBuilder = new ProvidersBuilder();
+	    ArrayList<Provider> providers = providersBuilder.build(config.getProperty(Config.PROVIDERS_DIRECTORY));
+	    
+	    SchemasBuilder schemasBuilder = new SchemasBuilder();
+	    ArrayList<Schema> schemas = schemasBuilder.build(config.getProperty(Config.SCHEMAS_DIRECTORY));  
+		
+	    SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
+	    SourceFile sourceFile = sourceFileBuilder.build(config.getProperty(Config.SOURCEFILES_DIRECTORY), "goodfileschematest_012015.csv", Config.EXPORT_MODE_IMPLODE, schemas, providers);
+	    
+	    SourceFileLoggerContext context = new SourceFileLoggerContext();
+	    context.setSourceFileLoggerStrategy(new BasicTextSourceFileLoggerStrategy());
+	    context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile);
+	    
+    	try{ 
+    		String fileName = FileHelper.getFullPath(config.getProperty(Config.LOGS_DIRECTORY), "goodfileschematest_012015.log");
+    		File file = new File(fileName);
+    		 Assert.assertTrue(file.delete());
+    	}catch(Exception e){
+    		//e.printStackTrace();
+    	}
+
+	}
+}

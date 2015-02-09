@@ -15,7 +15,7 @@ public class SourceFileRecord {
 	static Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);	
 	private int rowIndex = 0;
 	private ArrayList<Data> datas = new ArrayList<Data>();	
-	private String status = null;
+	private boolean status = true;
 	
 	public ArrayList<Data> getDatas() {
 		return datas;
@@ -63,10 +63,10 @@ public class SourceFileRecord {
 		}
 	}
 	
-	public String getStatus() {
+	public boolean getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
 	/**
@@ -89,6 +89,7 @@ public class SourceFileRecord {
 	public void printAll(){
 		logger.debug(" Row: {} Status: {} Data: {}",  this.getRowIndex(), this.getStatus(), this.printDatas());
 	}
+	
 	
 	private ArrayList<String> printDatas() {
 		ArrayList<String> row = new ArrayList<String>();

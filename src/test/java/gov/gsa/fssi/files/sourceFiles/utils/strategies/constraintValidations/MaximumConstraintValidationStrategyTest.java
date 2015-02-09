@@ -5,13 +5,12 @@ import main.java.gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldC
 import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.contexts.ConstraintValidationContext;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.constraintValidations.MaximumConstraintValidationStrategy;
+import main.java.gov.gsa.fssi.helpers.mockData.MockData;
+import main.java.gov.gsa.fssi.helpers.mockData.MockFieldConstraint;
+import main.java.gov.gsa.fssi.helpers.mockData.MockSchemaField;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import test.java.gov.gsa.fssi.mockData.MockData;
-import test.java.gov.gsa.fssi.mockData.MockFieldConstraint;
-import test.java.gov.gsa.fssi.mockData.MockSchemaField;
 
 public class MaximumConstraintValidationStrategyTest {
 
@@ -23,7 +22,7 @@ public class MaximumConstraintValidationStrategyTest {
 		ConstraintValidationContext context = new ConstraintValidationContext();
 		context.setDataValidationStrategy(new MaximumConstraintValidationStrategy());
 		
-		FieldConstraint fieldConstraint = MockFieldConstraint.make(FieldConstraint.TYPE_MAXIMUM, "4", 2);	
+		FieldConstraint fieldConstraint = main.java.gov.gsa.fssi.helpers.mockData.MockFieldConstraint.make(FieldConstraint.TYPE_MAXIMUM, "4", 2);	
 		SchemaField field = MockSchemaField.make("NUMBER", SchemaField.TYPE_STRING, fieldConstraint);
 		Data data = MockData.make("12345");
 		

@@ -96,7 +96,6 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 					}
 					
 					if(emptyRowCheck == false){
-						thisRecord.setStatus(File.STAGE_LOADED);
 						sourceFile.addRecord(thisRecord);
 					}else{
 						sourceFile.incrementTotalEmptyRecords();

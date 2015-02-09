@@ -9,6 +9,8 @@ import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.utils.SchemasBuilder;
 import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.SourceFileBuilder;
+import main.java.gov.gsa.fssi.files.sourceFiles.utils.contexts.SourceFileLoggerContext;
+import main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.loggers.BasicTextSourceFileLoggerStrategy;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 
 import org.slf4j.Logger;
@@ -43,6 +45,9 @@ public class Main {
 	    	if(sourceFile != null && !sourceFile.getStatus()){
 	    		sourceFile.export(config.getProperty(Config.STAGED_DIRECTORY));
 	    	}
+	    	SourceFileLoggerContext context = new SourceFileLoggerContext();
+	    	context.setSourceFileLoggerStrategy(new BasicTextSourceFileLoggerStrategy());
+	    	context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile);
 		}
 		
 	    logger.info("Completed FSSI File Processor");	
