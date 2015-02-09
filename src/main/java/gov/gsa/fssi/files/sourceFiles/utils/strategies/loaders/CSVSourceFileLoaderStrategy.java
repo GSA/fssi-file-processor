@@ -72,8 +72,8 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy{
 					Iterator<?> headerIterator = sourceFile.getSourceHeaders().entrySet().iterator();
 					while (headerIterator.hasNext()) {
 						Map.Entry dataPairs = (Map.Entry)headerIterator.next();
-						Data data = new Data();
 						try {
+							Data data = new Data();
 							data.setData(csvRecord.get(dataPairs.getValue().toString()).trim());
 							data.setHeaderIndex((Integer)dataPairs.getKey());
 							thisRecord.addData(data);

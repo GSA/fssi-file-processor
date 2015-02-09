@@ -137,9 +137,6 @@
 			<title>Device (Lease/Purchase) Schedule Price</title>
 			<type>number</type>
 			<description></description>
-			<constraints>
-				<required level="error">true</required>
-			</constraints>
 			<alias>Dev_Schedule_Price</alias>
 			<alias>Schedule Price&#9094;(Lease/Purchase)</alias><!-- Need to figure out "Enter code" -->
 		</field>
@@ -170,9 +167,6 @@
 			<title>Maintenance Schedule Price (Base Fee)</title>
 			<type>number</type>
 			<description></description>
-			<constraints>
-				<required level="error">true</required>
-			</constraints>
 			<alias>Maint_Schedule_Price</alias>
 			<alias>Schedule Price&#9094;(Base Fee)</alias><!-- Need to figure out "Enter code" -->
 		</field>	
@@ -203,9 +197,6 @@
 			<title>Maintenance Schedule Click Rate for B/W</title>
 			<type>number</type>
 			<description></description>
-			<constraints>
-				<required level="error">true</required>
-			</constraints>
 			<alias>Maint_Schedule_BW_Rate</alias>
 			<alias>Schedule Click Rates B/W Rate</alias>						
 		</field>		
@@ -247,9 +238,6 @@
 			<title>Maintenance Task Order Click Rate for B/W</title>
 			<type>number</type>
 			<description></description>
-			<constraints>
-				<required level="error">true</required>
-			</constraints>
 			<alias>Maint_Task_BW_Rate</alias>
 			<alias>Task Order B/W Rate</alias>			
 		</field>		
@@ -258,9 +246,6 @@
 			<title>Maintenance Task Order Click Rate for Color</title>
 			<type>number</type>
 			<description></description>
-			<constraints>
-				<required level="error">true</required>
-			</constraints>
 			<alias>Maint_Task_Color_Rate</alias>
 			<alias>Task Order Color Rate</alias>
 		</field>
@@ -269,9 +254,6 @@
 			<title>Maintenance Task Order Click Rate for B/W</title>
 			<type>number</type>
 			<description></description>
-			<constraints>
-				<required level="error">true</required>
-			</constraints>
 			<alias>Monthly_Usage_BW</alias>
 			<alias>Monthly Usage Black/White</alias>
 		</field>		
@@ -280,9 +262,6 @@
 			<title>Maintenance Task Order Click Rate for Color</title>
 			<type>number</type>
 			<description></description>
-			<constraints>
-				<required level="error">true</required>
-			</constraints>
 			<alias>Monthly_Usage_Color</alias>
 			<alias>Monthly Usage Color</alias>
 		</field>	
@@ -291,9 +270,6 @@
 			<title>Estimated Meter Read Indicator</title>
 			<type>string</type>
 			<description></description>
-			<constraints>
-				<pattern level="error">Yes|No</pattern>
-			</constraints>
 			<alias>Est_Read</alias>
 			<alias>Was Meter Read Estimated? (Select from drop down)</alias>
 		</field>			
@@ -347,9 +323,6 @@
 			<title>Point of Contact Email</title>
 			<type>string</type>
 			<description></description>
-			<constraints>
-				<required>true</required>
-			</constraints>
 			<alias>Point of Contact email</alias>
 		</field>																																																								
 	</fields>		

@@ -234,6 +234,7 @@ public class SchemaValidator {
 		public boolean isValidLevel(String string){
 			//TODO: use java java.lang.reflect.Field to iterate through globals to generate ArrayList
 			ArrayList<String> validList = new ArrayList<String>();
+			validList.add(FieldConstraint.LEVEL_FATAL);
 			validList.add(FieldConstraint.LEVEL_ERROR);
 			validList.add(FieldConstraint.LEVEL_WARNING);
 			validList.add(FieldConstraint.LEVEL_DEBUG);

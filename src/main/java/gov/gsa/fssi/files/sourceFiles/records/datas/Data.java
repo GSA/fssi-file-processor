@@ -17,7 +17,7 @@ public class Data {
 	private boolean status = true;
 	private ArrayList<ValidationResult> validationResults = new ArrayList<ValidationResult>();
 	
-	
+
 	/**
 	 * @return the validationResults
 	 */	
@@ -72,18 +72,16 @@ public class Data {
 
 	public void setStatus(boolean status) {
 		if(this.getStatus()) this.status = status;
-	}	
+	}
+	
 	public Data() {
-		super();
 	}
 	
 	public Data(Integer headerIndex) {
-		super();
 		this.headerIndex = headerIndex;
 	}
 	
 	public Data(Integer headerIndex, String data) {
-		super();
 		this.headerIndex = headerIndex;
 		this.data = data;
 	}

@@ -8,6 +8,10 @@ import org.slf4j.LoggerFactory;
 public class ValidationResult {
 	static Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);
 	
+	public ValidationResult(){
+		
+	}
+	
 	public ValidationResult(boolean status, int errorLevel, String rule){
 		this.setErrorLevel(errorLevel);
 		this.setStatus(status);

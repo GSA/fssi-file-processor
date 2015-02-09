@@ -42,9 +42,11 @@ public class Main {
 		for (String fileName : FileHelper.getFilesFromDirectory(config.getProperty(Config.SOURCEFILES_DIRECTORY), ".csv")) {
 	    	SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
 	    	SourceFile sourceFile = sourceFileBuilder.build(config.getProperty(Config.SOURCEFILES_DIRECTORY), fileName, config.getProperty(Config.EXPORT_MODE), schemas, providers);   
-	    	if(sourceFile != null && !sourceFile.getStatus()){
-	    		sourceFile.export(config.getProperty(Config.STAGED_DIRECTORY));
-	    	}
+	    	if(sourceFile != null){
+	    		if(sourceFile.getStatus()) sourceFile.export(config.getProperty(Config.STAGED_DIRECTORY));
+	    		else logger.error("File '{}' is in Error state and is being ignored for exporting", fileName);
+	    	}else logger.error("File '{}' is in null and is being ignored for exporting", fileName);
+	    	
 	    	SourceFileLoggerContext context = new SourceFileLoggerContext();
 	    	context.setSourceFileLoggerStrategy(new BasicTextSourceFileLoggerStrategy());
 	    	context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile);

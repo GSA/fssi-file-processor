@@ -1,5 +1,6 @@
 package main.java.gov.gsa.fssi.files.sourceFiles.utils;
 
+import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
 import main.java.gov.gsa.fssi.files.sourceFiles.SourceFile;
@@ -23,12 +24,12 @@ public class SourceFileValidator{
 	
 	
 	public void validate(SourceFile sourceFile){
-		logger.info("Starting sourceFile validation for file '{}'", sourceFile.getFileName());
+		logger.info("Starting sourceFile validation for file '{}'. it is in '{}' status", sourceFile.getFileName(), sourceFile.getStatusName());
 		
 		if(sourceFile.getSchema() == null){
 			logger.error("Cannot validate file '{}', no Schema", sourceFile.getFileName());	
-		}else if(sourceFile.getLoadStage().equals(SourceFile.STATUS_ERROR)){
-			logger.error("file '{}', had a load error, cannot validate", sourceFile.getFileName());
+		}else if(!sourceFile.getStatus()){
+			logger.error("file '{}' is in '{}' state and cannot be processed", sourceFile.getFileName(), File.getErrorLevelName(sourceFile.getMaxErrorLevel()));
 		}else{
 			for(SourceFileRecord sourceFileRecord: sourceFile.getRecords()){
 				for(SchemaField field:sourceFile.getSchema().getFields()){
@@ -50,10 +51,20 @@ public class SourceFileValidator{
 						}
 						sourceFileRecord.setMaxErrorLevel(data.getMaxErrorLevel());
 						sourceFileRecord.setStatus(data.getMaxErrorLevel());
+						sourceFile.setMaxErrorLevel(data.getMaxErrorLevel());
 					}
 				}
+				if(logger.isDebugEnabled() && sourceFileRecord.getMaxErrorLevel() == 3) logger.error("sourceFileRecord for Row '{}' is in '{}' State", sourceFileRecord.getRowIndex(), File.getErrorLevelName(sourceFileRecord.getMaxErrorLevel()));
+				else if(logger.isDebugEnabled() && sourceFileRecord.getMaxErrorLevel() == 2) logger.error("sourceFileRecord Row '{}' is in '{}' State", sourceFileRecord.getRowIndex(), File.getErrorLevelName(sourceFileRecord.getMaxErrorLevel()));		
+				else if(logger.isDebugEnabled() && sourceFileRecord.getMaxErrorLevel() == 1) logger.warn("sourceFileRecord Row '{}' is in '{}' State", sourceFileRecord.getRowIndex(), File.getErrorLevelName(sourceFileRecord.getMaxErrorLevel()));	
+				else if(logger.isDebugEnabled()) logger.info("sourceFileRecord Row '{}' is in '{}' and had no issues", sourceFileRecord.getRowIndex(), File.getErrorLevelName(sourceFileRecord.getMaxErrorLevel()));	
 			}
 		}
+		if(sourceFile.getMaxErrorLevel() == 3) logger.error("File '{}' is in '{}' State", sourceFile.getFileName(), File.getErrorLevelName(sourceFile.getMaxErrorLevel()));
+		else if(sourceFile.getMaxErrorLevel() == 2) logger.error("File '{}' is in '{}' State", sourceFile.getFileName(), File.getErrorLevelName(sourceFile.getMaxErrorLevel()));		
+		else if(sourceFile.getMaxErrorLevel() == 1) logger.warn("File '{}' is in '{}' State", sourceFile.getFileName(), File.getErrorLevelName(sourceFile.getMaxErrorLevel()));	
+		else logger.info("File '{}' is in '{}' and had no issuess", sourceFile.getFileName(), File.getErrorLevelName(sourceFile.getMaxErrorLevel()));	
+		if(!sourceFile.getStatus()) logger.error("File is now in Fatal State");
 	}
 	
 }

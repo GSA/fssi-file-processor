@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
+import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
@@ -62,6 +63,7 @@ public class SourceFileBuilder {
 		    logger.info("Completed loading SourceFile '{}'", sourceFile.getFileName());	
 		}
 	
+		logger.info("File '{}' is in state '{}' and status '{}' after loading", sourceFile.getFileName(), File.getErrorLevelName(sourceFile.getMaxErrorLevel()), sourceFile.getStatusName());
 		
 		//Organize file based upon schema
 		if (sourceFile.getStatus() && sourceFile.getSchema() != null && sourceFile.getRecords() != null){
@@ -73,13 +75,16 @@ public class SourceFileBuilder {
 		    logger.info("Completed Organizing SourceFile '{}'", sourceFile.getFileName());	
 		}
 		
+		logger.info("File '{}' is in state '{}' and status '{}' after organizing", sourceFile.getFileName(), File.getErrorLevelName(sourceFile.getMaxErrorLevel()), sourceFile.getStatusName());
+		
 		//Validate file based upon schema
 		if (sourceFile.getStatus() && sourceFile.getSchema() != null && sourceFile.getRecords() != null){
-		    logger.info("Validating SourceFile '{}'", sourceFile.getFileName());	
+			logger.info("Validating SourceFile '{}'", sourceFile.getFileName());	
 		   sourceFile.validate();
 		    logger.info("Completed validating SourceFile '{}'", sourceFile.getFileName());	
 		}
 		
+		logger.info("File '{}' is in state '{}' and status '{}' after validation", sourceFile.getFileName(), File.getErrorLevelName(sourceFile.getMaxErrorLevel()), sourceFile.getStatusName());
 		return sourceFile;
 	}
 	

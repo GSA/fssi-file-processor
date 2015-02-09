@@ -198,9 +198,10 @@ public class File {
 	public boolean getStatus() {
 		return status;
 	}
-	public void setStatus(boolean status) {
-		if(this.getStatus()) this.status = status;
-	}
+	public String getStatusName() {
+		if(status) return "Pass";
+		return "Fail";
+	}	
 
 	/**
 	 * Full filename including file extension.....Example: "filename.txt"
@@ -214,6 +215,7 @@ public class File {
 	private ArrayList<String> fileNameParts = new ArrayList<String>();
 	private String loadStage = STAGE_INITIALIZED;
 	private boolean status = true;
+	private int maxErrorLevel = 0;
 	private boolean loadStatus = true;
 	private boolean validatorStatus = true;
 	private boolean exportStatus = false;	
@@ -221,6 +223,53 @@ public class File {
 	private ArrayList<String> validatorStatusMessages = null;
 
 	private String exportStatusMessage = null;
+	
+	/**
+	 * @return
+	 */
+	public int getMaxErrorLevel() {
+		return maxErrorLevel;
+	}
+	/**
+	 * This sets the overall Pass/Fail status of the Data object. Once it is fail (false), it cannot change back
+	 * @param validatorStatus the validatorStatus to set
+	 */
+	public void setStatus(int errorLevel) {
+		if(errorLevel == 3) this.status = false;
+	}
+	public void setStatus(boolean status) {
+		if(this.getStatus()) this.status = status;
+	}		
+	/**
+	 * @return
+	 */
+	public static String getErrorLevelName(int errorLevel) {
+		String name = null;
+		if(errorLevel <= 3){
+			switch (errorLevel){
+			case 0:
+				name = File.STATUS_PASS;
+				break;
+			case 1:
+				name = File.STATUS_WARNING;
+				break;
+			case 2:
+				name = File.STATUS_ERROR;
+				break;
+			case 3:
+				name = File.STATUS_FATAL;
+				break;
+			default:
+				break;
+			}	
+		}
+		return name;
+	}	
+	
+	public void setMaxErrorLevel(int errorLevel) {
+		setStatus(errorLevel);
+		if(errorLevel > this.maxErrorLevel) this.maxErrorLevel = errorLevel;
+	}
 
 	/**
 	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte filePartSeparator)

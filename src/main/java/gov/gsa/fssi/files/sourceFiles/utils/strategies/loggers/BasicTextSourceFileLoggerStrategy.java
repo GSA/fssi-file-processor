@@ -46,23 +46,18 @@ public class BasicTextSourceFileLoggerStrategy implements SourceFileLoggerStrate
 			FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);	
 			for (SourceFileRecord record : sourceFile.getRecords()) {
-				if(!record.getStatus()){
-					bufferedWriter.write("Line: " + record.getRowIndex() + " Status: FAIL Level: " + record.getErrorLevelName(record.getMaxErrorLevel()));
-					bufferedWriter.newLine();
-					for (Data data : record.getDatas()) {
-						if(!data.getStatus()){
-							bufferedWriter.write("     Field: "+sourceFile.getSourceHeaderName(data.getHeaderIndex())+" failed constraints: ");
-							for (ValidationResult result : data.getValidationResults()) {
-								if(!result.getStatus()) bufferedWriter.write(result.getRule()+" ");
-							}
-							bufferedWriter.write(" against value: '"+ data.getData() + "'");	
-							bufferedWriter.newLine();
+				bufferedWriter.write("Line: " + record.getRowIndex() + " Status: " + record.getStatus() + " Level: " + SourceFile.getErrorLevelName(record.getMaxErrorLevel()));
+				bufferedWriter.newLine();
+				for (Data data : record.getDatas()) {
+					if(data.getMaxErrorLevel() > 0){
+						bufferedWriter.write("     Field: "+sourceFile.getSourceHeaderName(data.getHeaderIndex())+" failed constraints: ");
+						for (ValidationResult result : data.getValidationResults()) {
+							if(!result.getStatus()) bufferedWriter.write(result.getRule()+" ");
 						}
-					}					
-				}else {
-					bufferedWriter.write("Line: " + record.getRowIndex() + " Status: PASS");
-					bufferedWriter.newLine();
-				}
+						bufferedWriter.write(" against value: '"+ data.getData() + "'");	
+						bufferedWriter.newLine();
+					}
+				}					
 			}
 			
 			bufferedWriter.flush();

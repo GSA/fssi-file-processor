@@ -137,9 +137,6 @@
 			<title>Device (Lease/Purchase) Schedule Price</title>
 			<type>number</type>
 			<description></description>
-			<constraints>
-				<required level="error">true</required>
-			</constraints>
 			<alias>Dev_Schedule_Price</alias>
 			<alias>Schedule Price&#9094;(Lease/Purchase)</alias><!-- Need to figure out "Enter code" -->
 		</field>
@@ -310,9 +307,6 @@
 			<title>Point of Contact Email</title>
 			<type>string</type>
 			<description></description>
-			<constraints>
-				<required>true</required>
-			</constraints>
 			<alias>Point of Contact email</alias>
 		</field>																																																								
 	</fields>		

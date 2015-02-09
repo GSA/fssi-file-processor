@@ -196,7 +196,7 @@ public class SourceFile extends File{
 	public void setReportingPeriodUsingFileNameParts(){
 		if(this.getFileNameParts() == null || this.getFileNameParts().isEmpty()){
 			logger.error("File has no fileNameParts, which means we cannot discern a provider or schema. we can process the file no farther");
-			this.setLoadStage(STATUS_ERROR);
+			this.setStatus(false);
 		}else{
 			
 			for(String fileNamePart: this.getFileNameParts()){
@@ -219,10 +219,10 @@ public class SourceFile extends File{
 						
 						if(date.compareTo(todaysDate) > 0){
 							logger.error("ReportingPeriod '{}' found in FileName is later than current date. Please check file name", date.toString());
-							this.setLoadStage(STATUS_ERROR);
+							this.setStatus(false);
 						}else if(date.compareTo(minimumDate) < 0){
 							logger.error("ReportingPeriod '{}' found in FileName is before the year 2000 and may be inacurate. Please check file name", date.toString());
-							this.setLoadStage(STATUS_ERROR);				
+							this.setStatus(false);				
 						}else{
 							logger.info("Successfully added Reporting Period '{}'", date.toString());
 							this.setReportingPeriod(date);
@@ -324,6 +324,7 @@ public class SourceFile extends File{
 		this.setReportingPeriodUsingFileNameParts();
 		if(this.getReportingPeriod() == null){
 			logger.error("No reporting period found, unable to process");
+			this.setMaxErrorLevel(3);
 			this.setStatus(false);
 		}
 	}
@@ -392,7 +393,7 @@ public class SourceFile extends File{
 			context.setSourceFileLoaderStrategy(new CSVSourceFileLoaderStrategy());			
 		}else{
 			logger.warn("Could not load file '{}' as a '{}'", this.getFileName(), this.getFileExtension());	
-			this.setLoadStage(STATUS_ERROR);			
+			this.setStatus(false);			
 		}
 		
 		context.load(directory, this.getFileName(), this);
