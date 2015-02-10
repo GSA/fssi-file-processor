@@ -17,7 +17,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class SourceFileLoadTest {
-	Config config = new Config("./bin/test/resources/gov/gsa/fssi/fileProcessor/","config.properties");
+	Config config = new Config("./testfiles/","config.properties");
 	
 	
 	@Test	

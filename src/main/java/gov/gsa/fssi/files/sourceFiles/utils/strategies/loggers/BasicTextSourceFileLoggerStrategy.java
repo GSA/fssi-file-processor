@@ -44,10 +44,10 @@ public class BasicTextSourceFileLoggerStrategy implements SourceFileLoggerStrate
 			BufferedWriter bufferedWriter = new BufferedWriter (new OutputStreamWriter(new FileOutputStream(fileName),"UTF-8"));
 			
 			for (SourceFileRecord record : sourceFile.getRecords()) {
-				bufferedWriter.write("Line: " + record.getRowIndex() + " Status: " + record.getStatus() + " Level: " + SourceFile.getErrorLevelName(record.getMaxErrorLevel()));
+				bufferedWriter.write("Line: " + record.getRowIndex() + " Status: " + sourceFile.getStatusName() + " Level: " + SourceFile.getErrorLevelName(record.getMaxErrorLevel()));
 				bufferedWriter.newLine();
 				for (Data data : record.getDatas()) {
-					if(data.getMaxErrorLevel() > 0){
+					if(data.getMaxErrorLevel() > 2){
 						bufferedWriter.write("     Field: "+sourceFile.getSourceHeaderName(data.getHeaderIndex())+" failed constraints: ");
 						for (ValidationResult result : data.getValidationResults()) {
 							if(!result.getStatus()) bufferedWriter.write(result.getRule()+" ");

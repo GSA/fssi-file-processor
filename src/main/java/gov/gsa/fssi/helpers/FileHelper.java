@@ -1,6 +1,9 @@
 package main.java.gov.gsa.fssi.helpers;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -25,8 +28,16 @@ public class FileHelper {
 		ArrayList<String> fileList = new ArrayList<String>();
 		logger.info("getFilesFromDirectory Looking in '{}' for '{}' files.", directoryName, whitelist);	
 		
+		//relative
+//		if(fullFileName.startsWith(".")){
+//			inputStream = new FileInputStream(FileHelper.getFullPath(directory, fileName));
+//		}else{
+//			inputStream = getClass().getResourceAsStream(fullFileName);
+//		}
+		
 		
 		File folder = new File(directoryName);
+		System.out.println(folder.getAbsolutePath() );
 		File[] listOfFiles = folder.listFiles();
 		int fileCount = 0;
 		int totalFileCount = 0;

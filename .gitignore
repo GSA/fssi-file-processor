@@ -1,8 +1,5 @@
-/working/logs/*
-/working/srcfiles/*
-/working/staged/*
-/working/datamaps/*
 *.log
-/target/*
-/target
-/cov-int
+working/
+/*.log
+cov-int/
+target/

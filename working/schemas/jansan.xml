@@ -24,7 +24,7 @@
 			<name>ORDER_DATE</name>
 			<title>Order Date</title>
 			<type>date</type>
-			<format>yyyy-MM-dd</format>
+			<format>ddMMyyyy</format>
 			<description>The date the order was placed</description>
 			<constraints>
 				<required level="error">true</required>

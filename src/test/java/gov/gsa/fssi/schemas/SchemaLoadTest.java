@@ -13,7 +13,7 @@ import org.junit.Test;
 
 
 public class SchemaLoadTest {
-	Config config = new Config("./bin/test/resources/gov/gsa/fssi/fileProcessor/","config.properties");
+	Config config = new Config("./testfiles/","config.properties");
 	
 	/**
 	 * This should test to make sure that we are catching required Fields

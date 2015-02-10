@@ -14,9 +14,9 @@ public class ConfigTest {
 	 */
 	@Test
 	public void read() {
-		Config config = new Config("./bin/test/resources/gov/gsa/fssi/fileProcessor/","config.properties");
+		Config config = new Config("./testfiles/","config.properties");
 			
-		Assert.assertEquals("failure - ConfigTest", "./bin/test/resources/gov/gsa/fssi/fileProcessor/working/providers/", config.getProperty(Config.PROVIDERS_DIRECTORY));
+		Assert.assertEquals("failure - ConfigTest", "./testfiles/providers/", config.getProperty(Config.PROVIDERS_DIRECTORY));
 
 	}
 }

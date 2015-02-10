@@ -1,5 +1,6 @@
 package main.java.gov.gsa.fssi.config;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -158,8 +159,17 @@ public class Config {
 	 */
 	public void getPropValues(String directory, String fileName) throws IOException {
 		Properties prop = new Properties();
+		String fullFileName = FileHelper.getFullPath(directory, fileName);
+		logger.info("Attempting to get configurations from configfile '{}'", fullFileName);
+		InputStream inputStream = null;
 		
-		InputStream inputStream = new FileInputStream(FileHelper.getFullPath(directory, fileName));
+		//relative
+		if(fullFileName.startsWith(".")){
+			inputStream = new FileInputStream(FileHelper.getFullPath(directory, fileName));
+		}else{
+			inputStream = getClass().getResourceAsStream(fullFileName);
+		}
+		
 		Reader reader = new InputStreamReader(inputStream, "UTF-8");
 		prop.load(reader); //Attempting to Load File
 		validatePropFile(prop); //Now we validate the file
