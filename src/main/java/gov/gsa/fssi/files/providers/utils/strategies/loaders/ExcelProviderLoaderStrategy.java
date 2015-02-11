@@ -165,17 +165,13 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 			logger.error(
 					"Received InvalidFormatException '{}' while trying to load {}",
 					e.getMessage(), fileName);
-			// e.printStackTrace();
 		} catch (java.lang.NullPointerException e) {
 			logger.error(
 					"received NullPointerException error '{}' while loading file '{}'",
 					e.getMessage(), fileName);
-			// e.printStackTrace();
 		} catch (IOException e) {
 			logger.error("Received IOException while trying to load {}",
 					fileName);
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
 		}
 
 	}

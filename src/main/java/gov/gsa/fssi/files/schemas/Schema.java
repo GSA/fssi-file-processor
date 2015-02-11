@@ -1,6 +1,7 @@
 package main.java.gov.gsa.fssi.files.schemas;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
@@ -20,9 +21,9 @@ public class Schema extends File {
 	private String name = null;
 	private String providerName = null;
 	private String version = null;
-	private ArrayList<String> primaryKeys = null;
-	private ArrayList<String> foreignKeys = null;
-	private ArrayList<SchemaField> fields = new ArrayList<SchemaField>();
+	private List<String> primaryKeys = null;
+	private List<String> foreignKeys = null;
+	private List<SchemaField> fields = new ArrayList<SchemaField>();
 
 	/**
 	 * @param fileName
@@ -87,14 +88,14 @@ public class Schema extends File {
 	/**
 	 * @return
 	 */
-	public ArrayList<String> getPrimaryKeys() {
+	public List<String> getPrimaryKeys() {
 		return primaryKeys;
 	}
 
 	/**
 	 * @param primaryKey
 	 */
-	public void setPrimaryKeys(ArrayList<String> primaryKey) {
+	public void setPrimaryKeys(List<String> primaryKey) {
 		this.primaryKeys = primaryKey;
 	}
 
@@ -108,14 +109,14 @@ public class Schema extends File {
 	/**
 	 * @return
 	 */
-	public ArrayList<String> getForeignKeys() {
+	public List<String> getForeignKeys() {
 		return foreignKeys;
 	}
 
 	/**
 	 * @param foreignKeys
 	 */
-	public void setForeignKeys(ArrayList<String> foreignKeys) {
+	public void setForeignKeys(List<String> foreignKeys) {
 		this.foreignKeys = foreignKeys;
 	}
 
@@ -146,7 +147,7 @@ public class Schema extends File {
 	/**
 	 * @return the fields
 	 */
-	public ArrayList<SchemaField> getFields() {
+	public List<SchemaField> getFields() {
 		return fields;
 	}
 
@@ -160,10 +161,10 @@ public class Schema extends File {
 	}
 
 	/**
-	 * @param fields
+	 * @param list
 	 */
-	public void setFields(ArrayList<SchemaField> fields) {
-		this.fields = fields;
+	public void setFields(List<SchemaField> list) {
+		this.fields = list;
 	}
 
 	/**

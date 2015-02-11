@@ -170,8 +170,8 @@ public class SourceFileBuilder {
 				sourceFile.getFileName());
 		if (sourceFile.getStatus()) {
 			for (Schema schema : schemas) {
-				if (sourceFile.getProvider().getSchemaName().toUpperCase()
-						.equals(schema.getName().toUpperCase())) {
+				if (sourceFile.getProvider().getSchemaName()
+						.equalsIgnoreCase(schema.getName())) {
 					sourceFile.setSchema(schema);
 				}
 			}

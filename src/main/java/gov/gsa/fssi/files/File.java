@@ -1,6 +1,7 @@
 package main.java.gov.gsa.fssi.files;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ public class File {
 	/**
 	 * @return current fileNameParts
 	 */
-	public ArrayList<String> getFileNameParts() {
+	public List<String> getFileNameParts() {
 		return fileNameParts;
 	}
 
@@ -64,7 +65,7 @@ public class File {
 	 * @param fileParts
 	 *            ArrayList<String> fileParts to set
 	 */
-	public void setFileNameParts(ArrayList<String> fileParts) {
+	public void setFileNameParts(List<String> fileParts) {
 		this.fileNameParts = fileParts;
 	}
 
@@ -101,7 +102,7 @@ public class File {
 	 *            byte filePartSeparator
 	 */
 	public void setFileNameParts(byte filePartSeparator) {
-		ArrayList<String> newfileNameParts = new ArrayList<String>();
+		List<String> newfileNameParts = new ArrayList<String>();
 
 		if (fileName == null || fileName.isEmpty()) {
 			logger.warn("FileName was empty or null, unable to set FileNameParts");
@@ -156,11 +157,11 @@ public class File {
 	/**
 	 * @return current loadStatusMessage
 	 */
-	public ArrayList<String> getLoadStatusMessage() {
+	public List<String> getLoadStatusMessage() {
 		return this.loadStatusMessages;
 	}
 
-	public void setLoadStatusMessage(ArrayList<String> loadStatusMessages) {
+	public void setLoadStatusMessage(List<String> loadStatusMessages) {
 		this.loadStatusMessages = loadStatusMessages;
 	}
 
@@ -171,7 +172,7 @@ public class File {
 	/**
 	 * @return current validatorStatusMessage
 	 */
-	public ArrayList<String> getValidatorStatusMessage() {
+	public List<String> getValidatorStatusMessage() {
 		return this.validatorStatusMessages;
 	}
 
@@ -180,7 +181,7 @@ public class File {
 	 *            String validatorStatusMessage to set
 	 */
 	public void setValidatorStatusMessage(
-			ArrayList<String> validatorStatusMessages) {
+			List<String> validatorStatusMessages) {
 		this.validatorStatusMessages = validatorStatusMessages;
 	}
 
@@ -279,15 +280,15 @@ public class File {
 	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
 	 *      filePartSeparator)
 	 */
-	private ArrayList<String> fileNameParts = new ArrayList<String>();
+	private List<String> fileNameParts = new ArrayList<String>();
 	private String loadStage = STAGE_INITIALIZED;
 	private boolean status = true;
 	private int maxErrorLevel = 0;
 	private boolean loadStatus = true;
 	private boolean validatorStatus = true;
 	private boolean exportStatus = false;
-	private ArrayList<String> loadStatusMessages = null;
-	private ArrayList<String> validatorStatusMessages = null;
+	private List<String> loadStatusMessages = null;
+	private List<String> validatorStatusMessages = null;
 
 	private String exportStatusMessage = null;
 

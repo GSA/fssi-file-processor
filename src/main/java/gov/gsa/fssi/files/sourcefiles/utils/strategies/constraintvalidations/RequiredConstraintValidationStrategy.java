@@ -18,7 +18,7 @@ public class RequiredConstraintValidationStrategy
 			Data data) {
 		if (data != null) {
 			if ((data.getData() == null || data.getData().isEmpty())
-					&& constraint.getValue().toUpperCase().equals("TRUE")) {
+					&& constraint.getValue().equalsIgnoreCase("TRUE")) {
 				data.addValidationResult(false, constraint.getLevel(),
 						constraint.getRuleText());
 			} else

@@ -2,6 +2,7 @@ package main.java.gov.gsa.fssi.files.schemas.utils;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
@@ -36,7 +37,6 @@ public class SchemaValidator {
 	public void validate(Schema schema) {
 		logger.info("Started schema validation for schema '{}'",
 				schema.getName());
-		// Schema newSchema = schema;
 
 		if (schema.getName() == null || schema.getName().isEmpty()) {
 			logger.error("Schema in file '{}' does not have a name",
@@ -58,7 +58,7 @@ public class SchemaValidator {
 	 * 
 	 * @param schema
 	 */
-	private ArrayList<SchemaField> validateFields(Schema schema) {
+	private List<SchemaField> validateFields(Schema schema) {
 		Schema newSchema = new Schema();
 		for (SchemaField field : schema.getFields()) {
 			SchemaField newField = field;
