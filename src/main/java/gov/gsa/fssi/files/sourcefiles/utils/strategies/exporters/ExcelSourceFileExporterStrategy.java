@@ -48,7 +48,8 @@ public class ExcelSourceFileExporterStrategy
 					+ FileHelper.buildNewFileName(sourceFile.getFileName(),
 							sourceFile.getProvider().getFileOutputType()));
 
-			Workbook wb = sourceFile.getProvider().getFileOutputType().equalsIgnoreCase("XLSX")
+			Workbook wb = sourceFile.getProvider().getFileOutputType()
+					.equalsIgnoreCase("XLSX")
 					? new XSSFWorkbook()
 					: new HSSFWorkbook(); // create a new workbook
 

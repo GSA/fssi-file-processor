@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class File {
-	protected static final Logger logger = LoggerFactory.getLogger(File.class);
+	private static final Logger logger = LoggerFactory.getLogger(File.class);
 
 	/**
 	 * @return current fileName

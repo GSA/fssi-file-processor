@@ -15,7 +15,6 @@ import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.fieldconstraints.FieldConstraint;
 import main.java.gov.gsa.fssi.files.schemas.utils.strategies.SchemaLoaderStrategy;
-import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.helpers.XmlHelper;
 
 import org.slf4j.Logger;
@@ -33,7 +32,8 @@ import org.w3c.dom.NodeList;
  *
  */
 public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
-	private static final Logger logger = LoggerFactory.getLogger(XMLSchemaLoaderStrategy.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(XMLSchemaLoaderStrategy.class);
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory

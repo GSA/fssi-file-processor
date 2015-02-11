@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The Schema object is ment to mimic the JSON table schema located here:
  * http://dataprotocols.org/json-table-schema/
@@ -13,7 +16,7 @@ import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
  *
  */
 public class Schema extends File {
-
+	private static final Logger logger = LoggerFactory.getLogger(Schema.class);
 	private String name = null;
 	private String providerName = null;
 	private String version = null;

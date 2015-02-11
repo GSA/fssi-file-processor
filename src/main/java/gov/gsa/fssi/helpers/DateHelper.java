@@ -13,7 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DateHelper {
-	private static final Logger logger = LoggerFactory.getLogger(DateHelper.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(DateHelper.class);
 
 	public static final String FORMAT_MMYYYY = "MMyyyy";
 	public static final String FORMAT_MMDDYYYY = "MMddyyyy";
