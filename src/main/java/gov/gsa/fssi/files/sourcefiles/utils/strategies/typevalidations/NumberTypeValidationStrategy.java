@@ -1,17 +1,19 @@
 package main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.typevalidations;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.TypeValidationStrategy;
 
 public class NumberTypeValidationStrategy implements TypeValidationStrategy {
-
+	static final Logger logger = LoggerFactory.getLogger(NumberTypeValidationStrategy.class);
 	@Override
 	public void validate(SchemaField field, Data data) {
 		if (data != null) {
 			if (!data.getData().isEmpty() && !data.getData().equals("")) {
-				// if(logger.isDebugEnabled()) logger.debug("'{}'",
-				// data.getData());
+
 				Double number = null;
 				try {
 					number = Double.valueOf(data.getData());
@@ -20,10 +22,9 @@ public class NumberTypeValidationStrategy implements TypeValidationStrategy {
 						logger.debug(
 								"Received error '{}' when trying to convert '{}' to Number",
 								e.getMessage(), data.getData());
-					// e.printStackTrace();
+
 				}
 
-				// logger.debug("'{}'", number);
 				if (number == null)
 					data.addValidationResult(false, 3,
 							"Type(" + field.getType() + ")"); // Fatal

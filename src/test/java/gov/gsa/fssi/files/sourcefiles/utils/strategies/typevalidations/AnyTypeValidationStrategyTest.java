@@ -24,7 +24,6 @@ public class AnyTypeValidationStrategyTest {
 		Data data = MockData.make();
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - AnyTypeValidationStrategy did not catch error", 0,
 				data.getMaxErrorLevel());
@@ -47,7 +46,6 @@ public class AnyTypeValidationStrategyTest {
 		data.setMaxErrorLevel(2);
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - AnyTypeValidationStrategy did not catch error", 2,
 				data.getMaxErrorLevel());

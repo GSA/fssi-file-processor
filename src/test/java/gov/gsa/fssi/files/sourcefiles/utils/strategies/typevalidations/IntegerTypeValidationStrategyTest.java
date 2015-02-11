@@ -46,7 +46,6 @@ public class IntegerTypeValidationStrategyTest {
 		Data data = MockData.make("1234567");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - IntegerTypeValidationStrategy did not catch error",
 				0, data.getMaxErrorLevel());
@@ -68,7 +67,6 @@ public class IntegerTypeValidationStrategyTest {
 		Data data = MockData.make("123.45");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - IntegerTypeValidationStrategy did not catch error",
 				2, data.getMaxErrorLevel());
@@ -90,7 +88,6 @@ public class IntegerTypeValidationStrategyTest {
 		Data data = MockData.make("value");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - IntegerTypeValidationStrategy did not catch error",
 				3, data.getMaxErrorLevel());
@@ -114,7 +111,6 @@ public class IntegerTypeValidationStrategyTest {
 		data.setMaxErrorLevel(2);
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - IntegerTypeValidationStrategy did not catch error",
 				2, data.getMaxErrorLevel());

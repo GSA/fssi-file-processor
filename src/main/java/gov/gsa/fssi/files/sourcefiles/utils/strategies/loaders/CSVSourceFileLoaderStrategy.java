@@ -13,12 +13,15 @@ import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.sourcefiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
+import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.ConstraintValidationStrategy;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.SourceFileLoaderStrategy;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class loads a schema from an XML file
@@ -27,11 +30,12 @@ import org.apache.commons.csv.CSVRecord;
  *
  */
 public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
-
+	static final Logger logger = LoggerFactory.getLogger(CSVSourceFileLoaderStrategy.class);
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
 	 */
+	@Override
 	public void load(String directory, String fileName, SourceFile sourceFile) {
 		try {
 
@@ -76,11 +80,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 							data.setHeaderIndex((Integer) dataPairs.getKey());
 							thisRecord.addData(data);
 						} catch (IllegalArgumentException e) {
-							// logger.error("Failed to process record '{} - {}' in file '{}'",
-							// pairs.getKey().toString(),
-							// pairs.getValue().toString(),
-							// sourceFile.getFileName());
-							logger.error("{}", e.getMessage());
+							logger.error("Received IllegalArgumentExceptions '{}' while creating log for file '{}'", e.getMessage(), sourceFile.getFileName());
 						}
 
 					}
@@ -105,8 +105,6 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 					}
 
 				} else {
-					// logger.debug("row {} in file '{}' had no data, ignoring.",
-					// recordCount, sourceFile.getFileName());
 					sourceFile.incrementTotalNullRecords();
 				}
 			}

@@ -30,7 +30,6 @@ public class MaximumConstraintValidationStrategyTest {
 		Data data = MockData.make("12345");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - MaximumConstraintValidationStrategy did not catch error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -55,7 +54,6 @@ public class MaximumConstraintValidationStrategyTest {
 		Data data = MockData.make("12345");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertNotEquals(
 				"failure - MaximumConstraintValidationStrategy caught error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -80,7 +78,6 @@ public class MaximumConstraintValidationStrategyTest {
 		Data data = MockData.make("12345");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertNotEquals(
 				"failure - MaximumConstraintValidationStrategy caught error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -105,7 +102,6 @@ public class MaximumConstraintValidationStrategyTest {
 		Data data = MockData.make("2015-01-02");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - MaximumConstraintValidationStrategy did not catch error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -130,7 +126,6 @@ public class MaximumConstraintValidationStrategyTest {
 		Data data = MockData.make("2014-12-31");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertNotEquals(
 				"failure - MaximumConstraintValidationStrategy caught error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -155,7 +150,6 @@ public class MaximumConstraintValidationStrategyTest {
 		Data data = MockData.make("2015-01-01");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertNotEquals(
 				"failure - MaximumConstraintValidationStrategy caught error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -180,7 +174,6 @@ public class MaximumConstraintValidationStrategyTest {
 		Data data = MockData.make("9999.99");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - MaximumConstraintValidationStrategy did not catch error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -205,7 +198,6 @@ public class MaximumConstraintValidationStrategyTest {
 		Data data = MockData.make("999.99");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertNotEquals(
 				"failure - MaximumConstraintValidationStrategy caught error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -230,7 +222,6 @@ public class MaximumConstraintValidationStrategyTest {
 		Data data = MockData.make("99.99");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertNotEquals(
 				"failure - MaximumConstraintValidationStrategy caught error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -255,7 +246,6 @@ public class MaximumConstraintValidationStrategyTest {
 		Data data = MockData.make("9999");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - MaximumConstraintValidationStrategy did not catch error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -280,7 +270,6 @@ public class MaximumConstraintValidationStrategyTest {
 		Data data = MockData.make("999");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertNotEquals(
 				"failure - MaximumConstraintValidationStrategy caught error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -305,7 +294,6 @@ public class MaximumConstraintValidationStrategyTest {
 		Data data = MockData.make("99");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertNotEquals(
 				"failure - MaximumConstraintValidationStrategy caught error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());

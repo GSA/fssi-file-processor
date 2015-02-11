@@ -30,7 +30,6 @@ public class MaxLengthConstraintValidationStrategyTest {
 		Data data = MockData.make("12345");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - MaxLengthConstraintValidationStrategy did not catch error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -58,7 +57,6 @@ public class MaxLengthConstraintValidationStrategyTest {
 		Data data = MockData.make("12345");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - MaxLengthConstraintValidationStrategy caught error",
 				0, data.getMaxErrorLevel());
@@ -83,7 +81,6 @@ public class MaxLengthConstraintValidationStrategyTest {
 		Data data = MockData.make("12345");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - MaxLengthConstraintValidationStrategy caught error",
 				0, data.getMaxErrorLevel());

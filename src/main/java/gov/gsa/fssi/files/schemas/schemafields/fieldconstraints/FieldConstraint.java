@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class FieldConstraint {
-	static Logger logger = LoggerFactory.getLogger(SchemaField.class);
+	private static final Logger logger = LoggerFactory.getLogger(SchemaField.class);
 	private String loadStatusLevel = null;
 	private String loadStatusMessage = null;
 	private String validatorStatusMessage = null;

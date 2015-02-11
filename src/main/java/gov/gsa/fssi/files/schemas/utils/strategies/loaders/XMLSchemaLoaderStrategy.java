@@ -34,6 +34,7 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
 	 */
+	@Override
 	public void load(String directory, Schema schema) {
 		Document doc = null;
 		if (schema.getFileName() != null) {
@@ -47,7 +48,6 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 				logger.error(
 						"Received Exception error '{}' while processing file {}",
 						e.getMessage(), schema.getFileName());
-				// e.printStackTrace();
 			}
 
 			if (doc != null) {
@@ -70,7 +70,7 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 						.item(0).getTextContent());
 				schema.setFields(loadFields(doc.getElementsByTagName("field")));
 
-				if (schema.getLoadStage().equals(Schema.STATUS_ERROR)) {
+				if (schema.getLoadStage().equals(main.java.gov.gsa.fssi.files.File.STATUS_ERROR)) {
 					logger.error(
 							"Could not load Schema '{}' in file '{}' as it is in error status",
 							schema.getName(), schema.getFileName());
@@ -78,12 +78,12 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 
 				logger.info("successfully loaded Schema '{}' from file '{}'",
 						schema.getName(), schema.getFileName());
-				schema.setLoadStage(Schema.STAGE_LOADED);
+				schema.setLoadStage(main.java.gov.gsa.fssi.files.File.STAGE_LOADED);
 			}
 			logger.error(
 					"No document found in file '{}'. Unable to load any schema",
 					schema.getFileName());
-			schema.setLoadStage(Schema.STATUS_ERROR);
+			schema.setLoadStage(main.java.gov.gsa.fssi.files.File.STATUS_ERROR);
 
 		} else {
 			logger.error("Could not build Schema, no fileName was set");
@@ -115,8 +115,6 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 				Node currentNode = nodeList.item(j);
 				if (currentNode.getNodeType() == Node.ELEMENT_NODE
 						&& currentNode.getNodeName() != null) {
-					// logger.debug("{} - {}", currentNode.getNodeName(),
-					// currentNode.getTextContent());
 					if (currentNode.getNodeName().equals("name")) {
 						field.setName(currentNode.getTextContent());
 					} else if (currentNode.getNodeName().equals("description")) {
@@ -138,7 +136,6 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 							} catch (DOMException e) {
 								logger.error("Received DOMException '{}'",
 										e.getMessage());
-								// e.printStackTrace();
 							}
 						} else {
 							logger.info("Did not find any constraints");

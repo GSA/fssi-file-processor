@@ -2,13 +2,17 @@ package main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.typevalidation
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.TypeValidationStrategy;
+import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.exporters.CSVSourceFileExporterStrategy;
 import main.java.gov.gsa.fssi.helpers.DateHelper;
 
 public class DateTypeValidationStrategy implements TypeValidationStrategy {
-
+	static final Logger logger = LoggerFactory.getLogger(DateTypeValidationStrategy.class);
 	@Override
 	public void validate(SchemaField field, Data data) {
 		if (data != null) {

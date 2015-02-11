@@ -10,7 +10,5 @@ import org.slf4j.LoggerFactory;
  *
  */
 public interface SourceFileExporterStrategy {
-	Logger logger = LoggerFactory.getLogger(SourceFileExporterStrategy.class);
-
 	void export(String directory, SourceFile sourceFile);
 }

@@ -30,7 +30,6 @@ public class MinLengthConstraintValidationStrategyTest {
 		Data data = MockData.make("12345");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals(
 				"failure - MinLengthConstraintValidationStrategy did not catch error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -55,7 +54,6 @@ public class MinLengthConstraintValidationStrategyTest {
 		Data data = MockData.make("12345");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - MinLengthConstraintValidationStrategy caught error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -80,7 +78,6 @@ public class MinLengthConstraintValidationStrategyTest {
 		Data data = MockData.make("12345");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - MinLengthConstraintValidationStrategy caught error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -105,7 +102,6 @@ public class MinLengthConstraintValidationStrategyTest {
 		Data data = MockData.make("12345");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertNotEquals(
 				"failure - MinLengthConstraintValidationStrategy caught error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());

@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class Config {
-	static Logger logger = LoggerFactory.getLogger(Config.class);
+	private static Logger logger = LoggerFactory.getLogger(Config.class);
 	private Properties prop = null;
 	/**
 	 * @deprecated
@@ -107,7 +107,6 @@ public class Config {
 	 */
 	public String getProperty(String key) {
 		return this.prop.getProperty(key);
-		// return "test";
 	}
 
 	/**
@@ -149,6 +148,7 @@ public class Config {
 			logger.info("Loading default config settings");
 			getDefaultPropValue();
 		}
+
 	}
 
 	/**
@@ -208,12 +208,6 @@ public class Config {
 	 * @return Properties prop
 	 */
 	private Properties validatePropFile(Properties prop) {
-		// if(!prop.containsKey(WORKING_DIRECTORY)){
-		// logger.warn("No '{}' property found in config file, loading default: '{}'",
-		// WORKING_DIRECTORY, DEFAULT_WORKING_DIRECTORY);
-		// prop.put(WORKING_DIRECTORY, DEFAULT_WORKING_DIRECTORY);
-		// }
-
 		if (!prop.containsKey(SOURCEFILES_DIRECTORY)) {
 			logger.warn(
 					"No '{}' property found in config file, loading default: '{}'",
@@ -268,12 +262,6 @@ public class Config {
 					LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);
 			prop.put(EXPORT_MODE, DEFAULT_LOGGING_LEVEL);
 		}
-
-		// if(!prop.containsKey(VALIDATION_MODE)){
-		// logger.warn("No '{}' property found in config file, loading default: '{}'",
-		// VALIDATION_MODE, DEFAULT_VALIDATION_MODE);
-		// prop.put(VALIDATION_MODE, DEFAULT_VALIDATION_MODE);
-		// }
 		return prop;
 	}
 }

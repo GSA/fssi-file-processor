@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourcefiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
@@ -19,7 +22,7 @@ import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.SourceFileOrgan
  */
 public class ImplodeSourceFileOrganizerStrategy implements
 		SourceFileOrganizerStrategy {
-
+	static final Logger logger = LoggerFactory.getLogger(ImplodeSourceFileOrganizerStrategy.class);
 	/**
 	 * This method maps a sourceFile to its schema and then conforms the
 	 * file/data to the schema format We delete any data that is no longer

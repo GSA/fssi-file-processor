@@ -1,6 +1,7 @@
 package main.java.gov.gsa.fssi.files.sourcefiles.records.datas;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
@@ -10,17 +11,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Data {
-	static Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);
-	private String data = ""; // TODO: turn this into a generic Object
+	private static final Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);
+	private String dataValue = ""; // TODO: turn this into a generic Object
 	private Integer headerIndex = 0;
 	private int maxErrorLevel = 0;
 	private boolean status = true;
-	private ArrayList<ValidationResult> validationResults = new ArrayList<ValidationResult>();
+	private List<ValidationResult> validationResults = new ArrayList<ValidationResult>();
 
 	/**
 	 * @return the validationResults
 	 */
-	public ArrayList<ValidationResult> getValidationResults() {
+	public List<ValidationResult> getValidationResults() {
 		return validationResults;
 	}
 
@@ -96,21 +97,21 @@ public class Data {
 
 	public Data(Integer headerIndex, String data) {
 		this.headerIndex = headerIndex;
-		this.data = data;
+		this.dataValue = data;
 	}
 
 	/**
 	 * @return
 	 */
 	public String getData() {
-		return data;
+		return dataValue;
 	}
 
 	/**
 	 * @param data
 	 */
 	public void setData(String data) {
-		this.data = data;
+		this.dataValue = data;
 	}
 
 	/**

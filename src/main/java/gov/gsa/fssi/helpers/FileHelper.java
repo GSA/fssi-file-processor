@@ -9,13 +9,13 @@ import org.slf4j.LoggerFactory;
 public class FileHelper {
 	static Logger logger = LoggerFactory.getLogger(FileHelper.class);
 	// static Config config = new Config();
-	public static byte SEPARATOR_UNDERSCORE = '_';
-	public static byte SEPARATOR_DASH = '-';
-	public static byte SEPARATOR_COMMA = ',';
-	public static byte SEPARATOR_PIPE = '|';
-	public static byte SEPARATOR_TILDE = '~';
-	public static byte SEPARATOR_FORWARDSLASH = '/';
-	public static byte SEPARATOR_BACKSLASH = '\\';
+	public static final byte SEPARATOR_UNDERSCORE = '_';
+	public static final byte SEPARATOR_DASH = '-';
+	public static final byte SEPARATOR_COMMA = ',';
+	public static final byte SEPARATOR_PIPE = '|';
+	public static final byte SEPARATOR_TILDE = '~';
+	public static final byte SEPARATOR_FORWARDSLASH = '/';
+	public static final byte SEPARATOR_BACKSLASH = '\\';
 
 	public static ArrayList<String> getFilesFromDirectory(String directoryName) {
 		return getFilesFromDirectory(directoryName, null);
@@ -71,8 +71,7 @@ public class FileHelper {
 	}
 
 	public static String getFullPath(String directory, String fileName) {
-		String file = directory + fileName;
-		return file;
+		return directory + fileName;
 	}
 
 	public static String buildNewFileName(String oldFileName,

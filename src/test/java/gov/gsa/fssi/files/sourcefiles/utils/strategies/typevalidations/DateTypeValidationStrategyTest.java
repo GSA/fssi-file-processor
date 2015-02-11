@@ -24,10 +24,9 @@ public class DateTypeValidationStrategyTest {
 		Data data = MockData.make();
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not catch error", 0,
-				data.getMaxErrorLevel());
+				data.getMaxErrorLevel()); 
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not make failure",
 				true, data.getStatus());
@@ -45,7 +44,6 @@ public class DateTypeValidationStrategyTest {
 		Data data = MockData.make("2014-05-25");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not catch error", 0,
 				data.getMaxErrorLevel());
@@ -66,7 +64,6 @@ public class DateTypeValidationStrategyTest {
 		Data data = MockData.make("432154123");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not catch error", 3,
 				data.getMaxErrorLevel());
@@ -87,7 +84,6 @@ public class DateTypeValidationStrategyTest {
 		Data data = MockData.make("4321-54-123");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not catch error", 2,
 				data.getMaxErrorLevel());
@@ -108,7 +104,6 @@ public class DateTypeValidationStrategyTest {
 		Data data = MockData.make("1024-54-123");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not catch error", 2,
 				data.getMaxErrorLevel());
@@ -129,7 +124,6 @@ public class DateTypeValidationStrategyTest {
 		Data data = MockData.make("value");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not catch error", 3,
 				data.getMaxErrorLevel());
@@ -152,7 +146,6 @@ public class DateTypeValidationStrategyTest {
 		Data data = MockData.make("12-2014-05");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not catch error", 0,
 				data.getMaxErrorLevel());
@@ -175,7 +168,6 @@ public class DateTypeValidationStrategyTest {
 		Data data = MockData.make("1234567890");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not catch error", 2,
 				data.getMaxErrorLevel());
@@ -198,7 +190,6 @@ public class DateTypeValidationStrategyTest {
 		data.setMaxErrorLevel(2);
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not catch error", 2,
 				data.getMaxErrorLevel());

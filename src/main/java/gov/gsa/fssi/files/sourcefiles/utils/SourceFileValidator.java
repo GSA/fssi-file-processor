@@ -46,9 +46,6 @@ public class SourceFileValidator {
 								&& data.getStatus() == true) {
 							for (FieldConstraint constraint : field
 									.getConstraints()) {
-								// Already in error state, we can ignore
-								// if(data.getStatus() == null ||
-								// !data.getStatus().equals(FieldConstraint.LEVEL_ERROR)){
 								ConstraintValidationContext context = new ConstraintValidationContext();
 								context.validate(field, constraint, data); // Validate
 																			// Constraint
@@ -63,7 +60,6 @@ public class SourceFileValidator {
 											constraint.getValue(),
 											data.getData());
 								}
-								// }
 							}
 						}
 						sourceFileRecord.setMaxErrorLevel(data

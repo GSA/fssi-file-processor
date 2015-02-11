@@ -39,7 +39,7 @@ public class BasicTextSourceFileLoggerStrategyTest {
 						+ fileName);
 			}
 		} catch (Exception e) {
-			// e.printStackTrace();
+			System.out.print(e.getMessage());
 		}
 
 		ProvidersBuilder providersBuilder = new ProvidersBuilder();
@@ -67,7 +67,7 @@ public class BasicTextSourceFileLoggerStrategyTest {
 			File file = new File(fileName);
 			Assert.assertTrue(file.delete());
 		} catch (Exception e) {
-			// e.printStackTrace();
+			System.out.print(e.getMessage());
 		}
 
 	}

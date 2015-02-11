@@ -46,7 +46,6 @@ public class NumberTypeValidationStrategyTest {
 		Data data = MockData.make("1234.54");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - NumberTypeValidationStrategy did not catch error",
 				0, data.getMaxErrorLevel());
@@ -68,7 +67,6 @@ public class NumberTypeValidationStrategyTest {
 		Data data = MockData.make("1234.541234677");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
 		Assert.assertEquals(
 				"failure - NumberTypeValidationStrategy did not catch error",
 				0, data.getMaxErrorLevel());
@@ -90,7 +88,7 @@ public class NumberTypeValidationStrategyTest {
 		Data data = MockData.make("123");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
+
 		Assert.assertEquals(
 				"failure - NumberTypeValidationStrategy did not catch error",
 				0, data.getMaxErrorLevel());
@@ -112,7 +110,7 @@ public class NumberTypeValidationStrategyTest {
 		Data data = MockData.make("value");
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
+
 		Assert.assertEquals(
 				"failure - NumberTypeValidationStrategy did not catch error",
 				3, data.getMaxErrorLevel());
@@ -136,7 +134,7 @@ public class NumberTypeValidationStrategyTest {
 		data.setMaxErrorLevel(2);
 
 		context.validate(field, data);
-		// data.setStatus(FieldConstraint.LEVEL_ERROR);
+
 		Assert.assertEquals(
 				"failure - NumberTypeValidationStrategy did not catch error",
 				2, data.getMaxErrorLevel());

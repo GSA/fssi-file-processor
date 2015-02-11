@@ -1,6 +1,6 @@
 package main.java.gov.gsa.fssi.fileprocessor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * @version 0.1
  */
 public class Main {
-	static Logger logger = LoggerFactory.getLogger(Main.class);
+	private static Logger logger = LoggerFactory.getLogger(Main.class);
 	static Config config = new Config();
 
 	public static void main(String[] args) {
@@ -31,13 +31,13 @@ public class Main {
 
 		logger.info("Building Providers");
 		ProvidersBuilder providersBuilder = new ProvidersBuilder();
-		ArrayList<Provider> providers = providersBuilder.build(config
+		List<Provider> providers = providersBuilder.build(config
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 		printAllProviders(providers);
 
 		logger.info("Building Schemas");
 		SchemasBuilder schemasBuilder = new SchemasBuilder();
-		ArrayList<Schema> schemas = schemasBuilder.build(config
+		List<Schema> schemas = schemasBuilder.build(config
 				.getProperty(Config.SCHEMAS_DIRECTORY));
 		printAllSchemas(schemas);
 
@@ -74,7 +74,7 @@ public class Main {
 	 * @param providers
 	 *            an ArrayList of Provider class objects
 	 */
-	public static void printAllProviders(ArrayList<Provider> providers) {
+	public static void printAllProviders(List<Provider> providers) {
 		for (Provider provider : providers) {
 			provider.print();
 		}
@@ -86,7 +86,7 @@ public class Main {
 	 * @param schemas
 	 *            an ArrayList of Schema class objects
 	 */
-	public static void printAllSchemas(ArrayList<Schema> schemas) {
+	public static void printAllSchemas(List<Schema> schemas) {
 		for (Schema schema : schemas) {
 			schema.printAll();
 		}

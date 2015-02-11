@@ -1,6 +1,7 @@
 package main.java.gov.gsa.fssi.files.sourcefiles.records;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
 
@@ -14,11 +15,11 @@ import org.slf4j.LoggerFactory;
 public class SourceFileRecord {
 	static Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);
 	private int rowIndex = 0;
-	private ArrayList<Data> datas = new ArrayList<Data>();
+	private List<Data> datas = new ArrayList<Data>();
 	private boolean status = true;
 	private int maxErrorLevel = 0;
 
-	public ArrayList<Data> getDatas() {
+	public List<Data> getDatas() {
 		return datas;
 	}
 
@@ -64,10 +65,8 @@ public class SourceFileRecord {
 			}
 		}
 
-		// Now we delete the object
-		if (dataIndex != null) {
-			// logger.info("found data with index {} which is headerIndex {}",
-			// dataIndex, headerIndex);
+
+		if (dataIndex != null) { // Now we delete the object
 			deletDataByIndex(dataIndex);
 		}
 	}

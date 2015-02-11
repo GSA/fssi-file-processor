@@ -1,6 +1,7 @@
 package main.java.gov.gsa.fssi.files.schemas.schemafields;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.schemas.schemafields.fieldconstraints.FieldConstraint;
 
@@ -8,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SchemaField {
-	static Logger logger = LoggerFactory.getLogger(SchemaField.class);
+	static final Logger logger = LoggerFactory.getLogger(SchemaField.class);
 
 	private int headerIndex = -1;
 	private String name = null;
@@ -16,8 +17,8 @@ public class SchemaField {
 	private String type = null;
 	private String format = null;
 	private String description = null;
-	private ArrayList<FieldConstraint> constraints = new ArrayList<FieldConstraint>();
-	private ArrayList<String> alias = new ArrayList<String>();
+	private List<FieldConstraint> constraints = new ArrayList<FieldConstraint>();
+	private List<String> alias = new ArrayList<String>();
 	private String loadStatusLevel = null;
 	private String loadStatusMessage = null;
 	private String validatorStatusMessage = null;
@@ -205,7 +206,7 @@ public class SchemaField {
 	/**
 	 * @return the constraints
 	 */
-	public ArrayList<FieldConstraint> getConstraints() {
+	public List<FieldConstraint> getConstraints() {
 		return constraints;
 	}
 
@@ -213,7 +214,7 @@ public class SchemaField {
 	 * @param constraintMap
 	 *            the constraints to set
 	 */
-	public void setConstraints(ArrayList<FieldConstraint> constraintMap) {
+	public void setConstraints(List<FieldConstraint> constraintMap) {
 		this.constraints = constraintMap;
 	}
 
@@ -227,7 +228,7 @@ public class SchemaField {
 	/**
 	 * @return the alias
 	 */
-	public ArrayList<String> getAlias() {
+	public List<String> getAlias() {
 		return alias;
 	}
 

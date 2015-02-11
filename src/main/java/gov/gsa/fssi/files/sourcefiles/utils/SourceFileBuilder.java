@@ -2,6 +2,7 @@ package main.java.gov.gsa.fssi.files.sourcefiles.utils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import main.java.gov.gsa.fssi.files.File;
@@ -31,8 +32,8 @@ public class SourceFileBuilder {
 	 * @param sourceFileDirectory
 	 */
 	public SourceFile build(String directory, String fileName,
-			String exportMode, ArrayList<Schema> schemas,
-			ArrayList<Provider> providers) {
+			String exportMode, List<Schema> schemas,
+			List<Provider> providers) {
 		SourceFile sourceFile = new SourceFile(fileName);
 		mapProviderToSourceFile(providers, sourceFile);
 
@@ -125,15 +126,14 @@ public class SourceFileBuilder {
 	 * @param providers
 	 * @param sourceFile
 	 */
-	public void mapProviderToSourceFile(ArrayList<Provider> providers,
+	public void mapProviderToSourceFile(List<Provider> providers,
 			SourceFile sourceFile) {
 		if (sourceFile.getStatus()) {
 			logger.info("Attempting to map Provider to file {}",
 					sourceFile.getFileName());
 			for (Provider provider : providers) {
 				for (String fileNamePart : sourceFile.getFileNameParts()) {
-					// logger.debug("does '{}' equal '{}'", fileNamePart,
-					// provider.getProviderIdentifier());
+
 					if (provider
 							.getProviderIdentifier()
 							.toUpperCase()
@@ -165,7 +165,7 @@ public class SourceFileBuilder {
 	 * @param schemas
 	 * @param sourceFile
 	 */
-	public void mapSchemaToSourceFile(ArrayList<Schema> schemas,
+	public void mapSchemaToSourceFile(List<Schema> schemas,
 			SourceFile sourceFile) {
 		logger.info("Attempting to map Schema to file {}",
 				sourceFile.getFileName());

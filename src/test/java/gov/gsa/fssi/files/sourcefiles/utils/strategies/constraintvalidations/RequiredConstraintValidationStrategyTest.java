@@ -29,7 +29,6 @@ public class RequiredConstraintValidationStrategyTest {
 		Data data = MockData.make();
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - RequiredConstraintValidationStrategyTest did not catch error",
 				2, data.getMaxErrorLevel());
@@ -53,7 +52,7 @@ public class RequiredConstraintValidationStrategyTest {
 		Data data = MockData.make("");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
+
 		Assert.assertEquals(
 				"failure - RequiredConstraintValidationStrategyTest did not catch error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -77,7 +76,7 @@ public class RequiredConstraintValidationStrategyTest {
 		Data data = MockData.make("Value");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
+
 		Assert.assertEquals(
 				"failure - RequiredConstraintValidationStrategyTest caughtError",
 				0, data.getMaxErrorLevel());

@@ -22,8 +22,6 @@ public class ProviderLoadTest {
 		ArrayList<Provider> providers = providersBuilder.build(config
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 		Provider mockProvider = MockProvider.make("TEST", "TEST", "", "CSV");
-		// Assert.assertNotNull("Test file missing",
-		// getClass().getResource("/sample.txt"));
 
 		Assert.assertEquals("failure - ProviderLoadTest getProviderName",
 				providers.get(0).getProviderName(),

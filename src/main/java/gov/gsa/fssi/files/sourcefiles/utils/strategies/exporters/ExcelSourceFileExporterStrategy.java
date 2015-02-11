@@ -10,6 +10,7 @@ import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourcefiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
+import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.ConstraintValidationStrategy;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.SourceFileExporterStrategy;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 
@@ -19,6 +20,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class loads a schema from an XML file
@@ -28,38 +31,31 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class ExcelSourceFileExporterStrategy implements
 		SourceFileExporterStrategy {
-
+	static final Logger logger = LoggerFactory.getLogger(ExcelSourceFileExporterStrategy.class);
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
 	 */
+	@Override
 	public void export(String directory, SourceFile sourceFile) {
 		logger.info("Exporting File {} as a 'XLS'", sourceFile.getFileName());
 
 		FileOutputStream out = null;
 
 		try {
-			// File file = new File(FileHelper.getFullPath(directory,
-			// sourceFile.getFileName()));
-			// Writer writer = new OutputStreamWriter(new
-			// FileOutputStream(file), "UTF-8");
 			out = new FileOutputStream(directory
 					+ FileHelper.buildNewFileName(sourceFile.getFileName(),
 							sourceFile.getProvider().getFileOutputType()));
 
-			// create a new workbook
+
 			Workbook wb = (sourceFile.getProvider().getFileOutputType()
 					.toUpperCase().equals("XLSX") ? new XSSFWorkbook()
-					: new HSSFWorkbook());
-			// create a new sheet
-			Sheet s = wb.createSheet();
-			// declare a row object reference
-			Row r = null;
-			// declare a cell object reference
-			Cell c = null;
+					: new HSSFWorkbook()); // create a new workbook
 
-			// creating header row
-			r = s.createRow(0);
+			Sheet s = wb.createSheet(); // create a new sheet
+			Row r = null; // declare a row object reference
+			Cell c = null; // declare a cell object reference
+			r = s.createRow(0); // creating header row
 			Map<Integer, String> headerMap = sourceFile.getSourceHeaders();
 			Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
 			while (headerMapIterator.hasNext()) {
@@ -67,8 +63,7 @@ public class ExcelSourceFileExporterStrategy implements
 				Map.Entry<Integer, String> headerMapIteratorPairs = (Map.Entry) headerMapIterator
 						.next();
 				c = r.createCell(headerMapIteratorPairs.getKey());
-				// getting correct header name from Schema
-				for (SchemaField field : sourceFile.getSchema().getFields()) {
+				for (SchemaField field : sourceFile.getSchema().getFields()) { // getting correct header name from Schema
 					if (field.getHeaderIndex() == headerMapIteratorPairs
 							.getKey()) {
 						logger.info("Using Schema name '{}' for field '{}'",
@@ -90,7 +85,7 @@ public class ExcelSourceFileExporterStrategy implements
 
 				List<Data> records = sourceFileRecord.getDatas();
 				for (Data data : records) {
-					c = r.createCell((int) data.getHeaderIndex());
+					c = r.createCell(data.getHeaderIndex());
 					c.setCellValue(data.getData());
 				}
 			}

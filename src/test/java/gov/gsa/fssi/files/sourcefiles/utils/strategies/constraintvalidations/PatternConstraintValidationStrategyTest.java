@@ -29,7 +29,7 @@ public class PatternConstraintValidationStrategyTest {
 		Data data = MockData.make();
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
+
 		Assert.assertEquals(
 				"failure - PatternConstraintValidationStrategyTest did not catch error",
 				0, data.getMaxErrorLevel());
@@ -53,7 +53,7 @@ public class PatternConstraintValidationStrategyTest {
 		Data data = MockData.make("Yes");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
+
 		Assert.assertEquals(
 				"failure - PatternConstraintValidationStrategyTest caughtError",
 				0, data.getMaxErrorLevel());
@@ -77,7 +77,7 @@ public class PatternConstraintValidationStrategyTest {
 		Data data = MockData.make("YES");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
+
 		Assert.assertEquals(
 				"failure - PatternConstraintValidationStrategyTest caughtError",
 				0, data.getMaxErrorLevel());
@@ -101,7 +101,6 @@ public class PatternConstraintValidationStrategyTest {
 		Data data = MockData.make("YESS");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - PatternConstraintValidationStrategyTest caughtError",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -125,7 +124,6 @@ public class PatternConstraintValidationStrategyTest {
 		Data data = MockData.make("YES");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - PatternConstraintValidationStrategyTest caughtError",
 				0, data.getMaxErrorLevel());
@@ -149,7 +147,6 @@ public class PatternConstraintValidationStrategyTest {
 		Data data = MockData.make("123345");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - PatternConstraintValidationStrategyTest caughtError",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -173,7 +170,6 @@ public class PatternConstraintValidationStrategyTest {
 		Data data = MockData.make("123345");
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - PatternConstraintValidationStrategyTest caughtError",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
@@ -198,7 +194,6 @@ public class PatternConstraintValidationStrategyTest {
 		data.setMaxErrorLevel(2);
 
 		context.validate(field, fieldConstraint, data);
-		// data.setStatus(2);
 		Assert.assertEquals(
 				"failure - AnyTypeValidationStrategy did not catch error", 2,
 				data.getMaxErrorLevel());

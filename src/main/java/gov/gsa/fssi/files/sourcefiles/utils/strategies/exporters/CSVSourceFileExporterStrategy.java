@@ -19,6 +19,8 @@ import main.java.gov.gsa.fssi.helpers.FileHelper;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class loads a schema from an XML file
@@ -28,7 +30,7 @@ import org.apache.commons.csv.CSVPrinter;
  */
 public class CSVSourceFileExporterStrategy implements
 		SourceFileExporterStrategy {
-
+	static final Logger logger = LoggerFactory.getLogger(CSVSourceFileExporterStrategy.class);
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
@@ -36,27 +38,21 @@ public class CSVSourceFileExporterStrategy implements
 	@Override
 	public void export(String directory, SourceFile sourceFile) {
 		try {
-			// Delimiter used in CSV file
 			String newFileName = FileHelper.buildNewFileName(sourceFile
 					.getFileName(), sourceFile.getProvider()
-					.getFileOutputType());
+					.getFileOutputType()); // Delimiter used in CSV file
 			String newLineSeparator = "\n";
-			// FileWriter fileWriter = null;
 			CSVPrinter csvFilePrinter = null;
-			// Create the CSVFormat object with "\n" as a record delimiter
 			CSVFormat csvFileFormat = CSVFormat.DEFAULT
-					.withRecordSeparator(newLineSeparator);
-			// initialize FileWriter object
-			File file = new File(FileHelper.getFullPath(directory, newFileName));
+					.withRecordSeparator(newLineSeparator); // Create the CSVFormat object with "\n" as a record delimiter
+			File file = new File(FileHelper.getFullPath(directory, newFileName)); // initialize FileWriter object
 			Writer writer = new OutputStreamWriter(new FileOutputStream(file),
 					"UTF-8");
 			PrintWriter printWriter = new PrintWriter(writer);
-			// initialize CSVPrinter object
-			csvFilePrinter = new CSVPrinter(printWriter, csvFileFormat);
+			csvFilePrinter = new CSVPrinter(printWriter, csvFileFormat); // initialize CSVPrinter object
 
 			List<String> csvHeaders = new ArrayList<String>();
-			// Writing Headers
-			Map<Integer, String> headerMap = sourceFile.getSourceHeaders();
+			Map<Integer, String> headerMap = sourceFile.getSourceHeaders(); // Writing Headers
 			Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
 			while (headerMapIterator.hasNext()) {
 				String fieldName = null;
@@ -89,7 +85,6 @@ public class CSVSourceFileExporterStrategy implements
 					if (sourceFileRecord.getDataByHeaderIndex(i) != null
 							&& sourceFileRecord.getDataByHeaderIndex(i)
 									.getData() != null) {
-						// sourceFileRecord.print();
 						csvRecord.add(sourceFileRecord.getDataByHeaderIndex(i)
 								.getData());
 					} else {
@@ -107,7 +102,6 @@ public class CSVSourceFileExporterStrategy implements
 		} catch (IOException e) {
 			logger.error("Received Exception '{}' while processing {}",
 					e.getMessage(), sourceFile.getFileName());
-			// e.printStackTrace();
 		}
 	}
 }

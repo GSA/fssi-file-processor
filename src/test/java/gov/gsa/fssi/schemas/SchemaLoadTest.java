@@ -1,6 +1,7 @@
 package test.java.gov.gsa.fssi.schemas;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
@@ -34,7 +35,7 @@ public class SchemaLoadTest {
 	@Test
 	public void loadSchemas() {
 		SchemasBuilder schemasBuilder = new SchemasBuilder();
-		ArrayList<Schema> schemas = schemasBuilder.build(config
+		List<Schema> schemas = schemasBuilder.build(config
 				.getProperty(Config.SCHEMAS_DIRECTORY));
 
 		Assert.assertEquals("failure - loadSchemas count", 1, schemas.size());

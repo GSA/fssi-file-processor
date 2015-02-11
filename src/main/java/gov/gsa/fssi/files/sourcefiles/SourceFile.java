@@ -3,6 +3,7 @@ package main.java.gov.gsa.fssi.files.sourcefiles;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import main.java.gov.gsa.fssi.config.Config;
@@ -32,8 +33,7 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class SourceFile extends File {
-	static Logger logger = LoggerFactory.getLogger(SourceFile.class);
-
+	private static Logger logger = LoggerFactory.getLogger(SourceFile.class);
 	private Schema schema = null;
 	private Provider provider = null;
 	private Date reportingPeriod = null;
@@ -50,7 +50,7 @@ public class SourceFile extends File {
 	 * logging
 	 */
 	private Map<Integer, String> sourceHeaders = new HashMap<Integer, String>();
-	private ArrayList<SourceFileRecord> records = new ArrayList<SourceFileRecord>();
+	private List<SourceFileRecord> records = new ArrayList<SourceFileRecord>();
 
 	/**
 	 * @return
@@ -347,7 +347,7 @@ public class SourceFile extends File {
 	/**
 	 * @return the records
 	 */
-	public ArrayList<SourceFileRecord> getRecords() {
+	public List<SourceFileRecord> getRecords() {
 		return records;
 	}
 
@@ -355,7 +355,7 @@ public class SourceFile extends File {
 	 * @param records
 	 *            the records to set
 	 */
-	public void setRecords(ArrayList<SourceFileRecord> records) {
+	public void setRecords(List<SourceFileRecord> records) {
 		this.records = records;
 	}
 
@@ -484,19 +484,19 @@ public class SourceFile extends File {
 		SourceFileExporterContext context = new SourceFileExporterContext();
 		if (this.getRecords() != null) {
 			if (this.getProvider().getFileOutputType().toLowerCase()
-					.equals(SourceFile.FILETYPE_CSV)) {
+					.equals(File.FILETYPE_CSV)) {
 				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
 			} else if (this.getProvider().getFileOutputType().toLowerCase()
-					.equals(SourceFile.FILETYPE_XLS)) {
+					.equals(File.FILETYPE_XLS)) {
 				context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
 			} else if (this.getProvider().getFileOutputType().toLowerCase()
-					.equals(SourceFile.FILETYPE_XLSX)) {
+					.equals(File.FILETYPE_XLSX)) {
 				context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
 			} else {
 				logger.warn(
 						"We cannot currently export to a '{}'. defaulting to '{}'",
 						this.getProvider().getFileOutputType(),
-						SourceFile.FILETYPE_CSV);
+						File.FILETYPE_CSV);
 				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
 			}
 

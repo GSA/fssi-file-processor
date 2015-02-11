@@ -3,6 +3,9 @@ package main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.constraintvali
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.fieldconstraints.FieldConstraint;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
@@ -10,7 +13,7 @@ import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.ConstraintValid
 
 public class PatternConstraintValidationStrategy implements
 		ConstraintValidationStrategy {
-
+	static final Logger logger = LoggerFactory.getLogger(PatternConstraintValidationStrategy.class);
 	@Override
 	public void validate(SchemaField field, FieldConstraint constraint,
 			Data data) {
