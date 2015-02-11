@@ -11,5 +11,6 @@ import org.slf4j.LoggerFactory;
  */
 public interface SourceFileLoggerStrategy {
 	Logger logger = LoggerFactory.getLogger(SourceFileLoggerStrategy.class);
+
 	void createLog(String directory, SourceFile sourceFile);
 }

@@ -24,55 +24,72 @@ import org.slf4j.LoggerFactory;
  */
 public class Main {
 	static Logger logger = LoggerFactory.getLogger(Main.class);
-	static Config config = new Config();	    
-	
+	static Config config = new Config();
+
 	public static void main(String[] args) {
-	    logger.info("Starting FSSI File Processor");
-	    
-	    logger.info("Building Providers");
-	    ProvidersBuilder providersBuilder = new ProvidersBuilder();
-	    ArrayList<Provider> providers = providersBuilder.build(config.getProperty(Config.PROVIDERS_DIRECTORY));
-	    printAllProviders(providers);
-	    
-	    logger.info("Building Schemas");
-	    SchemasBuilder schemasBuilder = new SchemasBuilder();
-		ArrayList<Schema> schemas = schemasBuilder.build(config.getProperty(Config.SCHEMAS_DIRECTORY));
+		logger.info("Starting FSSI File Processor");
+
+		logger.info("Building Providers");
+		ProvidersBuilder providersBuilder = new ProvidersBuilder();
+		ArrayList<Provider> providers = providersBuilder.build(config
+				.getProperty(Config.PROVIDERS_DIRECTORY));
+		printAllProviders(providers);
+
+		logger.info("Building Schemas");
+		SchemasBuilder schemasBuilder = new SchemasBuilder();
+		ArrayList<Schema> schemas = schemasBuilder.build(config
+				.getProperty(Config.SCHEMAS_DIRECTORY));
 		printAllSchemas(schemas);
-		
-		for (String fileName : FileHelper.getFilesFromDirectory(config.getProperty(Config.SOURCEFILES_DIRECTORY), ".csv")) {
-	    	SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
-	    	SourceFile sourceFile = sourceFileBuilder.build(config.getProperty(Config.SOURCEFILES_DIRECTORY), fileName, config.getProperty(Config.EXPORT_MODE), schemas, providers);   
-	    	if(sourceFile != null){
-	    		if(sourceFile.getStatus()) sourceFile.export(config.getProperty(Config.STAGED_DIRECTORY));
-	    		else logger.error("File '{}' is in Error state and is being ignored for exporting", fileName);
-	    	}else logger.error("File '{}' is in null and is being ignored for exporting", fileName);
-	    	
-	    	SourceFileLoggerContext context = new SourceFileLoggerContext();
-	    	context.setSourceFileLoggerStrategy(new BasicTextSourceFileLoggerStrategy());
-	    	context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile);
+
+		for (String fileName : FileHelper.getFilesFromDirectory(
+				config.getProperty(Config.SOURCEFILES_DIRECTORY), ".csv")) {
+			SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
+			SourceFile sourceFile = sourceFileBuilder.build(
+					config.getProperty(Config.SOURCEFILES_DIRECTORY), fileName,
+					config.getProperty(Config.EXPORT_MODE), schemas, providers);
+			if (sourceFile != null) {
+				if (sourceFile.getStatus())
+					sourceFile.export(config
+							.getProperty(Config.STAGED_DIRECTORY));
+				else
+					logger.error(
+							"File '{}' is in Error state and is being ignored for exporting",
+							fileName);
+			} else
+				logger.error(
+						"File '{}' is in null and is being ignored for exporting",
+						fileName);
+
+			SourceFileLoggerContext context = new SourceFileLoggerContext();
+			context.setSourceFileLoggerStrategy(new BasicTextSourceFileLoggerStrategy());
+			context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile);
 		}
-		
-	    logger.info("Completed FSSI File Processor");	
+
+		logger.info("Completed FSSI File Processor");
 	}
 
 	/**
 	 * Prints all Providers
-	 * @param providers an ArrayList of Provider class objects
+	 * 
+	 * @param providers
+	 *            an ArrayList of Provider class objects
 	 */
-	public static void printAllProviders(ArrayList<Provider> providers){
-		for(Provider provider: providers){
+	public static void printAllProviders(ArrayList<Provider> providers) {
+		for (Provider provider : providers) {
 			provider.print();
 		}
 	}
-	
+
 	/**
 	 * Prints all Schemas
-	 * @param schemas an ArrayList of Schema class objects
-	 */	
-	public static void printAllSchemas(ArrayList<Schema> schemas){
-		for(Schema schema: schemas){
+	 * 
+	 * @param schemas
+	 *            an ArrayList of Schema class objects
+	 */
+	public static void printAllSchemas(ArrayList<Schema> schemas) {
+		for (Schema schema : schemas) {
 			schema.printAll();
 		}
 	}
-	
+
 }

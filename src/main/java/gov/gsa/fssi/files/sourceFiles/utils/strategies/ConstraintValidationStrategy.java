@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
  */
 public interface ConstraintValidationStrategy {
 	Logger logger = LoggerFactory.getLogger(ConstraintValidationStrategy.class);
+
 	void validate(SchemaField field, FieldConstraint constraint, Data data);
+
 	boolean isValid(SchemaField field, FieldConstraint constraint, Data data);
 }

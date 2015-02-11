@@ -19,17 +19,21 @@ public class StringTypeValidationStrategyTest {
 	public void testNull() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new StringTypeValidationStrategy());
-		
-		SchemaField field = MockSchemaField.make("STRING", SchemaField.TYPE_STRING);
+
+		SchemaField field = MockSchemaField.make("STRING",
+				SchemaField.TYPE_STRING);
 		Data data = MockData.make();
-		
+
 		context.validate(field, data);
-		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - StringTypeValidationStrategy did not catch error", 0, data.getMaxErrorLevel());
-		Assert.assertEquals("failure - StringTypeValidationStrategy did not make failure", true, data.getStatus());		
+		// data.setStatus(FieldConstraint.LEVEL_ERROR);
+		Assert.assertEquals(
+				"failure - StringTypeValidationStrategy did not catch error",
+				0, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - StringTypeValidationStrategy did not make failure",
+				true, data.getStatus());
 	}
 
-	
 	/**
 	 * 
 	 */
@@ -37,17 +41,21 @@ public class StringTypeValidationStrategyTest {
 	public void testAlreadyFailed() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new StringTypeValidationStrategy());
-		
-		SchemaField field = MockSchemaField.make("STRING", SchemaField.TYPE_STRING);
+
+		SchemaField field = MockSchemaField.make("STRING",
+				SchemaField.TYPE_STRING);
 		Data data = MockData.make();
 		data.setStatus(2);
 		data.setMaxErrorLevel(2);
-		
+
 		context.validate(field, data);
-		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - StringTypeValidationStrategy did not catch error", 2, data.getMaxErrorLevel());
-		Assert.assertEquals("failure - StringTypeValidationStrategy did not make failure",false, data.getStatus());		
+		// data.setStatus(FieldConstraint.LEVEL_ERROR);
+		Assert.assertEquals(
+				"failure - StringTypeValidationStrategy did not catch error",
+				2, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - StringTypeValidationStrategy did not make failure",
+				false, data.getStatus());
 	}
-		
-	
+
 }

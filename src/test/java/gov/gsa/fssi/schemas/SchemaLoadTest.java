@@ -11,32 +11,33 @@ import main.java.gov.gsa.fssi.helpers.mockData.MockSchema;
 import org.junit.Assert;
 import org.junit.Test;
 
-
 public class SchemaLoadTest {
-	Config config = new Config("./testfiles/","config.properties");
-	
+	Config config = new Config("./testfiles/", "config.properties");
+
 	/**
 	 * This should test to make sure that we are catching required Fields
 	 */
 	@Test
 	public void loadSchema() {
-	    SchemaBuilder schemaBuilder = new SchemaBuilder();
-	    Schema schema = schemaBuilder.build(config.getProperty(Config.SCHEMAS_DIRECTORY), "test1.xml");
+		SchemaBuilder schemaBuilder = new SchemaBuilder();
+		Schema schema = schemaBuilder.build(
+				config.getProperty(Config.SCHEMAS_DIRECTORY), "test1.xml");
 		Schema mockSchema = MockSchema.make("TEST1");
-	    
-		Assert.assertEquals("failure - loadSchema getName", schema.getName(), mockSchema.getName());		
+
+		Assert.assertEquals("failure - loadSchema getName", schema.getName(),
+				mockSchema.getName());
 	}
-	
-	
+
 	/**
 	 * This should test to make sure that we are catching required Fields
 	 */
 	@Test
 	public void loadSchemas() {
-	    SchemasBuilder schemasBuilder = new SchemasBuilder();
-	    ArrayList<Schema> schemas = schemasBuilder.build(config.getProperty(Config.SCHEMAS_DIRECTORY));
-	    
-		Assert.assertEquals("failure - loadSchemas count", 1, schemas.size());		
-	}	
+		SchemasBuilder schemasBuilder = new SchemasBuilder();
+		ArrayList<Schema> schemas = schemasBuilder.build(config
+				.getProperty(Config.SCHEMAS_DIRECTORY));
+
+		Assert.assertEquals("failure - loadSchemas count", 1, schemas.size());
+	}
 
 }

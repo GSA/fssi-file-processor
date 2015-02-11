@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 public interface SchemaLoaderStrategy {
 	Logger logger = LoggerFactory.getLogger(SchemaLoaderStrategy.class);
-	
+
 	/**
 	 * @param fileName
 	 * @return Schema

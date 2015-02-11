@@ -17,46 +17,50 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ProvidersBuilder {
-	static Logger logger = LoggerFactory.getLogger(ProvidersBuilder.class); 
-	
+	static Logger logger = LoggerFactory.getLogger(ProvidersBuilder.class);
+
 	/**
-	 * This is the main method for ProvidersBuilder that reads all files from the "config.getProperty(Config.PROVIDERS_DIRECTORY))", validates them, and returns an ArrayList of Provider objects.
+	 * This is the main method for ProvidersBuilder that reads all files from
+	 * the "config.getProperty(Config.PROVIDERS_DIRECTORY))", validates them,
+	 * and returns an ArrayList of Provider objects.
 	 * 
 	 * @return ArryList<Provider> of providers
 	 */
 	public ArrayList<Provider> build(String directory) {
-	    logger.debug("Starting Provider Builder", directory);
-	    
-	    ArrayList<Provider> providers = new ArrayList<Provider>();
-	    
-	    //First we load the providers
-	    ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(directory, ".xlsx, .xls");
+		logger.debug("Starting Provider Builder", directory);
+
+		ArrayList<Provider> providers = new ArrayList<Provider>();
+
+		// First we load the providers
+		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(
+				directory, ".xlsx, .xls");
 		for (String fileName : fileNames) {
 			logger.info("Loading providers from '{}'", fileName);
 			ProviderLoaderContext context = new ProviderLoaderContext();
 			context.setProviderLoaderStrategy(new ExcelProviderLoaderStrategy());
 			context.load(directory, fileName, providers);
-			logger.info("Loaded '{}' providers from '{}'", providers.size(), fileName);
+			logger.info("Loaded '{}' providers from '{}'", providers.size(),
+					fileName);
 		}
-		
-		if(logger.isDebugEnabled()){
+
+		if (logger.isDebugEnabled()) {
 			logger.debug("Printing loaded providers from '{}'", directory);
-			for(Provider provider: providers){
-				provider.print();
-			}
-		}
-		
-		//Now we validate all providers
-		ProviderValidator providerValidator = new ProviderValidator();
-		providerValidator.validateAll(providers);
-		
-		if(logger.isDebugEnabled()){
-			logger.debug("Printing validated providers from '{}'", directory);
-			for(Provider provider: providers){
+			for (Provider provider : providers) {
 				provider.print();
 			}
 		}
 
-		return providers;		
+		// Now we validate all providers
+		ProviderValidator providerValidator = new ProviderValidator();
+		providerValidator.validateAll(providers);
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("Printing validated providers from '{}'", directory);
+			for (Provider provider : providers) {
+				provider.print();
+			}
+		}
+
+		return providers;
 	}
 }

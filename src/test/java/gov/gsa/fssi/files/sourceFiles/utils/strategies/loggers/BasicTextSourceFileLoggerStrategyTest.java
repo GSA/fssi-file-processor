@@ -19,46 +19,56 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 public class BasicTextSourceFileLoggerStrategyTest {
-	Config config = new Config("./testfiles/","config.properties");
-	
-	
+	Config config = new Config("./testfiles/", "config.properties");
+
 	/**
 	 * 
 	 */
 	@Test
-	@Ignore public void createsFile() {
-    	try{ 
-    		String fileName = FileHelper.getFullPath(config.getProperty(Config.LOGS_DIRECTORY), "goodfileschematest_012015.log");
-    		File file = new File(fileName);
-    		if(file.delete()){
-    			System.out.println(file.getName() + " is deleted!");
-    		}else{
-    			System.out.println("Delete operation is failed for file: " + fileName);
-    		}
-    	}catch(Exception e){
-    		//e.printStackTrace();
-    	}
-    	
-	    ProvidersBuilder providersBuilder = new ProvidersBuilder();
-	    ArrayList<Provider> providers = providersBuilder.build(config.getProperty(Config.PROVIDERS_DIRECTORY));
-	    
-	    SchemasBuilder schemasBuilder = new SchemasBuilder();
-	    ArrayList<Schema> schemas = schemasBuilder.build(config.getProperty(Config.SCHEMAS_DIRECTORY));  
-		
-	    SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
-	    SourceFile sourceFile = sourceFileBuilder.build(config.getProperty(Config.SOURCEFILES_DIRECTORY), "goodfileschematest_012015.csv", Config.EXPORT_MODE_IMPLODE, schemas, providers);
-	    
-	    SourceFileLoggerContext context = new SourceFileLoggerContext();
-	    context.setSourceFileLoggerStrategy(new BasicTextSourceFileLoggerStrategy());
-	    context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile);
-	    
-    	try{ 
-    		String fileName = FileHelper.getFullPath(config.getProperty(Config.LOGS_DIRECTORY), "goodfileschematest_012015.log");
-    		File file = new File(fileName);
-    		 Assert.assertTrue(file.delete());
-    	}catch(Exception e){
-    		//e.printStackTrace();
-    	}
+	@Ignore
+	public void createsFile() {
+		try {
+			String fileName = FileHelper.getFullPath(
+					config.getProperty(Config.LOGS_DIRECTORY),
+					"goodfileschematest_012015.log");
+			File file = new File(fileName);
+			if (file.delete()) {
+				System.out.println(file.getName() + " is deleted!");
+			} else {
+				System.out.println("Delete operation is failed for file: "
+						+ fileName);
+			}
+		} catch (Exception e) {
+			// e.printStackTrace();
+		}
+
+		ProvidersBuilder providersBuilder = new ProvidersBuilder();
+		ArrayList<Provider> providers = providersBuilder.build(config
+				.getProperty(Config.PROVIDERS_DIRECTORY));
+
+		SchemasBuilder schemasBuilder = new SchemasBuilder();
+		ArrayList<Schema> schemas = schemasBuilder.build(config
+				.getProperty(Config.SCHEMAS_DIRECTORY));
+
+		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
+		SourceFile sourceFile = sourceFileBuilder.build(
+				config.getProperty(Config.SOURCEFILES_DIRECTORY),
+				"goodfileschematest_012015.csv", Config.EXPORT_MODE_IMPLODE,
+				schemas, providers);
+
+		SourceFileLoggerContext context = new SourceFileLoggerContext();
+		context.setSourceFileLoggerStrategy(new BasicTextSourceFileLoggerStrategy());
+		context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile);
+
+		try {
+			String fileName = FileHelper.getFullPath(
+					config.getProperty(Config.LOGS_DIRECTORY),
+					"goodfileschematest_012015.log");
+			File file = new File(fileName);
+			Assert.assertTrue(file.delete());
+		} catch (Exception e) {
+			// e.printStackTrace();
+		}
 
 	}
 }

@@ -9,48 +9,56 @@ import org.slf4j.LoggerFactory;
 
 public class SchemaField {
 	static Logger logger = LoggerFactory.getLogger(SchemaField.class);
-	
+
 	private int headerIndex = -1;
 	private String name = null;
-	private String title = null;	
-	private String type = null;		
-	private String format = null;	
+	private String title = null;
+	private String type = null;
+	private String format = null;
 	private String description = null;
-	private ArrayList<FieldConstraint> constraints = new ArrayList<FieldConstraint>();	
-	private ArrayList<String> alias = new ArrayList<String>();	
+	private ArrayList<FieldConstraint> constraints = new ArrayList<FieldConstraint>();
+	private ArrayList<String> alias = new ArrayList<String>();
 	private String loadStatusLevel = null;
 	private String loadStatusMessage = null;
 	private String validatorStatusMessage = null;
 	private String validatorStatusLevel = null;
-	
+
 	public String getValidatorStatusMessage() {
 		return validatorStatusMessage;
 	}
+
 	public void setValidatorStatusMessage(String validatorStatusMessage) {
 		this.validatorStatusMessage = validatorStatusMessage;
 	}
+
 	public String getValidatorStatusLevel() {
 		return validatorStatusLevel;
 	}
+
 	public void setValidatorStatusLevel(String validatorStatusLevel) {
 		this.validatorStatusLevel = validatorStatusLevel;
 	}
+
 	public String getLoadStatusLevel() {
 		return loadStatusLevel;
 	}
+
 	public void setLoadStatusLevel(String loadStatusLevel) {
 		this.loadStatusLevel = loadStatusLevel;
 	}
+
 	public String getLoadStatusMessage() {
 		return loadStatusMessage;
 	}
+
 	public void setLoadStatusMessage(String loadStatusMessage) {
 		this.loadStatusMessage = loadStatusMessage;
 	}
+
 	/**
 	 * a string (of arbitrary length)
 	 */
-	public static final String TYPE_STRING = "string"; 
+	public static final String TYPE_STRING = "string";
 	/**
 	 * a number including floating point numbers.
 	 */
@@ -60,30 +68,35 @@ public class SchemaField {
 	 */
 	public static final String TYPE_INTEGER = "integer";
 	/**
-	 * a date. This MUST be in ISO6801 format YYYY-MM-DD or, if not, a format field must be provided describing the structure.
+	 * a date. This MUST be in ISO6801 format YYYY-MM-DD or, if not, a format
+	 * field must be provided describing the structure.
 	 */
-	public static final String TYPE_DATE = "date"; 
+	public static final String TYPE_DATE = "date";
 	/**
 	 * a time without a date
 	 */
 	public static final String TYPE_TIME = "time";
 	/**
-	 * a date-time. This MUST be in ISO 8601 format of YYYY-MM-DDThh:mm:ssZ in UTC time or, if not, a format field must be provided.
+	 * a date-time. This MUST be in ISO 8601 format of YYYY-MM-DDThh:mm:ssZ in
+	 * UTC time or, if not, a format field must be provided.
 	 */
-	public static final String TYPE_DATETIME = "datetime";//a time without a date
+	public static final String TYPE_DATETIME = "datetime";// a time without a
+															// date
 	/**
 	 * a boolean value (1/0, true/false).
 	 */
-	public static final String TYPE_BOOLEAN = "boolean"; 
-	
-	//public static String TYPE_BINARY = "binary"; //a boolean value (1/0, true/false).
-	//public static String TYPE_OBJECT = "object"; //(alias xml) an XML-encoded object
-	
+	public static final String TYPE_BOOLEAN = "boolean";
+
+	// public static String TYPE_BINARY = "binary"; //a boolean value (1/0,
+	// true/false).
+	// public static String TYPE_OBJECT = "object"; //(alias xml) an XML-encoded
+	// object
+
 	/**
 	 * has one of the following structures: "longitude, latitude
 	 */
 	public static final String TYPE_GEOPOINT = "geopoint";
-	
+
 	/**
 	 * an array in "value,value,value" format
 	 */
@@ -91,51 +104,53 @@ public class SchemaField {
 	/**
 	 * value of field may be any type
 	 */
-	public static final String TYPE_ANY = "any"; 
+	public static final String TYPE_ANY = "any";
+
 	/**
 	 * @return the name
 	 */
 
-//TODO:Add the following Types
-//		string � http://www.w3.org/2001/XMLSchema#string
-//		integer � http://www.w3.org/2001/XMLSchema#int
-//		float � http://www.w3.org/2001/XMLSchema#float
-//		double � http://www.w3.org/2001/XMLSchema#double
-//		URL � http://www.w3.org/2001/XMLSchema#anyURI
-//		boolean � http://www.w3.org/2001/XMLSchema#boolean
-//		non-positive integer � http://www.w3.org/2001/XMLSchema#nonPositiveInteger
-//		positive integer � http://www.w3.org/2001/XMLSchema#positiveInteger
-//		non-negative integer � http://www.w3.org/2001/XMLSchema#nonNegativeInteger
-//		negative integer � http://www.w3.org/2001/XMLSchema#negativeInteger
-//		date � http://www.w3.org/2001/XMLSchema#date
-//		date & time � http://www.w3.org/2001/XMLSchema#dateTime
-//		year � http://www.w3.org/2001/XMLSchema#gYear
-//		year & month � http://www.w3.org/2001/XMLSchema#gYearMonth
-//		time � http://www.w3.org/2001/XMLSchema#time
-	
-	
-	
-	
-	
-	
-	
+	// TODO:Add the following Types
+	// string � http://www.w3.org/2001/XMLSchema#string
+	// integer � http://www.w3.org/2001/XMLSchema#int
+	// float � http://www.w3.org/2001/XMLSchema#float
+	// double � http://www.w3.org/2001/XMLSchema#double
+	// URL � http://www.w3.org/2001/XMLSchema#anyURI
+	// boolean � http://www.w3.org/2001/XMLSchema#boolean
+	// non-positive integer �
+	// http://www.w3.org/2001/XMLSchema#nonPositiveInteger
+	// positive integer � http://www.w3.org/2001/XMLSchema#positiveInteger
+	// non-negative integer �
+	// http://www.w3.org/2001/XMLSchema#nonNegativeInteger
+	// negative integer � http://www.w3.org/2001/XMLSchema#negativeInteger
+	// date � http://www.w3.org/2001/XMLSchema#date
+	// date & time � http://www.w3.org/2001/XMLSchema#dateTime
+	// year � http://www.w3.org/2001/XMLSchema#gYear
+	// year & month � http://www.w3.org/2001/XMLSchema#gYearMonth
+	// time � http://www.w3.org/2001/XMLSchema#time
+
 	public String getName() {
 		return name;
 	}
+
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	/**
 	 * @return the title
 	 */
 	public String getTitle() {
 		return title;
 	}
+
 	/**
-	 * @param title the title to set
+	 * @param title
+	 *            the title to set
 	 */
 	/**
 	 * @param title
@@ -143,105 +158,129 @@ public class SchemaField {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
 	/**
 	 * @return
 	 */
 	public String getType() {
 		return type;
 	}
+
 	/**
 	 * @param type
 	 */
 	public void setType(String type) {
 		this.type = type;
 	}
+
 	/**
 	 * @return
 	 */
 	public String getFormat() {
 		return format;
 	}
+
 	/**
 	 * @param format
 	 */
 	public void setFormat(String format) {
 		this.format = format;
 	}
+
 	/**
 	 * @return the description
 	 */
 	public String getDescription() {
 		return description;
 	}
+
 	/**
-	 * @param description the description to set
+	 * @param description
+	 *            the description to set
 	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	/**
 	 * @return the constraints
 	 */
 	public ArrayList<FieldConstraint> getConstraints() {
 		return constraints;
 	}
+
 	/**
-	 * @param constraintMap the constraints to set
+	 * @param constraintMap
+	 *            the constraints to set
 	 */
 	public void setConstraints(ArrayList<FieldConstraint> constraintMap) {
 		this.constraints = constraintMap;
 	}
+
 	/**
 	 * @param constraint
 	 */
 	public void addConstraint(FieldConstraint constraint) {
 		this.constraints.add(constraint);
-	}	
+	}
+
 	/**
 	 * @return the alias
 	 */
 	public ArrayList<String> getAlias() {
 		return alias;
 	}
+
 	/**
-	 * @param alias the alias to set
+	 * @param alias
+	 *            the alias to set
 	 */
 	public void setAlias(ArrayList<String> alias) {
 		this.alias = alias;
 	}
+
 	/**
 	 * @param alias
 	 */
 	public void addAlias(String alias) {
 		this.alias.add(alias);
 	}
-	public void removeAlias(String alias){
+
+	public void removeAlias(String alias) {
 		int index = this.alias.indexOf(alias);
 		this.alias.remove(index);
 	}
+
 	/**
 	 * Print Field
 	 */
 	public void print() {
-		logger.debug("     Field Name:'{}' HeaderIndex: '{}' Title:'{}' Type:'{}' Description:'{}' Format:'{}' Alias:{}}",  this.getName(), this.getHeaderIndex(), this.getTitle(), this.getType(), this.getDescription(), this.getFormat(), this.getAlias());
+		logger.debug(
+				"     Field Name:'{}' HeaderIndex: '{}' Title:'{}' Type:'{}' Description:'{}' Format:'{}' Alias:{}}",
+				this.getName(), this.getHeaderIndex(), this.getTitle(),
+				this.getType(), this.getDescription(), this.getFormat(),
+				this.getAlias());
 		printConstraints();
 	}
-	
-	private void printConstraints(){
+
+	private void printConstraints() {
 		for (FieldConstraint constraint : this.getConstraints()) {
 			constraint.print();
 		}
 	}
-	
+
 	/**
-	 * Validates that a string is a valid SchemaFieldType 
-	 * @param string to compare
+	 * Validates that a string is a valid SchemaFieldType
+	 * 
+	 * @param string
+	 *            to compare
 	 * @return true or false
 	 */
-	public boolean isValidType(String e){
+	public boolean isValidType(String e) {
 		ArrayList<String> arrayList = buildTypeArray();
-		return (arrayList.contains(e)? true:false);
+		return (arrayList.contains(e) ? true : false);
 	}
+
 	/**
 	 * @return
 	 */
@@ -259,15 +298,20 @@ public class SchemaField {
 		arrayList.add(TYPE_ANY);
 		return arrayList;
 	}
+
 	/**
-	 * This constructor class takes a file name and uses it to initialize the basic elements of a SourceFile
-	 * @param fileName - This should be in name.ext format.
+	 * This constructor class takes a file name and uses it to initialize the
+	 * basic elements of a SourceFile
+	 * 
+	 * @param fileName
+	 *            - This should be in name.ext format.
 	 */
 	public int getHeaderIndex() {
 		return headerIndex;
 	}
+
 	public void setHeaderIndex(int headerIndex) {
 		this.headerIndex = headerIndex;
 	}
-	
+
 }

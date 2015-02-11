@@ -19,13 +19,18 @@ public class IntegerTypeValidationStrategyTest {
 	public void testNull() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new IntegerTypeValidationStrategy());
-		
-		SchemaField field = MockSchemaField.make("INTEGER", SchemaField.TYPE_INTEGER);
+
+		SchemaField field = MockSchemaField.make("INTEGER",
+				SchemaField.TYPE_INTEGER);
 		Data data = MockData.make();
-		
+
 		context.validate(field, data);
-		Assert.assertEquals("failure - IntegerTypeValidationStrategy did not catch error", 0, data.getMaxErrorLevel());
-		Assert.assertEquals("failure - IntegerTypeValidationStrategy did not make failure", true, data.getStatus());		
+		Assert.assertEquals(
+				"failure - IntegerTypeValidationStrategy did not catch error",
+				0, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - IntegerTypeValidationStrategy did not make failure",
+				true, data.getStatus());
 	}
 
 	/**
@@ -35,16 +40,21 @@ public class IntegerTypeValidationStrategyTest {
 	public void testGoodInteger() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new IntegerTypeValidationStrategy());
-		
-		SchemaField field = MockSchemaField.make("INTEGER", SchemaField.TYPE_INTEGER);
+
+		SchemaField field = MockSchemaField.make("INTEGER",
+				SchemaField.TYPE_INTEGER);
 		Data data = MockData.make("1234567");
-		
+
 		context.validate(field, data);
-		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - IntegerTypeValidationStrategy did not catch error",0, data.getMaxErrorLevel());
-		Assert.assertEquals("failure - IntegerTypeValidationStrategy did not make failure", true, data.getStatus());		
+		// data.setStatus(FieldConstraint.LEVEL_ERROR);
+		Assert.assertEquals(
+				"failure - IntegerTypeValidationStrategy did not catch error",
+				0, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - IntegerTypeValidationStrategy did not make failure",
+				true, data.getStatus());
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -52,16 +62,21 @@ public class IntegerTypeValidationStrategyTest {
 	public void testNumber() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new IntegerTypeValidationStrategy());
-		
-		SchemaField field = MockSchemaField.make("INTEGER", SchemaField.TYPE_INTEGER);
+
+		SchemaField field = MockSchemaField.make("INTEGER",
+				SchemaField.TYPE_INTEGER);
 		Data data = MockData.make("123.45");
-		
+
 		context.validate(field, data);
-		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - IntegerTypeValidationStrategy did not catch error", 2, data.getMaxErrorLevel());
-		Assert.assertEquals("failure - IntegerTypeValidationStrategy did not make failure", false, data.getStatus());		
-	}	
-	
+		// data.setStatus(FieldConstraint.LEVEL_ERROR);
+		Assert.assertEquals(
+				"failure - IntegerTypeValidationStrategy did not catch error",
+				2, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - IntegerTypeValidationStrategy did not make failure",
+				false, data.getStatus());
+	}
+
 	/**
 	 * 
 	 */
@@ -69,18 +84,21 @@ public class IntegerTypeValidationStrategyTest {
 	public void testBadInteger() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new IntegerTypeValidationStrategy());
-		
-		SchemaField field = MockSchemaField.make("INTEGER", SchemaField.TYPE_INTEGER);
+
+		SchemaField field = MockSchemaField.make("INTEGER",
+				SchemaField.TYPE_INTEGER);
 		Data data = MockData.make("value");
-		
+
 		context.validate(field, data);
-		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - IntegerTypeValidationStrategy did not catch error", 3, data.getMaxErrorLevel());
-		Assert.assertEquals("failure - IntegerTypeValidationStrategy did not make failure", false, data.getStatus());		
+		// data.setStatus(FieldConstraint.LEVEL_ERROR);
+		Assert.assertEquals(
+				"failure - IntegerTypeValidationStrategy did not catch error",
+				3, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - IntegerTypeValidationStrategy did not make failure",
+				false, data.getStatus());
 	}
-	
-	
-	
+
 	/**
 	 * 
 	 */
@@ -88,18 +106,23 @@ public class IntegerTypeValidationStrategyTest {
 	public void testAlreadyFailed() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new IntegerTypeValidationStrategy());
-		
-		SchemaField field = MockSchemaField.make("INTEGER", SchemaField.TYPE_INTEGER);
+
+		SchemaField field = MockSchemaField.make("INTEGER",
+				SchemaField.TYPE_INTEGER);
 		Data data = MockData.make("12345");
 		data.setStatus(2);
 		data.setMaxErrorLevel(2);
-		
+
 		context.validate(field, data);
-		//data.setStatus(FieldConstraint.LEVEL_ERROR);
-		Assert.assertEquals("failure - IntegerTypeValidationStrategy did not catch error", 2, data.getMaxErrorLevel());
-		Assert.assertEquals("failure - IntegerTypeValidationStrategy did not make failure", false, data.getStatus());		
+		// data.setStatus(FieldConstraint.LEVEL_ERROR);
+		Assert.assertEquals(
+				"failure - IntegerTypeValidationStrategy did not catch error",
+				2, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - IntegerTypeValidationStrategy did not make failure",
+				false, data.getStatus());
 	}
-	
-	//TODO: Test Negative Numbers
-	
+
+	// TODO: Test Negative Numbers
+
 }

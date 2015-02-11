@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public interface ProviderLoaderStrategy {
-	Logger logger = LoggerFactory.getLogger(ProviderLoaderStrategy.class);	    
-	
+	Logger logger = LoggerFactory.getLogger(ProviderLoaderStrategy.class);
+
 	void load(String directory, String fileName, ArrayList<Provider> providers);
 }

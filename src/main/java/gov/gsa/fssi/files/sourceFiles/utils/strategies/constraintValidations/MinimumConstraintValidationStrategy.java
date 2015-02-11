@@ -5,18 +5,25 @@ import main.java.gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldC
 import main.java.gov.gsa.fssi.files.sourceFiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.ConstraintValidationStrategy;
 
-public class MinimumConstraintValidationStrategy implements ConstraintValidationStrategy {
+public class MinimumConstraintValidationStrategy implements
+		ConstraintValidationStrategy {
 
 	@Override
-	public void validate(SchemaField field, FieldConstraint constraint, Data data) {
-		if(data != null){
-			if(data.getData() != null && !data.getData().isEmpty()){
-				if(field.getType().equals(SchemaField.TYPE_ANY) || field.getType().equals(SchemaField.TYPE_STRING)){
-					if(data.getData().length() < Integer.parseInt(constraint.getValue())) data.addValidationResult(false, constraint.getLevel(), constraint.getRuleText());
-				}else{
-					data.addValidationResult(true, 0, constraint.getRuleText());	
+	public void validate(SchemaField field, FieldConstraint constraint,
+			Data data) {
+		if (data != null) {
+			if (data.getData() != null && !data.getData().isEmpty()) {
+				if (field.getType().equals(SchemaField.TYPE_ANY)
+						|| field.getType().equals(SchemaField.TYPE_STRING)) {
+					if (data.getData().length() < Integer.parseInt(constraint
+							.getValue()))
+						data.addValidationResult(false, constraint.getLevel(),
+								constraint.getRuleText());
+				} else {
+					data.addValidationResult(true, 0, constraint.getRuleText());
 				}
-			}else data.addValidationResult(true, 0, constraint.getRuleText());
+			} else
+				data.addValidationResult(true, 0, constraint.getRuleText());
 		}
 	}
 

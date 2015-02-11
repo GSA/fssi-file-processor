@@ -15,40 +15,54 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SchemasBuilder {
-	static Logger logger = LoggerFactory.getLogger(SchemasBuilder.class);  
-	
+	static Logger logger = LoggerFactory.getLogger(SchemasBuilder.class);
+
 	public ArrayList<Schema> build(String directory) {
-	    logger.debug("Starting initializeSchemas('{}')", directory);		
-		
-	    ArrayList<Schema> schemas = new ArrayList<Schema>();	
-	    ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(directory, ".xml");
+		logger.debug("Starting initializeSchemas('{}')", directory);
+
+		ArrayList<Schema> schemas = new ArrayList<Schema>();
+		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(
+				directory, ".xml");
 		for (String fileName : fileNames) {
 			SchemaBuilder schemaBuilder = new SchemaBuilder();
 			Schema schema = schemaBuilder.build(directory, fileName);
-			
-			if(!schema.getStatus()){ //We currently prevent invalid schemas from being loaded
-				logger.error("Schema '{}' from file '{}' not being added to schemas because it is in error state", schema.getName(), schema.getFileName());
-			}else if(isDuplicateSchemaName(schemas, schema)){ //duplicate schema names can screw up a lot.
-				logger.error("Schema '{}' from file '{}' is a duplicate, it will not be added", schema.getName(), schema.getFileName());
-			}else{
-				logger.info("Completed Schema setup. Added " + schemas.size() + " Schemas");	
-				schemas.add(schema);				
-			}
-			
-		}
-		return schemas;		
-	}
-	
 
-	private static boolean isDuplicateSchemaName(ArrayList<Schema> schemas, Schema newSchema){
-		for(Schema schema: schemas){
-			if(schema.getName().equals(newSchema.getName())){
-				logger.error("Schema '{}' from file '{}' is a duplicate from file '{}", schema.getName(), newSchema.getFileName(), schema.getFileName());
+			if (!schema.getStatus()) { // We currently prevent invalid schemas
+										// from being loaded
+				logger.error(
+						"Schema '{}' from file '{}' not being added to schemas because it is in error state",
+						schema.getName(), schema.getFileName());
+			} else if (isDuplicateSchemaName(schemas, schema)) { // duplicate
+																	// schema
+																	// names can
+																	// screw up
+																	// a lot.
+				logger.error(
+						"Schema '{}' from file '{}' is a duplicate, it will not be added",
+						schema.getName(), schema.getFileName());
+			} else {
+				logger.info("Completed Schema setup. Added " + schemas.size()
+						+ " Schemas");
+				schemas.add(schema);
+			}
+
+		}
+		return schemas;
+	}
+
+	private static boolean isDuplicateSchemaName(ArrayList<Schema> schemas,
+			Schema newSchema) {
+		for (Schema schema : schemas) {
+			if (schema.getName().equals(newSchema.getName())) {
+				logger.error(
+						"Schema '{}' from file '{}' is a duplicate from file '{}",
+						schema.getName(), newSchema.getFileName(),
+						schema.getFileName());
 				return true;
 			}
-				
+
 		}
 		return false;
 	}
-	
+
 }
