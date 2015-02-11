@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.gov.gsa.fssi.files.File;
-import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.results.ValidationResult;
 
 import org.slf4j.Logger;
@@ -12,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class Data {
 	private static final Logger logger = LoggerFactory
-			.getLogger(SourceFileRecord.class);
+			.getLogger(Data.class);
 	private String dataValue = ""; // TODO: turn this into a generic Object
 	private Integer headerIndex = 0;
 	private int maxErrorLevel = 0;
