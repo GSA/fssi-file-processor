@@ -65,7 +65,6 @@ public class SourceFileRecord {
 			}
 		}
 
-
 		if (dataIndex != null) { // Now we delete the object
 			deletDataByIndex(dataIndex);
 		}

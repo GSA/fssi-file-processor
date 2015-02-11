@@ -16,7 +16,8 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class FieldConstraint {
-	private static final Logger logger = LoggerFactory.getLogger(SchemaField.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(SchemaField.class);
 	private String loadStatusLevel = null;
 	private String loadStatusMessage = null;
 	private String validatorStatusMessage = null;
@@ -161,7 +162,8 @@ public class FieldConstraint {
 	}
 
 	public Date getEffectiveDate() {
-		return (effectiveDate == null ? null
+		return (effectiveDate == null
+				? null
 				: new Date(effectiveDate.getTime()));
 	}
 

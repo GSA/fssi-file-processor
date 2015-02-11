@@ -32,8 +32,7 @@ public class SourceFileBuilder {
 	 * @param sourceFileDirectory
 	 */
 	public SourceFile build(String directory, String fileName,
-			String exportMode, List<Schema> schemas,
-			List<Provider> providers) {
+			String exportMode, List<Schema> schemas, List<Provider> providers) {
 		SourceFile sourceFile = new SourceFile(fileName);
 		mapProviderToSourceFile(providers, sourceFile);
 

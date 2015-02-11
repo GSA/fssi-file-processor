@@ -322,20 +322,20 @@ public class File {
 		String name = null;
 		if (errorLevel <= 3) {
 			switch (errorLevel) {
-			case 0:
-				name = File.STATUS_PASS;
-				break;
-			case 1:
-				name = File.STATUS_WARNING;
-				break;
-			case 2:
-				name = File.STATUS_ERROR;
-				break;
-			case 3:
-				name = File.STATUS_FATAL;
-				break;
-			default:
-				break;
+				case 0 :
+					name = File.STATUS_PASS;
+					break;
+				case 1 :
+					name = File.STATUS_WARNING;
+					break;
+				case 2 :
+					name = File.STATUS_ERROR;
+					break;
+				case 3 :
+					name = File.STATUS_FATAL;
+					break;
+				default :
+					break;
 			}
 		}
 		return name;

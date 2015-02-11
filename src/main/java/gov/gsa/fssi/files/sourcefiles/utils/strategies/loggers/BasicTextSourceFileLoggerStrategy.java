@@ -5,17 +5,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.sourcefiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.results.ValidationResult;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.SourceFileLoggerStrategy;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.typevalidations.NumberTypeValidationStrategy;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class loads a schema from an XML file
@@ -23,8 +22,11 @@ import main.java.gov.gsa.fssi.helpers.FileHelper;
  * @author davidlarrimore
  *
  */
-public class BasicTextSourceFileLoggerStrategy implements SourceFileLoggerStrategy {
-	static final Logger logger = LoggerFactory.getLogger(BasicTextSourceFileLoggerStrategy.class);
+public class BasicTextSourceFileLoggerStrategy
+		implements
+			SourceFileLoggerStrategy {
+	static final Logger logger = LoggerFactory
+			.getLogger(BasicTextSourceFileLoggerStrategy.class);
 	/**
 	 * This method maps a sourceFile to its schema and then conforms the
 	 * file/data to the schema format We delete any data that is no longer
@@ -41,19 +43,14 @@ public class BasicTextSourceFileLoggerStrategy implements SourceFileLoggerStrate
 					+ FileHelper.buildNewFileName(sourceFile.getFileName(),
 							"log");
 
-
 			BufferedWriter bufferedWriter = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(fileName),
 							"UTF-8"));
 
 			for (SourceFileRecord record : sourceFile.getRecords()) {
-				bufferedWriter.write("Line: "
-						+ record.getRowIndex()
-						+ " Status: "
-						+ sourceFile.getStatusName()
-						+ " Level: "
-						+ File.getErrorLevelName(record
-								.getMaxErrorLevel()));
+				bufferedWriter.write("Line: " + record.getRowIndex()
+						+ " Status: " + sourceFile.getStatusName() + " Level: "
+						+ File.getErrorLevelName(record.getMaxErrorLevel()));
 				bufferedWriter.newLine();
 				for (Data data : record.getDatas()) {
 					if (data.getMaxErrorLevel() > 2) {

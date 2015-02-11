@@ -10,7 +10,6 @@ import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourcefiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.ConstraintValidationStrategy;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.SourceFileExporterStrategy;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 
@@ -29,9 +28,11 @@ import org.slf4j.LoggerFactory;
  * @author davidlarrimore
  *
  */
-public class ExcelSourceFileExporterStrategy implements
-		SourceFileExporterStrategy {
-	static final Logger logger = LoggerFactory.getLogger(ExcelSourceFileExporterStrategy.class);
+public class ExcelSourceFileExporterStrategy
+		implements
+			SourceFileExporterStrategy {
+	static final Logger logger = LoggerFactory
+			.getLogger(ExcelSourceFileExporterStrategy.class);
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
@@ -47,9 +48,9 @@ public class ExcelSourceFileExporterStrategy implements
 					+ FileHelper.buildNewFileName(sourceFile.getFileName(),
 							sourceFile.getProvider().getFileOutputType()));
 
-
 			Workbook wb = (sourceFile.getProvider().getFileOutputType()
-					.toUpperCase().equals("XLSX") ? new XSSFWorkbook()
+					.toUpperCase().equals("XLSX")
+					? new XSSFWorkbook()
 					: new HSSFWorkbook()); // create a new workbook
 
 			Sheet s = wb.createSheet(); // create a new sheet
@@ -63,7 +64,12 @@ public class ExcelSourceFileExporterStrategy implements
 				Map.Entry<Integer, String> headerMapIteratorPairs = (Map.Entry) headerMapIterator
 						.next();
 				c = r.createCell(headerMapIteratorPairs.getKey());
-				for (SchemaField field : sourceFile.getSchema().getFields()) { // getting correct header name from Schema
+				for (SchemaField field : sourceFile.getSchema().getFields()) { // getting
+																				// correct
+																				// header
+																				// name
+																				// from
+																				// Schema
 					if (field.getHeaderIndex() == headerMapIteratorPairs
 							.getKey()) {
 						logger.info("Using Schema name '{}' for field '{}'",

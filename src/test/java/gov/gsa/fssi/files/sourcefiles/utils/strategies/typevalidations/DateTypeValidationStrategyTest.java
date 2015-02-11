@@ -26,7 +26,7 @@ public class DateTypeValidationStrategyTest {
 		context.validate(field, data);
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not catch error", 0,
-				data.getMaxErrorLevel()); 
+				data.getMaxErrorLevel());
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not make failure",
 				true, data.getStatus());

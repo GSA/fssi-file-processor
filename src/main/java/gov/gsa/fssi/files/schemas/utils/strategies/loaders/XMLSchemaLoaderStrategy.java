@@ -70,7 +70,8 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 						.item(0).getTextContent());
 				schema.setFields(loadFields(doc.getElementsByTagName("field")));
 
-				if (schema.getLoadStage().equals(main.java.gov.gsa.fssi.files.File.STATUS_ERROR)) {
+				if (schema.getLoadStage().equals(
+						main.java.gov.gsa.fssi.files.File.STATUS_ERROR)) {
 					logger.error(
 							"Could not load Schema '{}' in file '{}' as it is in error status",
 							schema.getName(), schema.getFileName());

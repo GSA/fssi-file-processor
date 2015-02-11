@@ -1,14 +1,15 @@
 package main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.typevalidations;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.TypeValidationStrategy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class NumberTypeValidationStrategy implements TypeValidationStrategy {
-	static final Logger logger = LoggerFactory.getLogger(NumberTypeValidationStrategy.class);
+	static final Logger logger = LoggerFactory
+			.getLogger(NumberTypeValidationStrategy.class);
 	@Override
 	public void validate(SchemaField field, Data data) {
 		if (data != null) {

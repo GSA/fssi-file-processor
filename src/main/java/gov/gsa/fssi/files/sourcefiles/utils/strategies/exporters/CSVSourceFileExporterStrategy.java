@@ -28,9 +28,11 @@ import org.slf4j.LoggerFactory;
  * @author davidlarrimore
  *
  */
-public class CSVSourceFileExporterStrategy implements
-		SourceFileExporterStrategy {
-	static final Logger logger = LoggerFactory.getLogger(CSVSourceFileExporterStrategy.class);
+public class CSVSourceFileExporterStrategy
+		implements
+			SourceFileExporterStrategy {
+	static final Logger logger = LoggerFactory
+			.getLogger(CSVSourceFileExporterStrategy.class);
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
@@ -44,15 +46,23 @@ public class CSVSourceFileExporterStrategy implements
 			String newLineSeparator = "\n";
 			CSVPrinter csvFilePrinter = null;
 			CSVFormat csvFileFormat = CSVFormat.DEFAULT
-					.withRecordSeparator(newLineSeparator); // Create the CSVFormat object with "\n" as a record delimiter
-			File file = new File(FileHelper.getFullPath(directory, newFileName)); // initialize FileWriter object
+					.withRecordSeparator(newLineSeparator); // Create the
+															// CSVFormat object
+															// with "\n" as a
+															// record delimiter
+			File file = new File(FileHelper.getFullPath(directory, newFileName)); // initialize
+																					// FileWriter
+																					// object
 			Writer writer = new OutputStreamWriter(new FileOutputStream(file),
 					"UTF-8");
 			PrintWriter printWriter = new PrintWriter(writer);
-			csvFilePrinter = new CSVPrinter(printWriter, csvFileFormat); // initialize CSVPrinter object
+			csvFilePrinter = new CSVPrinter(printWriter, csvFileFormat); // initialize
+																			// CSVPrinter
+																			// object
 
 			List<String> csvHeaders = new ArrayList<String>();
-			Map<Integer, String> headerMap = sourceFile.getSourceHeaders(); // Writing Headers
+			Map<Integer, String> headerMap = sourceFile.getSourceHeaders(); // Writing
+																			// Headers
 			Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
 			while (headerMapIterator.hasNext()) {
 				String fieldName = null;

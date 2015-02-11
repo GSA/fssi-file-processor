@@ -1,15 +1,15 @@
 package main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.typevalidations;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.TypeValidationStrategy;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.organizers.ImplodeSourceFileOrganizerStrategy;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IntegerTypeValidationStrategy implements TypeValidationStrategy {
-	static final Logger logger = LoggerFactory.getLogger(IntegerTypeValidationStrategy.class);
+	static final Logger logger = LoggerFactory
+			.getLogger(IntegerTypeValidationStrategy.class);
 	@Override
 	public void validate(SchemaField field, Data data) {
 		if (data != null) {
@@ -35,10 +35,10 @@ public class IntegerTypeValidationStrategy implements TypeValidationStrategy {
 									"Received error '{}' when trying to convert '{}' to Number",
 									e.getMessage(), data.getData());
 					}
-					
+
 					/*
-					 *  If we find out that it is a "Number" (aka has a float)
-					 *  then it is just an error....otherwise its a fatal
+					 * If we find out that it is a "Number" (aka has a float)
+					 * then it is just an error....otherwise its a fatal
 					 */
 					if (number == null)
 						data.addValidationResult(false, 3,

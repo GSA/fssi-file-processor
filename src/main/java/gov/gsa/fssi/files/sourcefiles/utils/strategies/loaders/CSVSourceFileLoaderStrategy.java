@@ -13,7 +13,6 @@ import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.sourcefiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.ConstraintValidationStrategy;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.SourceFileLoaderStrategy;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 
@@ -30,7 +29,8 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
-	static final Logger logger = LoggerFactory.getLogger(CSVSourceFileLoaderStrategy.class);
+	static final Logger logger = LoggerFactory
+			.getLogger(CSVSourceFileLoaderStrategy.class);
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
@@ -45,7 +45,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 			final CSVParser parser = new CSVParser(reader,
 					CSVFormat.EXCEL.withHeader());
 
-			/* 
+			/*
 			 * Converting Apache Commons CSV header map from <String, Integer>
 			 * to <Integer,String>
 			 */
@@ -80,7 +80,9 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 							data.setHeaderIndex((Integer) dataPairs.getKey());
 							thisRecord.addData(data);
 						} catch (IllegalArgumentException e) {
-							logger.error("Received IllegalArgumentExceptions '{}' while creating log for file '{}'", e.getMessage(), sourceFile.getFileName());
+							logger.error(
+									"Received IllegalArgumentExceptions '{}' while creating log for file '{}'",
+									e.getMessage(), sourceFile.getFileName());
 						}
 
 					}
