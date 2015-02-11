@@ -443,7 +443,7 @@ public class SourceFile extends File {
 	 */
 	public void load(String directory) {
 		SourceFileLoaderContext context = new SourceFileLoaderContext();
-		if (this.getFileExtension().toLowerCase().equals(FILETYPE_CSV)) {
+		if (this.getFileExtension().equalsIgnoreCase(FILETYPE_CSV)) {
 			logger.info("Loading file {} as a '{}'", this.getFileName(),
 					this.getFileExtension());
 			context.setSourceFileLoaderStrategy(new CSVSourceFileLoaderStrategy());

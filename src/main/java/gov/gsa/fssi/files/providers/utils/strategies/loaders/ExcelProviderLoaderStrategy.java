@@ -14,9 +14,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
-
+	static final Logger logger = LoggerFactory
+			.getLogger(ExcelProviderLoaderStrategy.class);
 	@Override
 	public void load(String directory, String fileName,
 			ArrayList<Provider> providers) {

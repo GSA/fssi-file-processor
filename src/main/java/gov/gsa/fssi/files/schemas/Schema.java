@@ -186,7 +186,7 @@ public class Schema extends File {
 				return field.getName().trim().toUpperCase();
 			}
 			for (String alias : field.getAlias()) {
-				if (alias.toUpperCase().trim().equals(e.trim().toUpperCase())) {
+				if (alias.toUpperCase().trim().equalsIgnoreCase(e.trim())) {
 					logger.info(
 							"Source File Header '{}' matches alias in field {}",
 							e.toUpperCase(), field.getName());
