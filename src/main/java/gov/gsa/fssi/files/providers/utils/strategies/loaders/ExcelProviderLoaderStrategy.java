@@ -160,7 +160,6 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 			logger.error(
 					"Received FileNotFoundException '{}' while trying to load {}",
 					e.getMessage(), fileName);
-			// e.printStackTrace();
 		} catch (InvalidFormatException e) {
 			logger.error(
 					"Received InvalidFormatException '{}' while trying to load {}",

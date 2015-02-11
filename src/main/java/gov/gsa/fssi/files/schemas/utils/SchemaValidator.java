@@ -22,9 +22,12 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SchemaValidator {
-	static Logger logger = LoggerFactory.getLogger(SchemaValidator.class);
+	private static final Logger logger = LoggerFactory.getLogger(SchemaValidator.class);
 
-	public void validateAll(ArrayList<Schema> schemas) {
+	public void validateAll(List<Schema> schemas) {
+		for (Schema schema : schemas) {
+			validate(schema);
+		}
 	}
 
 	/**
@@ -95,9 +98,9 @@ public class SchemaValidator {
 	 * 
 	 * @param schemaField
 	 */
-	private ArrayList<String> validateFieldAlias(Schema newSchema,
+	private List<String> validateFieldAlias(Schema newSchema,
 			SchemaField newField) {
-		ArrayList<String> newAliasList = new ArrayList<String>();
+		List<String> newAliasList = new ArrayList<String>();
 		for (String alias : newField.getAlias()) {
 			String newAlias = alias.toUpperCase().trim();
 			if (newField.getName().equals(newAlias)) {
@@ -136,9 +139,9 @@ public class SchemaValidator {
 		return newAliasList;
 	}
 
-	private ArrayList<FieldConstraint> validateFieldConstraints(
+	private List<FieldConstraint> validateFieldConstraints(
 			SchemaField newField) {
-		ArrayList<FieldConstraint> fieldConstraints = new ArrayList<FieldConstraint>();
+		List<FieldConstraint> fieldConstraints = new ArrayList<FieldConstraint>();
 		for (FieldConstraint constraint : newField.getConstraints()) {
 			FieldConstraint newConstraint = constraint;
 
@@ -206,9 +209,6 @@ public class SchemaValidator {
 									"Found good effectiveDate in options, using that",
 									newConstraint.getType());
 							newConstraint.setEffectiveDate(newDate);
-							// if(logger.isDebugEnabled())
-							// logger.debug("Does date '{}' equal '{}'",
-							// newDate, newConstraint.getEffectiveDate());
 						} else {
 							logger.error(
 									"Could not convert date '{}' using yyyy-MM-dd format.",
@@ -226,7 +226,7 @@ public class SchemaValidator {
 		return fieldConstraints;
 	}
 
-	public void printAllSchemas(ArrayList<Schema> schemas) {
+	public void printAllSchemas(List<Schema> schemas) {
 		for (Schema schema : schemas) {
 			schema.printAll();
 		}
@@ -238,8 +238,7 @@ public class SchemaValidator {
 	 */
 	public boolean isValidType(String string) {
 		// TODO: use java java.lang.reflect.Field to iterate through globals to
-		// generate ArrayList
-		ArrayList<String> validTypes = new ArrayList<String>();
+		List<String> validTypes = new ArrayList<String>();
 		validTypes.add(FieldConstraint.TYPE_REQUIRED);
 		validTypes.add(FieldConstraint.TYPE_MINLENGTH);
 		validTypes.add(FieldConstraint.TYPE_MAXLENGTH);
@@ -248,7 +247,7 @@ public class SchemaValidator {
 		validTypes.add(FieldConstraint.TYPE_MAXIMUM);
 
 		for (String type : validTypes) {
-			if (type.trim().toUpperCase().equals(string.trim().toUpperCase())) {
+			if (type.trim().equalsIgnoreCase(string.trim())) {
 				return true;
 			}
 		}
@@ -263,12 +262,12 @@ public class SchemaValidator {
 	public boolean isValidOption(String string) {
 		// TODO: use java java.lang.reflect.Field to iterate through globals to
 		// generate ArrayList
-		ArrayList<String> validList = new ArrayList<String>();
+		List<String> validList = new ArrayList<String>();
 		validList.add(FieldConstraint.OPTION_EFFECTIVEDATE);
 		validList.add(FieldConstraint.OPTION_LEVEL);
 
 		for (String type : validList) {
-			if (type.trim().toUpperCase().equals(string.trim().toUpperCase())) {
+			if (type.trim().equalsIgnoreCase(string.trim())) {
 				return true;
 			}
 		}
@@ -283,14 +282,14 @@ public class SchemaValidator {
 	public boolean isValidLevel(String string) {
 		// TODO: use java java.lang.reflect.Field to iterate through globals to
 		// generate ArrayList
-		ArrayList<String> validList = new ArrayList<String>();
+		List<String> validList = new ArrayList<String>();
 		validList.add(FieldConstraint.LEVEL_FATAL);
 		validList.add(FieldConstraint.LEVEL_ERROR);
 		validList.add(FieldConstraint.LEVEL_WARNING);
 		validList.add(FieldConstraint.LEVEL_DEBUG);
 
 		for (String type : validList) {
-			if (type.trim().toUpperCase().equals(string.trim().toUpperCase())) {
+			if (type.trim().equalsIgnoreCase(string.trim())) {
 				return true;
 			}
 		}
