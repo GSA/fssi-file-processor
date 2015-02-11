@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class MinimumConstraintValidationStrategy
 		implements
 			ConstraintValidationStrategy {
-	static final Logger logger = LoggerFactory
+	private static final Logger logger = LoggerFactory
 			.getLogger(MinimumConstraintValidationStrategy.class);
 	@Override
 	public void validate(SchemaField field, FieldConstraint constraint,

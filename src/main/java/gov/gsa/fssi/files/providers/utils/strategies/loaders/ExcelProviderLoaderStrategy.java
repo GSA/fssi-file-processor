@@ -40,7 +40,6 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 			logger.info("Found '{}' rows in file '{}'", sheet1.getLastRowNum(),
 					fileName);
 			for (Row row : sheet1) {
-				// logger.info("Loading header row - '{}'", row.getRowNum());
 				Provider newProvider = new Provider();
 				// If this is the header row, we need to figure out where the
 				// columns we need are

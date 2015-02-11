@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SourceFileRecord {
-	static Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);
+	private static final Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);
 	private int rowIndex = 0;
 	private List<Data> datas = new ArrayList<Data>();
 	private boolean status = true;

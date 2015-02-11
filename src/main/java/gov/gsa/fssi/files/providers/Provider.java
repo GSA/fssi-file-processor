@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class Provider extends File {
-	static Logger logger = LoggerFactory.getLogger(Provider.class);
+	private static final Logger logger = LoggerFactory.getLogger(Provider.class);
 	private String schemaName = null;
 
 	/**

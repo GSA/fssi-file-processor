@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 public class ExcelSourceFileExporterStrategy
 		implements
 			SourceFileExporterStrategy {
-	static final Logger logger = LoggerFactory
+	private static final Logger logger = LoggerFactory
 			.getLogger(ExcelSourceFileExporterStrategy.class);
 	/**
 	 *
@@ -48,10 +48,9 @@ public class ExcelSourceFileExporterStrategy
 					+ FileHelper.buildNewFileName(sourceFile.getFileName(),
 							sourceFile.getProvider().getFileOutputType()));
 
-			Workbook wb = (sourceFile.getProvider().getFileOutputType()
-					.toUpperCase().equals("XLSX")
+			Workbook wb = sourceFile.getProvider().getFileOutputType().equalsIgnoreCase("XLSX")
 					? new XSSFWorkbook()
-					: new HSSFWorkbook()); // create a new workbook
+					: new HSSFWorkbook(); // create a new workbook
 
 			Sheet s = wb.createSheet(); // create a new sheet
 			Row r = null; // declare a row object reference

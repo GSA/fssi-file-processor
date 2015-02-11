@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -14,8 +15,11 @@ import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.fieldconstraints.FieldConstraint;
 import main.java.gov.gsa.fssi.files.schemas.utils.strategies.SchemaLoaderStrategy;
+import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.helpers.XmlHelper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,7 +33,7 @@ import org.w3c.dom.NodeList;
  *
  */
 public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
-
+	private static final Logger logger = LoggerFactory.getLogger(XMLSchemaLoaderStrategy.class);
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
@@ -132,7 +136,7 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 						NodeList constraintList = currentNode.getChildNodes();
 						if (constraintList != null) {
 							try {
-								ArrayList<FieldConstraint> constraints = loadConstraints(constraintList);
+								List<FieldConstraint> constraints = loadConstraints(constraintList);
 								field.setConstraints(constraints);
 							} catch (DOMException e) {
 								logger.error("Received DOMException '{}'",

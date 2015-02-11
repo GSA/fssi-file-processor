@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class MaxLengthConstraintValidationStrategy
 		implements
 			ConstraintValidationStrategy {
-	static final Logger logger = LoggerFactory
+	private static final Logger logger = LoggerFactory
 			.getLogger(MaxLengthConstraintValidationStrategy.class);
 	@Override
 	public void validate(SchemaField field, FieldConstraint constraint,

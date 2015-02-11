@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SchemaBuilder {
-	static Logger logger = LoggerFactory.getLogger(SchemaBuilder.class);
+	private static final Logger logger = LoggerFactory.getLogger(SchemaBuilder.class);
 
 	public Schema build(String directory, String fileName) {
 		SchemaLoaderContext context = new SchemaLoaderContext();

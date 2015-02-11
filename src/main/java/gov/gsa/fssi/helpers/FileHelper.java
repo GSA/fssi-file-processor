@@ -27,14 +27,6 @@ public class FileHelper {
 		logger.info("getFilesFromDirectory Looking in '{}' for '{}' files.",
 				directoryName, whitelist);
 
-		// relative
-		// if(fullFileName.startsWith(".")){
-		// inputStream = new FileInputStream(FileHelper.getFullPath(directory,
-		// fileName));
-		// }else{
-		// inputStream = getClass().getResourceAsStream(fullFileName);
-		// }
-
 		File folder = new File(directoryName);
 		System.out.println(folder.getAbsolutePath());
 		File[] listOfFiles = folder.listFiles();

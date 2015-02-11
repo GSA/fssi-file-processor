@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DateTypeValidationStrategy implements TypeValidationStrategy {
-	static final Logger logger = LoggerFactory
+	private static final Logger logger = LoggerFactory
 			.getLogger(DateTypeValidationStrategy.class);
 	@Override
 	public void validate(SchemaField field, Data data) {
