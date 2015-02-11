@@ -233,11 +233,11 @@ public class SchemaField {
 	}
 
 	/**
-	 * @param alias
+	 * @param list
 	 *            the alias to set
 	 */
-	public void setAlias(ArrayList<String> alias) {
-		this.alias = alias;
+	public void setAlias(List<String> list) {
+		this.alias = list;
 	}
 
 	/**
