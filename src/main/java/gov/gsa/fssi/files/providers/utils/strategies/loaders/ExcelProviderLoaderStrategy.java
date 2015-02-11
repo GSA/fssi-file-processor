@@ -92,8 +92,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								&& !(row.getCell(providerNameColumn)
 										.getStringCellValue().isEmpty())
 								&& !(row.getCell(providerNameColumn)
-										.getStringCellValue().toUpperCase()
-										.equals("NULL"))) {
+										.getStringCellValue().equalsIgnoreCase("NULL"))) {
 							newProvider.setProviderName(row
 									.getCell(providerNameColumn)
 									.getStringCellValue().toUpperCase());
@@ -103,8 +102,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								&& !(row.getCell(providerIdentifierColumn)
 										.getStringCellValue().isEmpty())
 								&& !(row.getCell(providerIdentifierColumn)
-										.getStringCellValue().toUpperCase()
-										.equals("NULL"))) {
+										.getStringCellValue().equalsIgnoreCase("NULL"))) {
 							newProvider.setProviderIdentifier(row
 									.getCell(providerIdentifierColumn)
 									.getStringCellValue().toUpperCase());
@@ -114,8 +112,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								&& !(row.getCell(fileOutputTypeColumn)
 										.getStringCellValue().isEmpty())
 								&& !(row.getCell(fileOutputTypeColumn)
-										.getStringCellValue().toUpperCase()
-										.equals("NULL"))) {
+										.getStringCellValue().equalsIgnoreCase("NULL"))) {
 							newProvider.setFileOutputType(row
 									.getCell(fileOutputTypeColumn)
 									.getStringCellValue().toUpperCase());
@@ -125,8 +122,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								&& !(row.getCell(schemaNameColumn)
 										.getStringCellValue().isEmpty())
 								&& !(row.getCell(schemaNameColumn)
-										.getStringCellValue().toUpperCase()
-										.equals("NULL"))) {
+										.getStringCellValue().equalsIgnoreCase("NULL"))) {
 							newProvider.setSchemaName(row
 									.getCell(schemaNameColumn)
 									.getStringCellValue().toUpperCase());
@@ -136,8 +132,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								&& !(row.getCell(providerEmailColumn)
 										.getStringCellValue().isEmpty())
 								&& !(row.getCell(providerEmailColumn)
-										.getStringCellValue().toUpperCase()
-										.equals("NULL"))) {
+										.getStringCellValue().equalsIgnoreCase("NULL"))) {
 							newProvider.setProviderEmail(row
 									.getCell(providerEmailColumn)
 									.getStringCellValue().toUpperCase());

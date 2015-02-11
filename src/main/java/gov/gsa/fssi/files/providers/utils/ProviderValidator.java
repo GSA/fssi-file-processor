@@ -35,9 +35,6 @@ public class ProviderValidator {
 				for (Provider newProvider : deleteProvidersList) {
 					if (provider.getProviderIdentifier().equals(
 							newProvider.getProviderIdentifier())) {
-						// logger.debug("{} - {}",
-						// newProvider.getProviderIdentifier(),
-						// provider.getProviderIdentifier());
 						unique = false;
 					}
 				}
