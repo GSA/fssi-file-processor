@@ -52,6 +52,21 @@ public class SourceFile extends File {
 	private Map<Integer, String> sourceHeaders = new HashMap<Integer, String>();
 	private List<SourceFileRecord> records = new ArrayList<SourceFileRecord>();
 
+
+	public SourceFile(String fileName) {
+		super(fileName);
+		this.setReportingPeriodUsingFileNameParts();
+		if (this.getReportingPeriod() == null) {
+			logger.error("No reporting period found, unable to process");
+			this.setMaxErrorLevel(3);
+			this.setStatus(false);
+		}
+	}
+
+	public SourceFile() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	/**
 	 * @return
 	 */
@@ -378,20 +393,6 @@ public class SourceFile extends File {
 	 */
 	public void removeRecord(int index) {
 		this.records.remove(index);
-	}
-
-	public SourceFile(String fileName) {
-		super(fileName);
-		this.setReportingPeriodUsingFileNameParts();
-		if (this.getReportingPeriod() == null) {
-			logger.error("No reporting period found, unable to process");
-			this.setMaxErrorLevel(3);
-			this.setStatus(false);
-		}
-	}
-
-	public SourceFile() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public void validate() {

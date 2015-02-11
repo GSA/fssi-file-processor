@@ -15,14 +15,125 @@ import org.slf4j.LoggerFactory;
  */
 public class File {
 	private static final Logger logger = LoggerFactory.getLogger(File.class);
+	/**
+	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
+	 *      filePartSeparator)
+	 */
+	public static final String SEPARATOR_PERIOD = ".";
+	/**
+	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
+	 *      filePartSeparator)
+	 */
+	public static final String SEPARATOR_UNDERSCORE = "_";
+	/**
+	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
+	 *      filePartSeparator)
+	 */
+	public static final String SEPARATOR_DASH = "-";
+	/**
+	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
+	 *      filePartSeparator)
+	 */
+	public static final String SEPARATOR_COMMA = ",";
+	/**
+	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
+	 *      filePartSeparator)
+	 */
+	public static final String SEPARATOR_PIPE = "|";
+	/**
+	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
+	 *      filePartSeparator)
+	 */
+	public static final String SEPARATOR_TILDE = "~";
+	/**
+	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
+	 *      filePartSeparator)
+	 */
+	public static final String SEPARATOR_FORWARDSLASH = "/";
+	/**
+	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
+	 *      filePartSeparator)
+	 */
+	public static final String SEPARATOR_BACKSLASH = "\\";
+	public static final String FILETYPE_CSV = "csv";
+	public static final String FILETYPE_XLSX = "xlsx";
+	public static final String FILETYPE_XLS = "xls";
+	public static final String FILETYPE_XML = "xml";
+	/**
+	 * A status of "fatal" means that an unrecoverable issue was found. The file
+	 * MUST stop processing
+	 */
+	public static final String STATUS_FATAL = "fatal";
+	/**
+	 * A status of "error" means that the file is able to be processed but
+	 * contains issues that MUST be addressed.
+	 */
+	public static final String STATUS_ERROR = "error";
+	/**
+	 * A status of "warning" means that the file is able to be addressed but
+	 * contains issues.
+	 */
+	public static final String STATUS_WARNING = "warning";
+	public static final String STATUS_FAIL = "failed";
+	public static final String STATUS_PASS = "pass";
 
+	public static final String STAGE_LOADED = "loaded";
+	public static final String STAGE_VALIDATED = "validated";
+	public static final String STAGE_EXPORTED = "exported";
+	public static final String STAGE_INITIALIZED = "initialized";
+	
+	/**
+	 * Full filename including file extension.....Example: "filename.txt"
+	 */
+	private String fileName = null;
+	private String fileExtension = null;
+	/**
+	 * Individual parts of a files Name. For example the file "example_oo2.txt"
+	 * consists of the "parts" [exmaple,002]
+	 * 
+	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
+	 *      filePartSeparator)
+	 */
+	private List<String> fileNameParts = new ArrayList<String>();
+	private String loadStage = STAGE_INITIALIZED;
+	private boolean status = true;
+	private int maxErrorLevel = 0;
+	private boolean loadStatus = true;
+	private boolean validatorStatus = true;
+	private boolean exportStatus = false;
+	private List<String> loadStatusMessages = null;
+	private List<String> validatorStatusMessages = null;
+	private String exportStatusMessage = null;
+
+	/**
+	 * This constructor class takes a file name and uses it to initialize the
+	 * basic elements of a SourceFile
+	 * 
+	 * @param fileName
+	 *            - This should be in name.ext format.
+	 */
+	public File(String fileName) {
+		logger.info("Constructing SourceFile using fileName '{}'", fileName);
+		this.setFileName(fileName);
+		int startOfExtension = fileName.lastIndexOf(".") + 1;
+		this.setFileExtension(fileName.substring(startOfExtension,
+				fileName.length()));
+		this.setLoadStage(STAGE_LOADED);
+		// defaulted to underscore
+		this.setFileNameParts(SEPARATOR_UNDERSCORE);
+	}
+
+	/**
+	 * Blank Constructor
+	 */
+	public File() {
+	}
 	/**
 	 * @return current fileName
 	 */
 	public String getFileName() {
 		return fileName;
 	}
-
 	/**
 	 * @param fileName
 	 *            String fileName to set
@@ -30,7 +141,6 @@ public class File {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-
 	/**
 	 * @return current fileExtension
 	 */
@@ -69,29 +179,7 @@ public class File {
 		this.fileNameParts = fileParts;
 	}
 
-	/**
-	 * This constructor class takes a file name and uses it to initialize the
-	 * basic elements of a SourceFile
-	 * 
-	 * @param fileName
-	 *            - This should be in name.ext format.
-	 */
-	public File(String fileName) {
-		logger.info("Constructing SourceFile using fileName '{}'", fileName);
-		this.setFileName(fileName);
-		int startOfExtension = fileName.lastIndexOf(".") + 1;
-		this.setFileExtension(fileName.substring(startOfExtension,
-				fileName.length()));
-		this.setLoadStage(STAGE_LOADED);
-		// defaulted to underscore
-		this.setFileNameParts(SEPARATOR_UNDERSCORE);
-	}
 
-	/**
-	 * Blank Constructor
-	 */
-	public File() {
-	}
 
 	/**
 	 * This method breaks apart the files fileName into descrete parts and pops
@@ -101,30 +189,32 @@ public class File {
 	 * @param filePartSeparator
 	 *            byte filePartSeparator
 	 */
-	public void setFileNameParts(byte filePartSeparator) {
+	public void setFileNameParts(String filePartSeparator) {
+
 		List<String> newfileNameParts = new ArrayList<String>();
 
 		if (fileName == null || fileName.isEmpty()) {
 			logger.warn("FileName was empty or null, unable to set FileNameParts");
 		} else {
 			String fileNameWithoutExtension = fileName.substring(0,
-					fileName.lastIndexOf("."));
+					fileName.lastIndexOf(SEPARATOR_PERIOD));
 			boolean loopQuit = false;
-
-			logger.debug("Attempting to get file parts from fileName '{}'",
+			logger.debug("Setting file name parts using the '{}' separator", 
+					filePartSeparator);
+			logger.info("Attempting to get file parts from fileName '{}'",
 					fileName);
 			while (!loopQuit) {
 				logger.debug("fileNameWithoutExtension: {}",
 						fileNameWithoutExtension);
-				if (fileNameWithoutExtension.contains("_")) {
+				if (fileNameWithoutExtension.contains(filePartSeparator)) {
 					logger.debug("Adding File Part: '{}'",
 							fileNameWithoutExtension.substring(0,
-									fileNameWithoutExtension.indexOf("_")));
+									fileNameWithoutExtension.indexOf(filePartSeparator)));
 					newfileNameParts.add(fileNameWithoutExtension.substring(0,
-							fileNameWithoutExtension.indexOf("_")));
+							fileNameWithoutExtension.indexOf(filePartSeparator)));
 					fileNameWithoutExtension = fileNameWithoutExtension
 							.substring(
-									fileNameWithoutExtension.indexOf("_") + 1,
+									fileNameWithoutExtension.indexOf(filePartSeparator) + 1,
 									fileNameWithoutExtension.length());
 				} else {
 					logger.debug("Adding File Part: '{}'",
@@ -268,29 +358,6 @@ public class File {
 		return "Fail";
 	}
 
-	/**
-	 * Full filename including file extension.....Example: "filename.txt"
-	 */
-	private String fileName = null;
-	private String fileExtension = null;
-	/**
-	 * Individual parts of a files Name. For example the file "example_oo2.txt"
-	 * consists of the "parts" [exmaple,002]
-	 * 
-	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
-	 *      filePartSeparator)
-	 */
-	private List<String> fileNameParts = new ArrayList<String>();
-	private String loadStage = STAGE_INITIALIZED;
-	private boolean status = true;
-	private int maxErrorLevel = 0;
-	private boolean loadStatus = true;
-	private boolean validatorStatus = true;
-	private boolean exportStatus = false;
-	private List<String> loadStatusMessages = null;
-	private List<String> validatorStatusMessages = null;
-
-	private String exportStatusMessage = null;
 
 	/**
 	 * @return
@@ -348,66 +415,5 @@ public class File {
 			this.maxErrorLevel = errorLevel;
 	}
 
-	/**
-	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
-	 *      filePartSeparator)
-	 */
-	public static final byte SEPARATOR_UNDERSCORE = '_';
-	/**
-	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
-	 *      filePartSeparator)
-	 */
-	public static final byte SEPARATOR_DASH = '-';
-	/**
-	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
-	 *      filePartSeparator)
-	 */
-	public static final byte SEPARATOR_COMMA = ',';
-	/**
-	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
-	 *      filePartSeparator)
-	 */
-	public static final byte SEPARATOR_PIPE = '|';
-	/**
-	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
-	 *      filePartSeparator)
-	 */
-	public static final byte SEPARATOR_TILDE = '~';
-	/**
-	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
-	 *      filePartSeparator)
-	 */
-	public static final byte SEPARATOR_FORWARDSLASH = '/';
-	/**
-	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
-	 *      filePartSeparator)
-	 */
-	public static final byte SEPARATOR_BACKSLASH = '\\';
-	public static final String FILETYPE_CSV = "csv";
-	public static final String FILETYPE_XLSX = "xlsx";
-	public static final String FILETYPE_XLS = "xls";
-	public static final String FILETYPE_XML = "xml";
-	/**
-	 * A status of "fatal" means that an unrecoverable issue was found. The file
-	 * MUST stop processing
-	 */
-	public static final String STATUS_FATAL = "fatal";
-	/**
-	 * A status of "error" means that the file is able to be processed but
-	 * contains issues that MUST be addressed.
-	 */
-	public static final String STATUS_ERROR = "error";
-	/**
-	 * A status of "warning" means that the file is able to be addressed but
-	 * contains issues.
-	 */
-	public static final String STATUS_WARNING = "warning";
-	public static final String STATUS_FAIL = "failed";
-	public static final String STATUS_PASS = "pass";
-
-	public static final String STAGE_LOADED = "loaded";
-	public static final String STAGE_VALIDATED = "validated";
-	public static final String STAGE_EXPORTED = "exported";
-	public static final String STAGE_INITIALIZED = "initialized";
 
 }
