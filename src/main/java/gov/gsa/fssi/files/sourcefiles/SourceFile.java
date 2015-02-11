@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class SourceFile extends File {
-	private static Logger logger = LoggerFactory.getLogger(SourceFile.class);
+	private static final Logger logger = LoggerFactory.getLogger(SourceFile.class);
 	private Schema schema = null;
 	private Provider provider = null;
 	private Date reportingPeriod = null;
@@ -203,8 +203,8 @@ public class SourceFile extends File {
 	 * @return the reportingPeriod
 	 */
 	public Date getReportingPeriod() {
-		return (reportingPeriod == null ? null : new Date(
-				reportingPeriod.getTime()));
+		return reportingPeriod == null ? null : new Date(
+				reportingPeriod.getTime());
 	}
 
 	/**
@@ -483,14 +483,11 @@ public class SourceFile extends File {
 	public void export(String directory) {
 		SourceFileExporterContext context = new SourceFileExporterContext();
 		if (this.getRecords() != null) {
-			if (this.getProvider().getFileOutputType().toLowerCase()
-					.equals(File.FILETYPE_CSV)) {
+			if (this.getProvider().getFileOutputType().equalsIgnoreCase(File.FILETYPE_CSV)) {
 				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
-			} else if (this.getProvider().getFileOutputType().toLowerCase()
-					.equals(File.FILETYPE_XLS)) {
+			} else if (this.getProvider().getFileOutputType().equalsIgnoreCase(File.FILETYPE_XLS)) {
 				context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
-			} else if (this.getProvider().getFileOutputType().toLowerCase()
-					.equals(File.FILETYPE_XLSX)) {
+			} else if (this.getProvider().getFileOutputType().equalsIgnoreCase(File.FILETYPE_XLSX)) {
 				context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
 			} else {
 				logger.warn(
