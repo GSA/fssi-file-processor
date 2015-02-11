@@ -2,6 +2,7 @@ package main.java.gov.gsa.fssi.helpers;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +17,11 @@ public class FileHelper {
 	public static final byte SEPARATOR_FORWARDSLASH = '/';
 	public static final byte SEPARATOR_BACKSLASH = '\\';
 
-	public static ArrayList<String> getFilesFromDirectory(String directoryName) {
+	public static List<String> getFilesFromDirectory(String directoryName) {
 		return getFilesFromDirectory(directoryName, null);
 	}
 
-	public static ArrayList<String> getFilesFromDirectory(String directoryName,
+	public static List<String> getFilesFromDirectory(String directoryName,
 			String whitelist) {
 		ArrayList<String> fileList = new ArrayList<String>();
 		logger.info("getFilesFromDirectory Looking in '{}' for '{}' files.",

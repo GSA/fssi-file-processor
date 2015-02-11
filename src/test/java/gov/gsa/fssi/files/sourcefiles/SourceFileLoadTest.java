@@ -1,6 +1,7 @@
 package test.java.gov.gsa.fssi.files.sourcefiles;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
@@ -60,7 +61,7 @@ public class SourceFileLoadTest {
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 
 		SchemasBuilder schemasBuilder = new SchemasBuilder();
-		ArrayList<Schema> schemas = schemasBuilder.build(config
+		List<Schema> schemas = schemasBuilder.build(config
 				.getProperty(Config.SCHEMAS_DIRECTORY));
 
 		SourceFile sourceFile = new SourceFile("goodfileschematest_012015.csv");
@@ -77,7 +78,7 @@ public class SourceFileLoadTest {
 		ArrayList<Provider> providers = providersBuilder.build(config
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 		SchemasBuilder schemasBuilder = new SchemasBuilder();
-		ArrayList<Schema> schemas = schemasBuilder.build(config
+		List<Schema> schemas = schemasBuilder.build(config
 				.getProperty(Config.SCHEMAS_DIRECTORY));
 		SourceFile sourceFile = new SourceFile("goodfileschematest_012015.csv");
 		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
@@ -124,7 +125,7 @@ public class SourceFileLoadTest {
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 
 		SchemasBuilder schemasBuilder = new SchemasBuilder();
-		ArrayList<Schema> schemas = schemasBuilder.build(config
+		List<Schema> schemas = schemasBuilder.build(config
 				.getProperty(Config.SCHEMAS_DIRECTORY));
 
 		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();

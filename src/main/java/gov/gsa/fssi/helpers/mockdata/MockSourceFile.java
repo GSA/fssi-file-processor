@@ -1,7 +1,7 @@
 package main.java.gov.gsa.fssi.helpers.mockdata;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.sourcefiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
@@ -26,7 +26,7 @@ public class MockSourceFile {
 	}
 
 	public static SourceFile make(String fileName,
-			ArrayList<SourceFileRecord> sourceFileRecords) {
+			List<SourceFileRecord> sourceFileRecords) {
 		SourceFile sourceFile = new SourceFile(fileName);
 		for (SourceFileRecord sourceFileRecord : sourceFileRecords) {
 			sourceFile.addRecord(sourceFileRecord);
@@ -43,7 +43,7 @@ public class MockSourceFile {
 
 	public static SourceFile make(String fileName,
 			HashMap<Integer, String> sourceHeaders,
-			ArrayList<SourceFileRecord> sourceFileRecords) {
+			List<SourceFileRecord> sourceFileRecords) {
 		SourceFile sourceFile = new SourceFile(fileName);
 		sourceFile.setSourceHeaders(sourceHeaders);
 		for (SourceFileRecord sourceFileRecord : sourceFileRecords) {

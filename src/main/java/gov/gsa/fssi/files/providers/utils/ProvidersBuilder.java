@@ -1,6 +1,7 @@
 package main.java.gov.gsa.fssi.files.providers.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.providers.utils.contexts.ProviderLoaderContext;
@@ -32,7 +33,7 @@ public class ProvidersBuilder {
 		ArrayList<Provider> providers = new ArrayList<Provider>();
 
 		// First we load the providers
-		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(
+		List<String> fileNames = FileHelper.getFilesFromDirectory(
 				directory, ".xlsx, .xls");
 		for (String fileName : fileNames) {
 			logger.info("Loading providers from '{}'", fileName);

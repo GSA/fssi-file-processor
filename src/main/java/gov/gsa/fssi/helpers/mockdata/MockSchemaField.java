@@ -1,6 +1,6 @@
 package main.java.gov.gsa.fssi.helpers.mockdata;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.fieldconstraints.FieldConstraint;
@@ -35,7 +35,7 @@ public class MockSchemaField {
 	}
 
 	public static SchemaField make(String fieldName, String fieldType,
-			ArrayList<FieldConstraint> fieldConstraints) {
+			List<FieldConstraint> fieldConstraints) {
 		SchemaField schemaField = new SchemaField();
 		schemaField.setName(fieldName);
 		schemaField.setType(fieldType);

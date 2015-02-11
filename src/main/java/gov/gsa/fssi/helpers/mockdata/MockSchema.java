@@ -1,6 +1,6 @@
 package main.java.gov.gsa.fssi.helpers.mockdata;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
@@ -25,7 +25,7 @@ public class MockSchema {
 		return schema;
 	}
 
-	public static Schema make(String name, ArrayList<SchemaField> schemaFields) {
+	public static Schema make(String name, List<SchemaField> schemaFields) {
 		Schema schema = new Schema();
 		schema.setName(name);
 		for (SchemaField schemaField : schemaFields) {

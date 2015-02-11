@@ -1,8 +1,8 @@
 package main.java.gov.gsa.fssi.helpers.mockdata;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
@@ -33,7 +33,7 @@ public class MockSourceFileRecord {
 		return sourceFileRecord;
 	}
 
-	public static SourceFileRecord make(ArrayList<Data> datas) {
+	public static SourceFileRecord make(List<Data> datas) {
 		SourceFileRecord sourceFileRecord = new SourceFileRecord();
 		for (Data data : datas) {
 			sourceFileRecord.addData(data);
@@ -45,7 +45,7 @@ public class MockSourceFileRecord {
 		SourceFileRecord sourceFileRecord = new SourceFileRecord();
 		Iterator<?> dataMapIterator = dataMap.entrySet().iterator();
 		while (dataMapIterator.hasNext()) {
-			Map.Entry<Integer, String> dataMapIteratorPairs = (Map.Entry) dataMapIterator
+			Map.Entry<Integer, String> dataMapIteratorPairs = (Map.Entry<Integer, String>) dataMapIterator
 					.next();
 			sourceFileRecord.addData(MockData.make(
 					dataMapIteratorPairs.getValue(),

@@ -1,6 +1,7 @@
 package main.java.gov.gsa.fssi.files.schemas.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
@@ -17,11 +18,11 @@ import org.slf4j.LoggerFactory;
 public class SchemasBuilder {
 	static Logger logger = LoggerFactory.getLogger(SchemasBuilder.class);
 
-	public ArrayList<Schema> build(String directory) {
+	public List<Schema> build(String directory) {
 		logger.debug("Starting initializeSchemas('{}')", directory);
 
-		ArrayList<Schema> schemas = new ArrayList<Schema>();
-		ArrayList<String> fileNames = FileHelper.getFilesFromDirectory(
+		List<Schema> schemas = new ArrayList<Schema>();
+		List<String> fileNames = FileHelper.getFilesFromDirectory(
 				directory, ".xml");
 		for (String fileName : fileNames) {
 			SchemaBuilder schemaBuilder = new SchemaBuilder();
@@ -50,7 +51,7 @@ public class SchemasBuilder {
 		return schemas;
 	}
 
-	private static boolean isDuplicateSchemaName(ArrayList<Schema> schemas,
+	private static boolean isDuplicateSchemaName(List<Schema> schemas,
 			Schema newSchema) {
 		for (Schema schema : schemas) {
 			if (schema.getName().equals(newSchema.getName())) {

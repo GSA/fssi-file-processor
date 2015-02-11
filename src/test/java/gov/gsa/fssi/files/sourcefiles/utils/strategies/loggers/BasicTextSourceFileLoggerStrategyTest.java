@@ -2,6 +2,7 @@ package test.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.loggers;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
@@ -47,7 +48,7 @@ public class BasicTextSourceFileLoggerStrategyTest {
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 
 		SchemasBuilder schemasBuilder = new SchemasBuilder();
-		ArrayList<Schema> schemas = schemasBuilder.build(config
+		List<Schema> schemas = schemasBuilder.build(config
 				.getProperty(Config.SCHEMAS_DIRECTORY));
 
 		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();

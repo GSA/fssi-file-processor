@@ -3,7 +3,7 @@ package main.java.gov.gsa.fssi.files.providers.utils.strategies.loaders;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.providers.utils.strategies.ProviderLoaderStrategy;
@@ -22,7 +22,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 			.getLogger(ExcelProviderLoaderStrategy.class);
 	@Override
 	public void load(String directory, String fileName,
-			ArrayList<Provider> providers) {
+			List<Provider> providers) {
 		logger.info(
 				"Running ExcelProviderLoaderStrategy to get providers from '{}'",
 				fileName);
