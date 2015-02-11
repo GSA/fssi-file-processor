@@ -8,7 +8,6 @@
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  
   <name>FSSI File Processor</name>
   <url>https://github.com/GSA/fssi-file-processor</url>
   <dependencies>
@@ -89,6 +88,11 @@
   </reporting>
   <build>
 		<plugins>
+	      <plugin>
+	        <groupId>org.codehaus.mojo</groupId>
+	        <artifactId>sonar-maven-plugin</artifactId>
+	        <version>2.3</version>
+	      </plugin>
 		    <plugin>
 		      <artifactId>maven-assembly-plugin</artifactId>
 		      <configuration>

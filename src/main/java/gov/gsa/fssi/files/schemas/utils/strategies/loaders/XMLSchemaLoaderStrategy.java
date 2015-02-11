@@ -11,8 +11,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import main.java.gov.gsa.fssi.files.schemas.Schema;
-import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
-import main.java.gov.gsa.fssi.files.schemas.schemaFields.fieldConstraints.FieldConstraint;
+import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
+import main.java.gov.gsa.fssi.files.schemas.schemafields.fieldconstraints.FieldConstraint;
 import main.java.gov.gsa.fssi.files.schemas.utils.strategies.SchemaLoaderStrategy;
 import main.java.gov.gsa.fssi.helpers.XmlHelper;
 

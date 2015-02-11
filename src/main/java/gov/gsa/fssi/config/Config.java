@@ -74,11 +74,11 @@ public class Config {
 	@Deprecated
 	public static final String VALIDATION_MODE = "validation_mode";
 	/**
-	 * @see main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.organizers.ExplodeSourceFileOrganizerStrategy#organize
+	 * @see main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.organizers.ExplodeSourceFileOrganizerStrategy#organize
 	 */
 	public static final String EXPORT_MODE_EXPLODE = "explode";
 	/**
-	 * @see main.java.gov.gsa.fssi.files.sourceFiles.utils.strategies.organizers.ImplodeSourceFileOrganizerStrategy#organize
+	 * @see main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.organizers.ImplodeSourceFileOrganizerStrategy#organize
 	 */
 	public static final String EXPORT_MODE_IMPLODE = "implode";
 	/**

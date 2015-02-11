@@ -3,7 +3,7 @@ package main.java.gov.gsa.fssi.files.schemas;
 import java.util.ArrayList;
 
 import main.java.gov.gsa.fssi.files.File;
-import main.java.gov.gsa.fssi.files.schemas.schemaFields.SchemaField;
+import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 
 /**
  * The Schema object is ment to mimic the JSON table schema located here:
