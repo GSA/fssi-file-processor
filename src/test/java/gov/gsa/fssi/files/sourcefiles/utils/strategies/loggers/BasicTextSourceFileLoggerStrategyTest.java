@@ -44,7 +44,7 @@ public class BasicTextSourceFileLoggerStrategyTest {
 		}
 
 		ProvidersBuilder providersBuilder = new ProvidersBuilder();
-		ArrayList<Provider> providers = providersBuilder.build(config
+		List<Provider> providers = providersBuilder.build(config
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 
 		SchemasBuilder schemasBuilder = new SchemasBuilder();

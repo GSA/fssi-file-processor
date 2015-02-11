@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ValidationResult {
-	static Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);
+	private static final Logger logger = LoggerFactory.getLogger(SourceFileRecord.class);
 
 	public ValidationResult() {
 

@@ -52,23 +52,23 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								.getColumnIndex(), cell.getStringCellValue()
 								.toUpperCase());
 
-						if (cell.getStringCellValue().toUpperCase().toString()
-								.equals("PROVIDER_ID")) {
+						if (cell.getStringCellValue().toString()
+								.equalsIgnoreCase("PROVIDER_ID")) {
 							providerIdColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue().toUpperCase()
-								.toString().equals("PROVIDER_NAME")) {
+						} else if (cell.getStringCellValue()
+								.toString().equalsIgnoreCase("PROVIDER_NAME")) {
 							providerNameColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue().toUpperCase()
-								.toString().equals("PROVIDER_IDENTIFIER")) {
+						} else if (cell.getStringCellValue()
+								.toString().equalsIgnoreCase("PROVIDER_IDENTIFIER")) {
 							providerIdentifierColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue().toUpperCase()
-								.toString().equals("FILE_OUTPUT_TYPE")) {
+						} else if (cell.getStringCellValue()
+								.toString().equalsIgnoreCase("FILE_OUTPUT_TYPE")) {
 							fileOutputTypeColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue().toUpperCase()
-								.toString().equals("SCHEMA")) {
+						} else if (cell.getStringCellValue()
+								.toString().equalsIgnoreCase("SCHEMA")) {
 							schemaNameColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue().toUpperCase()
-								.toString().equals("PROVIDER_EMAIL")) {
+						} else if (cell.getStringCellValue()
+								.toString().equalsIgnoreCase("PROVIDER_EMAIL")) {
 							providerEmailColumn = cell.getColumnIndex();
 						}
 					}
@@ -81,8 +81,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								&& !(row.getCell(providerIdColumn)
 										.getStringCellValue().isEmpty())
 								&& !(row.getCell(providerIdColumn)
-										.getStringCellValue().toUpperCase()
-										.equals("NULL"))) {
+										.getStringCellValue().equalsIgnoreCase("NULL"))) {
 							newProvider.setProviderId(row
 									.getCell(providerIdColumn)
 									.getStringCellValue().toUpperCase());

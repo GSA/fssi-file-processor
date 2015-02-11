@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SourceFilesBuilder {
-	static Logger logger = LoggerFactory.getLogger(SourceFilesBuilder.class);
+	private static final Logger logger = LoggerFactory.getLogger(SourceFilesBuilder.class);
 
 	/**
 	 * The purpose of this function is just to prep file processing. We are not

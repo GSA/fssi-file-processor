@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ProvidersBuilder {
-	static Logger logger = LoggerFactory.getLogger(ProvidersBuilder.class);
+	public static final Logger logger = LoggerFactory.getLogger(ProvidersBuilder.class);
 
 	/**
 	 * This is the main method for ProvidersBuilder that reads all files from
@@ -27,10 +27,10 @@ public class ProvidersBuilder {
 	 * 
 	 * @return ArryList<Provider> of providers
 	 */
-	public ArrayList<Provider> build(String directory) {
+	public List<Provider> build(String directory) {
 		logger.debug("Starting Provider Builder", directory);
 
-		ArrayList<Provider> providers = new ArrayList<Provider>();
+		List<Provider> providers = new ArrayList<Provider>();
 
 		// First we load the providers
 		List<String> fileNames = FileHelper.getFilesFromDirectory(

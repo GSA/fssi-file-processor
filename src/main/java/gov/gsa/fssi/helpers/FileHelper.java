@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FileHelper {
-	static Logger logger = LoggerFactory.getLogger(FileHelper.class);
+	private static final Logger logger = LoggerFactory.getLogger(FileHelper.class);
 	public static final byte SEPARATOR_UNDERSCORE = '_';
 	public static final byte SEPARATOR_DASH = '-';
 	public static final byte SEPARATOR_COMMA = ',';

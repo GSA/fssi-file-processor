@@ -1,6 +1,7 @@
 package main.java.gov.gsa.fssi.files.providers.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.providers.Provider;
 
@@ -23,7 +24,7 @@ public class ProviderValidator {
 	 * @param providers
 	 *            ArrayList<Provider> of Provider class
 	 */
-	public void validateAll(ArrayList<Provider> providers) {
+	public void validateAll(List<Provider> providers) {
 		ArrayList<Provider> deleteProvidersList = new ArrayList<Provider>();
 		// We need to check for duplicative Providers.
 

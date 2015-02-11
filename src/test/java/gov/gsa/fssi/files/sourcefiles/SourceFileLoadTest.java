@@ -44,7 +44,7 @@ public class SourceFileLoadTest {
 	@Test
 	public void mapProviderToSourceFile() {
 		ProvidersBuilder providersBuilder = new ProvidersBuilder();
-		ArrayList<Provider> providers = providersBuilder.build(config
+		List<Provider> providers = providersBuilder.build(config
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 
 		SourceFile sourceFile = new SourceFile("goodfileschematest_012015.csv");
@@ -57,7 +57,7 @@ public class SourceFileLoadTest {
 	@Test
 	public void mapSchemaToSourceFile() {
 		ProvidersBuilder providersBuilder = new ProvidersBuilder();
-		ArrayList<Provider> providers = providersBuilder.build(config
+		List<Provider> providers = providersBuilder.build(config
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 
 		SchemasBuilder schemasBuilder = new SchemasBuilder();
@@ -75,7 +75,7 @@ public class SourceFileLoadTest {
 	@Test
 	public void mapSourceFileFieldsToSchemaTest() {
 		ProvidersBuilder providersBuilder = new ProvidersBuilder();
-		ArrayList<Provider> providers = providersBuilder.build(config
+		List<Provider> providers = providersBuilder.build(config
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 		SchemasBuilder schemasBuilder = new SchemasBuilder();
 		List<Schema> schemas = schemasBuilder.build(config
@@ -121,7 +121,7 @@ public class SourceFileLoadTest {
 	@Test
 	public void loadSourceFileUsingBuilder() {
 		ProvidersBuilder providersBuilder = new ProvidersBuilder();
-		ArrayList<Provider> providers = providersBuilder.build(config
+		List<Provider> providers = providersBuilder.build(config
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 
 		SchemasBuilder schemasBuilder = new SchemasBuilder();

@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 public class ExplodeSourceFileOrganizerStrategy
 		implements
 			SourceFileOrganizerStrategy {
-	static final Logger logger = LoggerFactory
+	private static final Logger logger = LoggerFactory
 			.getLogger(ExplodeSourceFileOrganizerStrategy.class);
 	/**
 	 * This method maps a sourceFile to its schema and then conforms the

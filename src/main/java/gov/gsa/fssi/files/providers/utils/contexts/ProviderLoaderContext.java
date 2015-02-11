@@ -1,6 +1,7 @@
 package main.java.gov.gsa.fssi.files.providers.utils.contexts;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.providers.utils.strategies.ProviderLoaderStrategy;
@@ -38,7 +39,7 @@ public class ProviderLoaderContext {
 	 *            ArrayList<Provider> of Provider
 	 */
 	public void load(String directory, String fileName,
-			ArrayList<Provider> providers) {
+			List<Provider> providers) {
 		strategy.load(directory, fileName, providers); // Validate Constraint
 	}
 }

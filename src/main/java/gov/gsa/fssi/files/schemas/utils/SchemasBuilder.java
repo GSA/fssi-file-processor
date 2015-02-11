@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SchemasBuilder {
-	static Logger logger = LoggerFactory.getLogger(SchemasBuilder.class);
+	private static final Logger logger = LoggerFactory.getLogger(SchemasBuilder.class);
 
 	public List<Schema> build(String directory) {
 		logger.debug("Starting initializeSchemas('{}')", directory);

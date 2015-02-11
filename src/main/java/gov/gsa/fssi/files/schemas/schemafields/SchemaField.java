@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SchemaField {
-	static final Logger logger = LoggerFactory.getLogger(SchemaField.class);
+	private static final Logger logger = LoggerFactory.getLogger(SchemaField.class);
 
 	private int headerIndex = -1;
 	private String name = null;
@@ -278,15 +278,15 @@ public class SchemaField {
 	 * @return true or false
 	 */
 	public boolean isValidType(String e) {
-		ArrayList<String> arrayList = buildTypeArray();
+		List<String> arrayList = buildTypeArray();
 		return (arrayList.contains(e) ? true : false);
 	}
 
 	/**
 	 * @return
 	 */
-	private ArrayList<String> buildTypeArray() {
-		ArrayList<String> arrayList = new ArrayList<String>();
+	private List<String> buildTypeArray() {
+		List<String> arrayList = new ArrayList<String>();
 		arrayList.add(TYPE_STRING);
 		arrayList.add(TYPE_NUMBER);
 		arrayList.add(TYPE_INTEGER);

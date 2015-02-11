@@ -1,6 +1,7 @@
 package test.java.gov.gsa.fssi.providers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
@@ -19,7 +20,7 @@ public class ProviderLoadTest {
 	@Test
 	public void load() {
 		ProvidersBuilder providersBuilder = new ProvidersBuilder();
-		ArrayList<Provider> providers = providersBuilder.build(config
+		List<Provider> providers = providersBuilder.build(config
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 		Provider mockProvider = MockProvider.make("TEST", "TEST", "", "CSV");
 
