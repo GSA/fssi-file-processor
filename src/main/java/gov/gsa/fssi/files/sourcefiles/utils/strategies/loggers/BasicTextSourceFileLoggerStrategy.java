@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 public class BasicTextSourceFileLoggerStrategy
 		implements
 			SourceFileLoggerStrategy {
-	static final Logger logger = LoggerFactory
+	private static final Logger logger = LoggerFactory
 			.getLogger(BasicTextSourceFileLoggerStrategy.class);
 	/**
 	 * This method maps a sourceFile to its schema and then conforms the

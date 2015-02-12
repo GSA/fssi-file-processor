@@ -17,28 +17,6 @@ public class File {
 	/**
 	 * @return
 	 */
-	public static String getErrorLevelName(int errorLevel) {
-		String name = null;
-		if (errorLevel <= 3) {
-			switch (errorLevel) {
-				case 0 :
-					name = File.STATUS_PASS;
-					break;
-				case 1 :
-					name = File.STATUS_WARNING;
-					break;
-				case 2 :
-					name = File.STATUS_ERROR;
-					break;
-				case 3 :
-					name = File.STATUS_FATAL;
-					break;
-				default :
-					break;
-			}
-		}
-		return name;
-	}
 	private static final Logger logger = LoggerFactory.getLogger(File.class);
 	/**
 	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
@@ -413,4 +391,26 @@ public class File {
 		this.validatorStatusMessages = validatorStatusMessages;
 	}
 
+	public static String getErrorLevelName(int errorLevel) {
+		String name = null;
+		if (errorLevel <= 3) {
+			switch (errorLevel) {
+				case 0 :
+					name = File.STATUS_PASS;
+					break;
+				case 1 :
+					name = File.STATUS_WARNING;
+					break;
+				case 2 :
+					name = File.STATUS_ERROR;
+					break;
+				case 3 :
+					name = File.STATUS_FATAL;
+					break;
+				default :
+					break;
+			}
+		}
+		return name;
+	}
 }

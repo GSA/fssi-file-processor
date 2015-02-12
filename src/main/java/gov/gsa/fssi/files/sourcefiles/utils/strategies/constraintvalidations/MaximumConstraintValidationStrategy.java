@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class MaximumConstraintValidationStrategy
 		implements
 			ConstraintValidationStrategy {
-	static final Logger logger = LoggerFactory
+	private static final Logger logger = LoggerFactory
 			.getLogger(MaximumConstraintValidationStrategy.class);
 	@Override
 	public boolean isValid(SchemaField field, FieldConstraint constraint,
