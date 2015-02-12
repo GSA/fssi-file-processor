@@ -68,6 +68,16 @@ public class DateHelper {
 		c.set(Calendar.SECOND, 0);
 		return c.getTime();
 	}
+	public static String getTodaysDateAndTime(String format) {
+		DateFormat dateFormat = new SimpleDateFormat(format);
+		Date date = new Date();
+		return dateFormat.format(date);
+	}	
+	public static String getFormattedDate(Date date, String format) {
+		DateFormat dateFormat = new SimpleDateFormat(format);
+		Date newDate = date;
+		return dateFormat.format(newDate);
+	}		
 	private static Date parseDate(String string, String dateFormat)
 			throws ParseException {
 		TimeZone timeZone = TimeZone.getTimeZone(TIMEZONE_UTC);

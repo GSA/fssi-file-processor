@@ -211,7 +211,7 @@ public class SourceFile extends File {
 	/**
 	 * 
 	 */
-	public void incrementTotalErrorlRecords() {
+	public void incrementTotalErrorRecords() {
 		this.totalErrorRecords++;
 	}
 
@@ -506,6 +506,22 @@ public class SourceFile extends File {
 	public void validate() {
 		SourceFileValidator validator = new SourceFileValidator();
 		validator.validate(this);
+	}
+	
+	public void logError(int errorLevel){
+		this.setMaxErrorLevel(errorLevel);
+		switch(errorLevel){
+		case 1:
+			this.incrementTotalWarningRecords();
+			break;
+		case 2:
+			this.incrementTotalErrorRecords();
+			break;
+		case 3:
+			this.incrementTotalFatalRecords();
+			break;
+		}
+		
 	}
 
 }

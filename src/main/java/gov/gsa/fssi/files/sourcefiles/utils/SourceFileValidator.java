@@ -65,7 +65,6 @@ public class SourceFileValidator {
 						sourceFileRecord.setMaxErrorLevel(data
 								.getMaxErrorLevel());
 						sourceFileRecord.setStatus(data.getMaxErrorLevel());
-						sourceFile.setMaxErrorLevel(data.getMaxErrorLevel());
 					}
 				}
 				if (logger.isDebugEnabled()
@@ -93,6 +92,8 @@ public class SourceFileValidator {
 							sourceFileRecord.getRowIndex(), File
 									.getErrorLevelName(sourceFileRecord
 											.getMaxErrorLevel()));
+				
+			sourceFile.logError(sourceFileRecord.getMaxErrorLevel());
 			}
 		}
 		if (sourceFile.getMaxErrorLevel() == 3)
