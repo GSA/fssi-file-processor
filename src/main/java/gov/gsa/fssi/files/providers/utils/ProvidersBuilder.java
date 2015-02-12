@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ProvidersBuilder {
-	public static final Logger logger = LoggerFactory.getLogger(ProvidersBuilder.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProvidersBuilder.class);
 
 	/**
 	 * This is the main method for ProvidersBuilder that reads all files from

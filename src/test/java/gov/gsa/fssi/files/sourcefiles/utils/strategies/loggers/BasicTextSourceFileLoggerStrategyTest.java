@@ -1,7 +1,6 @@
 package test.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.loggers;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import main.java.gov.gsa.fssi.config.Config;
