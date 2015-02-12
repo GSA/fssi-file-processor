@@ -95,8 +95,8 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 		}
 	}
 
-	public ArrayList<SchemaField> loadFields(NodeList fieldNodes) {
-		ArrayList<SchemaField> fields = new ArrayList<SchemaField>();
+	public List<SchemaField> loadFields(NodeList fieldNodes) {
+		List<SchemaField> fields = new ArrayList<SchemaField>();
 		for (int temp = 0; temp < fieldNodes.getLength(); temp++) {
 			SchemaField field = loadField(fieldNodes.item(temp));
 			fields.add(field);

@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ProviderValidator {
-	static Logger logger = LoggerFactory.getLogger(ProviderValidator.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProviderValidator.class);
 
 	/**
 	 * This accepts an arraylist of providers and validates them. Note: It has a

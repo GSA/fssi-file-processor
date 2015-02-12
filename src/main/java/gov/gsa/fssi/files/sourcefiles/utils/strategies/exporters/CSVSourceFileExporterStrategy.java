@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 public class CSVSourceFileExporterStrategy
 		implements
 			SourceFileExporterStrategy {
-	static final Logger logger = LoggerFactory
+	private static final Logger logger = LoggerFactory
 			.getLogger(CSVSourceFileExporterStrategy.class);
 	/**
 	 *
