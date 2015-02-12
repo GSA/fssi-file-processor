@@ -18,11 +18,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
+	public static boolean isRowEmpty(Row row) {
+		for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
+			Cell cell = row.getCell(c);
+			if (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK)
+				return false;
+		}
+		return true;
+	}
 	static final Logger logger = LoggerFactory
 			.getLogger(ExcelProviderLoaderStrategy.class);
+
 	@Override
-	public void load(String directory, String fileName,
-			List<Provider> providers) {
+	public void load(String directory, String fileName, List<Provider> providers) {
 		logger.info(
 				"Running ExcelProviderLoaderStrategy to get providers from '{}'",
 				fileName);
@@ -55,20 +63,20 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 						if (cell.getStringCellValue().toString()
 								.equalsIgnoreCase("PROVIDER_ID")) {
 							providerIdColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue()
-								.toString().equalsIgnoreCase("PROVIDER_NAME")) {
+						} else if (cell.getStringCellValue().toString()
+								.equalsIgnoreCase("PROVIDER_NAME")) {
 							providerNameColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue()
-								.toString().equalsIgnoreCase("PROVIDER_IDENTIFIER")) {
+						} else if (cell.getStringCellValue().toString()
+								.equalsIgnoreCase("PROVIDER_IDENTIFIER")) {
 							providerIdentifierColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue()
-								.toString().equalsIgnoreCase("FILE_OUTPUT_TYPE")) {
+						} else if (cell.getStringCellValue().toString()
+								.equalsIgnoreCase("FILE_OUTPUT_TYPE")) {
 							fileOutputTypeColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue()
-								.toString().equalsIgnoreCase("SCHEMA")) {
+						} else if (cell.getStringCellValue().toString()
+								.equalsIgnoreCase("SCHEMA")) {
 							schemaNameColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue()
-								.toString().equalsIgnoreCase("PROVIDER_EMAIL")) {
+						} else if (cell.getStringCellValue().toString()
+								.equalsIgnoreCase("PROVIDER_EMAIL")) {
 							providerEmailColumn = cell.getColumnIndex();
 						}
 					}
@@ -81,7 +89,8 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								&& !(row.getCell(providerIdColumn)
 										.getStringCellValue().isEmpty())
 								&& !(row.getCell(providerIdColumn)
-										.getStringCellValue().equalsIgnoreCase("NULL"))) {
+										.getStringCellValue()
+										.equalsIgnoreCase("NULL"))) {
 							newProvider.setProviderId(row
 									.getCell(providerIdColumn)
 									.getStringCellValue().toUpperCase());
@@ -91,7 +100,8 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								&& !(row.getCell(providerNameColumn)
 										.getStringCellValue().isEmpty())
 								&& !(row.getCell(providerNameColumn)
-										.getStringCellValue().equalsIgnoreCase("NULL"))) {
+										.getStringCellValue()
+										.equalsIgnoreCase("NULL"))) {
 							newProvider.setProviderName(row
 									.getCell(providerNameColumn)
 									.getStringCellValue().toUpperCase());
@@ -101,7 +111,8 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								&& !(row.getCell(providerIdentifierColumn)
 										.getStringCellValue().isEmpty())
 								&& !(row.getCell(providerIdentifierColumn)
-										.getStringCellValue().equalsIgnoreCase("NULL"))) {
+										.getStringCellValue()
+										.equalsIgnoreCase("NULL"))) {
 							newProvider.setProviderIdentifier(row
 									.getCell(providerIdentifierColumn)
 									.getStringCellValue().toUpperCase());
@@ -111,7 +122,8 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								&& !(row.getCell(fileOutputTypeColumn)
 										.getStringCellValue().isEmpty())
 								&& !(row.getCell(fileOutputTypeColumn)
-										.getStringCellValue().equalsIgnoreCase("NULL"))) {
+										.getStringCellValue()
+										.equalsIgnoreCase("NULL"))) {
 							newProvider.setFileOutputType(row
 									.getCell(fileOutputTypeColumn)
 									.getStringCellValue().toUpperCase());
@@ -121,7 +133,8 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								&& !(row.getCell(schemaNameColumn)
 										.getStringCellValue().isEmpty())
 								&& !(row.getCell(schemaNameColumn)
-										.getStringCellValue().equalsIgnoreCase("NULL"))) {
+										.getStringCellValue()
+										.equalsIgnoreCase("NULL"))) {
 							newProvider.setSchemaName(row
 									.getCell(schemaNameColumn)
 									.getStringCellValue().toUpperCase());
@@ -131,7 +144,8 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								&& !(row.getCell(providerEmailColumn)
 										.getStringCellValue().isEmpty())
 								&& !(row.getCell(providerEmailColumn)
-										.getStringCellValue().equalsIgnoreCase("NULL"))) {
+										.getStringCellValue()
+										.equalsIgnoreCase("NULL"))) {
 							newProvider.setProviderEmail(row
 									.getCell(providerEmailColumn)
 									.getStringCellValue().toUpperCase());
@@ -167,15 +181,6 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 					fileName);
 		}
 
-	}
-
-	public static boolean isRowEmpty(Row row) {
-		for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
-			Cell cell = row.getCell(c);
-			if (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK)
-				return false;
-		}
-		return true;
 	}
 
 }

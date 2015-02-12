@@ -41,100 +41,10 @@ public class Schema extends File {
 	}
 
 	/**
-	 * @return the name
+	 * @param fields
 	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the provider
-	 */
-	public String getProviderName() {
-		return providerName;
-	}
-
-	/**
-	 * @param provider
-	 *            the provider to set
-	 */
-	public void setProviderName(String provider) {
-		this.providerName = provider;
-	}
-
-	/**
-	 * @return the version
-	 */
-	public String getVersion() {
-		return version;
-	}
-
-	/**
-	 * @param version
-	 *            the version to set
-	 */
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	/**
-	 * @return
-	 */
-	public List<String> getPrimaryKeys() {
-		return primaryKeys;
-	}
-
-	/**
-	 * @param primaryKey
-	 */
-	public void setPrimaryKeys(List<String> primaryKey) {
-		this.primaryKeys = primaryKey;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void addPrimaryKey(String string) {
-		this.primaryKeys.add(string);
-	}
-
-	/**
-	 * @return
-	 */
-	public List<String> getForeignKeys() {
-		return foreignKeys;
-	}
-
-	/**
-	 * @param foreignKeys
-	 */
-	public void setForeignKeys(List<String> foreignKeys) {
-		this.foreignKeys = foreignKeys;
-	}
-
-	public void removeField(int index) {
-		this.fields.remove(index);
-	}
-
-	public void removeField(SchemaField schemaField) {
-		this.fields.remove(schemaField);
-	}
-
-	public void removeField(String fieldName) {
-		if (this.getField(fieldName) != null) {
-			this.removeField(this.getField(fieldName));
-		} else {
-			logger.error("Could not remove field '{}' from Schema '{}'",
-					fieldName, this.getName());
-		}
+	public void addField(SchemaField field) {
+		this.fields.add(field);
 	}
 
 	/**
@@ -145,10 +55,10 @@ public class Schema extends File {
 	}
 
 	/**
-	 * @return the fields
+	 * @param string
 	 */
-	public List<SchemaField> getFields() {
-		return fields;
+	public void addPrimaryKey(String string) {
+		this.primaryKeys.add(string);
 	}
 
 	public SchemaField getField(String fieldName) {
@@ -160,18 +70,24 @@ public class Schema extends File {
 		return null;
 	}
 
-	/**
-	 * @param list
-	 */
-	public void setFields(List<SchemaField> list) {
-		this.fields = list;
+	public ArrayList<String> getFieldAndAliasNames() {
+		ArrayList<String> aliasNames = new ArrayList<String>();
+		for (SchemaField field : this.getFields()) {
+			aliasNames.add(field.getName());
+			for (String alias : field.getAlias()) {
+				aliasNames.add(alias);
+			}
+		}
+		return aliasNames;
 	}
 
-	/**
-	 * @param fields
-	 */
-	public void addField(SchemaField field) {
-		this.fields.add(field);
+	public String getFieldName(int headerIndex) {
+		for (SchemaField field : this.getFields()) {
+			if (field.getHeaderIndex() == headerIndex) {
+				return field.getName();
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -208,24 +124,46 @@ public class Schema extends File {
 		return fieldNames;
 	}
 
-	public String getFieldName(int headerIndex) {
-		for (SchemaField field : this.getFields()) {
-			if (field.getHeaderIndex() == headerIndex) {
-				return field.getName();
-			}
-		}
-		return null;
+	/**
+	 * @return the fields
+	 */
+	public List<SchemaField> getFields() {
+		return fields;
 	}
 
-	public ArrayList<String> getFieldAndAliasNames() {
-		ArrayList<String> aliasNames = new ArrayList<String>();
-		for (SchemaField field : this.getFields()) {
-			aliasNames.add(field.getName());
-			for (String alias : field.getAlias()) {
-				aliasNames.add(alias);
-			}
-		}
-		return aliasNames;
+	/**
+	 * @return
+	 */
+	public List<String> getForeignKeys() {
+		return foreignKeys;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @return
+	 */
+	public List<String> getPrimaryKeys() {
+		return primaryKeys;
+	}
+
+	/**
+	 * @return the provider
+	 */
+	public String getProviderName() {
+		return providerName;
+	}
+
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return version;
 	}
 
 	public void print() {
@@ -243,6 +181,68 @@ public class Schema extends File {
 		for (SchemaField field : this.getFields()) {
 			field.print();
 		}
+	}
+
+	public void removeField(int index) {
+		this.fields.remove(index);
+	}
+
+	public void removeField(SchemaField schemaField) {
+		this.fields.remove(schemaField);
+	}
+
+	public void removeField(String fieldName) {
+		if (this.getField(fieldName) != null) {
+			this.removeField(this.getField(fieldName));
+		} else {
+			logger.error("Could not remove field '{}' from Schema '{}'",
+					fieldName, this.getName());
+		}
+	}
+
+	/**
+	 * @param list
+	 */
+	public void setFields(List<SchemaField> list) {
+		this.fields = list;
+	}
+
+	/**
+	 * @param foreignKeys
+	 */
+	public void setForeignKeys(List<String> foreignKeys) {
+		this.foreignKeys = foreignKeys;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @param primaryKey
+	 */
+	public void setPrimaryKeys(List<String> primaryKey) {
+		this.primaryKeys = primaryKey;
+	}
+
+	/**
+	 * @param provider
+	 *            the provider to set
+	 */
+	public void setProviderName(String provider) {
+		this.providerName = provider;
+	}
+
+	/**
+	 * @param version
+	 *            the version to set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 }

@@ -23,9 +23,6 @@ import org.slf4j.LoggerFactory;
  * @version 0.1
  */
 public class Main {
-	private static final Logger logger = LoggerFactory.getLogger(Main.class);
-	static Config config = new Config();
-
 	public static void main(String[] args) {
 		logger.info("Starting FSSI File Processor");
 
@@ -67,7 +64,6 @@ public class Main {
 
 		logger.info("Completed FSSI File Processor");
 	}
-
 	/**
 	 * Prints all Providers
 	 * 
@@ -91,5 +87,9 @@ public class Main {
 			schema.printAll();
 		}
 	}
+
+	private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
+	static Config config = new Config();
 
 }

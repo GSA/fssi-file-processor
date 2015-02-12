@@ -52,18 +52,17 @@ public class Provider extends File {
 	}
 
 	/**
+	 * @return current fileOutputType
+	 */
+	public String getFileOutputType() {
+		return fileOutputType;
+	}
+
+	/**
 	 * @return current providerEmail
 	 */
 	public String getProviderEmail() {
 		return providerEmail;
-	}
-
-	/**
-	 * @param contactEmail
-	 *            String contactEmail to set
-	 */
-	public void setProviderEmail(String contactEmail) {
-		this.providerEmail = contactEmail;
 	}
 
 	/**
@@ -74,26 +73,10 @@ public class Provider extends File {
 	}
 
 	/**
-	 * @param providerId
-	 *            the providerId to set
-	 */
-	public void setProviderId(String providerId) {
-		this.providerId = providerId;
-	}
-
-	/**
 	 * @return current providerIdentifier
 	 */
 	public String getProviderIdentifier() {
 		return providerIdentifier;
-	}
-
-	/**
-	 * @param providerIdentifier
-	 *            the providerIdentifier to set
-	 */
-	public void setProviderIdentifier(String providerIdentifier) {
-		this.providerIdentifier = providerIdentifier;
 	}
 
 	/**
@@ -104,40 +87,10 @@ public class Provider extends File {
 	}
 
 	/**
-	 * @param providerName
-	 *            the providerName to set
-	 */
-	public void setProviderName(String providerName) {
-		this.providerName = providerName;
-	}
-
-	/**
-	 * @return current fileOutputType
-	 */
-	public String getFileOutputType() {
-		return fileOutputType;
-	}
-
-	/**
 	 * @return current schemaName
 	 */
 	public String getSchemaName() {
 		return schemaName;
-	}
-
-	/**
-	 * @param schemaName
-	 */
-	public void setSchemaName(String schemaName) {
-		this.schemaName = schemaName;
-	}
-
-	/**
-	 * @param fileOutputType
-	 *            the fileOutputType to set
-	 */
-	public void setFileOutputType(String fileOutputType) {
-		this.fileOutputType = fileOutputType;
 	}
 
 	/**
@@ -149,6 +102,53 @@ public class Provider extends File {
 				this.getProviderId(), this.getProviderName(),
 				this.getProviderIdentifier(), this.getProviderEmail(),
 				this.getFileOutputType(), this.getSchemaName());
+	}
+
+	/**
+	 * @param fileOutputType
+	 *            the fileOutputType to set
+	 */
+	public void setFileOutputType(String fileOutputType) {
+		this.fileOutputType = fileOutputType;
+	}
+
+	/**
+	 * @param contactEmail
+	 *            String contactEmail to set
+	 */
+	public void setProviderEmail(String contactEmail) {
+		this.providerEmail = contactEmail;
+	}
+
+	/**
+	 * @param providerId
+	 *            the providerId to set
+	 */
+	public void setProviderId(String providerId) {
+		this.providerId = providerId;
+	}
+
+	/**
+	 * @param providerIdentifier
+	 *            the providerIdentifier to set
+	 */
+	public void setProviderIdentifier(String providerIdentifier) {
+		this.providerIdentifier = providerIdentifier;
+	}
+
+	/**
+	 * @param providerName
+	 *            the providerName to set
+	 */
+	public void setProviderName(String providerName) {
+		this.providerName = providerName;
+	}
+
+	/**
+	 * @param schemaName
+	 */
+	public void setSchemaName(String schemaName) {
+		this.schemaName = schemaName;
 	}
 
 }

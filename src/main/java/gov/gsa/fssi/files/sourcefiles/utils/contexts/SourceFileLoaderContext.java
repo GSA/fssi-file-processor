@@ -7,11 +7,6 @@ public class SourceFileLoaderContext {
 	private SourceFileLoaderStrategy strategy;
 
 	// this can be set at runtime by the application preferences
-	public void setSourceFileLoaderStrategy(SourceFileLoaderStrategy strategy) {
-		this.strategy = strategy;
-	}
-
-	// this can be set at runtime by the application preferences
 	public SourceFileLoaderStrategy getSourceFileLoaderStrategy() {
 		return this.strategy;
 	}
@@ -24,5 +19,10 @@ public class SourceFileLoaderContext {
 	 */
 	public void load(String directory, String fileName, SourceFile sourceFile) {
 		strategy.load(directory, fileName, sourceFile); // Validate Constraint
+	}
+
+	// this can be set at runtime by the application preferences
+	public void setSourceFileLoaderStrategy(SourceFileLoaderStrategy strategy) {
+		this.strategy = strategy;
 	}
 }

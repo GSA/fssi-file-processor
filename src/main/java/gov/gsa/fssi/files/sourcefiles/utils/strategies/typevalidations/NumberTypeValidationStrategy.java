@@ -11,6 +11,12 @@ public class NumberTypeValidationStrategy implements TypeValidationStrategy {
 	static final Logger logger = LoggerFactory
 			.getLogger(NumberTypeValidationStrategy.class);
 	@Override
+	public boolean isValid(SchemaField field, Data data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public void validate(SchemaField field, Data data) {
 		if (data != null) {
 			if (!data.getData().isEmpty() && !data.getData().equals("")) {
@@ -36,12 +42,6 @@ public class NumberTypeValidationStrategy implements TypeValidationStrategy {
 				data.addValidationResult(true, 0, "Type(" + field.getType()
 						+ ")");
 		}
-	}
-
-	@Override
-	public boolean isValid(SchemaField field, Data data) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

@@ -7,11 +7,6 @@ public class SourceFileLoggerContext {
 	private SourceFileLoggerStrategy strategy;
 
 	// this can be set at runtime by the application preferences
-	public void setSourceFileLoggerStrategy(SourceFileLoggerStrategy strategy) {
-		this.strategy = strategy;
-	}
-
-	// this can be set at runtime by the application preferences
 	public SourceFileLoggerStrategy getSourceFileLoggerStrategy() {
 		return this.strategy;
 	}
@@ -24,5 +19,10 @@ public class SourceFileLoggerContext {
 	 */
 	public void log(String directory, SourceFile sourceFile) {
 		strategy.createLog(directory, sourceFile);
+	}
+
+	// this can be set at runtime by the application preferences
+	public void setSourceFileLoggerStrategy(SourceFileLoggerStrategy strategy) {
+		this.strategy = strategy;
 	}
 }

@@ -13,13 +13,17 @@ public class TypeValidationContext {
 	private TypeValidationStrategy strategy;
 
 	// this can be set at runtime by the application preferences
-	public void setTypeValidationStrategy(TypeValidationStrategy strategy) {
-		this.strategy = strategy;
+	public TypeValidationStrategy getTypeValidationStrategy() {
+		return this.strategy;
+	}
+
+	public boolean isValid(SchemaField field, Data data) {
+		return strategy.isValid(field, data); // Validate Constraint
 	}
 
 	// this can be set at runtime by the application preferences
-	public TypeValidationStrategy getTypeValidationStrategy() {
-		return this.strategy;
+	public void setTypeValidationStrategy(TypeValidationStrategy strategy) {
+		this.strategy = strategy;
 	}
 
 	// use the strategy
@@ -45,9 +49,5 @@ public class TypeValidationContext {
 			}
 		}
 		strategy.validate(field, data); // Validate Type
-	}
-
-	public boolean isValid(SchemaField field, Data data) {
-		return strategy.isValid(field, data); // Validate Constraint
 	}
 }

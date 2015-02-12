@@ -15,6 +15,33 @@ import org.junit.Test;
 public class MaxLengthConstraintValidationStrategyTest {
 
 	/**
+	 * This should test to make sure that the validator is passing strings with
+	 * a length below maximum
+	 */
+	@Test
+	public void testEqual() {
+		ConstraintValidationContext context = new ConstraintValidationContext();
+		context.setDataValidationStrategy(new MaxLengthConstraintValidationStrategy());
+
+		FieldConstraint fieldConstraint = MockFieldConstraint.make(
+				FieldConstraint.TYPE_MAXLENGTH, "5", 2);
+		SchemaField field = MockSchemaField.make("NUMBER",
+				SchemaField.TYPE_STRING, fieldConstraint);
+		Data data = MockData.make("12345");
+
+		context.validate(field, fieldConstraint, data);
+		Assert.assertEquals(
+				"failure - MaxLengthConstraintValidationStrategy caught error",
+				0, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - MaxLengthConstraintValidationStrategy did not make failure",
+				true, data.getStatus());
+		Assert.assertEquals(
+				"failure - MaxLengthConstraintValidationStrategy did not make failure",
+				true, data.getValidationResult(0).getStatus());
+	}
+
+	/**
 	 * This should test to make sure that the validator is failing strings with
 	 * a length above maximum
 	 */
@@ -63,33 +90,6 @@ public class MaxLengthConstraintValidationStrategyTest {
 		Assert.assertEquals(
 				"failure - MaxLengthConstraintValidationStrategy did not make failure",
 				true, data.getStatus());
-	}
-
-	/**
-	 * This should test to make sure that the validator is passing strings with
-	 * a length below maximum
-	 */
-	@Test
-	public void testEqual() {
-		ConstraintValidationContext context = new ConstraintValidationContext();
-		context.setDataValidationStrategy(new MaxLengthConstraintValidationStrategy());
-
-		FieldConstraint fieldConstraint = MockFieldConstraint.make(
-				FieldConstraint.TYPE_MAXLENGTH, "5", 2);
-		SchemaField field = MockSchemaField.make("NUMBER",
-				SchemaField.TYPE_STRING, fieldConstraint);
-		Data data = MockData.make("12345");
-
-		context.validate(field, fieldConstraint, data);
-		Assert.assertEquals(
-				"failure - MaxLengthConstraintValidationStrategy caught error",
-				0, data.getMaxErrorLevel());
-		Assert.assertEquals(
-				"failure - MaxLengthConstraintValidationStrategy did not make failure",
-				true, data.getStatus());
-		Assert.assertEquals(
-				"failure - MaxLengthConstraintValidationStrategy did not make failure",
-				true, data.getValidationResult(0).getStatus());
 	}
 
 }

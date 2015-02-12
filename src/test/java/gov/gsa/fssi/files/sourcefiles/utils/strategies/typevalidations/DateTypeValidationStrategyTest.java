@@ -16,12 +16,78 @@ public class DateTypeValidationStrategyTest {
 	 * 
 	 */
 	@Test
-	public void testNull() {
+	public void testAlreadyFailed() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
 
 		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE);
 		Data data = MockData.make();
+		data.setStatus(2);
+		data.setMaxErrorLevel(2);
+
+		context.validate(field, data);
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy did not catch error", 2,
+				data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy did not make failure",
+				false, data.getStatus());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void testBadDateWithFormat() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("REQUIRED",
+				SchemaField.TYPE_DATE);
+		field.setFormat("ddMMyyyy");
+		Data data = MockData.make("1234567890");
+
+		context.validate(field, data);
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy did not catch error", 2,
+				data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy did not make failure",
+				false, data.getStatus());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void testBadDateWithoutFormat() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE);
+		Data data = MockData.make("432154123");
+
+		context.validate(field, data);
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy did not catch error", 3,
+				data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy did not make failure",
+				false, data.getStatus());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void testGoodDateWithFormat() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("REQUIRED",
+				SchemaField.TYPE_DATE);
+		field.setFormat("dd-yyyy-MM");
+		Data data = MockData.make("12-2014-05");
 
 		context.validate(field, data);
 		Assert.assertEquals(
@@ -50,26 +116,6 @@ public class DateTypeValidationStrategyTest {
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not make failure",
 				true, data.getStatus());
-	}
-
-	/**
-	 * 
-	 */
-	@Test
-	public void testBadDateWithoutFormat() {
-		TypeValidationContext context = new TypeValidationContext();
-		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
-
-		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE);
-		Data data = MockData.make("432154123");
-
-		context.validate(field, data);
-		Assert.assertEquals(
-				"failure - DateTypeValidationStrategy did not catch error", 3,
-				data.getMaxErrorLevel());
-		Assert.assertEquals(
-				"failure - DateTypeValidationStrategy did not make failure",
-				false, data.getStatus());
 	}
 
 	/**
@@ -136,14 +182,12 @@ public class DateTypeValidationStrategyTest {
 	 * 
 	 */
 	@Test
-	public void testGoodDateWithFormat() {
+	public void testNull() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
 
-		SchemaField field = MockSchemaField.make("REQUIRED",
-				SchemaField.TYPE_DATE);
-		field.setFormat("dd-yyyy-MM");
-		Data data = MockData.make("12-2014-05");
+		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE);
+		Data data = MockData.make();
 
 		context.validate(field, data);
 		Assert.assertEquals(
@@ -152,50 +196,6 @@ public class DateTypeValidationStrategyTest {
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not make failure",
 				true, data.getStatus());
-	}
-
-	/**
-	 * 
-	 */
-	@Test
-	public void testBadDateWithFormat() {
-		TypeValidationContext context = new TypeValidationContext();
-		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
-
-		SchemaField field = MockSchemaField.make("REQUIRED",
-				SchemaField.TYPE_DATE);
-		field.setFormat("ddMMyyyy");
-		Data data = MockData.make("1234567890");
-
-		context.validate(field, data);
-		Assert.assertEquals(
-				"failure - DateTypeValidationStrategy did not catch error", 2,
-				data.getMaxErrorLevel());
-		Assert.assertEquals(
-				"failure - DateTypeValidationStrategy did not make failure",
-				false, data.getStatus());
-	}
-
-	/**
-	 * 
-	 */
-	@Test
-	public void testAlreadyFailed() {
-		TypeValidationContext context = new TypeValidationContext();
-		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
-
-		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE);
-		Data data = MockData.make();
-		data.setStatus(2);
-		data.setMaxErrorLevel(2);
-
-		context.validate(field, data);
-		Assert.assertEquals(
-				"failure - DateTypeValidationStrategy did not catch error", 2,
-				data.getMaxErrorLevel());
-		Assert.assertEquals(
-				"failure - DateTypeValidationStrategy did not make failure",
-				false, data.getStatus());
 	}
 
 }

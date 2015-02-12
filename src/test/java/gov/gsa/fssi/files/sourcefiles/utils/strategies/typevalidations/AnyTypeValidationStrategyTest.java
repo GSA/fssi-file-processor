@@ -16,26 +16,6 @@ public class AnyTypeValidationStrategyTest {
 	 * 
 	 */
 	@Test
-	public void testNull() {
-		TypeValidationContext context = new TypeValidationContext();
-		context.setTypeValidationStrategy(new AnyTypeValidationStrategy());
-
-		SchemaField field = MockSchemaField.make("ANY", SchemaField.TYPE_ANY);
-		Data data = MockData.make();
-
-		context.validate(field, data);
-		Assert.assertEquals(
-				"failure - AnyTypeValidationStrategy did not catch error", 0,
-				data.getMaxErrorLevel());
-		Assert.assertEquals(
-				"failure - AnyTypeValidationStrategy did not make failure",
-				true, data.getStatus());
-	}
-
-	/**
-	 * 
-	 */
-	@Test
 	public void testAlreadyFailed() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new AnyTypeValidationStrategy());
@@ -52,6 +32,26 @@ public class AnyTypeValidationStrategyTest {
 		Assert.assertEquals(
 				"failure - AnyTypeValidationStrategy did not make failure",
 				false, data.getStatus());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void testNull() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new AnyTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("ANY", SchemaField.TYPE_ANY);
+		Data data = MockData.make();
+
+		context.validate(field, data);
+		Assert.assertEquals(
+				"failure - AnyTypeValidationStrategy did not catch error", 0,
+				data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - AnyTypeValidationStrategy did not make failure",
+				true, data.getStatus());
 	}
 
 }

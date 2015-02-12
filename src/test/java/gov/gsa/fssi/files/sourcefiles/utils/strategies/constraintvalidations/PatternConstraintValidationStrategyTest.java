@@ -15,6 +15,30 @@ import org.junit.Test;
 public class PatternConstraintValidationStrategyTest {
 
 	/**
+	 * 
+	 */
+	@Test
+	public void testAlreadyFailed() {
+		ConstraintValidationContext context = new ConstraintValidationContext();
+		context.setDataValidationStrategy(new PatternConstraintValidationStrategy());
+
+		FieldConstraint fieldConstraint = MockFieldConstraint.make(
+				FieldConstraint.TYPE_PATTERN, "true", 2);
+		SchemaField field = MockSchemaField.make("ANY", SchemaField.TYPE_ANY);
+		Data data = MockData.make();
+		data.setStatus(2);
+		data.setMaxErrorLevel(2);
+
+		context.validate(field, fieldConstraint, data);
+		Assert.assertEquals(
+				"failure - AnyTypeValidationStrategy did not catch error", 2,
+				data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - AnyTypeValidationStrategy did not make failure",
+				false, data.getStatus());
+	}
+
+	/**
 	 * This should test to make sure that we are catching required Fields
 	 */
 	@Test
@@ -42,7 +66,7 @@ public class PatternConstraintValidationStrategyTest {
 	 * This should test to make sure that we are catching required Fields
 	 */
 	@Test
-	public void testOrPatternExactMatch() {
+	public void testOrPatterMatch() {
 		ConstraintValidationContext context = new ConstraintValidationContext();
 		context.setDataValidationStrategy(new PatternConstraintValidationStrategy());
 
@@ -50,7 +74,7 @@ public class PatternConstraintValidationStrategyTest {
 				FieldConstraint.TYPE_PATTERN, "Yes|No", 2);
 		SchemaField field = MockSchemaField.make("PATTERN",
 				SchemaField.TYPE_STRING, fieldConstraint);
-		Data data = MockData.make("Yes");
+		Data data = MockData.make("YES");
 
 		context.validate(field, fieldConstraint, data);
 
@@ -66,7 +90,7 @@ public class PatternConstraintValidationStrategyTest {
 	 * This should test to make sure that we are catching required Fields
 	 */
 	@Test
-	public void testOrPatterMatch() {
+	public void testOrPatternExactMatch() {
 		ConstraintValidationContext context = new ConstraintValidationContext();
 		context.setDataValidationStrategy(new PatternConstraintValidationStrategy());
 
@@ -74,7 +98,7 @@ public class PatternConstraintValidationStrategyTest {
 				FieldConstraint.TYPE_PATTERN, "Yes|No", 2);
 		SchemaField field = MockSchemaField.make("PATTERN",
 				SchemaField.TYPE_STRING, fieldConstraint);
-		Data data = MockData.make("YES");
+		Data data = MockData.make("Yes");
 
 		context.validate(field, fieldConstraint, data);
 
@@ -176,30 +200,6 @@ public class PatternConstraintValidationStrategyTest {
 		Assert.assertEquals(
 				"failure - PatternConstraintValidationStrategyTest did not pass",
 				true, data.getStatus());
-	}
-
-	/**
-	 * 
-	 */
-	@Test
-	public void testAlreadyFailed() {
-		ConstraintValidationContext context = new ConstraintValidationContext();
-		context.setDataValidationStrategy(new PatternConstraintValidationStrategy());
-
-		FieldConstraint fieldConstraint = MockFieldConstraint.make(
-				FieldConstraint.TYPE_PATTERN, "true", 2);
-		SchemaField field = MockSchemaField.make("ANY", SchemaField.TYPE_ANY);
-		Data data = MockData.make();
-		data.setStatus(2);
-		data.setMaxErrorLevel(2);
-
-		context.validate(field, fieldConstraint, data);
-		Assert.assertEquals(
-				"failure - AnyTypeValidationStrategy did not catch error", 2,
-				data.getMaxErrorLevel());
-		Assert.assertEquals(
-				"failure - AnyTypeValidationStrategy did not make failure",
-				false, data.getStatus());
 	}
 
 }

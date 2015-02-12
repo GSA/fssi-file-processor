@@ -14,6 +14,31 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class File {
+	/**
+	 * @return
+	 */
+	public static String getErrorLevelName(int errorLevel) {
+		String name = null;
+		if (errorLevel <= 3) {
+			switch (errorLevel) {
+				case 0 :
+					name = File.STATUS_PASS;
+					break;
+				case 1 :
+					name = File.STATUS_WARNING;
+					break;
+				case 2 :
+					name = File.STATUS_ERROR;
+					break;
+				case 3 :
+					name = File.STATUS_FATAL;
+					break;
+				default :
+					break;
+			}
+		}
+		return name;
+	}
 	private static final Logger logger = LoggerFactory.getLogger(File.class);
 	/**
 	 * @see main.java.gov.gsa.fssi.files.File#setFileNameParts(byte
@@ -75,13 +100,13 @@ public class File {
 	 */
 	public static final String STATUS_WARNING = "warning";
 	public static final String STATUS_FAIL = "failed";
-	public static final String STATUS_PASS = "pass";
 
+	public static final String STATUS_PASS = "pass";
 	public static final String STAGE_LOADED = "loaded";
 	public static final String STAGE_VALIDATED = "validated";
 	public static final String STAGE_EXPORTED = "exported";
+
 	public static final String STAGE_INITIALIZED = "initialized";
-	
 	/**
 	 * Full filename including file extension.....Example: "filename.txt"
 	 */
@@ -103,8 +128,14 @@ public class File {
 	private boolean exportStatus = false;
 	private List<String> loadStatusMessages = null;
 	private List<String> validatorStatusMessages = null;
+
 	private String exportStatusMessage = null;
 
+	/**
+	 * Blank Constructor
+	 */
+	public File() {
+	}
 	/**
 	 * This constructor class takes a file name and uses it to initialize the
 	 * basic elements of a SourceFile
@@ -122,30 +153,131 @@ public class File {
 		// defaulted to underscore
 		this.setFileNameParts(SEPARATOR_UNDERSCORE);
 	}
+	/**
+	 * @param filepart
+	 *            String filepart to add
+	 */
+	public void addFileNameParts(String filepart) {
+		this.fileNameParts.add(filepart);
+	}
+	public void addLoadStatusMessage(String loadStatusMessage) {
+		this.loadStatusMessages.add(loadStatusMessage);
+	}
+
+	public void addValidatorStatusMessage(String validatorStatusMessage) {
+		this.validatorStatusMessages.add(validatorStatusMessage);
+	}
 
 	/**
-	 * Blank Constructor
+	 * @return current exportStatusLevel
 	 */
-	public File() {
+	public boolean getExportStatus() {
+		return exportStatus;
 	}
+
+	/**
+	 * @return current exportStatusMessage
+	 */
+	public String getExportStatusMessage() {
+		return exportStatusMessage;
+	}
+
+	/**
+	 * @return current fileExtension
+	 */
+	public String getFileExtension() {
+		return fileExtension;
+	}
+
 	/**
 	 * @return current fileName
 	 */
 	public String getFileName() {
 		return fileName;
 	}
+
 	/**
-	 * @param fileName
-	 *            String fileName to set
+	 * @return current fileNameParts
 	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public List<String> getFileNameParts() {
+		return fileNameParts;
 	}
+
 	/**
-	 * @return current fileExtension
+	 * @return current loadStatusLevel
 	 */
-	public String getFileExtension() {
-		return fileExtension;
+	public String getLoadStage() {
+		return loadStage;
+	}
+
+	public boolean getLoadStatus() {
+		return loadStatus;
+	}
+
+	/**
+	 * @return current loadStatusMessage
+	 */
+	public List<String> getLoadStatusMessage() {
+		return this.loadStatusMessages;
+	}
+
+	/**
+	 * @return
+	 */
+	public int getMaxErrorLevel() {
+		return maxErrorLevel;
+	}
+
+	public boolean getStatus() {
+		return status;
+	}
+
+	public String getStatusName() {
+		if (status)
+			return "Pass";
+		return "Fail";
+	}
+
+	/**
+	 * @return current validatorStatusLevel
+	 */
+	public boolean getValidatorStatus() {
+		return validatorStatus;
+	}
+
+	/**
+	 * @return current validatorStatusMessage
+	 */
+	public List<String> getValidatorStatusMessage() {
+		return this.validatorStatusMessages;
+	}
+
+	/**
+	 * @return current validatorStatusMessage
+	 */
+	public String getValidatorStatusName() {
+		if (this.getValidatorStatus())
+			return STATUS_PASS;
+		else
+			return STATUS_FAIL;
+	}
+
+	/**
+	 * @param exportStatusLevel
+	 *            String exportStatusLevel to set
+	 */
+	public void setExportStatusLevel(boolean exportStatus) {
+		this.setStatus(exportStatus);
+		if (this.getExportStatus())
+			this.exportStatus = exportStatus;
+	}
+
+	/**
+	 * @param exportStatusMessage
+	 *            String exportStatusMessage to set
+	 */
+	public void setExportStatusMessage(String exportStatusMessage) {
+		this.exportStatusMessage = exportStatusMessage;
 	}
 
 	/**
@@ -157,18 +289,11 @@ public class File {
 	}
 
 	/**
-	 * @param filepart
-	 *            String filepart to add
+	 * @param fileName
+	 *            String fileName to set
 	 */
-	public void addFileNameParts(String filepart) {
-		this.fileNameParts.add(filepart);
-	}
-
-	/**
-	 * @return current fileNameParts
-	 */
-	public List<String> getFileNameParts() {
-		return fileNameParts;
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	/**
@@ -178,8 +303,6 @@ public class File {
 	public void setFileNameParts(List<String> fileParts) {
 		this.fileNameParts = fileParts;
 	}
-
-
 
 	/**
 	 * This method breaks apart the files fileName into descrete parts and pops
@@ -199,7 +322,7 @@ public class File {
 			String fileNameWithoutExtension = fileName.substring(0,
 					fileName.lastIndexOf(SEPARATOR_PERIOD));
 			boolean loopQuit = false;
-			logger.debug("Setting file name parts using the '{}' separator", 
+			logger.debug("Setting file name parts using the '{}' separator",
 					filePartSeparator);
 			logger.info("Attempting to get file parts from fileName '{}'",
 					fileName);
@@ -209,12 +332,14 @@ public class File {
 				if (fileNameWithoutExtension.contains(filePartSeparator)) {
 					logger.debug("Adding File Part: '{}'",
 							fileNameWithoutExtension.substring(0,
-									fileNameWithoutExtension.indexOf(filePartSeparator)));
-					newfileNameParts.add(fileNameWithoutExtension.substring(0,
-							fileNameWithoutExtension.indexOf(filePartSeparator)));
+									fileNameWithoutExtension
+											.indexOf(filePartSeparator)));
+					newfileNameParts.add(fileNameWithoutExtension
+							.substring(0, fileNameWithoutExtension
+									.indexOf(filePartSeparator)));
 					fileNameWithoutExtension = fileNameWithoutExtension
-							.substring(
-									fileNameWithoutExtension.indexOf(filePartSeparator) + 1,
+							.substring(fileNameWithoutExtension
+									.indexOf(filePartSeparator) + 1,
 									fileNameWithoutExtension.length());
 				} else {
 					logger.debug("Adding File Part: '{}'",
@@ -230,116 +355,11 @@ public class File {
 	}
 
 	/**
-	 * @return current loadStatusLevel
-	 */
-	public String getLoadStage() {
-		return loadStage;
-	}
-
-	/**
 	 * @param loadStatusLevel
 	 *            String loadStatusLevel to set
 	 */
 	public void setLoadStage(String loadStatusLevel) {
 		this.loadStage = loadStatusLevel;
-	}
-
-	/**
-	 * @return current loadStatusMessage
-	 */
-	public List<String> getLoadStatusMessage() {
-		return this.loadStatusMessages;
-	}
-
-	public void setLoadStatusMessage(List<String> loadStatusMessages) {
-		this.loadStatusMessages = loadStatusMessages;
-	}
-
-	public void addLoadStatusMessage(String loadStatusMessage) {
-		this.loadStatusMessages.add(loadStatusMessage);
-	}
-
-	/**
-	 * @return current validatorStatusMessage
-	 */
-	public List<String> getValidatorStatusMessage() {
-		return this.validatorStatusMessages;
-	}
-
-	/**
-	 * @param validatorStatusMessage
-	 *            String validatorStatusMessage to set
-	 */
-	public void setValidatorStatusMessage(
-			List<String> validatorStatusMessages) {
-		this.validatorStatusMessages = validatorStatusMessages;
-	}
-
-	public void addValidatorStatusMessage(String validatorStatusMessage) {
-		this.validatorStatusMessages.add(validatorStatusMessage);
-	}
-
-	/**
-	 * @return current validatorStatusLevel
-	 */
-	public boolean getValidatorStatus() {
-		return validatorStatus;
-	}
-
-	/**
-	 * @return current validatorStatusMessage
-	 */
-	public String getValidatorStatusName() {
-		if (this.getValidatorStatus())
-			return STATUS_PASS;
-		else
-			return STATUS_FAIL;
-	}
-
-	/**
-	 * @param validatorStatus
-	 *            boolean validatorStatus to set
-	 */
-	public void setValidatorStatus(boolean validatorStatus) {
-		this.setStatus(validatorStatus);
-		if (this.getValidatorStatus())
-			this.validatorStatus = validatorStatus;
-	}
-
-	/**
-	 * @return current exportStatusMessage
-	 */
-	public String getExportStatusMessage() {
-		return exportStatusMessage;
-	}
-
-	/**
-	 * @param exportStatusMessage
-	 *            String exportStatusMessage to set
-	 */
-	public void setExportStatusMessage(String exportStatusMessage) {
-		this.exportStatusMessage = exportStatusMessage;
-	}
-
-	/**
-	 * @return current exportStatusLevel
-	 */
-	public boolean getExportStatus() {
-		return exportStatus;
-	}
-
-	/**
-	 * @param exportStatusLevel
-	 *            String exportStatusLevel to set
-	 */
-	public void setExportStatusLevel(boolean exportStatus) {
-		this.setStatus(exportStatus);
-		if (this.getExportStatus())
-			this.exportStatus = exportStatus;
-	}
-
-	public boolean getLoadStatus() {
-		return loadStatus;
 	}
 
 	public void setLoadStatus(boolean loadStatus) {
@@ -348,22 +368,19 @@ public class File {
 			this.loadStatus = loadStatus;
 	}
 
-	public boolean getStatus() {
-		return status;
+	public void setLoadStatusMessage(List<String> loadStatusMessages) {
+		this.loadStatusMessages = loadStatusMessages;
 	}
 
-	public String getStatusName() {
-		if (status)
-			return "Pass";
-		return "Fail";
+	public void setMaxErrorLevel(int errorLevel) {
+		setStatus(errorLevel);
+		if (errorLevel > this.maxErrorLevel)
+			this.maxErrorLevel = errorLevel;
 	}
 
-
-	/**
-	 * @return
-	 */
-	public int getMaxErrorLevel() {
-		return maxErrorLevel;
+	public void setStatus(boolean status) {
+		if (this.getStatus())
+			this.status = status;
 	}
 
 	/**
@@ -378,42 +395,22 @@ public class File {
 			this.status = false;
 	}
 
-	public void setStatus(boolean status) {
-		if (this.getStatus())
-			this.status = status;
+	/**
+	 * @param validatorStatus
+	 *            boolean validatorStatus to set
+	 */
+	public void setValidatorStatus(boolean validatorStatus) {
+		this.setStatus(validatorStatus);
+		if (this.getValidatorStatus())
+			this.validatorStatus = validatorStatus;
 	}
 
 	/**
-	 * @return
+	 * @param validatorStatusMessage
+	 *            String validatorStatusMessage to set
 	 */
-	public static String getErrorLevelName(int errorLevel) {
-		String name = null;
-		if (errorLevel <= 3) {
-			switch (errorLevel) {
-				case 0 :
-					name = File.STATUS_PASS;
-					break;
-				case 1 :
-					name = File.STATUS_WARNING;
-					break;
-				case 2 :
-					name = File.STATUS_ERROR;
-					break;
-				case 3 :
-					name = File.STATUS_FATAL;
-					break;
-				default :
-					break;
-			}
-		}
-		return name;
+	public void setValidatorStatusMessage(List<String> validatorStatusMessages) {
+		this.validatorStatusMessages = validatorStatusMessages;
 	}
-
-	public void setMaxErrorLevel(int errorLevel) {
-		setStatus(errorLevel);
-		if (errorLevel > this.maxErrorLevel)
-			this.maxErrorLevel = errorLevel;
-	}
-
 
 }

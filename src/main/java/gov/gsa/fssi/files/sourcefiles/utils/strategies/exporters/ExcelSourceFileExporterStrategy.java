@@ -31,8 +31,20 @@ import org.slf4j.LoggerFactory;
 public class ExcelSourceFileExporterStrategy
 		implements
 			SourceFileExporterStrategy {
+	public static void closeOutputStream(FileOutputStream out, String fileName) {
+		try {
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			logger.error("There was an IOException error '{}' with file {}.",
+					e.getMessage(), fileName);
+		} finally {
+			out = null;
+		}
+	}
 	private static final Logger logger = LoggerFactory
 			.getLogger(ExcelSourceFileExporterStrategy.class);
+
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
@@ -103,18 +115,6 @@ public class ExcelSourceFileExporterStrategy
 		} catch (IOException e) {
 			logger.error("There was an IOException error '{}' with file {}. ",
 					sourceFile.getFileName(), e.getMessage());
-		}
-	}
-
-	public static void closeOutputStream(FileOutputStream out, String fileName) {
-		try {
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			logger.error("There was an IOException error '{}' with file {}.",
-					e.getMessage(), fileName);
-		} finally {
-			out = null;
 		}
 	}
 

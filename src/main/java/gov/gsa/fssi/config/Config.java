@@ -100,27 +100,6 @@ public class Config {
 	public static final String DEFAULT_LOGGING_LEVEL = "";
 
 	/**
-	 * @param key
-	 *            the property you want to get
-	 * @return Properties the property you want
-	 * @see java.util.Properties#getProperty()
-	 */
-	public String getProperty(String key) {
-		return this.prop.getProperty(key);
-	}
-
-	/**
-	 * @param key
-	 *            the key to be placed into this property list.
-	 * @param value
-	 *            the value corresponding to key.
-	 * @see java.util.Properties#setProperty(String key, String value)
-	 */
-	public void setProperty(String key, String value) {
-		this.prop.setProperty(key, value);
-	}
-
-	/**
 	 * Config
 	 */
 	public Config() {
@@ -149,6 +128,34 @@ public class Config {
 			getDefaultPropValue();
 		}
 
+	}
+
+	/**
+	 * This method is only envoked if no config.properties file is provided.
+	 * This loads in default values.
+	 */
+	private void getDefaultPropValue() {
+		Properties prop = new Properties();
+		prop.setProperty(WORKING_DIRECTORY, DEFAULT_WORKING_DIRECTORY);
+		prop.setProperty(SOURCEFILES_DIRECTORY, DEFAULT_SOURCEFILES_DIRECTORY);
+		prop.setProperty(SCHEMAS_DIRECTORY, DEFAULT_SCHEMAS_DIRECTORY);
+		prop.setProperty(DATAMAPS_DIRECTORY, DEFAULT_DATAMAPS_DIRECTORY);
+		prop.setProperty(LOGS_DIRECTORY, DEFAULT_LOGS_DIRECTORY);
+		prop.setProperty(PROVIDERS_DIRECTORY, DEFAULT_PROVIDERS_DIRECTORY);
+		prop.setProperty(STAGED_DIRECTORY, DEFAULT_STAGED_DIRECTORY);
+		prop.setProperty(EXPORT_MODE, DEFAULT_EXPORT_MODE);
+		prop.setProperty(VALIDATION_MODE, DEFAULT_VALIDATION_MODE);
+		this.prop = prop;
+	}
+
+	/**
+	 * @param key
+	 *            the property you want to get
+	 * @return Properties the property you want
+	 * @see java.util.Properties#getProperty()
+	 */
+	public String getProperty(String key) {
+		return this.prop.getProperty(key);
 	}
 
 	/**
@@ -181,21 +188,14 @@ public class Config {
 	}
 
 	/**
-	 * This method is only envoked if no config.properties file is provided.
-	 * This loads in default values.
+	 * @param key
+	 *            the key to be placed into this property list.
+	 * @param value
+	 *            the value corresponding to key.
+	 * @see java.util.Properties#setProperty(String key, String value)
 	 */
-	private void getDefaultPropValue() {
-		Properties prop = new Properties();
-		prop.setProperty(WORKING_DIRECTORY, DEFAULT_WORKING_DIRECTORY);
-		prop.setProperty(SOURCEFILES_DIRECTORY, DEFAULT_SOURCEFILES_DIRECTORY);
-		prop.setProperty(SCHEMAS_DIRECTORY, DEFAULT_SCHEMAS_DIRECTORY);
-		prop.setProperty(DATAMAPS_DIRECTORY, DEFAULT_DATAMAPS_DIRECTORY);
-		prop.setProperty(LOGS_DIRECTORY, DEFAULT_LOGS_DIRECTORY);
-		prop.setProperty(PROVIDERS_DIRECTORY, DEFAULT_PROVIDERS_DIRECTORY);
-		prop.setProperty(STAGED_DIRECTORY, DEFAULT_STAGED_DIRECTORY);
-		prop.setProperty(EXPORT_MODE, DEFAULT_EXPORT_MODE);
-		prop.setProperty(VALIDATION_MODE, DEFAULT_VALIDATION_MODE);
-		this.prop = prop;
+	public void setProperty(String key, String value) {
+		this.prop.setProperty(key, value);
 	}
 
 	/**

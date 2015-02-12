@@ -15,13 +15,18 @@ public class ConstraintValidationContext {
 	private ConstraintValidationStrategy strategy;
 
 	// this can be set at runtime by the application preferences
-	public void setDataValidationStrategy(ConstraintValidationStrategy strategy) {
-		this.strategy = strategy;
+	public ConstraintValidationStrategy getDataValidationStrategy() {
+		return this.strategy;
+	}
+
+	public boolean isValid(SchemaField field, FieldConstraint constraint,
+			Data data) {
+		return strategy.isValid(field, constraint, data); // is Valid
 	}
 
 	// this can be set at runtime by the application preferences
-	public ConstraintValidationStrategy getDataValidationStrategy() {
-		return this.strategy;
+	public void setDataValidationStrategy(ConstraintValidationStrategy strategy) {
+		this.strategy = strategy;
 	}
 
 	// use the strategy
@@ -53,10 +58,5 @@ public class ConstraintValidationContext {
 			}
 		}
 		strategy.validate(field, constraint, data); // Validate Constraint
-	}
-
-	public boolean isValid(SchemaField field, FieldConstraint constraint,
-			Data data) {
-		return strategy.isValid(field, constraint, data); // is Valid
 	}
 }

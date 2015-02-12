@@ -15,29 +15,9 @@ public class MockSourceFileRecord {
 		return sourceFileRecord;
 	}
 
-	public static SourceFileRecord make(String value) {
-		SourceFileRecord sourceFileRecord = new SourceFileRecord();
-		sourceFileRecord.addData(MockData.make(value));
-		return sourceFileRecord;
-	}
-
-	public static SourceFileRecord make(String value, int headerIndex) {
-		SourceFileRecord sourceFileRecord = new SourceFileRecord();
-		sourceFileRecord.addData(MockData.make(value, headerIndex));
-		return sourceFileRecord;
-	}
-
 	public static SourceFileRecord make(Data data) {
 		SourceFileRecord sourceFileRecord = new SourceFileRecord();
 		sourceFileRecord.addData(data);
-		return sourceFileRecord;
-	}
-
-	public static SourceFileRecord make(List<Data> datas) {
-		SourceFileRecord sourceFileRecord = new SourceFileRecord();
-		for (Data data : datas) {
-			sourceFileRecord.addData(data);
-		}
 		return sourceFileRecord;
 	}
 
@@ -52,6 +32,26 @@ public class MockSourceFileRecord {
 					dataMapIteratorPairs.getKey()));
 		}
 
+		return sourceFileRecord;
+	}
+
+	public static SourceFileRecord make(List<Data> datas) {
+		SourceFileRecord sourceFileRecord = new SourceFileRecord();
+		for (Data data : datas) {
+			sourceFileRecord.addData(data);
+		}
+		return sourceFileRecord;
+	}
+
+	public static SourceFileRecord make(String value) {
+		SourceFileRecord sourceFileRecord = new SourceFileRecord();
+		sourceFileRecord.addData(MockData.make(value));
+		return sourceFileRecord;
+	}
+
+	public static SourceFileRecord make(String value, int headerIndex) {
+		SourceFileRecord sourceFileRecord = new SourceFileRecord();
+		sourceFileRecord.addData(MockData.make(value, headerIndex));
 		return sourceFileRecord;
 	}
 

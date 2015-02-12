@@ -99,8 +99,72 @@ public class FieldConstraint {
 	// TODO:Add support for option "IgnoreCase" that will ignore case during
 	// validation
 
+	public void addOption(String key, String value) {
+		this.options.put(key, value);
+	}
+
+	public Date getEffectiveDate() {
+		return (effectiveDate == null
+				? null
+				: new Date(effectiveDate.getTime()));
+	}
+
 	public int getLevel() {
 		return level;
+	}
+
+	public String getLevelName() {
+		return levelName;
+	}
+
+	public String getLoadStatusLevel() {
+		return loadStatusLevel;
+	}
+
+	public String getLoadStatusMessage() {
+		return loadStatusMessage;
+	}
+
+	public HashMap<String, String> getOptions() {
+		return options;
+	}
+
+	public String getOptionValue(String key) {
+		return options.get(key);
+	}
+
+	public String getRuleText() {
+		return this.getType() + "(" + this.getValue() + ")";
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public String getValidatorStatusLevel() {
+		return validatorStatusLevel;
+	}
+
+	public String getValidatorStatusMessage() {
+		return validatorStatusMessage;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void print() {
+		logger.debug(
+				"          Constraint Type:'{}' Value:'{}' Level:'{}' EffectiveDate:'{}' Options:{}",
+				this.getType(),
+				this.getValue(),
+				this.getLevelName(),
+				(this.getEffectiveDate() == null ? "" : this.getEffectiveDate()),
+				this.getOptions());
+	}
+
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = new Date(effectiveDate.getTime());
 	}
 
 	public void setLevel(int level) {
@@ -117,103 +181,39 @@ public class FieldConstraint {
 		}
 	}
 
-	public void setLoadStatusLevel(int loadStatusLevel) {
-		this.level = loadStatusLevel;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String name) {
-		this.type = name;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public HashMap<String, String> getOptions() {
-		return options;
-	}
-
-	public String getOptionValue(String key) {
-		return options.get(key);
-	}
-
-	public void setOptions(HashMap<String, String> options) {
-		this.options = options;
-	}
-
-	public void addOption(String key, String value) {
-		this.options.put(key, value);
-	}
-
-	public String getLevelName() {
-		return levelName;
-	}
-
 	public void setLevelName(String levelName) {
 		this.levelName = levelName;
 	}
 
-	public Date getEffectiveDate() {
-		return (effectiveDate == null
-				? null
-				: new Date(effectiveDate.getTime()));
-	}
-
-	public void setEffectiveDate(Date effectiveDate) {
-		this.effectiveDate = new Date(effectiveDate.getTime());
-	}
-
-	public void print() {
-		logger.debug(
-				"          Constraint Type:'{}' Value:'{}' Level:'{}' EffectiveDate:'{}' Options:{}",
-				this.getType(),
-				this.getValue(),
-				this.getLevelName(),
-				(this.getEffectiveDate() == null ? "" : this.getEffectiveDate()),
-				this.getOptions());
-	}
-
-	public String getLoadStatusLevel() {
-		return loadStatusLevel;
+	public void setLoadStatusLevel(int loadStatusLevel) {
+		this.level = loadStatusLevel;
 	}
 
 	public void setLoadStatusLevel(String loadStatusLevel) {
 		this.loadStatusLevel = loadStatusLevel;
 	}
 
-	public String getLoadStatusMessage() {
-		return loadStatusMessage;
-	}
-
 	public void setLoadStatusMessage(String loadStatusMessage) {
 		this.loadStatusMessage = loadStatusMessage;
 	}
 
-	public String getValidatorStatusMessage() {
-		return validatorStatusMessage;
+	public void setOptions(HashMap<String, String> options) {
+		this.options = options;
 	}
 
-	public void setValidatorStatusMessage(String validatorStatusMessage) {
-		this.validatorStatusMessage = validatorStatusMessage;
-	}
-
-	public String getValidatorStatusLevel() {
-		return validatorStatusLevel;
+	public void setType(String name) {
+		this.type = name;
 	}
 
 	public void setValidatorStatusLevel(String validatorStatusLevel) {
 		this.validatorStatusLevel = validatorStatusLevel;
 	}
 
-	public String getRuleText() {
-		return this.getType() + "(" + this.getValue() + ")";
+	public void setValidatorStatusMessage(String validatorStatusMessage) {
+		this.validatorStatusMessage = validatorStatusMessage;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

@@ -16,6 +16,30 @@ public class MinLengthConstraintValidationStrategyTest {
 
 	/**
 	 * This should test to make sure that the validator is passing strings with
+	 * the same length
+	 */
+	@Test
+	public void testEqual() {
+		ConstraintValidationContext context = new ConstraintValidationContext();
+		context.setDataValidationStrategy(new MinLengthConstraintValidationStrategy());
+
+		FieldConstraint fieldConstraint = MockFieldConstraint.make(
+				FieldConstraint.TYPE_MAXLENGTH, "5", 2);
+		SchemaField field = MockSchemaField.make("NUMBER",
+				SchemaField.TYPE_STRING, fieldConstraint);
+		Data data = MockData.make("12345");
+
+		context.validate(field, fieldConstraint, data);
+		Assert.assertNotEquals(
+				"failure - MinLengthConstraintValidationStrategy caught error",
+				fieldConstraint.getLevel(), data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - MinLengthConstraintValidationStrategy did not pass",
+				true, data.getStatus());
+	}
+
+	/**
+	 * This should test to make sure that the validator is passing strings with
 	 * a length above maximum
 	 */
 	@Test
@@ -83,30 +107,6 @@ public class MinLengthConstraintValidationStrategyTest {
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
 		Assert.assertEquals(
 				"failure - MinLengthConstraintValidationStrategy did not make failure",
-				true, data.getStatus());
-	}
-
-	/**
-	 * This should test to make sure that the validator is passing strings with
-	 * the same length
-	 */
-	@Test
-	public void testEqual() {
-		ConstraintValidationContext context = new ConstraintValidationContext();
-		context.setDataValidationStrategy(new MinLengthConstraintValidationStrategy());
-
-		FieldConstraint fieldConstraint = MockFieldConstraint.make(
-				FieldConstraint.TYPE_MAXLENGTH, "5", 2);
-		SchemaField field = MockSchemaField.make("NUMBER",
-				SchemaField.TYPE_STRING, fieldConstraint);
-		Data data = MockData.make("12345");
-
-		context.validate(field, fieldConstraint, data);
-		Assert.assertNotEquals(
-				"failure - MinLengthConstraintValidationStrategy caught error",
-				fieldConstraint.getLevel(), data.getMaxErrorLevel());
-		Assert.assertEquals(
-				"failure - MinLengthConstraintValidationStrategy did not pass",
 				true, data.getStatus());
 	}
 

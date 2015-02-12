@@ -13,49 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DateHelper {
-	private static final Logger logger = LoggerFactory
-			.getLogger(DateHelper.class);
-
-	public static final String FORMAT_MMYYYY = "MMyyyy";
-	public static final String FORMAT_MMDDYYYY = "MMddyyyy";
-	public static final String FORMAT_ISO8601 = "yyyy-MM-dd'T'HH:mm'Z'";
-	public static final String FORMAT_YYYY_MM_DD = "yyyy-MM-dd";
-	public static final String TIMEZONE_UTC = "UTC";
-
-	/**
-	 * @return
-	 */
-	public static Date getTodaysDate() {
-		Calendar c = new GregorianCalendar();
-		c.set(Calendar.HOUR_OF_DAY, 0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		return c.getTime();
-	}
-
-	public static Date getMaxDate() {
-		Date date = new Date();
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		c.add(Calendar.YEAR, 10);
-		date = c.getTime();
-		return date;
-	}
-
-	/**
-	 * Based upon the wisdom of the powers at be, we determined that a date that
-	 * 
-	 * @return date minimum acceptable date
-	 */
-	public static Date getMinDate() {
-		Date date = new Date();
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		c.add(Calendar.YEAR, -50);
-		date = c.getTime();
-		return date;
-	}
-
 	/**
 	 * Use this method to get a date when you know the dateformat
 	 * 
@@ -80,15 +37,44 @@ public class DateHelper {
 		return date;
 	}
 
-	public static Date yesterdaysDate() {
-		Date newDate = new Date();
+	public static Date getMaxDate() {
+		Date date = new Date();
 		Calendar c = Calendar.getInstance();
-		c.setTime(newDate);
-		c.add(Calendar.DATE, -1);
-		newDate = c.getTime();
-		return newDate;
+		c.setTime(date);
+		c.add(Calendar.YEAR, 10);
+		date = c.getTime();
+		return date;
 	}
-
+	/**
+	 * Based upon the wisdom of the powers at be, we determined that a date that
+	 * 
+	 * @return date minimum acceptable date
+	 */
+	public static Date getMinDate() {
+		Date date = new Date();
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.YEAR, -50);
+		date = c.getTime();
+		return date;
+	}
+	/**
+	 * @return
+	 */
+	public static Date getTodaysDate() {
+		Calendar c = new GregorianCalendar();
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		return c.getTime();
+	}
+	private static Date parseDate(String string, String dateFormat)
+			throws ParseException {
+		TimeZone timeZone = TimeZone.getTimeZone(TIMEZONE_UTC);
+		DateFormat format = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
+		format.setTimeZone(timeZone);
+		return format.parse(string);
+	}
 	public static Date tomorrowsDate() {
 		Date newDate = new Date();
 		Calendar c = Calendar.getInstance();
@@ -98,11 +84,25 @@ public class DateHelper {
 		return newDate;
 	}
 
-	private static Date parseDate(String string, String dateFormat)
-			throws ParseException {
-		TimeZone timeZone = TimeZone.getTimeZone(TIMEZONE_UTC);
-		DateFormat format = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
-		format.setTimeZone(timeZone);
-		return format.parse(string);
+	public static Date yesterdaysDate() {
+		Date newDate = new Date();
+		Calendar c = Calendar.getInstance();
+		c.setTime(newDate);
+		c.add(Calendar.DATE, -1);
+		newDate = c.getTime();
+		return newDate;
 	}
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(DateHelper.class);
+
+	public static final String FORMAT_MMYYYY = "MMyyyy";
+
+	public static final String FORMAT_MMDDYYYY = "MMddyyyy";
+
+	public static final String FORMAT_ISO8601 = "yyyy-MM-dd'T'HH:mm'Z'";
+
+	public static final String FORMAT_YYYY_MM_DD = "yyyy-MM-dd";
+
+	public static final String TIMEZONE_UTC = "UTC";
 }

@@ -14,6 +14,13 @@ public class MinimumConstraintValidationStrategy
 	private static final Logger logger = LoggerFactory
 			.getLogger(MinimumConstraintValidationStrategy.class);
 	@Override
+	public boolean isValid(SchemaField field, FieldConstraint constraint,
+			Data data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public void validate(SchemaField field, FieldConstraint constraint,
 			Data data) {
 		if (data != null) {
@@ -30,12 +37,5 @@ public class MinimumConstraintValidationStrategy
 			} else
 				data.addValidationResult(true, 0, constraint.getRuleText());
 		}
-	}
-
-	@Override
-	public boolean isValid(SchemaField field, FieldConstraint constraint,
-			Data data) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

@@ -14,6 +14,12 @@ public class DateTypeValidationStrategy implements TypeValidationStrategy {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DateTypeValidationStrategy.class);
 	@Override
+	public boolean isValid(SchemaField field, Data data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public void validate(SchemaField field, Data data) {
 		if (data != null) {
 			if (data.getData() != null && !data.getData().isEmpty()) {
@@ -57,12 +63,6 @@ public class DateTypeValidationStrategy implements TypeValidationStrategy {
 				data.addValidationResult(true, 0, "Type(" + field.getType()
 						+ ")");
 		}
-	}
-
-	@Override
-	public boolean isValid(SchemaField field, Data data) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

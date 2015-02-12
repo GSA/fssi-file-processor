@@ -18,29 +18,6 @@ public class RequiredConstraintValidationStrategyTest {
 	 * This should test to make sure that we are catching required Fields
 	 */
 	@Test
-	public void testRequiredWhenNull() {
-		ConstraintValidationContext context = new ConstraintValidationContext();
-		context.setDataValidationStrategy(new RequiredConstraintValidationStrategy());
-
-		FieldConstraint fieldConstraint = MockFieldConstraint.make(
-				FieldConstraint.TYPE_REQUIRED, "true", 2);
-		SchemaField field = MockSchemaField.make("REQUIRED",
-				SchemaField.TYPE_STRING, fieldConstraint);
-		Data data = MockData.make();
-
-		context.validate(field, fieldConstraint, data);
-		Assert.assertEquals(
-				"failure - RequiredConstraintValidationStrategyTest did not catch error",
-				2, data.getMaxErrorLevel());
-		Assert.assertEquals(
-				"failure - RequiredConstraintValidationStrategyTest did not make failure",
-				false, data.getStatus());
-	}
-
-	/**
-	 * This should test to make sure that we are catching required Fields
-	 */
-	@Test
 	public void testRequiredWhenEmpty() {
 		ConstraintValidationContext context = new ConstraintValidationContext();
 		context.setDataValidationStrategy(new RequiredConstraintValidationStrategy());
@@ -56,6 +33,29 @@ public class RequiredConstraintValidationStrategyTest {
 		Assert.assertEquals(
 				"failure - RequiredConstraintValidationStrategyTest did not catch error",
 				fieldConstraint.getLevel(), data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - RequiredConstraintValidationStrategyTest did not make failure",
+				false, data.getStatus());
+	}
+
+	/**
+	 * This should test to make sure that we are catching required Fields
+	 */
+	@Test
+	public void testRequiredWhenNull() {
+		ConstraintValidationContext context = new ConstraintValidationContext();
+		context.setDataValidationStrategy(new RequiredConstraintValidationStrategy());
+
+		FieldConstraint fieldConstraint = MockFieldConstraint.make(
+				FieldConstraint.TYPE_REQUIRED, "true", 2);
+		SchemaField field = MockSchemaField.make("REQUIRED",
+				SchemaField.TYPE_STRING, fieldConstraint);
+		Data data = MockData.make();
+
+		context.validate(field, fieldConstraint, data);
+		Assert.assertEquals(
+				"failure - RequiredConstraintValidationStrategyTest did not catch error",
+				2, data.getMaxErrorLevel());
 		Assert.assertEquals(
 				"failure - RequiredConstraintValidationStrategyTest did not make failure",
 				false, data.getStatus());

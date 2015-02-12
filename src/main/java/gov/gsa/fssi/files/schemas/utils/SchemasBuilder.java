@@ -16,14 +16,30 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SchemasBuilder {
-	private static final Logger logger = LoggerFactory.getLogger(SchemasBuilder.class);
+	private static boolean isDuplicateSchemaName(List<Schema> schemas,
+			Schema newSchema) {
+		for (Schema schema : schemas) {
+			if (schema.getName().equals(newSchema.getName())) {
+				logger.error(
+						"Schema '{}' from file '{}' is a duplicate from file '{}",
+						schema.getName(), newSchema.getFileName(),
+						schema.getFileName());
+				return true;
+			}
+
+		}
+		return false;
+	}
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(SchemasBuilder.class);
 
 	public List<Schema> build(String directory) {
 		logger.debug("Starting initializeSchemas('{}')", directory);
 
 		List<Schema> schemas = new ArrayList<Schema>();
-		List<String> fileNames = FileHelper.getFilesFromDirectory(
-				directory, ".xml");
+		List<String> fileNames = FileHelper.getFilesFromDirectory(directory,
+				".xml");
 		for (String fileName : fileNames) {
 			SchemaBuilder schemaBuilder = new SchemaBuilder();
 			Schema schema = schemaBuilder.build(directory, fileName);
@@ -49,21 +65,6 @@ public class SchemasBuilder {
 
 		}
 		return schemas;
-	}
-
-	private static boolean isDuplicateSchemaName(List<Schema> schemas,
-			Schema newSchema) {
-		for (Schema schema : schemas) {
-			if (schema.getName().equals(newSchema.getName())) {
-				logger.error(
-						"Schema '{}' from file '{}' is a duplicate from file '{}",
-						schema.getName(), newSchema.getFileName(),
-						schema.getFileName());
-				return true;
-			}
-
-		}
-		return false;
 	}
 
 }

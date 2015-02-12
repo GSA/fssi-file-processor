@@ -14,6 +14,13 @@ public class MaxLengthConstraintValidationStrategy
 	private static final Logger logger = LoggerFactory
 			.getLogger(MaxLengthConstraintValidationStrategy.class);
 	@Override
+	public boolean isValid(SchemaField field, FieldConstraint constraint,
+			Data data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public void validate(SchemaField field, FieldConstraint constraint,
 			Data data) {
 		if (data != null) {
@@ -28,13 +35,6 @@ public class MaxLengthConstraintValidationStrategy
 			} else
 				data.addValidationResult(true, 0, constraint.getRuleText());
 		}
-	}
-
-	@Override
-	public boolean isValid(SchemaField field, FieldConstraint constraint,
-			Data data) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

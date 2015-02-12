@@ -22,11 +22,77 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SchemaValidator {
-	private static final Logger logger = LoggerFactory.getLogger(SchemaValidator.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(SchemaValidator.class);
 
-	public void validateAll(List<Schema> schemas) {
+	/**
+	 * @param string
+	 * @return
+	 */
+	public boolean isValidLevel(String string) {
+		// TODO: use java java.lang.reflect.Field to iterate through globals to
+		// generate ArrayList
+		List<String> validList = new ArrayList<String>();
+		validList.add(FieldConstraint.LEVEL_FATAL);
+		validList.add(FieldConstraint.LEVEL_ERROR);
+		validList.add(FieldConstraint.LEVEL_WARNING);
+		validList.add(FieldConstraint.LEVEL_DEBUG);
+
+		for (String type : validList) {
+			if (type.trim().equalsIgnoreCase(string.trim())) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param string
+	 * @return
+	 */
+	public boolean isValidOption(String string) {
+		// TODO: use java java.lang.reflect.Field to iterate through globals to
+		// generate ArrayList
+		List<String> validList = new ArrayList<String>();
+		validList.add(FieldConstraint.OPTION_EFFECTIVEDATE);
+		validList.add(FieldConstraint.OPTION_LEVEL);
+
+		for (String type : validList) {
+			if (type.trim().equalsIgnoreCase(string.trim())) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param string
+	 * @return
+	 */
+	public boolean isValidType(String string) {
+		// TODO: use java java.lang.reflect.Field to iterate through globals to
+		List<String> validTypes = new ArrayList<String>();
+		validTypes.add(FieldConstraint.TYPE_REQUIRED);
+		validTypes.add(FieldConstraint.TYPE_MINLENGTH);
+		validTypes.add(FieldConstraint.TYPE_MAXLENGTH);
+		validTypes.add(FieldConstraint.TYPE_PATTERN);
+		validTypes.add(FieldConstraint.TYPE_MINIMUM);
+		validTypes.add(FieldConstraint.TYPE_MAXIMUM);
+
+		for (String type : validTypes) {
+			if (type.trim().equalsIgnoreCase(string.trim())) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public void printAllSchemas(List<Schema> schemas) {
 		for (Schema schema : schemas) {
-			validate(schema);
+			schema.printAll();
 		}
 	}
 
@@ -56,41 +122,10 @@ public class SchemaValidator {
 		}
 	}
 
-	/**
-	 * This method checks naming for duplicate field naming
-	 * 
-	 * @param schema
-	 */
-	private List<SchemaField> validateFields(Schema schema) {
-		Schema newSchema = new Schema();
-		for (SchemaField field : schema.getFields()) {
-			SchemaField newField = field;
-			if (newField.getName() == null || newField.getName().isEmpty()) {
-				logger.warn("Field has no name, removing");
-			} else if (newSchema.getFieldNames().contains(newField.getName())) {
-				logger.warn("Field '{}' is a duplicate, removing",
-						field.getName());
-			} else {
-				if (field.getAlias() != null && !field.getAlias().isEmpty()) {
-					newField.setAlias(validateFieldAlias(newSchema, newField));
-				}
-				if (newField.getType() == null || newField.getType().isEmpty()) {
-					logger.info("Setting default type 'ANY' for field '{}'",
-							newField.getName());
-					newField.setType(SchemaField.TYPE_ANY);
-				}
-
-				if (newField.getConstraints() != null
-						&& !newField.getConstraints().isEmpty()) {
-					newField.setConstraints(validateFieldConstraints(newField));
-				}
-
-				// TODO: Validate format to make sure it is compatible with type
-				newSchema.addField(newField);
-			}
+	public void validateAll(List<Schema> schemas) {
+		for (Schema schema : schemas) {
+			validate(schema);
 		}
-
-		return newSchema.getFields();
 	}
 
 	/**
@@ -139,8 +174,7 @@ public class SchemaValidator {
 		return newAliasList;
 	}
 
-	private List<FieldConstraint> validateFieldConstraints(
-			SchemaField newField) {
+	private List<FieldConstraint> validateFieldConstraints(SchemaField newField) {
 		List<FieldConstraint> fieldConstraints = new ArrayList<FieldConstraint>();
 		for (FieldConstraint constraint : newField.getConstraints()) {
 			FieldConstraint newConstraint = constraint;
@@ -226,75 +260,41 @@ public class SchemaValidator {
 		return fieldConstraints;
 	}
 
-	public void printAllSchemas(List<Schema> schemas) {
-		for (Schema schema : schemas) {
-			schema.printAll();
-		}
-	}
-
 	/**
-	 * @param string
-	 * @return
+	 * This method checks naming for duplicate field naming
+	 * 
+	 * @param schema
 	 */
-	public boolean isValidType(String string) {
-		// TODO: use java java.lang.reflect.Field to iterate through globals to
-		List<String> validTypes = new ArrayList<String>();
-		validTypes.add(FieldConstraint.TYPE_REQUIRED);
-		validTypes.add(FieldConstraint.TYPE_MINLENGTH);
-		validTypes.add(FieldConstraint.TYPE_MAXLENGTH);
-		validTypes.add(FieldConstraint.TYPE_PATTERN);
-		validTypes.add(FieldConstraint.TYPE_MINIMUM);
-		validTypes.add(FieldConstraint.TYPE_MAXIMUM);
+	private List<SchemaField> validateFields(Schema schema) {
+		Schema newSchema = new Schema();
+		for (SchemaField field : schema.getFields()) {
+			SchemaField newField = field;
+			if (newField.getName() == null || newField.getName().isEmpty()) {
+				logger.warn("Field has no name, removing");
+			} else if (newSchema.getFieldNames().contains(newField.getName())) {
+				logger.warn("Field '{}' is a duplicate, removing",
+						field.getName());
+			} else {
+				if (field.getAlias() != null && !field.getAlias().isEmpty()) {
+					newField.setAlias(validateFieldAlias(newSchema, newField));
+				}
+				if (newField.getType() == null || newField.getType().isEmpty()) {
+					logger.info("Setting default type 'ANY' for field '{}'",
+							newField.getName());
+					newField.setType(SchemaField.TYPE_ANY);
+				}
 
-		for (String type : validTypes) {
-			if (type.trim().equalsIgnoreCase(string.trim())) {
-				return true;
+				if (newField.getConstraints() != null
+						&& !newField.getConstraints().isEmpty()) {
+					newField.setConstraints(validateFieldConstraints(newField));
+				}
+
+				// TODO: Validate format to make sure it is compatible with type
+				newSchema.addField(newField);
 			}
 		}
 
-		return false;
-	}
-
-	/**
-	 * @param string
-	 * @return
-	 */
-	public boolean isValidOption(String string) {
-		// TODO: use java java.lang.reflect.Field to iterate through globals to
-		// generate ArrayList
-		List<String> validList = new ArrayList<String>();
-		validList.add(FieldConstraint.OPTION_EFFECTIVEDATE);
-		validList.add(FieldConstraint.OPTION_LEVEL);
-
-		for (String type : validList) {
-			if (type.trim().equalsIgnoreCase(string.trim())) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param string
-	 * @return
-	 */
-	public boolean isValidLevel(String string) {
-		// TODO: use java java.lang.reflect.Field to iterate through globals to
-		// generate ArrayList
-		List<String> validList = new ArrayList<String>();
-		validList.add(FieldConstraint.LEVEL_FATAL);
-		validList.add(FieldConstraint.LEVEL_ERROR);
-		validList.add(FieldConstraint.LEVEL_WARNING);
-		validList.add(FieldConstraint.LEVEL_DEBUG);
-
-		for (String type : validList) {
-			if (type.trim().equalsIgnoreCase(string.trim())) {
-				return true;
-			}
-		}
-
-		return false;
+		return newSchema.getFields();
 	}
 
 }

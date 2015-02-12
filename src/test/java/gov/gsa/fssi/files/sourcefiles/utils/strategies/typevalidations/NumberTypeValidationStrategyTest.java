@@ -16,13 +16,13 @@ public class NumberTypeValidationStrategyTest {
 	 * 
 	 */
 	@Test
-	public void testNull() {
+	public void test10DigitFloat() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new NumberTypeValidationStrategy());
 
 		SchemaField field = MockSchemaField.make("NUMBER",
 				SchemaField.TYPE_NUMBER);
-		Data data = MockData.make();
+		Data data = MockData.make("1234.541234677");
 
 		context.validate(field, data);
 		Assert.assertEquals(
@@ -58,43 +58,24 @@ public class NumberTypeValidationStrategyTest {
 	 * 
 	 */
 	@Test
-	public void test10DigitFloat() {
+	public void testAlreadyFailed() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new NumberTypeValidationStrategy());
 
 		SchemaField field = MockSchemaField.make("NUMBER",
 				SchemaField.TYPE_NUMBER);
-		Data data = MockData.make("1234.541234677");
-
-		context.validate(field, data);
-		Assert.assertEquals(
-				"failure - NumberTypeValidationStrategy did not catch error",
-				0, data.getMaxErrorLevel());
-		Assert.assertEquals(
-				"failure - NumberTypeValidationStrategy did not make failure",
-				true, data.getStatus());
-	}
-
-	/**
-	 * 
-	 */
-	@Test
-	public void testInteger() {
-		TypeValidationContext context = new TypeValidationContext();
-		context.setTypeValidationStrategy(new NumberTypeValidationStrategy());
-
-		SchemaField field = MockSchemaField.make("NUMBER",
-				SchemaField.TYPE_NUMBER);
-		Data data = MockData.make("123");
+		Data data = MockData.make("12345.345");
+		data.setStatus(2);
+		data.setMaxErrorLevel(2);
 
 		context.validate(field, data);
 
 		Assert.assertEquals(
 				"failure - NumberTypeValidationStrategy did not catch error",
-				0, data.getMaxErrorLevel());
+				2, data.getMaxErrorLevel());
 		Assert.assertEquals(
 				"failure - NumberTypeValidationStrategy did not make failure",
-				true, data.getStatus());
+				false, data.getStatus());
 	}
 
 	/**
@@ -123,24 +104,43 @@ public class NumberTypeValidationStrategyTest {
 	 * 
 	 */
 	@Test
-	public void testAlreadyFailed() {
+	public void testInteger() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new NumberTypeValidationStrategy());
 
 		SchemaField field = MockSchemaField.make("NUMBER",
 				SchemaField.TYPE_NUMBER);
-		Data data = MockData.make("12345.345");
-		data.setStatus(2);
-		data.setMaxErrorLevel(2);
+		Data data = MockData.make("123");
 
 		context.validate(field, data);
 
 		Assert.assertEquals(
 				"failure - NumberTypeValidationStrategy did not catch error",
-				2, data.getMaxErrorLevel());
+				0, data.getMaxErrorLevel());
 		Assert.assertEquals(
 				"failure - NumberTypeValidationStrategy did not make failure",
-				false, data.getStatus());
+				true, data.getStatus());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void testNull() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new NumberTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("NUMBER",
+				SchemaField.TYPE_NUMBER);
+		Data data = MockData.make();
+
+		context.validate(field, data);
+		Assert.assertEquals(
+				"failure - NumberTypeValidationStrategy did not catch error",
+				0, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - NumberTypeValidationStrategy did not make failure",
+				true, data.getStatus());
 	}
 
 }

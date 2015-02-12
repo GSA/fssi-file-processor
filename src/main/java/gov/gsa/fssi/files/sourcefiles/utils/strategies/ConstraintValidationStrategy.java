@@ -9,6 +9,6 @@ import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
  *
  */
 public interface ConstraintValidationStrategy {
-	void validate(SchemaField field, FieldConstraint constraint, Data data);
 	boolean isValid(SchemaField field, FieldConstraint constraint, Data data);
+	void validate(SchemaField field, FieldConstraint constraint, Data data);
 }

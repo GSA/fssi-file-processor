@@ -18,7 +18,8 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ProvidersBuilder {
-	private static final Logger logger = LoggerFactory.getLogger(ProvidersBuilder.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(ProvidersBuilder.class);
 
 	/**
 	 * This is the main method for ProvidersBuilder that reads all files from
@@ -33,8 +34,8 @@ public class ProvidersBuilder {
 		List<Provider> providers = new ArrayList<Provider>();
 
 		// First we load the providers
-		List<String> fileNames = FileHelper.getFilesFromDirectory(
-				directory, ".xlsx, .xls");
+		List<String> fileNames = FileHelper.getFilesFromDirectory(directory,
+				".xlsx, .xls");
 		for (String fileName : fileNames) {
 			logger.info("Loading providers from '{}'", fileName);
 			ProviderLoaderContext context = new ProviderLoaderContext();

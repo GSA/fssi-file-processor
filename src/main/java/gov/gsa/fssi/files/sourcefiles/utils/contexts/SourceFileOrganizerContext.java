@@ -7,12 +7,6 @@ public class SourceFileOrganizerContext {
 	private SourceFileOrganizerStrategy strategy;
 
 	// this can be set at runtime by the application preferences
-	public void setSourceFileOrganizerStrategy(
-			SourceFileOrganizerStrategy strategy) {
-		this.strategy = strategy;
-	}
-
-	// this can be set at runtime by the application preferences
 	public SourceFileOrganizerStrategy getSourceFileOrganizerStrategy() {
 		return this.strategy;
 	}
@@ -25,5 +19,11 @@ public class SourceFileOrganizerContext {
 	 */
 	public void organize(SourceFile sourceFile) {
 		strategy.organize(sourceFile);
+	}
+
+	// this can be set at runtime by the application preferences
+	public void setSourceFileOrganizerStrategy(
+			SourceFileOrganizerStrategy strategy) {
+		this.strategy = strategy;
 	}
 }

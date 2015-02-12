@@ -8,19 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FileHelper {
-	private static final Logger logger = LoggerFactory.getLogger(FileHelper.class);
-	public static final byte SEPARATOR_UNDERSCORE = '_';
-	public static final byte SEPARATOR_DASH = '-';
-	public static final byte SEPARATOR_COMMA = ',';
-	public static final byte SEPARATOR_PIPE = '|';
-	public static final byte SEPARATOR_TILDE = '~';
-	public static final byte SEPARATOR_FORWARDSLASH = '/';
-	public static final byte SEPARATOR_BACKSLASH = '\\';
-
+	public static String buildNewFileName(String oldFileName,
+			String newExtension) {
+		return oldFileName.substring(0, oldFileName.lastIndexOf('.') + 1)
+				+ newExtension.toLowerCase();
+	}
 	public static List<String> getFilesFromDirectory(String directoryName) {
 		return getFilesFromDirectory(directoryName, null);
 	}
-
 	public static List<String> getFilesFromDirectory(String directoryName,
 			String whitelist) {
 		ArrayList<String> fileList = new ArrayList<String>();
@@ -61,15 +56,21 @@ public class FileHelper {
 
 		return fileList;
 	}
-
 	public static String getFullPath(String directory, String fileName) {
 		return directory + fileName;
 	}
+	private static final Logger logger = LoggerFactory
+			.getLogger(FileHelper.class);
+	public static final byte SEPARATOR_UNDERSCORE = '_';
+	public static final byte SEPARATOR_DASH = '-';
+	public static final byte SEPARATOR_COMMA = ',';
 
-	public static String buildNewFileName(String oldFileName,
-			String newExtension) {
-		return oldFileName.substring(0, oldFileName.lastIndexOf('.') + 1)
-				+ newExtension.toLowerCase();
-	}
+	public static final byte SEPARATOR_PIPE = '|';
+
+	public static final byte SEPARATOR_TILDE = '~';
+
+	public static final byte SEPARATOR_FORWARDSLASH = '/';
+
+	public static final byte SEPARATOR_BACKSLASH = '\\';
 
 }

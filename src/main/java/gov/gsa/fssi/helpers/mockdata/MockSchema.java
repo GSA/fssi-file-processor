@@ -18,19 +18,19 @@ public class MockSchema {
 		return schema;
 	}
 
-	public static Schema make(String name, SchemaField schemaField) {
-		Schema schema = new Schema();
-		schema.setName(name);
-		schema.addField(schemaField);
-		return schema;
-	}
-
 	public static Schema make(String name, List<SchemaField> schemaFields) {
 		Schema schema = new Schema();
 		schema.setName(name);
 		for (SchemaField schemaField : schemaFields) {
 			schema.addField(schemaField);
 		}
+		return schema;
+	}
+
+	public static Schema make(String name, SchemaField schemaField) {
+		Schema schema = new Schema();
+		schema.setName(name);
+		schema.addField(schemaField);
 		return schema;
 	}
 }

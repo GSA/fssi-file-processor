@@ -17,6 +17,13 @@ public class MaximumConstraintValidationStrategy
 	static final Logger logger = LoggerFactory
 			.getLogger(MaximumConstraintValidationStrategy.class);
 	@Override
+	public boolean isValid(SchemaField field, FieldConstraint constraint,
+			Data data) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
 	public void validate(SchemaField field, FieldConstraint constraint,
 			Data data) {
 		if (data != null) {
@@ -34,63 +41,6 @@ public class MaximumConstraintValidationStrategy
 				}
 			} else
 				data.addValidationResult(true, 0, constraint.getRuleText());
-		}
-	}
-
-	@Override
-	public boolean isValid(SchemaField field, FieldConstraint constraint,
-			Data data) {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	/**
-	 * Validate String or Any type fields
-	 * 
-	 * @param field
-	 * @param constraint
-	 * @param data
-	 */
-	private void validateString(FieldConstraint constraint, Data data) {
-		if (data.getData().length() > Integer.parseInt(constraint.getValue())) {
-			data.addValidationResult(false, constraint.getLevel(),
-					constraint.getRuleText());
-		} else {
-			data.addValidationResult(true, 0, constraint.getRuleText());
-		}
-	}
-
-	/**
-	 * Validate Integer or Number
-	 * 
-	 * @param field
-	 * @param constraint
-	 * @param data
-	 */
-	private void validateInteger(FieldConstraint constraint, Data data) {
-		if (Integer.parseInt(data.getData()) > Integer.parseInt(constraint
-				.getValue())) {
-			data.addValidationResult(false, constraint.getLevel(),
-					constraint.getRuleText());
-		} else {
-			data.addValidationResult(true, 0, constraint.getRuleText());
-		}
-	}
-
-	/**
-	 * Validate Integer or Number
-	 * 
-	 * @param field
-	 * @param constraint
-	 * @param data
-	 */
-	private void validateNumber(FieldConstraint constraint, Data data) {
-		if (Float.valueOf(data.getData()) > Float
-				.valueOf(constraint.getValue())) {
-			data.addValidationResult(false, constraint.getLevel(),
-					constraint.getRuleText());
-		} else {
-			data.addValidationResult(true, 0, constraint.getRuleText());
 		}
 	}
 
@@ -128,5 +78,55 @@ public class MaximumConstraintValidationStrategy
 
 		// Everything else is either Any, String, or unknown....we use a simple
 		// length comparison
+	}
+
+	/**
+	 * Validate Integer or Number
+	 * 
+	 * @param field
+	 * @param constraint
+	 * @param data
+	 */
+	private void validateInteger(FieldConstraint constraint, Data data) {
+		if (Integer.parseInt(data.getData()) > Integer.parseInt(constraint
+				.getValue())) {
+			data.addValidationResult(false, constraint.getLevel(),
+					constraint.getRuleText());
+		} else {
+			data.addValidationResult(true, 0, constraint.getRuleText());
+		}
+	}
+
+	/**
+	 * Validate Integer or Number
+	 * 
+	 * @param field
+	 * @param constraint
+	 * @param data
+	 */
+	private void validateNumber(FieldConstraint constraint, Data data) {
+		if (Float.valueOf(data.getData()) > Float
+				.valueOf(constraint.getValue())) {
+			data.addValidationResult(false, constraint.getLevel(),
+					constraint.getRuleText());
+		} else {
+			data.addValidationResult(true, 0, constraint.getRuleText());
+		}
+	}
+
+	/**
+	 * Validate String or Any type fields
+	 * 
+	 * @param field
+	 * @param constraint
+	 * @param data
+	 */
+	private void validateString(FieldConstraint constraint, Data data) {
+		if (data.getData().length() > Integer.parseInt(constraint.getValue())) {
+			data.addValidationResult(false, constraint.getLevel(),
+					constraint.getRuleText());
+		} else {
+			data.addValidationResult(true, 0, constraint.getRuleText());
+		}
 	}
 }

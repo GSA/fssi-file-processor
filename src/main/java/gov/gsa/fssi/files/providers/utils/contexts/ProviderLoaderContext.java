@@ -15,14 +15,6 @@ public class ProviderLoaderContext {
 	private ProviderLoaderStrategy strategy;
 
 	/**
-	 * @param strategy
-	 *            String strategy to set
-	 */
-	public void setProviderLoaderStrategy(ProviderLoaderStrategy strategy) {
-		this.strategy = strategy;
-	}
-
-	/**
 	 * @return current strategy
 	 */
 	public ProviderLoaderStrategy getProviderLoaderStrategy() {
@@ -37,8 +29,15 @@ public class ProviderLoaderContext {
 	 * @param providers
 	 *            ArrayList<Provider> of Provider
 	 */
-	public void load(String directory, String fileName,
-			List<Provider> providers) {
+	public void load(String directory, String fileName, List<Provider> providers) {
 		strategy.load(directory, fileName, providers); // Validate Constraint
+	}
+
+	/**
+	 * @param strategy
+	 *            String strategy to set
+	 */
+	public void setProviderLoaderStrategy(ProviderLoaderStrategy strategy) {
+		this.strategy = strategy;
 	}
 }

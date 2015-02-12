@@ -19,22 +19,6 @@ public class MockSourceFile {
 	}
 
 	public static SourceFile make(String fileName,
-			SourceFileRecord sourceFileRecord) {
-		SourceFile sourceFile = new SourceFile(fileName);
-		sourceFile.addRecord(sourceFileRecord);
-		return sourceFile;
-	}
-
-	public static SourceFile make(String fileName,
-			List<SourceFileRecord> sourceFileRecords) {
-		SourceFile sourceFile = new SourceFile(fileName);
-		for (SourceFileRecord sourceFileRecord : sourceFileRecords) {
-			sourceFile.addRecord(sourceFileRecord);
-		}
-		return sourceFile;
-	}
-
-	public static SourceFile make(String fileName,
 			HashMap<Integer, String> sourceHeaders) {
 		SourceFile sourceFile = new SourceFile(fileName);
 		sourceFile.setSourceHeaders(sourceHeaders);
@@ -49,6 +33,22 @@ public class MockSourceFile {
 		for (SourceFileRecord sourceFileRecord : sourceFileRecords) {
 			sourceFile.addRecord(sourceFileRecord);
 		}
+		return sourceFile;
+	}
+
+	public static SourceFile make(String fileName,
+			List<SourceFileRecord> sourceFileRecords) {
+		SourceFile sourceFile = new SourceFile(fileName);
+		for (SourceFileRecord sourceFileRecord : sourceFileRecords) {
+			sourceFile.addRecord(sourceFileRecord);
+		}
+		return sourceFile;
+	}
+
+	public static SourceFile make(String fileName,
+			SourceFileRecord sourceFileRecord) {
+		SourceFile sourceFile = new SourceFile(fileName);
+		sourceFile.addRecord(sourceFileRecord);
 		return sourceFile;
 	}
 

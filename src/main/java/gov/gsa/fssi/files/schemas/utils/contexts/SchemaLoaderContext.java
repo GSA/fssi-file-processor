@@ -7,11 +7,6 @@ public class SchemaLoaderContext {
 	private SchemaLoaderStrategy strategy;
 
 	// this can be set at runtime by the application preferences
-	public void setSchemaLoaderStrategy(SchemaLoaderStrategy strategy) {
-		this.strategy = strategy;
-	}
-
-	// this can be set at runtime by the application preferences
 	public SchemaLoaderStrategy getSchemaLoaderStrategy() {
 		return this.strategy;
 	}
@@ -24,5 +19,10 @@ public class SchemaLoaderContext {
 	 */
 	public void load(String directory, Schema schema) {
 		strategy.load(directory, schema); // Validate Constraint
+	}
+
+	// this can be set at runtime by the application preferences
+	public void setSchemaLoaderStrategy(SchemaLoaderStrategy strategy) {
+		this.strategy = strategy;
 	}
 }

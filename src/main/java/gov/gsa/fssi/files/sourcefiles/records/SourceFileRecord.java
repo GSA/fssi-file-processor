@@ -20,37 +20,16 @@ public class SourceFileRecord {
 	private boolean status = true;
 	private int maxErrorLevel = 0;
 
-	public List<Data> getDatas() {
-		return datas;
-	}
-
-	public Data getData(int index) {
-		return datas.get(index);
-	}
-
-	public Data getDataByHeaderIndex(int headerIndex) {
-		for (Data data : this.datas) {
-			if (data.getHeaderIndex() == headerIndex) {
-				return data;
-			}
-		}
-		return null;
-	}
-
-	public void setDatas(ArrayList<Data> datas) {
-		this.datas = datas;
-	}
-
 	public void addData(Data data) {
 		this.datas.add(data);
 	}
 
-	public void deleteData(Data data) {
-		this.datas.remove(this.datas.indexOf(data));
-	}
-
 	public void deletDataByIndex(int dataIndex) {
 		this.datas.remove(dataIndex);
+	}
+
+	public void deleteData(Data data) {
+		this.datas.remove(this.datas.indexOf(data));
 	}
 
 	/**
@@ -71,25 +50,28 @@ public class SourceFileRecord {
 		}
 	}
 
-	public boolean getStatus() {
-		return status;
+	public Data getData(int index) {
+		return datas.get(index);
+	}
+
+	public Data getDataByHeaderIndex(int headerIndex) {
+		for (Data data : this.datas) {
+			if (data.getHeaderIndex() == headerIndex) {
+				return data;
+			}
+		}
+		return null;
+	}
+
+	public List<Data> getDatas() {
+		return datas;
 	}
 
 	/**
-	 * This sets the overall Pass/Fail status of the Data object. Once it is
-	 * fail (false), it cannot change back
-	 * 
-	 * @param validatorStatus
-	 *            the validatorStatus to set
+	 * @return
 	 */
-	public void setStatus(int errorLevel) {
-		if (this.getStatus() == true && errorLevel > 1)
-			this.status = false;
-	}
-
-	public void setStatus(boolean status) {
-		if (this.getStatus())
-			this.status = status;
+	public int getMaxErrorLevel() {
+		return maxErrorLevel;
 	}
 
 	/**
@@ -99,12 +81,8 @@ public class SourceFileRecord {
 		return rowIndex;
 	}
 
-	/**
-	 * @param row
-	 *            the row to set
-	 */
-	public void setRowIndex(Integer row) {
-		this.rowIndex = row;
+	public boolean getStatus() {
+		return status;
 	}
 
 	public void print() {
@@ -126,11 +104,8 @@ public class SourceFileRecord {
 		return row;
 	}
 
-	/**
-	 * @return
-	 */
-	public int getMaxErrorLevel() {
-		return maxErrorLevel;
+	public void setDatas(ArrayList<Data> datas) {
+		this.datas = datas;
 	}
 
 	/**
@@ -140,6 +115,31 @@ public class SourceFileRecord {
 		if (errorLevel > this.maxErrorLevel)
 			this.maxErrorLevel = errorLevel;
 		this.setStatus(errorLevel);
+	}
+
+	/**
+	 * @param row
+	 *            the row to set
+	 */
+	public void setRowIndex(Integer row) {
+		this.rowIndex = row;
+	}
+
+	public void setStatus(boolean status) {
+		if (this.getStatus())
+			this.status = status;
+	}
+
+	/**
+	 * This sets the overall Pass/Fail status of the Data object. Once it is
+	 * fail (false), it cannot change back
+	 * 
+	 * @param validatorStatus
+	 *            the validatorStatus to set
+	 */
+	public void setStatus(int errorLevel) {
+		if (this.getStatus() == true && errorLevel > 1)
+			this.status = false;
 	}
 
 }

@@ -9,7 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SchemaField {
-	private static final Logger logger = LoggerFactory.getLogger(SchemaField.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(SchemaField.class);
 
 	private int headerIndex = -1;
 	private String name = null;
@@ -24,74 +25,43 @@ public class SchemaField {
 	private String validatorStatusMessage = null;
 	private String validatorStatusLevel = null;
 
-	public String getValidatorStatusMessage() {
-		return validatorStatusMessage;
-	}
-
-	public void setValidatorStatusMessage(String validatorStatusMessage) {
-		this.validatorStatusMessage = validatorStatusMessage;
-	}
-
-	public String getValidatorStatusLevel() {
-		return validatorStatusLevel;
-	}
-
-	public void setValidatorStatusLevel(String validatorStatusLevel) {
-		this.validatorStatusLevel = validatorStatusLevel;
-	}
-
-	public String getLoadStatusLevel() {
-		return loadStatusLevel;
-	}
-
-	public void setLoadStatusLevel(String loadStatusLevel) {
-		this.loadStatusLevel = loadStatusLevel;
-	}
-
-	public String getLoadStatusMessage() {
-		return loadStatusMessage;
-	}
-
-	public void setLoadStatusMessage(String loadStatusMessage) {
-		this.loadStatusMessage = loadStatusMessage;
-	}
-
 	/**
 	 * a string (of arbitrary length)
 	 */
 	public static final String TYPE_STRING = "string";
+
 	/**
 	 * a number including floating point numbers.
 	 */
 	public static final String TYPE_NUMBER = "number";
+
 	/**
 	 * an integer.
 	 */
 	public static final String TYPE_INTEGER = "integer";
+
 	/**
 	 * a date. This MUST be in ISO6801 format YYYY-MM-DD or, if not, a format
 	 * field must be provided describing the structure.
 	 */
 	public static final String TYPE_DATE = "date";
+
 	/**
 	 * a time without a date
 	 */
 	public static final String TYPE_TIME = "time";
+
 	/**
 	 * a date-time. This MUST be in ISO 8601 format of YYYY-MM-DDThh:mm:ssZ in
 	 * UTC time or, if not, a format field must be provided.
 	 */
 	public static final String TYPE_DATETIME = "datetime";// a time without a
-															// date
+
+	// date
 	/**
 	 * a boolean value (1/0, true/false).
 	 */
 	public static final String TYPE_BOOLEAN = "boolean";
-
-	// public static String TYPE_BINARY = "binary"; //a boolean value (1/0,
-	// true/false).
-	// public static String TYPE_OBJECT = "object"; //(alias xml) an XML-encoded
-	// object
 
 	/**
 	 * has one of the following structures: "longitude, latitude
@@ -106,6 +76,84 @@ public class SchemaField {
 	 * value of field may be any type
 	 */
 	public static final String TYPE_ANY = "any";
+	/**
+	 * @param alias
+	 */
+	public void addAlias(String alias) {
+		this.alias.add(alias);
+	}
+	/**
+	 * @param constraint
+	 */
+	public void addConstraint(FieldConstraint constraint) {
+		this.constraints.add(constraint);
+	}
+	/**
+	 * @return
+	 */
+	private List<String> buildTypeArray() {
+		List<String> arrayList = new ArrayList<String>();
+		arrayList.add(TYPE_STRING);
+		arrayList.add(TYPE_NUMBER);
+		arrayList.add(TYPE_INTEGER);
+		arrayList.add(TYPE_DATE);
+		arrayList.add(TYPE_TIME);
+		arrayList.add(TYPE_DATETIME);
+		arrayList.add(TYPE_BOOLEAN);
+		arrayList.add(TYPE_GEOPOINT);
+		arrayList.add(TYPE_ARRAY);
+		arrayList.add(TYPE_ANY);
+		return arrayList;
+	}
+	/**
+	 * @return the alias
+	 */
+	public List<String> getAlias() {
+		return alias;
+	}
+															/**
+	 * @return the constraints
+	 */
+	public List<FieldConstraint> getConstraints() {
+		return constraints;
+	}
+
+	// public static String TYPE_BINARY = "binary"; //a boolean value (1/0,
+	// true/false).
+	// public static String TYPE_OBJECT = "object"; //(alias xml) an XML-encoded
+	// object
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getFormat() {
+		return format;
+	}
+	/**
+	 * This constructor class takes a file name and uses it to initialize the
+	 * basic elements of a SourceFile
+	 * 
+	 * @param fileName
+	 *            - This should be in name.ext format.
+	 */
+	public int getHeaderIndex() {
+		return headerIndex;
+	}
+
+	public String getLoadStatusLevel() {
+		return loadStatusLevel;
+	}
+
+	public String getLoadStatusMessage() {
+		return loadStatusMessage;
+	}
 
 	/**
 	 * @return the name
@@ -135,29 +183,10 @@ public class SchemaField {
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
 	 * @return the title
 	 */
 	public String getTitle() {
 		return title;
-	}
-
-	/**
-	 * @param title
-	 *            the title to set
-	 */
-	/**
-	 * @param title
-	 */
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	/**
@@ -167,89 +196,24 @@ public class SchemaField {
 		return type;
 	}
 
-	/**
-	 * @param type
-	 */
-	public void setType(String type) {
-		this.type = type;
+	public String getValidatorStatusLevel() {
+		return validatorStatusLevel;
+	}
+
+	public String getValidatorStatusMessage() {
+		return validatorStatusMessage;
 	}
 
 	/**
-	 * @return
+	 * Validates that a string is a valid SchemaFieldType
+	 * 
+	 * @param string
+	 *            to compare
+	 * @return true or false
 	 */
-	public String getFormat() {
-		return format;
-	}
-
-	/**
-	 * @param format
-	 */
-	public void setFormat(String format) {
-		this.format = format;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
-	 * @return the constraints
-	 */
-	public List<FieldConstraint> getConstraints() {
-		return constraints;
-	}
-
-	/**
-	 * @param constraintMap
-	 *            the constraints to set
-	 */
-	public void setConstraints(List<FieldConstraint> constraintMap) {
-		this.constraints = constraintMap;
-	}
-
-	/**
-	 * @param constraint
-	 */
-	public void addConstraint(FieldConstraint constraint) {
-		this.constraints.add(constraint);
-	}
-
-	/**
-	 * @return the alias
-	 */
-	public List<String> getAlias() {
-		return alias;
-	}
-
-	/**
-	 * @param list
-	 *            the alias to set
-	 */
-	public void setAlias(List<String> list) {
-		this.alias = list;
-	}
-
-	/**
-	 * @param alias
-	 */
-	public void addAlias(String alias) {
-		this.alias.add(alias);
-	}
-
-	public void removeAlias(String alias) {
-		int index = this.alias.indexOf(alias);
-		this.alias.remove(index);
+	public boolean isValidType(String e) {
+		List<String> arrayList = buildTypeArray();
+		return (arrayList.contains(e) ? true : false);
 	}
 
 	/**
@@ -270,49 +234,86 @@ public class SchemaField {
 		}
 	}
 
-	/**
-	 * Validates that a string is a valid SchemaFieldType
-	 * 
-	 * @param string
-	 *            to compare
-	 * @return true or false
-	 */
-	public boolean isValidType(String e) {
-		List<String> arrayList = buildTypeArray();
-		return (arrayList.contains(e) ? true : false);
+	public void removeAlias(String alias) {
+		int index = this.alias.indexOf(alias);
+		this.alias.remove(index);
 	}
 
 	/**
-	 * @return
+	 * @param list
+	 *            the alias to set
 	 */
-	private List<String> buildTypeArray() {
-		List<String> arrayList = new ArrayList<String>();
-		arrayList.add(TYPE_STRING);
-		arrayList.add(TYPE_NUMBER);
-		arrayList.add(TYPE_INTEGER);
-		arrayList.add(TYPE_DATE);
-		arrayList.add(TYPE_TIME);
-		arrayList.add(TYPE_DATETIME);
-		arrayList.add(TYPE_BOOLEAN);
-		arrayList.add(TYPE_GEOPOINT);
-		arrayList.add(TYPE_ARRAY);
-		arrayList.add(TYPE_ANY);
-		return arrayList;
+	public void setAlias(List<String> list) {
+		this.alias = list;
 	}
 
 	/**
-	 * This constructor class takes a file name and uses it to initialize the
-	 * basic elements of a SourceFile
-	 * 
-	 * @param fileName
-	 *            - This should be in name.ext format.
+	 * @param constraintMap
+	 *            the constraints to set
 	 */
-	public int getHeaderIndex() {
-		return headerIndex;
+	public void setConstraints(List<FieldConstraint> constraintMap) {
+		this.constraints = constraintMap;
+	}
+
+	/**
+	 * @param description
+	 *            the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @param format
+	 */
+	public void setFormat(String format) {
+		this.format = format;
 	}
 
 	public void setHeaderIndex(int headerIndex) {
 		this.headerIndex = headerIndex;
+	}
+
+	public void setLoadStatusLevel(String loadStatusLevel) {
+		this.loadStatusLevel = loadStatusLevel;
+	}
+
+	public void setLoadStatusMessage(String loadStatusMessage) {
+		this.loadStatusMessage = loadStatusMessage;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @param title
+	 *            the title to set
+	 */
+	/**
+	 * @param title
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	/**
+	 * @param type
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setValidatorStatusLevel(String validatorStatusLevel) {
+		this.validatorStatusLevel = validatorStatusLevel;
+	}
+
+	public void setValidatorStatusMessage(String validatorStatusMessage) {
+		this.validatorStatusMessage = validatorStatusMessage;
 	}
 
 }

@@ -183,6 +183,62 @@ public class SourceFileBuilder {
 	}
 
 	/**
+	 * This method takes a populated sourcefile and maps the fields to the
+	 * schema header indexes This allows us to easily organize and validate.
+	 * 
+	 * This method should only be called if the sourceFile has been loaded or at
+	 * least has headers
+	 * 
+	 * @param sourceFile
+	 */
+	public void mapSourceFileFieldsToSchema(SourceFile sourceFile) {
+		if (sourceFile.getSourceHeaders() != null
+				|| sourceFile.getSchema() != null) {
+			logger.info(
+					"Atempting to map field names from File '{}' to Schema '{}'",
+					sourceFile.getFileName(), sourceFile.getSchema().getName());
+			for (SchemaField field : sourceFile.getSchema().getFields()) {
+				ArrayList<String> aliasNames = new ArrayList<String>();// getting
+																		// array
+																		// list
+																		// of
+																		// field
+																		// name
+																		// and
+																		// alias
+				aliasNames.add(field.getName()); // Adding Field Name
+				aliasNames.addAll(field.getAlias()); // Adding all of its
+														// aliases
+				Iterator<?> thisHeaderIterator = sourceFile.getSourceHeaders()
+						.entrySet().iterator();
+				while (thisHeaderIterator.hasNext()) {
+					Map.Entry<Integer, String> thisHeaderPairs = (Map.Entry<Integer, String>) thisHeaderIterator
+							.next();
+					if (aliasNames.contains(thisHeaderPairs.getValue()
+							.toUpperCase())) {
+						logger.info(
+								"Matched sourcFile field '{} - {}' with Schema field '{}'",
+								thisHeaderPairs.getKey(),
+								thisHeaderPairs.getValue(), field.getName());
+						field.setHeaderIndex(thisHeaderPairs.getKey());
+					}
+				}
+			}
+			if (logger.isDebugEnabled()) {
+				logger.debug("Printing Fields:");
+				for (SchemaField field : sourceFile.getSchema().getFields()) {
+					logger.debug("FieldName: '{}' headerIndex: '{}'",
+							field.getName(), field.getHeaderIndex());
+				}
+			}
+		} else {
+			logger.info(
+					"No schema or header found was found for file {}. Will not Map header indexes to schema fields",
+					sourceFile.getFileName());
+		}
+	}
+
+	/**
 	 * This method is important to trim the fat from Schemas and personalize it
 	 * for each file based upon its effective date. It compares the effective
 	 * dates and only
@@ -292,62 +348,6 @@ public class SourceFileBuilder {
 			}
 			newSchema.setFields(newFields);
 			sourceFile.setSchema(newSchema);
-		}
-	}
-
-	/**
-	 * This method takes a populated sourcefile and maps the fields to the
-	 * schema header indexes This allows us to easily organize and validate.
-	 * 
-	 * This method should only be called if the sourceFile has been loaded or at
-	 * least has headers
-	 * 
-	 * @param sourceFile
-	 */
-	public void mapSourceFileFieldsToSchema(SourceFile sourceFile) {
-		if (sourceFile.getSourceHeaders() != null
-				|| sourceFile.getSchema() != null) {
-			logger.info(
-					"Atempting to map field names from File '{}' to Schema '{}'",
-					sourceFile.getFileName(), sourceFile.getSchema().getName());
-			for (SchemaField field : sourceFile.getSchema().getFields()) {
-				ArrayList<String> aliasNames = new ArrayList<String>();// getting
-																		// array
-																		// list
-																		// of
-																		// field
-																		// name
-																		// and
-																		// alias
-				aliasNames.add(field.getName()); // Adding Field Name
-				aliasNames.addAll(field.getAlias()); // Adding all of its
-														// aliases
-				Iterator<?> thisHeaderIterator = sourceFile.getSourceHeaders()
-						.entrySet().iterator();
-				while (thisHeaderIterator.hasNext()) {
-					Map.Entry<Integer, String> thisHeaderPairs = (Map.Entry<Integer, String>) thisHeaderIterator
-							.next();
-					if (aliasNames.contains(thisHeaderPairs.getValue()
-							.toUpperCase())) {
-						logger.info(
-								"Matched sourcFile field '{} - {}' with Schema field '{}'",
-								thisHeaderPairs.getKey(),
-								thisHeaderPairs.getValue(), field.getName());
-						field.setHeaderIndex(thisHeaderPairs.getKey());
-					}
-				}
-			}
-			if (logger.isDebugEnabled()) {
-				logger.debug("Printing Fields:");
-				for (SchemaField field : sourceFile.getSchema().getFields()) {
-					logger.debug("FieldName: '{}' headerIndex: '{}'",
-							field.getName(), field.getHeaderIndex());
-				}
-			}
-		} else {
-			logger.info(
-					"No schema or header found was found for file {}. Will not Map header indexes to schema fields",
-					sourceFile.getFileName());
 		}
 	}
 

@@ -15,7 +15,24 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ProviderValidator {
-	private static final Logger logger = LoggerFactory.getLogger(ProviderValidator.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(ProviderValidator.class);
+
+	/**
+	 * This accepts a provider and validates it.
+	 * 
+	 * @param provider
+	 *            of Provider class
+	 */
+	public void validate(Provider provider) {
+		// Certain fields are required.
+		if (provider.getProviderId() == null
+				|| provider.getProviderName() == null
+				|| provider.getProviderIdentifier() == null) {
+			logger.error("Provider found Without all of the required fields (ID, Name, Identifier)...ignoring");
+			provider.setValidatorStatus(false);
+		}
+	}
 
 	/**
 	 * This accepts an arraylist of providers and validates them. Note: It has a
@@ -51,22 +68,6 @@ public class ProviderValidator {
 		// Deleting providers
 		for (Provider provider : deleteProvidersList) {
 			providers.remove(provider);
-		}
-	}
-
-	/**
-	 * This accepts a provider and validates it.
-	 * 
-	 * @param provider
-	 *            of Provider class
-	 */
-	public void validate(Provider provider) {
-		// Certain fields are required.
-		if (provider.getProviderId() == null
-				|| provider.getProviderName() == null
-				|| provider.getProviderIdentifier() == null) {
-			logger.error("Provider found Without all of the required fields (ID, Name, Identifier)...ignoring");
-			provider.setValidatorStatus(false);
 		}
 	}
 }

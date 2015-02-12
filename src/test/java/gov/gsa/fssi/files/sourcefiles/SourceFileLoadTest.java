@@ -18,10 +18,11 @@ import org.junit.Test;
 
 public class SourceFileLoadTest {
 	Config config = new Config("./testfiles/", "config.properties");
-
+	private static final String SOURCEFILENAME = "goodfileschematest_012015.csv";
 	@Test
 	public void loadSourceFile() {
-		SourceFile sourceFile = new SourceFile("goodfileschematest_012015.csv");
+		
+		SourceFile sourceFile = new SourceFile(SOURCEFILENAME);
 		sourceFile.load(config.getProperty(Config.SOURCEFILES_DIRECTORY));
 
 		Assert.assertEquals("failure - loadSourceFile recordCount", 6,
@@ -40,13 +41,50 @@ public class SourceFileLoadTest {
 				totalDataCount);
 	}
 
+	/**
+	 * This should test to make sure that we are catching required Fields
+	 */
+	@Test
+	public void loadSourceFileUsingBuilder() {
+		ProvidersBuilder providersBuilder = new ProvidersBuilder();
+		List<Provider> providers = providersBuilder.build(config
+				.getProperty(Config.PROVIDERS_DIRECTORY));
+
+		SchemasBuilder schemasBuilder = new SchemasBuilder();
+		List<Schema> schemas = schemasBuilder.build(config
+				.getProperty(Config.SCHEMAS_DIRECTORY));
+
+		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
+		SourceFile sourceFile = sourceFileBuilder.build(
+				config.getProperty(Config.SOURCEFILES_DIRECTORY),
+				SOURCEFILENAME, Config.EXPORT_MODE_IMPLODE,
+				schemas, providers);
+
+		Assert.assertEquals("failure - loadSourceFile recordCount", 6,
+				sourceFile.recordCount());
+		Assert.assertEquals("failure - loadSourceFile getSourceHeaders", 50,
+				sourceFile.getSourceHeaders().size());
+
+		int totalDataCount = 0;
+		for (SourceFileRecord record : sourceFile.getRecords()) {
+			for (Data data : record.getDatas()) {
+				if (!data.getData().isEmpty())
+					totalDataCount++;
+			}
+		}
+
+		Assert.assertEquals("failure - loadSourceFile totalDataCount", 204,
+				totalDataCount);
+
+	}
+
 	@Test
 	public void mapProviderToSourceFile() {
 		ProvidersBuilder providersBuilder = new ProvidersBuilder();
 		List<Provider> providers = providersBuilder.build(config
 				.getProperty(Config.PROVIDERS_DIRECTORY));
 
-		SourceFile sourceFile = new SourceFile("goodfileschematest_012015.csv");
+		SourceFile sourceFile = new SourceFile(SOURCEFILENAME);
 
 		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
 		sourceFileBuilder.mapProviderToSourceFile(providers, sourceFile);
@@ -63,7 +101,7 @@ public class SourceFileLoadTest {
 		List<Schema> schemas = schemasBuilder.build(config
 				.getProperty(Config.SCHEMAS_DIRECTORY));
 
-		SourceFile sourceFile = new SourceFile("goodfileschematest_012015.csv");
+		SourceFile sourceFile = new SourceFile(SOURCEFILENAME);
 
 		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
 		sourceFileBuilder.mapProviderToSourceFile(providers, sourceFile);
@@ -79,7 +117,7 @@ public class SourceFileLoadTest {
 		SchemasBuilder schemasBuilder = new SchemasBuilder();
 		List<Schema> schemas = schemasBuilder.build(config
 				.getProperty(Config.SCHEMAS_DIRECTORY));
-		SourceFile sourceFile = new SourceFile("goodfileschematest_012015.csv");
+		SourceFile sourceFile = new SourceFile(SOURCEFILENAME);
 		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
 		sourceFileBuilder.mapProviderToSourceFile(providers, sourceFile);
 		sourceFile.load(config.getProperty(Config.SOURCEFILES_DIRECTORY));
@@ -112,43 +150,6 @@ public class SourceFileLoadTest {
 		Assert.assertEquals(
 				"failure - mapSourceFileFieldsToSchemaTest totalDataCount",
 				204, totalDataCount);
-	}
-
-	/**
-	 * This should test to make sure that we are catching required Fields
-	 */
-	@Test
-	public void loadSourceFileUsingBuilder() {
-		ProvidersBuilder providersBuilder = new ProvidersBuilder();
-		List<Provider> providers = providersBuilder.build(config
-				.getProperty(Config.PROVIDERS_DIRECTORY));
-
-		SchemasBuilder schemasBuilder = new SchemasBuilder();
-		List<Schema> schemas = schemasBuilder.build(config
-				.getProperty(Config.SCHEMAS_DIRECTORY));
-
-		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
-		SourceFile sourceFile = sourceFileBuilder.build(
-				config.getProperty(Config.SOURCEFILES_DIRECTORY),
-				"goodfileschematest_012015.csv", Config.EXPORT_MODE_IMPLODE,
-				schemas, providers);
-
-		Assert.assertEquals("failure - loadSourceFile recordCount", 6,
-				sourceFile.recordCount());
-		Assert.assertEquals("failure - loadSourceFile getSourceHeaders", 50,
-				sourceFile.getSourceHeaders().size());
-
-		int totalDataCount = 0;
-		for (SourceFileRecord record : sourceFile.getRecords()) {
-			for (Data data : record.getDatas()) {
-				if (!data.getData().isEmpty())
-					totalDataCount++;
-			}
-		}
-
-		Assert.assertEquals("failure - loadSourceFile totalDataCount", 204,
-				totalDataCount);
-
 	}
 
 }

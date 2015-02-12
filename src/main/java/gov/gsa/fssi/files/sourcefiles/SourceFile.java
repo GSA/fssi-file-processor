@@ -33,7 +33,8 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class SourceFile extends File {
-	private static final Logger logger = LoggerFactory.getLogger(SourceFile.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(SourceFile.class);
 	private Schema schema = null;
 	private Provider provider = null;
 	private Date reportingPeriod = null;
@@ -52,6 +53,9 @@ public class SourceFile extends File {
 	private Map<Integer, String> sourceHeaders = new HashMap<Integer, String>();
 	private List<SourceFileRecord> records = new ArrayList<SourceFileRecord>();
 
+	public SourceFile() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public SourceFile(String fileName) {
 		super(fileName);
@@ -63,71 +67,89 @@ public class SourceFile extends File {
 		}
 	}
 
-	public SourceFile() {
-		// TODO Auto-generated constructor stub
-	}
-	
 	/**
-	 * @return
+	 * @param record
 	 */
-	public Integer getTotalRecords() {
-		return totalRecords;
+	public void addRecord(SourceFileRecord record) {
+		this.records.add(record);
 	}
 
 	/**
-	 * @param totalRecords
+	 * @param map
+	 *            the headers to set
 	 */
-	public void setTotalRecords(Integer totalRecords) {
-		this.totalRecords = totalRecords;
+	public void addSourceHeader(Integer key, String value) {
+		this.sourceHeaders.put(key, value);
+	}
+
+	public void export(String directory) {
+		SourceFileExporterContext context = new SourceFileExporterContext();
+		if (this.getRecords() != null) {
+			if (this.getProvider().getFileOutputType()
+					.equalsIgnoreCase(File.FILETYPE_CSV)) {
+				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
+			} else if (this.getProvider().getFileOutputType()
+					.equalsIgnoreCase(File.FILETYPE_XLS)) {
+				context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
+			} else if (this.getProvider().getFileOutputType()
+					.equalsIgnoreCase(File.FILETYPE_XLSX)) {
+				context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
+			} else {
+				logger.warn(
+						"We cannot currently export to a '{}'. defaulting to '{}'",
+						this.getProvider().getFileOutputType(),
+						File.FILETYPE_CSV);
+				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
+			}
+
+			context.export(directory, this);
+		} else {
+			logger.error("Cannot export sourceFile '{}'. No data found",
+					this.getFileName());
+		}
 	}
 
 	/**
-	 * @param totalRecords
+	 * @return the provider
 	 */
-	public void incrementTotalRecords() {
-		this.totalRecords++;
+	public Provider getProvider() {
+		return provider;
 	}
 
 	/**
-	 * @return
+	 * @return the records
 	 */
-	public Integer getTotalProcessedRecords() {
-		return totalProcessedRecords;
+	public List<SourceFileRecord> getRecords() {
+		return records;
 	}
 
 	/**
-	 * @param totalProcessedRecords
+	 * @return the reportingPeriod
 	 */
-	public void setTotalProcessedRecords(Integer totalProcessedRecords) {
-		this.totalProcessedRecords = totalProcessedRecords;
+	public Date getReportingPeriod() {
+		return reportingPeriod == null ? null : new Date(
+				reportingPeriod.getTime());
 	}
 
 	/**
-	 * @param totalProcessedRecords
+	 * @return the schema
 	 */
-	public void incrementTotalProcessedRecords() {
-		this.totalProcessedRecords++;
+	public Schema getSchema() {
+		return schema;
 	}
 
 	/**
-	 * @return
+	 * @return the headers
 	 */
-	public Integer getTotalNullRecords() {
-		return totalNullRecords;
+	public String getSourceHeaderName(int key) {
+		return sourceHeaders.get(key);
 	}
 
 	/**
-	 * @param totalNullRecords
+	 * @return the headers
 	 */
-	public void setTotalNullRecords(Integer totalNullRecords) {
-		this.totalNullRecords = totalNullRecords;
-	}
-
-	/**
-	 * @param totalNullRecords
-	 */
-	public void incrementTotalNullRecords() {
-		this.totalNullRecords++;
+	public Map<Integer, String> getSourceHeaders() {
+		return sourceHeaders;
 	}
 
 	/**
@@ -138,17 +160,10 @@ public class SourceFile extends File {
 	}
 
 	/**
-	 * @param totalEmptyRecords
+	 * @return
 	 */
-	public void setTotalEmptyRecords(Integer totalEmptyRecords) {
-		this.totalEmptyRecords = totalEmptyRecords;
-	}
-
-	/**
-	 * 
-	 */
-	public void incrementTotalEmptyRecords() {
-		this.totalEmptyRecords++;
+	public Integer getTotalErrorRecords() {
+		return totalErrorRecords;
 	}
 
 	/**
@@ -159,38 +174,24 @@ public class SourceFile extends File {
 	}
 
 	/**
-	 * @param totalFatalRecords
+	 * @return
 	 */
-	public void setTotalFatalRecords(Integer totalFatalRecords) {
-		this.totalFatalRecords = totalFatalRecords;
-	}
-
-	/**
-	 * 
-	 */
-	public void incrementTotalFatalRecords() {
-		this.totalFatalRecords++;
+	public Integer getTotalNullRecords() {
+		return totalNullRecords;
 	}
 
 	/**
 	 * @return
 	 */
-	public Integer getTotalErrorRecords() {
-		return totalErrorRecords;
+	public Integer getTotalProcessedRecords() {
+		return totalProcessedRecords;
 	}
 
 	/**
-	 * @param totalErrorRecords
+	 * @return
 	 */
-	public void setTotalErrorRecords(Integer totalErrorRecords) {
-		this.totalErrorRecords = totalErrorRecords;
-	}
-
-	/**
-	 * 
-	 */
-	public void incrementTotalErrorlRecords() {
-		this.totalErrorRecords++;
+	public Integer getTotalRecords() {
+		return totalRecords;
 	}
 
 	/**
@@ -201,10 +202,45 @@ public class SourceFile extends File {
 	}
 
 	/**
-	 * @param totalWarningRecords
+	 * 
 	 */
-	public void setTotalWarningRecords(Integer totalWarningRecords) {
-		this.totalWarningRecords = totalWarningRecords;
+	public void incrementTotalEmptyRecords() {
+		this.totalEmptyRecords++;
+	}
+
+	/**
+	 * 
+	 */
+	public void incrementTotalErrorlRecords() {
+		this.totalErrorRecords++;
+	}
+
+	/**
+	 * 
+	 */
+	public void incrementTotalFatalRecords() {
+		this.totalFatalRecords++;
+	}
+
+	/**
+	 * @param totalNullRecords
+	 */
+	public void incrementTotalNullRecords() {
+		this.totalNullRecords++;
+	}
+
+	/**
+	 * @param totalProcessedRecords
+	 */
+	public void incrementTotalProcessedRecords() {
+		this.totalProcessedRecords++;
+	}
+
+	/**
+	 * @param totalRecords
+	 */
+	public void incrementTotalRecords() {
+		this.totalRecords++;
 	}
 
 	/**
@@ -215,11 +251,122 @@ public class SourceFile extends File {
 	}
 
 	/**
-	 * @return the reportingPeriod
+	 * @param sourceFile
 	 */
-	public Date getReportingPeriod() {
-		return reportingPeriod == null ? null : new Date(
-				reportingPeriod.getTime());
+	public void load(String directory) {
+		SourceFileLoaderContext context = new SourceFileLoaderContext();
+		if (this.getFileExtension().equalsIgnoreCase(FILETYPE_CSV)) {
+			logger.info("Loading file {} as a '{}'", this.getFileName(),
+					this.getFileExtension());
+			context.setSourceFileLoaderStrategy(new CSVSourceFileLoaderStrategy());
+		} else {
+			logger.warn("Could not load file '{}' as a '{}'",
+					this.getFileName(), this.getFileExtension());
+			this.setStatus(false);
+		}
+
+		context.load(directory, this.getFileName(), this);
+	}
+
+	/**
+	 * This method processes a file against its schema
+	 */
+	public void organize(String exportMode) {
+		SourceFileOrganizerContext context = new SourceFileOrganizerContext();
+		if (this.getSchema() != null) {
+			if (exportMode.equals(Config.EXPORT_MODE_EXPLODE)) {
+				context.setSourceFileOrganizerStrategy(new ExplodeSourceFileOrganizerStrategy());
+			}
+			if (exportMode.equals(Config.EXPORT_MODE_IMPLODE)) {
+				context.setSourceFileOrganizerStrategy(new ImplodeSourceFileOrganizerStrategy());
+			} else {
+				logger.warn("No Export Mode provided, defaulting to Implode");
+				context.setSourceFileOrganizerStrategy(new ImplodeSourceFileOrganizerStrategy());
+			}
+
+			context.organize(this);
+		} else {
+			logger.info(
+					"No schema was found for file {}. Ignoring sourceFile schema organizing",
+					this.getFileName());
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public void print() {
+		printAll();
+	}
+
+	/**
+	 * 
+	 */
+	public void printAll() {
+		String providerString = null;
+		if (!(this.getProvider() == null)) {
+			providerString = this.getProvider().getProviderName() + " - "
+					+ this.getProvider().getProviderIdentifier();
+		}
+
+		String schemaString = null;
+		if (!(this.getSchema() == null)) {
+			schemaString = this.schema.getName();
+		}
+
+		logger.debug(
+				"FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'",
+				this.getFileName(), this.getFileExtension(),
+				this.getLoadStage(), this.getSourceHeaders().size(),
+				providerString, schemaString);
+		printRecords();
+	}
+
+	/**
+	 * 
+	 */
+	private void printRecords() {
+		for (SourceFileRecord sourceFileRecord : this.getRecords()) {
+			sourceFileRecord.print();
+		}
+	}
+
+	/**
+	 * @param record
+	 */
+	public long recordCount() {
+		return this.records.size();
+	}
+
+	/**
+	 * @param index
+	 */
+	public void removeRecord(int index) {
+		this.records.remove(index);
+	}
+
+	/**
+	 * @param map
+	 *            the headers to set
+	 */
+	public void removeSourceHeader(Integer key) {
+		this.sourceHeaders.remove(key);
+	}
+
+	/**
+	 * @param provider
+	 *            the provider to set
+	 */
+	public void setProvider(Provider provider) {
+		this.provider = provider;
+	}
+
+	/**
+	 * @param records
+	 *            the records to set
+	 */
+	public void setRecords(List<SourceFileRecord> records) {
+		this.records = records;
 	}
 
 	/**
@@ -292,47 +439,11 @@ public class SourceFile extends File {
 	}
 
 	/**
-	 * @return the schema
-	 */
-	public Schema getSchema() {
-		return schema;
-	}
-
-	/**
 	 * @param schema
 	 *            the schema to set
 	 */
 	public void setSchema(Schema schema) {
 		this.schema = schema;
-	}
-
-	/**
-	 * @return the provider
-	 */
-	public Provider getProvider() {
-		return provider;
-	}
-
-	/**
-	 * @param provider
-	 *            the provider to set
-	 */
-	public void setProvider(Provider provider) {
-		this.provider = provider;
-	}
-
-	/**
-	 * @return the headers
-	 */
-	public Map<Integer, String> getSourceHeaders() {
-		return sourceHeaders;
-	}
-
-	/**
-	 * @return the headers
-	 */
-	public String getSourceHeaderName(int key) {
-		return sourceHeaders.get(key);
 	}
 
 	/**
@@ -344,165 +455,57 @@ public class SourceFile extends File {
 	}
 
 	/**
-	 * @param map
-	 *            the headers to set
+	 * @param totalEmptyRecords
 	 */
-	public void addSourceHeader(Integer key, String value) {
-		this.sourceHeaders.put(key, value);
+	public void setTotalEmptyRecords(Integer totalEmptyRecords) {
+		this.totalEmptyRecords = totalEmptyRecords;
 	}
 
 	/**
-	 * @param map
-	 *            the headers to set
+	 * @param totalErrorRecords
 	 */
-	public void removeSourceHeader(Integer key) {
-		this.sourceHeaders.remove(key);
+	public void setTotalErrorRecords(Integer totalErrorRecords) {
+		this.totalErrorRecords = totalErrorRecords;
 	}
 
 	/**
-	 * @return the records
+	 * @param totalFatalRecords
 	 */
-	public List<SourceFileRecord> getRecords() {
-		return records;
+	public void setTotalFatalRecords(Integer totalFatalRecords) {
+		this.totalFatalRecords = totalFatalRecords;
 	}
 
 	/**
-	 * @param records
-	 *            the records to set
+	 * @param totalNullRecords
 	 */
-	public void setRecords(List<SourceFileRecord> records) {
-		this.records = records;
+	public void setTotalNullRecords(Integer totalNullRecords) {
+		this.totalNullRecords = totalNullRecords;
 	}
 
 	/**
-	 * @param record
+	 * @param totalProcessedRecords
 	 */
-	public void addRecord(SourceFileRecord record) {
-		this.records.add(record);
+	public void setTotalProcessedRecords(Integer totalProcessedRecords) {
+		this.totalProcessedRecords = totalProcessedRecords;
 	}
 
 	/**
-	 * @param record
+	 * @param totalRecords
 	 */
-	public long recordCount() {
-		return this.records.size();
+	public void setTotalRecords(Integer totalRecords) {
+		this.totalRecords = totalRecords;
 	}
 
 	/**
-	 * @param index
+	 * @param totalWarningRecords
 	 */
-	public void removeRecord(int index) {
-		this.records.remove(index);
+	public void setTotalWarningRecords(Integer totalWarningRecords) {
+		this.totalWarningRecords = totalWarningRecords;
 	}
 
 	public void validate() {
 		SourceFileValidator validator = new SourceFileValidator();
 		validator.validate(this);
-	}
-
-	/**
-	 * 
-	 */
-	public void print() {
-		printAll();
-	}
-
-	/**
-	 * 
-	 */
-	public void printAll() {
-		String providerString = null;
-		if (!(this.getProvider() == null)) {
-			providerString = this.getProvider().getProviderName() + " - "
-					+ this.getProvider().getProviderIdentifier();
-		}
-
-		String schemaString = null;
-		if (!(this.getSchema() == null)) {
-			schemaString = this.schema.getName();
-		}
-
-		logger.debug(
-				"FileName '{}' FileExtension: '{}' Status: '{}' Headers (Size): '{}' Provider: '{}' Schema: '{}'",
-				this.getFileName(), this.getFileExtension(),
-				this.getLoadStage(), this.getSourceHeaders().size(),
-				providerString, schemaString);
-		printRecords();
-	}
-
-	/**
-	 * 
-	 */
-	private void printRecords() {
-		for (SourceFileRecord sourceFileRecord : this.getRecords()) {
-			sourceFileRecord.print();
-		}
-	}
-
-	/**
-	 * @param sourceFile
-	 */
-	public void load(String directory) {
-		SourceFileLoaderContext context = new SourceFileLoaderContext();
-		if (this.getFileExtension().equalsIgnoreCase(FILETYPE_CSV)) {
-			logger.info("Loading file {} as a '{}'", this.getFileName(),
-					this.getFileExtension());
-			context.setSourceFileLoaderStrategy(new CSVSourceFileLoaderStrategy());
-		} else {
-			logger.warn("Could not load file '{}' as a '{}'",
-					this.getFileName(), this.getFileExtension());
-			this.setStatus(false);
-		}
-
-		context.load(directory, this.getFileName(), this);
-	}
-
-	/**
-	 * This method processes a file against its schema
-	 */
-	public void organize(String exportMode) {
-		SourceFileOrganizerContext context = new SourceFileOrganizerContext();
-		if (this.getSchema() != null) {
-			if (exportMode.equals(Config.EXPORT_MODE_EXPLODE)) {
-				context.setSourceFileOrganizerStrategy(new ExplodeSourceFileOrganizerStrategy());
-			}
-			if (exportMode.equals(Config.EXPORT_MODE_IMPLODE)) {
-				context.setSourceFileOrganizerStrategy(new ImplodeSourceFileOrganizerStrategy());
-			} else {
-				logger.warn("No Export Mode provided, defaulting to Implode");
-				context.setSourceFileOrganizerStrategy(new ImplodeSourceFileOrganizerStrategy());
-			}
-
-			context.organize(this);
-		} else {
-			logger.info(
-					"No schema was found for file {}. Ignoring sourceFile schema organizing",
-					this.getFileName());
-		}
-	}
-
-	public void export(String directory) {
-		SourceFileExporterContext context = new SourceFileExporterContext();
-		if (this.getRecords() != null) {
-			if (this.getProvider().getFileOutputType().equalsIgnoreCase(File.FILETYPE_CSV)) {
-				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
-			} else if (this.getProvider().getFileOutputType().equalsIgnoreCase(File.FILETYPE_XLS)) {
-				context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
-			} else if (this.getProvider().getFileOutputType().equalsIgnoreCase(File.FILETYPE_XLSX)) {
-				context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
-			} else {
-				logger.warn(
-						"We cannot currently export to a '{}'. defaulting to '{}'",
-						this.getProvider().getFileOutputType(),
-						File.FILETYPE_CSV);
-				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
-			}
-
-			context.export(directory, this);
-		} else {
-			logger.error("Cannot export sourceFile '{}'. No data found",
-					this.getFileName());
-		}
 	}
 
 }

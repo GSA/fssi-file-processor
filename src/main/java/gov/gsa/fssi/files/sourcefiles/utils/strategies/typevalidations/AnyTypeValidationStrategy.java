@@ -7,16 +7,16 @@ import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.TypeValidationS
 public class AnyTypeValidationStrategy implements TypeValidationStrategy {
 
 	@Override
+	public boolean isValid(SchemaField field, Data data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public void validate(SchemaField field, Data data) {
 		if (data != null) {
 			data.addValidationResult(true, 0, "Type(" + field.getType() + ")");
 		}
-	}
-
-	@Override
-	public boolean isValid(SchemaField field, Data data) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

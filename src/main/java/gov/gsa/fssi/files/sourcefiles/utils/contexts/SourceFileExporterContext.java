@@ -6,17 +6,6 @@ import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.SourceFileExpor
 public class SourceFileExporterContext {
 	private SourceFileExporterStrategy strategy;
 
-	// this can be set at runtime by the application preferences
-	public void setSourceFileExporterStrategy(
-			SourceFileExporterStrategy strategy) {
-		this.strategy = strategy;
-	}
-
-	// this can be set at runtime by the application preferences
-	public SourceFileExporterStrategy getSourceFileExporterStrategy() {
-		return this.strategy;
-	}
-
 	// use the strategy
 	/**
 	 * @param field
@@ -25,5 +14,16 @@ public class SourceFileExporterContext {
 	 */
 	public void export(String directory, SourceFile sourceFile) {
 		strategy.export(directory, sourceFile);
+	}
+
+	// this can be set at runtime by the application preferences
+	public SourceFileExporterStrategy getSourceFileExporterStrategy() {
+		return this.strategy;
+	}
+
+	// this can be set at runtime by the application preferences
+	public void setSourceFileExporterStrategy(
+			SourceFileExporterStrategy strategy) {
+		this.strategy = strategy;
 	}
 }

@@ -95,15 +95,55 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 		}
 	}
 
-	public List<SchemaField> loadFields(NodeList fieldNodes) {
-		List<SchemaField> fields = new ArrayList<SchemaField>();
-		for (int temp = 0; temp < fieldNodes.getLength(); temp++) {
-			SchemaField field = loadField(fieldNodes.item(temp));
-			fields.add(field);
-			logger.info("succesfully added field '{}' to the schema.",
-					field.getName());
+	/**
+	 * @param field
+	 * @param currentNode
+	 * @throws DOMException
+	 */
+	private FieldConstraint loadConstraint(Node currentNode)
+			throws DOMException {
+		FieldConstraint newConstraint = new FieldConstraint();
+		if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+			logger.info("Adding Constraint {} - {}", currentNode.getNodeName()
+					.trim(), currentNode.getTextContent().trim());
+			newConstraint.setType(currentNode.getNodeName().trim());
+			newConstraint.setValue(currentNode.getTextContent().trim());
+
+			HashMap<String, String> attributeMap = XmlHelper
+					.convertXmlAttributeToHashMap(currentNode.getAttributes());
+			Iterator<?> optionsIterator = attributeMap.entrySet().iterator();
+
+			while (optionsIterator.hasNext()) {
+				Map.Entry<String, String> optionsPair = (Entry<String, String>) optionsIterator
+						.next();
+				newConstraint.addOption(optionsPair.getKey(),
+						optionsPair.getValue());
+				logger.info("Adding Attribute {} - {} to Constraint {}",
+						optionsPair.getKey(), optionsPair.getValue(),
+						currentNode.getNodeName());
+			}
+
+			return newConstraint;
 		}
-		return fields;
+		return null;
+	}
+
+	/**
+	 * @param field
+	 * @param constraintList
+	 * @throws DOMException
+	 */
+	private ArrayList<FieldConstraint> loadConstraints(NodeList constraintList)
+			throws DOMException {
+		Node currentNode;
+		ArrayList<FieldConstraint> constraints = new ArrayList<FieldConstraint>();
+		for (int i = 0; i < constraintList.getLength(); i++) {
+			currentNode = constraintList.item(i);
+			FieldConstraint fieldConstraint = loadConstraint(currentNode);
+			if (fieldConstraint != null)
+				constraints.add(fieldConstraint);
+		}
+		return constraints;
 	}
 
 	/**
@@ -157,55 +197,15 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 		return field;
 	}
 
-	/**
-	 * @param field
-	 * @param constraintList
-	 * @throws DOMException
-	 */
-	private ArrayList<FieldConstraint> loadConstraints(NodeList constraintList)
-			throws DOMException {
-		Node currentNode;
-		ArrayList<FieldConstraint> constraints = new ArrayList<FieldConstraint>();
-		for (int i = 0; i < constraintList.getLength(); i++) {
-			currentNode = constraintList.item(i);
-			FieldConstraint fieldConstraint = loadConstraint(currentNode);
-			if (fieldConstraint != null)
-				constraints.add(fieldConstraint);
+	public List<SchemaField> loadFields(NodeList fieldNodes) {
+		List<SchemaField> fields = new ArrayList<SchemaField>();
+		for (int temp = 0; temp < fieldNodes.getLength(); temp++) {
+			SchemaField field = loadField(fieldNodes.item(temp));
+			fields.add(field);
+			logger.info("succesfully added field '{}' to the schema.",
+					field.getName());
 		}
-		return constraints;
-	}
-
-	/**
-	 * @param field
-	 * @param currentNode
-	 * @throws DOMException
-	 */
-	private FieldConstraint loadConstraint(Node currentNode)
-			throws DOMException {
-		FieldConstraint newConstraint = new FieldConstraint();
-		if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
-			logger.info("Adding Constraint {} - {}", currentNode.getNodeName()
-					.trim(), currentNode.getTextContent().trim());
-			newConstraint.setType(currentNode.getNodeName().trim());
-			newConstraint.setValue(currentNode.getTextContent().trim());
-
-			HashMap<String, String> attributeMap = XmlHelper
-					.convertXmlAttributeToHashMap(currentNode.getAttributes());
-			Iterator<?> optionsIterator = attributeMap.entrySet().iterator();
-
-			while (optionsIterator.hasNext()) {
-				Map.Entry<String, String> optionsPair = (Entry<String, String>) optionsIterator
-						.next();
-				newConstraint.addOption(optionsPair.getKey(),
-						optionsPair.getValue());
-				logger.info("Adding Attribute {} - {} to Constraint {}",
-						optionsPair.getKey(), optionsPair.getValue(),
-						currentNode.getNodeName());
-			}
-
-			return newConstraint;
-		}
-		return null;
+		return fields;
 	}
 
 }
