@@ -1,6 +1,7 @@
 package main.java.gov.gsa.fssi.files.sourcefiles.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
@@ -28,10 +29,10 @@ public class SourceFilesBuilder {
 	 * @param sourceFileDirectory
 	 * @return
 	 */
-	public ArrayList<SourceFile> build(String directory,
-			ArrayList<Schema> schemas, String exportMode,
-			ArrayList<Provider> providers) {
-		ArrayList<SourceFile> sourceFiles = new ArrayList<SourceFile>();
+	public List<SourceFile> build(String directory,
+			List<Schema> schemas, String exportMode,
+			List<Provider> providers) {
+		List<SourceFile> sourceFiles = new ArrayList<SourceFile>();
 		// Loop through files in sourceFileDirectory and populate SourceFile
 		// objects
 		for (String fileName : FileHelper.getFilesFromDirectory(directory,

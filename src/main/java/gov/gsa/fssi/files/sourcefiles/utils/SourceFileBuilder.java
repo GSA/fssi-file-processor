@@ -198,7 +198,7 @@ public class SourceFileBuilder {
 					"Atempting to map field names from File '{}' to Schema '{}'",
 					sourceFile.getFileName(), sourceFile.getSchema().getName());
 			for (SchemaField field : sourceFile.getSchema().getFields()) {
-				ArrayList<String> aliasNames = new ArrayList<String>();// getting
+				List<String> aliasNames = new ArrayList<String>();// getting
 																		// array
 																		// list
 																		// of
@@ -266,12 +266,12 @@ public class SourceFileBuilder {
 					sourceFile.getSchema().getName(),
 					sourceFile.getReportingPeriod());
 			Schema newSchema = sourceFile.getSchema();
-			ArrayList<SchemaField> newFields = new ArrayList<SchemaField>();
+			List<SchemaField> newFields = new ArrayList<SchemaField>();
 			for (SchemaField field : sourceFile.getSchema().getFields()) {
 				logger.info("Personalizing field '{}' to effectiveDate '{}'",
 						field.getName(), sourceFile.getReportingPeriod());
 				SchemaField newField = field;
-				ArrayList<FieldConstraint> newConstraints = new ArrayList<FieldConstraint>();
+				List<FieldConstraint> newConstraints = new ArrayList<FieldConstraint>();
 				for (FieldConstraint constraint : newField.getConstraints()) {
 					FieldConstraint newConstraint = constraint;
 					logger.info("Analyzing constraint '{}' - '{}'",

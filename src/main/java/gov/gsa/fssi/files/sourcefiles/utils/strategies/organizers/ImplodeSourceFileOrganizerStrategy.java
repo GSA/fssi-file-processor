@@ -3,6 +3,7 @@ package main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.organizers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
@@ -83,7 +84,7 @@ public class ImplodeSourceFileOrganizerStrategy
 		}
 
 		// Now we need to find the stragglers...so we can delete them!
-		ArrayList<Integer> deleteFieldDataList = new ArrayList<Integer>();
+		List<Integer> deleteFieldDataList = new ArrayList<Integer>();
 		Iterator<?> currentHeaderIterator = sourceFile.getSourceHeaders()
 				.entrySet().iterator();
 		while (currentHeaderIterator.hasNext()) {
