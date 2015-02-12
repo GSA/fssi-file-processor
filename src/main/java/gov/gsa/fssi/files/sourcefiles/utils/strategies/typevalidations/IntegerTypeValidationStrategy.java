@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class IntegerTypeValidationStrategy implements TypeValidationStrategy {
-	static final Logger logger = LoggerFactory
+	private static final Logger logger = LoggerFactory
 			.getLogger(IntegerTypeValidationStrategy.class);
 	@Override
 	public boolean isValid(SchemaField field, Data data) {
