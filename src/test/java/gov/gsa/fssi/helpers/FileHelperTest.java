@@ -1,25 +1,19 @@
-package test.java.gov.gsa.fssi.config;
+package test.java.gov.gsa.fssi.helpers;
 
 import main.java.gov.gsa.fssi.config.Config;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class ConfigTest {
-	protected static final Logger logger = LoggerFactory
-			.getLogger(ConfigTest.class);
-
+public class FileHelperTest {
 	/**
-	 * This should test to make sure that we are catching required Fields
+	 * 
 	 */
 	@Test
-	public void read() {
+	public void testIsDirectory() {
 		Config config = new Config("./testfiles/", "config.properties");
 
 		Assert.assertEquals("failure - ConfigTest", "./testfiles/providers/",
 				config.getProperty(Config.PROVIDERS_DIRECTORY));
 	}
-	
 }

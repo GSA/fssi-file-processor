@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 import main.java.gov.gsa.fssi.files.File;
+import main.java.gov.gsa.fssi.files.schemas.schemafields.fieldconstraints.FieldConstraint;
 import main.java.gov.gsa.fssi.files.sourcefiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
@@ -34,7 +35,7 @@ public class BasicTextSourceFileLoggerStrategy
 	 * necessary
 	 */
 	@Override
-	public void createLog(String directory, SourceFile sourceFile) {
+	public void createLog(String directory, SourceFile sourceFile, String errorLevel) {
 
 		try {
 
@@ -86,6 +87,7 @@ public class BasicTextSourceFileLoggerStrategy
 			bufferedWriter.newLine();
 			bufferedWriter.newLine();
 			bufferedWriter.write("Results:");	
+			bufferedWriter.newLine();
 			
 			for (SourceFileRecord record : sourceFile.getRecords()) {
 				bufferedWriter.write("Line: " + record.getRowIndex()
@@ -93,7 +95,7 @@ public class BasicTextSourceFileLoggerStrategy
 						+ File.getErrorLevelName(record.getMaxErrorLevel()));
 				bufferedWriter.newLine();
 				for (Data data : record.getDatas()) {
-					if (data.getMaxErrorLevel() > 0) {
+					if (data.getMaxErrorLevel() > FieldConstraint.getLevel(errorLevel)) {
 						bufferedWriter.write("     Field: "
 								+ sourceFile.getSourceHeaderName(data
 										.getHeaderIndex())

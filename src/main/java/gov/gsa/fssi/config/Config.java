@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Properties;
 
+import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 
 import org.slf4j.Logger;
@@ -22,8 +23,13 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class Config {
-	private static Logger logger = LoggerFactory.getLogger(Config.class);
+	private static final Logger logger = LoggerFactory.getLogger(Config.class);
 	private Properties prop = null;
+	public static final String LOGGING_LEVEL_ALL = "all";
+	public static final String LOGGING_LEVEL_WARNING = "warning";
+	public static final String LOGGING_LEVEL_ERROR = "error";
+	public static final String LOGGING_LEVEL_FATAL = "fatal";	
+	
 	/**
 	 * @deprecated
 	 */
@@ -97,7 +103,7 @@ public class Config {
 	public static final String DEFAULT_EXPORT_MODE = "implode";
 	public static final String DEFAULT_VALIDATION_MODE = "";
 	public static final String DEFAULT_PROPFILE_NAME = "config.properties";
-	public static final String DEFAULT_LOGGING_LEVEL = "";
+	public static final String DEFAULT_LOGGING_LEVEL = LOGGING_LEVEL_ALL;
 
 	/**
 	 * Config
@@ -229,39 +235,73 @@ public class Config {
 		}
 
 		if (!prop.containsKey(LOGS_DIRECTORY)) {
-			logger.warn(
+			logger.info(
 					"No '{}' property found in config file, loading default: '{}'",
 					LOGS_DIRECTORY, DEFAULT_LOGS_DIRECTORY);
 			prop.put(LOGS_DIRECTORY, DEFAULT_LOGS_DIRECTORY);
 		}
 
 		if (!prop.containsKey(PROVIDERS_DIRECTORY)) {
-			logger.warn(
+			logger.info(
 					"No '{}' property found in config file, loading default: '{}'",
 					PROVIDERS_DIRECTORY, DEFAULT_PROVIDERS_DIRECTORY);
 			prop.put(PROVIDERS_DIRECTORY, DEFAULT_PROVIDERS_DIRECTORY);
 		}
 
 		if (!prop.containsKey(STAGED_DIRECTORY)) {
-			logger.warn(
+			logger.info(
 					"No '{}' property found in config file, loading default: '{}'",
 					STAGED_DIRECTORY, DEFAULT_STAGED_DIRECTORY);
 			prop.put(STAGED_DIRECTORY, DEFAULT_STAGED_DIRECTORY);
 		}
 
 		if (!prop.containsKey(EXPORT_MODE)) {
-			logger.warn(
+			logger.info(
 					"No '{}' property found in config file, loading default: '{}'",
 					EXPORT_MODE, DEFAULT_EXPORT_MODE);
 			prop.put(EXPORT_MODE, DEFAULT_EXPORT_MODE);
+		}else if(!isValidExportMode(prop.getProperty(EXPORT_MODE))){
+			logger.warn(
+					"BAD '{}' property found in config file, loading default: '{}'",
+					EXPORT_MODE, DEFAULT_EXPORT_MODE);
+			prop.put(EXPORT_MODE, DEFAULT_EXPORT_MODE);			
 		}
 
 		if (!prop.containsKey(LOGGING_LEVEL)) {
-			logger.warn(
+			logger.info(
 					"No '{}' property found in config file, loading default: '{}'",
 					LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);
-			prop.put(EXPORT_MODE, DEFAULT_LOGGING_LEVEL);
+			prop.put(LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);
+		}else if(!isValidLoggingLevel(prop.getProperty(LOGGING_LEVEL))){
+			logger.warn(
+					"BAD '{}' property found in config file, loading default: '{}'",
+					LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);
+			prop.put(LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);			
 		}
+		
 		return prop;
 	}
+	
+	public static boolean isValidLoggingLevel(String val) {
+		if (val.equalsIgnoreCase(LOGGING_LEVEL_FATAL)) {
+			return true;
+		} else if (val.equalsIgnoreCase(LOGGING_LEVEL_ERROR)) {
+			return true;
+		} else if (val.equalsIgnoreCase(LOGGING_LEVEL_WARNING)) {
+			return true;
+		} else if (val.equalsIgnoreCase(LOGGING_LEVEL_ALL)){
+			return true;			
+		}
+		return false;
+	}	
+	
+	public static boolean isValidExportMode(String val) {
+		if (val.equalsIgnoreCase(EXPORT_MODE_IMPLODE)) {
+			return true;
+		} else if (val.equalsIgnoreCase(EXPORT_MODE_EXPLODE)) {
+			return true;
+		}
+		return false;
+	}		
+	
 }

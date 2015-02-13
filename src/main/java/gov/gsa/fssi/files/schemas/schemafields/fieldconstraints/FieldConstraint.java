@@ -172,15 +172,20 @@ public class FieldConstraint {
 	}
 
 	public void setLevel(String levelName) {
-		if (levelName.equals(File.STATUS_FATAL)) {
-			this.level = 3;
-		} else if (levelName.equals(File.STATUS_ERROR)) {
-			this.level = 2;
-		} else if (levelName.equals(File.STATUS_WARNING)) {
-			this.level = 1;
-		}
+		this.level = getLevel(levelName);
 	}
 
+	public static int getLevel(String levelName) {
+		if (levelName.equalsIgnoreCase(File.STATUS_FATAL)) {
+			return 3;
+		} else if (levelName.equalsIgnoreCase(File.STATUS_ERROR)) {
+			return 2;
+		} else if (levelName.equalsIgnoreCase(File.STATUS_WARNING)) {
+			return 1;
+		}
+		return 0;
+		
+	}	
 	public void setLevelName(String levelName) {
 		this.levelName = levelName;
 	}

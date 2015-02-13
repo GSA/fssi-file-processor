@@ -80,6 +80,7 @@ public class File {
 	public static final String STATUS_FAIL = "failed";
 
 	public static final String STATUS_PASS = "pass";
+	public static final String STAGE_LOADING = "loading";
 	public static final String STAGE_LOADED = "loaded";
 	public static final String STAGE_VALIDATED = "validated";
 	public static final String STAGE_EXPORTED = "exported";
@@ -349,7 +350,7 @@ public class File {
 	public void setLoadStatusMessage(List<String> loadStatusMessages) {
 		this.loadStatusMessages = loadStatusMessages;
 	}
-
+	
 	public void setMaxErrorLevel(int errorLevel) {
 		setStatus(errorLevel);
 		if (errorLevel > this.maxErrorLevel)

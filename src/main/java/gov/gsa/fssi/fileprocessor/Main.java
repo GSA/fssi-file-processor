@@ -59,7 +59,7 @@ public class Main {
 
 			SourceFileLoggerContext context = new SourceFileLoggerContext();
 			context.setSourceFileLoggerStrategy(new BasicTextSourceFileLoggerStrategy());
-			context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile);
+			context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile, config.getProperty(Config.LOGGING_LEVEL));
 		}
 
 		logger.info("Completed FSSI File Processor");

@@ -7,5 +7,5 @@ import main.java.gov.gsa.fssi.files.sourcefiles.SourceFile;
  *
  */
 public interface SourceFileLoggerStrategy {
-	void createLog(String directory, SourceFile sourceFile);
+	void createLog(String directory, SourceFile sourceFile, String errorLevel);
 }

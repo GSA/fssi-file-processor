@@ -17,8 +17,8 @@ public class SourceFileLoggerContext {
 	 * @param constraint
 	 * @param data
 	 */
-	public void log(String directory, SourceFile sourceFile) {
-		strategy.createLog(directory, sourceFile);
+	public void log(String directory, SourceFile sourceFile, String errorLevel) {
+		strategy.createLog(directory, sourceFile, errorLevel);
 	}
 
 	// this can be set at runtime by the application preferences

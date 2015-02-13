@@ -28,45 +28,78 @@ public class FileHelper {
 	}
 	public static List<String> getFilesFromDirectory(String directoryName,
 			String whitelist) {
-		List<String> fileList = new ArrayList<String>();
 		logger.info("getFilesFromDirectory Looking in '{}' for '{}' files.",
 				directoryName, whitelist);
 
-		File folder = new File(directoryName);
-		System.out.println(folder.getAbsolutePath());
-		File[] listOfFiles = folder.listFiles();
-		int fileCount = 0;
-		int totalFileCount = 0;
-
-		if (listOfFiles != null) {
-			for (File file : listOfFiles) {
-				if (file.isFile()) {
-					totalFileCount++;
-					String fileExtension = file.getName().substring(
-							file.getName().lastIndexOf("."),
-							file.getName().length());
-					if (file.isDirectory()) {
-						logger.info("Ignoring '{}' because it is a directory",
-								whitelist);
-					} else if (whitelist != null && !whitelist.isEmpty()
-							&& !whitelist.contains(fileExtension)) {
-						logger.info(
-								"Ignoring '{}' because it is not in whitelist",
-								file.getName());
-					} else {
-						logger.info("Added '{}' to ArrayList", file.getName());
-						fileList.add(file.getName());
-						fileCount++;
+		File directory = getFile(directoryName);
+		if(isDirectory(directory)){
+			System.out.println(directory.getAbsolutePath());
+			List<String> fileList = new ArrayList<String>();
+			File[] listOfFiles = directory.listFiles();
+			int fileCount = 0;
+			int totalFileCount = 0;
+			if (listOfFiles != null) {
+				for (File file : listOfFiles) {
+					if (isFile(file)) {
+						totalFileCount++;
+						String fileExtension = file.getName().substring(
+								file.getName().lastIndexOf("."),
+								file.getName().length());
+						if (file.isDirectory()) {
+							logger.info("Ignoring '{}' because it is a directory",
+									whitelist);
+						} else if (whitelist != null && !whitelist.isEmpty()
+								&& !whitelist.contains(fileExtension)) {
+							logger.info(
+									"Ignoring '{}' because it is not in whitelist",
+									file.getName());
+						} else {
+							logger.info("Added '{}' to ArrayList", file.getName());
+							fileList.add(file.getName());
+							fileCount++;
+						}
 					}
 				}
-			}
-		}
-
-		logger.info("Added {} out of {} files", fileCount, totalFileCount);
-
-		return fileList;
+			}else logger.error("No files were found in '{}'", directory);
+			logger.info("Added {} out of {} files", fileCount, totalFileCount);
+			return fileList;
+		}else logger.error("'{}' is not a valid directory", directory);
+		return null;
 	}
 	public static String getFullPath(String directory, String fileName) {
 		return directory + fileName;
+	}
+	
+	public static File getFile(String path){
+		return new File(path);
+	}
+	
+	public static boolean isFile(File file){
+		if(file.isFile()) return true;
+		else return false;
+	}
+	
+	public static boolean isDirectory(File file){
+		if(file.isDirectory()) return true;
+		else return false;
+	}	
+	
+	public static boolean isDirectory(String path){
+		File file = getFile(path);
+		if(file.isDirectory()) return true;
+		else return false;
+	}	
+		
+	public static boolean isFile(String path){
+		return isFile(getFile(path));
+	}
+	
+	public static boolean createDirectory(String path){
+		File file = getFile(path);
+		if (isDirectory(file)){
+			return true;
+		}else{
+			return file.mkdir();			
+		}
 	}
 }

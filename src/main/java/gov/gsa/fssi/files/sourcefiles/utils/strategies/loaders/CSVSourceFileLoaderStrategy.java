@@ -37,6 +37,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 	 */
 	@Override
 	public void load(String directory, String fileName, SourceFile sourceFile) {
+		sourceFile.setLoadStage(File.STAGE_LOADING);
 		try {
 
 			InputStream inputStream = new FileInputStream(
@@ -45,70 +46,22 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 			final CSVParser parser = new CSVParser(reader,
 					CSVFormat.EXCEL.withHeader());
 
-			/*
-			 * Converting Apache Commons CSV header map from <String, Integer>
-			 * to <Integer,String>
-			 */
-			Map<String, Integer> parserHeaderMap = parser.getHeaderMap();
-			Iterator<?> parserHeaderMapIterator = parserHeaderMap.entrySet()
-					.iterator();
-			while (parserHeaderMapIterator.hasNext()) {
-				Map.Entry pairs = (Map.Entry) parserHeaderMapIterator.next();
-				sourceFile.addSourceHeader((Integer) pairs.getValue(), pairs
-						.getKey().toString());
+			
+			try {
+				processHeaders(fileName, sourceFile, parser);
+			} catch (NullPointerException e) {
+				logger.error(
+						"Received NullPointerException '{}' while processing headers for file '{}'",
+						e.getMessage(), sourceFile.getFileName());	
+						sourceFile.setMaxErrorLevel(3);
+						sourceFile.setLoadStatus(false);
+						sourceFile.addLoadStatusMessage("Received error processing headers");
 			}
-
-			logger.info("file '{}' had the following headers: {}", fileName,
-					parser.getHeaderMap());
-
-			for (final CSVRecord csvRecord : parser) {
-				sourceFile.incrementTotalRecords();
-
-				SourceFileRecord thisRecord = new SourceFileRecord();
-				thisRecord.setRowIndex((int) csvRecord.getRecordNumber() + 1);
-				// Ignoring null rows
-				if (csvRecord.size() > 1
-						&& sourceFile.getSourceHeaders().size() > 1) {
-					Iterator<?> headerIterator = sourceFile.getSourceHeaders()
-							.entrySet().iterator();
-					while (headerIterator.hasNext()) {
-						Map.Entry dataPairs = (Map.Entry) headerIterator.next();
-						try {
-							Data data = new Data();
-							data.setData(csvRecord.get(
-									dataPairs.getValue().toString()).trim());
-							data.setHeaderIndex((Integer) dataPairs.getKey());
-							thisRecord.addData(data);
-						} catch (IllegalArgumentException e) {
-							logger.error(
-									"Received IllegalArgumentExceptions '{}' while creating log for file '{}'",
-									e.getMessage(), sourceFile.getFileName());
-						}
-
-					}
-
-					// Checking to see if any data was in the row. if nothing is
-					// found, we consider this an Empty Record
-					boolean emptyRowCheck = false;
-					for (Data data : thisRecord.getDatas()) {
-						if (data.getData() == null || data.getData().isEmpty()
-								|| data.getData().equals("")) {
-							emptyRowCheck = true;
-						} else {
-							emptyRowCheck = false;
-							break;
-						}
-					}
-
-					if (emptyRowCheck == false) {
-						sourceFile.addRecord(thisRecord);
-					} else {
-						sourceFile.incrementTotalEmptyRecords();
-					}
-
-				} else {
-					sourceFile.incrementTotalNullRecords();
-				}
+			
+			if(sourceFile.getStatus()){
+				for (final CSVRecord csvRecord : parser) {
+					processRecord(sourceFile, csvRecord);
+				}				
 			}
 
 			if (sourceFile.getTotalEmptyRecords()
@@ -137,6 +90,94 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 			logger.error(
 					"There was an IllegalArgumentException error with file {}",
 					sourceFile.getFileName());
+		}catch (NullPointerException e){
+			logger.error(
+					"Received NullPointerException '{}' while creating log for file '{}'",
+					e.getMessage(), sourceFile.getFileName());							
+		}
+		if(sourceFile.getStatus()){
+			sourceFile.setLoadStage(File.STAGE_LOADED);
+		}
+		
+	}
+	/**
+	 * @param fileName
+	 * @param sourceFile
+	 * @param parser
+	 */
+	private void processHeaders(String fileName, SourceFile sourceFile,
+			final CSVParser parser) throws NullPointerException{
+		/*
+		 * Converting Apache Commons CSV header map from <String, Integer>
+		 * to <Integer,String>
+		 */
+		
+		Map<String, Integer> parserHeaderMap = parser.getHeaderMap();
+		Iterator<?> parserHeaderMapIterator = parserHeaderMap.entrySet()
+				.iterator();
+		while (parserHeaderMapIterator.hasNext()) {
+			Map.Entry pairs = (Map.Entry) parserHeaderMapIterator.next();
+			sourceFile.addSourceHeader((Integer) pairs.getValue(), pairs
+					.getKey().toString());
+		}
+
+		logger.info("file '{}' had the following headers: {}", fileName,
+				parser.getHeaderMap());
+	}
+	/**
+	 * @param sourceFile
+	 * @param csvRecord
+	 */
+	private void processRecord(SourceFile sourceFile, final CSVRecord csvRecord) {
+		sourceFile.incrementTotalRecords();
+
+		SourceFileRecord thisRecord = new SourceFileRecord();
+		thisRecord.setRowIndex((int) csvRecord.getRecordNumber() + 1);
+		// Ignoring null rows
+		if (csvRecord.size() > 1
+				&& sourceFile.getSourceHeaders().size() > 1) {
+			Iterator<?> headerIterator = sourceFile.getSourceHeaders()
+					.entrySet().iterator();
+			while (headerIterator.hasNext()) {
+				Map.Entry dataPairs = (Map.Entry) headerIterator.next();
+				try {
+					Data data = new Data();
+					data.setData(csvRecord.get(
+							dataPairs.getValue().toString()).trim());
+					data.setHeaderIndex((Integer) dataPairs.getKey());
+					thisRecord.addData(data);
+				} catch (IllegalArgumentException e) {
+					logger.error(
+							"Received IllegalArgumentExceptions '{}' while loading file '{}'",
+							e.getMessage(), sourceFile.getFileName());
+					sourceFile.setMaxErrorLevel(3);
+					sourceFile.setLoadStatus(false);
+					sourceFile.addLoadStatusMessage("Received error processing record");
+				}
+
+			}
+
+			// Checking to see if any data was in the row. if nothing is
+			// found, we consider this an Empty Record
+			boolean emptyRowCheck = false;
+			for (Data data : thisRecord.getDatas()) {
+				if (data.getData() == null || data.getData().isEmpty()
+						|| data.getData().equals("")) {
+					emptyRowCheck = true;
+				} else {
+					emptyRowCheck = false;
+					break;
+				}
+			}
+
+			if (emptyRowCheck == false) {
+				sourceFile.addRecord(thisRecord);
+			} else {
+				sourceFile.incrementTotalEmptyRecords();
+			}
+
+		} else {
+			sourceFile.incrementTotalNullRecords();
 		}
 	}
 
