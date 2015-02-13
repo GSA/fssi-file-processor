@@ -172,10 +172,10 @@ public class FieldConstraint {
 	}
 
 	public void setLevel(String levelName) {
-		this.level = getLevel(levelName);
+		this.level = getErrorLevel(levelName);
 	}
 
-	public static int getLevel(String levelName) {
+	public static int getErrorLevel(String levelName) {
 		if (levelName.equalsIgnoreCase(File.STATUS_FATAL)) {
 			return 3;
 		} else if (levelName.equalsIgnoreCase(File.STATUS_ERROR)) {

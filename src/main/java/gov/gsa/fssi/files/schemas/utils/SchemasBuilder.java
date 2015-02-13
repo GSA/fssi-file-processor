@@ -40,6 +40,8 @@ public class SchemasBuilder {
 		List<Schema> schemas = new ArrayList<Schema>();
 		List<String> fileNames = FileHelper.getFilesFromDirectory(directory,
 				".xml");
+		
+		
 		for (String fileName : fileNames) {
 			SchemaBuilder schemaBuilder = new SchemaBuilder();
 			Schema schema = schemaBuilder.build(directory, fileName);

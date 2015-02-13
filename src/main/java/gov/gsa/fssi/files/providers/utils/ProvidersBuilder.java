@@ -36,6 +36,8 @@ public class ProvidersBuilder {
 		// First we load the providers
 		List<String> fileNames = FileHelper.getFilesFromDirectory(directory,
 				".xlsx, .xls");
+		
+		
 		for (String fileName : fileNames) {
 			logger.info("Loading providers from '{}'", fileName);
 			ProviderLoaderContext context = new ProviderLoaderContext();

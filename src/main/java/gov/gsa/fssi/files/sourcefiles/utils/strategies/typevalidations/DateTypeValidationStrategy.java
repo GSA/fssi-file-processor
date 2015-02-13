@@ -32,9 +32,7 @@ public class DateTypeValidationStrategy implements TypeValidationStrategy {
 
 				if (date == null) {
 					data.addValidationResult(false, 3,
-							"Type(" + field.getType() + ")"); // Fatal error,
-																// could not
-																// find date
+							"Type(" + field.getType() + ")/Format("+dateFormatString+")");
 				} else if (date.compareTo(DateHelper.getMinDate()) < 0) {
 					if (logger.isDebugEnabled())
 						logger.debug(

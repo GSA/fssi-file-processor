@@ -33,7 +33,7 @@ public class ImplodeSourceFileOrganizerStrategy
 	 */
 	@Override
 	public void organize(SourceFile sourceFile) {
-		logger.info("Exploding sourceFile '{}' to Schema '{}'",
+		logger.info("Imploding sourceFile '{}' to Schema '{}'",
 				sourceFile.getFileName(), sourceFile.getSchema().getName());
 		HashMap<Integer, String> newHeader = new HashMap<Integer, String>();
 		// This is our count to determine location of each header

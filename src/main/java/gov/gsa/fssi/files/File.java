@@ -105,8 +105,8 @@ public class File {
 	private boolean loadStatus = true;
 	private boolean validatorStatus = true;
 	private boolean exportStatus = false;
-	private List<String> loadStatusMessages = null;
-	private List<String> validatorStatusMessages = null;
+	private List<String> loadStatusMessages = new ArrayList<String>();
+	private List<String> validatorStatusMessages = new ArrayList<String>();
 
 	private String exportStatusMessage = null;
 

@@ -39,19 +39,29 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 	 * @return Schema loaded from fileName in schemas_directory
 	 */
 	@Override
-	public void load(String directory, Schema schema) {
+	public void load(File file, Schema schema) {
+		schema.setLoadStage(main.java.gov.gsa.fssi.files.File.STAGE_LOADING);
 		Document doc = null;
 		if (schema.getFileName() != null) {
 			try {
-				File fXmlFile = new File(directory + schema.getFileName());
-				DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-						.newInstance();
-				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-				doc = dBuilder.parse(fXmlFile);
+				if(file.isFile()){
+					DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+							.newInstance();
+					DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+					doc = dBuilder.parse(file);
+				}else{
+					schema.setMaxErrorLevel(3);
+					schema.addLoadStatusMessage(schema.getFileName()+" is not a File.");
+					logger.error(
+							"'{}' is not a file. unable to process", 
+							schema.getFileName());
+				}
 			} catch (Exception e) {
 				logger.error(
 						"Received Exception error '{}' while processing file {}",
 						e.getMessage(), schema.getFileName());
+				schema.setMaxErrorLevel(3);
+				schema.addLoadStatusMessage("Received Exception error '"+e.getMessage()+"' while processing file '"+schema.getFileName()+"'");
 			}
 
 			if (doc != null) {
@@ -84,14 +94,19 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 				logger.info("successfully loaded Schema '{}' from file '{}'",
 						schema.getName(), schema.getFileName());
 				schema.setLoadStage(main.java.gov.gsa.fssi.files.File.STAGE_LOADED);
+			}else{
+				logger.error(
+						"No document found in file '{}'. Unable to load any schema",
+						schema.getFileName());
+				schema.setMaxErrorLevel(3);
+				schema.addLoadStatusMessage("No document found in file '"
+						+ schema.getFileName()
+						+ "'. Unable to load any schema");
 			}
-			logger.error(
-					"No document found in file '{}'. Unable to load any schema",
-					schema.getFileName());
-			schema.setLoadStage(main.java.gov.gsa.fssi.files.File.STATUS_ERROR);
-
 		} else {
-			logger.error("Could not build Schema, no fileName was set");
+			logger.error("Could not build Schema from file '{}', no fileName was set");
+			schema.setMaxErrorLevel(3);
+			schema.addLoadStatusMessage(file.getPath() + " is not a File.");	
 		}
 	}
 
@@ -122,7 +137,6 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 						optionsPair.getKey(), optionsPair.getValue(),
 						currentNode.getNodeName());
 			}
-
 			return newConstraint;
 		}
 		return null;
@@ -160,18 +174,18 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 				Node currentNode = nodeList.item(j);
 				if (currentNode.getNodeType() == Node.ELEMENT_NODE
 						&& currentNode.getNodeName() != null) {
-					if (currentNode.getNodeName().equals("name")) {
+					if ("name".equals(currentNode.getNodeName())) {
 						field.setName(currentNode.getTextContent());
-					} else if (currentNode.getNodeName().equals("description")) {
+					} else if ("description".equalsIgnoreCase(currentNode.getNodeName())) {
 						field.setDescription(currentNode.getTextContent());
-					} else if (currentNode.getNodeName().equals("title")) {
+					} else if ("title".equalsIgnoreCase(currentNode.getNodeName())) {
 						field.setTitle(currentNode.getTextContent());
-					} else if (currentNode.getNodeName().equals("format")) {
+					} else if ("format".equalsIgnoreCase(currentNode.getNodeName())) {
 						field.setFormat(currentNode.getTextContent());
-					} else if (currentNode.getNodeName().equals("type")) {
+					} else if ("type".equalsIgnoreCase(currentNode.getNodeName())) {
 						field.setType(currentNode.getTextContent()
 								.toLowerCase().trim());
-					} else if (currentNode.getNodeName().equals("constraints")) {
+					} else if ("constraints".equalsIgnoreCase(currentNode.getNodeName())) {
 						logger.info("Processing Constraints");
 						NodeList constraintList = currentNode.getChildNodes();
 						if (constraintList != null) {

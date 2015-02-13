@@ -1,5 +1,7 @@
 package main.java.gov.gsa.fssi.files.schemas.utils.contexts;
 
+import java.io.File;
+
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.utils.strategies.SchemaLoaderStrategy;
 
@@ -17,8 +19,8 @@ public class SchemaLoaderContext {
 	 * @param constraint
 	 * @param data
 	 */
-	public void load(String directory, Schema schema) {
-		strategy.load(directory, schema); // Validate Constraint
+	public void load(File file, Schema schema) {
+		strategy.load(file, schema); // Validate Constraint
 	}
 
 	// this can be set at runtime by the application preferences

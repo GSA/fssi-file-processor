@@ -54,7 +54,7 @@ public class SourceFile extends File {
 	private List<SourceFileRecord> records = new ArrayList<SourceFileRecord>();
 
 	public SourceFile() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 
 	public SourceFile(String fileName) {

@@ -22,14 +22,14 @@ public class DateHelper {
 	 */
 	public static Date getDate(String string, String dateFormat) {
 		Date date;
-		logger.info(
+		if(logger.isDebugEnabled()) logger.debug(
 				"Attempting to extract date from string: '{}' using format '{}'",
 				string, dateFormat);
 		try {
 			date = parseDate(string, dateFormat);
 		} catch (ParseException e) {
 			date = null;
-			logger.error(
+			if(logger.isDebugEnabled()) logger.debug(
 					"There was an ParseException error '{}' attempting to get date from string: '{}'",
 					e.getMessage(), string);
 		}

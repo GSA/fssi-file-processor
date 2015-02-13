@@ -73,11 +73,11 @@ public class BasicTextSourceFileLoggerStrategy
 			bufferedWriter.newLine();
 			bufferedWriter.write("Highest Error Level: " + File.getErrorLevelName(sourceFile.getMaxErrorLevel()));
 			bufferedWriter.newLine();
-			bufferedWriter.write("Number of Fatal Errors: " + sourceFile.getTotalFatalRecords());
+			bufferedWriter.write("Number of Records with Fatal Errors: " + sourceFile.getTotalFatalRecords());
 			bufferedWriter.newLine();
-			bufferedWriter.write("Number of Errors: " + sourceFile.getTotalErrorRecords());	
+			bufferedWriter.write("Number of Records with Errors: " + sourceFile.getTotalErrorRecords());	
 			bufferedWriter.newLine();
-			bufferedWriter.write("Number of Warnings: " + sourceFile.getTotalWarningRecords());
+			bufferedWriter.write("Number of Records with Warnings: " + sourceFile.getTotalWarningRecords());
 			bufferedWriter.newLine();
 			bufferedWriter.write("Number of Passsing Records (Includings Warnings): " + passingRecords);			
 			bufferedWriter.newLine();
@@ -86,32 +86,36 @@ public class BasicTextSourceFileLoggerStrategy
 			bufferedWriter.write("*******************************");
 			bufferedWriter.newLine();
 			bufferedWriter.newLine();
-			bufferedWriter.write("Results:");	
-			bufferedWriter.newLine();
 			
-			for (SourceFileRecord record : sourceFile.getRecords()) {
-				bufferedWriter.write("Line: " + record.getRowIndex()
-						+ " Status: " + sourceFile.getStatusName() + " Level: "
-						+ File.getErrorLevelName(record.getMaxErrorLevel()));
+			if(sourceFile.getSchema() != null && sourceFile.getSchema().getStatus()){
+				bufferedWriter.write("Validation Results:");	
 				bufferedWriter.newLine();
-				for (Data data : record.getDatas()) {
-					if (data.getMaxErrorLevel() > FieldConstraint.getLevel(errorLevel)) {
-						bufferedWriter.write("     Field: "
-								+ sourceFile.getSourceHeaderName(data
-										.getHeaderIndex())
-								+ " failed constraints: ");
-						for (ValidationResult result : data
-								.getValidationResults()) {
-							if (!result.getStatus())
-								bufferedWriter.write(result.getRule() + " ");
+				
+				for (SourceFileRecord record : sourceFile.getRecords()) {
+					bufferedWriter.write("Line: " + record.getRowIndex()
+							+ " Status: " + sourceFile.getStatusName() + " Level: "
+							+ File.getErrorLevelName(record.getMaxErrorLevel()));
+					bufferedWriter.newLine();
+					for (Data data : record.getDatas()) {
+						if (data.getMaxErrorLevel() > FieldConstraint.getErrorLevel(errorLevel)) {
+							bufferedWriter.write("     Field: "
+									+ sourceFile.getSourceHeaderName(data
+											.getHeaderIndex())
+									+ " failed constraints: ");
+							for (ValidationResult result : data
+									.getValidationResults()) {
+								if (!result.getStatus()){
+									bufferedWriter.write("[" + File.getErrorLevelName(result.getErrorLevel()) + "] " + result.getRule());
+								}
+
+							}
+							bufferedWriter.write(" against value: '"
+									+ data.getData() + "'");
+							bufferedWriter.newLine();
 						}
-						bufferedWriter.write(" against value: '"
-								+ data.getData() + "'");
-						bufferedWriter.newLine();
 					}
 				}
 			}
-
 			bufferedWriter.flush();
 			bufferedWriter.close();
 

@@ -96,7 +96,6 @@ public class Config {
 	public static final String DEFAULT_WORKING_DIRECTORY = "./working/";
 	public static final String DEFAULT_SOURCEFILES_DIRECTORY = "./working/srcfiles/";
 	public static final String DEFAULT_SCHEMAS_DIRECTORY = "./working/schemas/";
-	public static final String DEFAULT_DATAMAPS_DIRECTORY = "./working/schemas/";
 	public static final String DEFAULT_LOGS_DIRECTORY = "./working/logs/";
 	public static final String DEFAULT_PROVIDERS_DIRECTORY = "./working/providers/";
 	public static final String DEFAULT_STAGED_DIRECTORY = "./working/staged/";
@@ -145,7 +144,6 @@ public class Config {
 		prop.setProperty(WORKING_DIRECTORY, DEFAULT_WORKING_DIRECTORY);
 		prop.setProperty(SOURCEFILES_DIRECTORY, DEFAULT_SOURCEFILES_DIRECTORY);
 		prop.setProperty(SCHEMAS_DIRECTORY, DEFAULT_SCHEMAS_DIRECTORY);
-		prop.setProperty(DATAMAPS_DIRECTORY, DEFAULT_DATAMAPS_DIRECTORY);
 		prop.setProperty(LOGS_DIRECTORY, DEFAULT_LOGS_DIRECTORY);
 		prop.setProperty(PROVIDERS_DIRECTORY, DEFAULT_PROVIDERS_DIRECTORY);
 		prop.setProperty(STAGED_DIRECTORY, DEFAULT_STAGED_DIRECTORY);
@@ -225,13 +223,6 @@ public class Config {
 					"No '{}' property found in config file, loading default: '{}'",
 					SCHEMAS_DIRECTORY, DEFAULT_SCHEMAS_DIRECTORY);
 			prop.put(SCHEMAS_DIRECTORY, DEFAULT_SCHEMAS_DIRECTORY);
-		}
-
-		if (!prop.containsKey(DATAMAPS_DIRECTORY)) {
-			logger.warn(
-					"No '{}' property found in config file, loading default: '{}'",
-					DATAMAPS_DIRECTORY, DEFAULT_DATAMAPS_DIRECTORY);
-			prop.put(DATAMAPS_DIRECTORY, DEFAULT_DATAMAPS_DIRECTORY);
 		}
 
 		if (!prop.containsKey(LOGS_DIRECTORY)) {

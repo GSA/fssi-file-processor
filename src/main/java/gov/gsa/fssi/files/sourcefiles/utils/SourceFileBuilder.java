@@ -36,42 +36,41 @@ public class SourceFileBuilder {
 		SourceFile sourceFile = new SourceFile(fileName);
 		mapProviderToSourceFile(providers, sourceFile);
 
-		if (sourceFile.getProvider() == null) {
-			logger.error("Could not find Provider for file '{}'. Ignoring",
+		if (sourceFile.getProvider() == null && sourceFile.getStatus()) {
+			logger.error("Could not find Provider for file '{}'. Will use defaults",
 					fileName);
-			sourceFile.setStatus(false);
-			return null;
+		}else{
+			// Map Schema to SourceFile
+			if (sourceFile.getStatus()
+					&& sourceFile.getProvider().getSchemaName() != null
+					&& !sourceFile.getProvider().getSchemaName().isEmpty()) {
+				logger.warn("Attemping to map Schema to SourceFile '{}'",
+						sourceFile.getFileName());
+				mapSchemaToSourceFile(schemas, sourceFile);
+	
+			} else {
+				logger.warn(
+						"Provider '{}' for SourceFile '{}' does not have a Schema",
+						sourceFile.getProvider().getProviderName(), fileName);
+			}
+	
+			// Provider noted a schema, but couldn't find it
+			if (sourceFile.getStatus() && sourceFile.getSchema() != null) {
+				personalizeSourceFileSchema(sourceFile);
+			} else if (sourceFile.getStatus() && sourceFile.getSchema() == null) {
+				logger.error(
+						"Provider '{}' for sourceFile '{}' noted schema '{}', but it could not be found",
+						sourceFile.getProvider().getProviderName(), sourceFile
+								.getFileName(), sourceFile.getProvider()
+								.getSchemaName());
+			} else if (sourceFile.getStatus()) {
+				logger.error(
+						"No schema for file '{}', ignoring Schema processing activities",
+						fileName);
+			}
+		
 		}
-
-		// Map Schema to SourceFile
-		if (sourceFile.getStatus()
-				&& sourceFile.getProvider().getSchemaName() != null
-				&& !sourceFile.getProvider().getSchemaName().isEmpty()) {
-			logger.warn("Attemping to map Schema to SourceFile '{}'",
-					sourceFile.getFileName());
-			mapSchemaToSourceFile(schemas, sourceFile);
-
-		} else {
-			logger.warn(
-					"Provider '{}' for SourceFile '{}' does not have a Schema",
-					sourceFile.getProvider().getProviderName(), fileName);
-		}
-
-		// Provider noted a schema, but couldn't find it
-		if (sourceFile.getStatus() && sourceFile.getSchema() != null) {
-			personalizeSourceFileSchema(sourceFile);
-		} else if (sourceFile.getStatus() && sourceFile.getSchema() == null) {
-			logger.error(
-					"Provider '{}' for sourceFile '{}' noted schema '{}', but it could not be found",
-					sourceFile.getProvider().getProviderName(), sourceFile
-							.getFileName(), sourceFile.getProvider()
-							.getSchemaName());
-		} else if (sourceFile.getStatus()) {
-			logger.error(
-					"No schema for file '{}', ignoring Schema processing activities",
-					fileName);
-		}
-
+		
 		// Load File
 		if (sourceFile.getStatus()) {
 			logger.info("Loading SourceFile '{}'", sourceFile.getFileName());
@@ -152,7 +151,8 @@ public class SourceFileBuilder {
 		if (sourceFile.getProvider() == null) {
 			logger.error("Could not find provider for file: '{}'",
 					sourceFile.getFileName());
-			sourceFile.setStatus(false);
+			sourceFile.setMaxErrorLevel(2);
+			sourceFile.addLoadStatusMessage("Could not find provider, will have to use defaults");
 		} else {
 			logger.info("Mapped Provider '{}' successfully", sourceFile
 					.getProvider().getProviderIdentifier());

@@ -72,22 +72,19 @@ public class ExcelSourceFileExporterStrategy
 			Map<Integer, String> headerMap = sourceFile.getSourceHeaders();
 			Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
 			while (headerMapIterator.hasNext()) {
-				String fieldName = null;
 				Map.Entry<Integer, String> headerMapIteratorPairs = (Map.Entry) headerMapIterator
 						.next();
+				String fieldName = headerMapIteratorPairs.getValue().toString();
 				c = r.createCell(headerMapIteratorPairs.getKey());
-				for (SchemaField field : sourceFile.getSchema().getFields()) { // getting
-																				// correct
-																				// header
-																				// name
-																				// from
-																				// Schema
-					if (field.getHeaderIndex() == headerMapIteratorPairs
-							.getKey()) {
-						logger.info("Using Schema name '{}' for field '{}'",
-								field.getName(), headerMapIteratorPairs
-										.getValue().toString());
-						fieldName = field.getName();
+				if(sourceFile.getSchema() != null && sourceFile.getSchema().getStatus()){
+					for (SchemaField field : sourceFile.getSchema().getFields()) { 
+						if (field.getHeaderIndex() == headerMapIteratorPairs
+								.getKey()) {
+							logger.info("Using Schema name '{}' for field '{}'",
+									field.getName(), headerMapIteratorPairs
+											.getValue().toString());
+							fieldName = field.getName();
+						}
 					}
 				}
 				c.setCellValue((fieldName == null ? headerMapIteratorPairs
