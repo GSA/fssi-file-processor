@@ -11,11 +11,11 @@ import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.ConstraintValid
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PatternConstraintValidationStrategy
-		implements
-			ConstraintValidationStrategy {
+public class PatternConstraintValidationStrategy implements
+		ConstraintValidationStrategy {
 	private static final Logger logger = LoggerFactory
 			.getLogger(PatternConstraintValidationStrategy.class);
+
 	@Override
 	public boolean isValid(SchemaField field, FieldConstraint constraint,
 			Data data) {

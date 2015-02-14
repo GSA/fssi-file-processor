@@ -507,10 +507,10 @@ public class SourceFile extends File {
 		SourceFileValidator validator = new SourceFileValidator();
 		validator.validate(this);
 	}
-	
-	public void logError(int errorLevel){
+
+	public void logError(int errorLevel) {
 		this.setMaxErrorLevel(errorLevel);
-		switch(errorLevel){
+		switch (errorLevel) {
 		case 1:
 			this.incrementTotalWarningRecords();
 			break;
@@ -521,7 +521,7 @@ public class SourceFile extends File {
 			this.incrementTotalFatalRecords();
 			break;
 		}
-		
+
 	}
 
 }

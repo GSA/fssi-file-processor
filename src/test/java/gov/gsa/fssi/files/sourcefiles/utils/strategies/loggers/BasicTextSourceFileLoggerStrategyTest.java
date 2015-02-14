@@ -58,7 +58,8 @@ public class BasicTextSourceFileLoggerStrategyTest {
 
 		SourceFileLoggerContext context = new SourceFileLoggerContext();
 		context.setSourceFileLoggerStrategy(new BasicTextSourceFileLoggerStrategy());
-		context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile, config.getProperty(Config.LOGGING_LEVEL));
+		context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile,
+				config.getProperty(Config.LOGGING_LEVEL));
 
 		try {
 			String fileName = FileHelper.getFullPath(

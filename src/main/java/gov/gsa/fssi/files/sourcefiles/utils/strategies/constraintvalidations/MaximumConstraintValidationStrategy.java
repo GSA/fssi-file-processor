@@ -11,11 +11,11 @@ import main.java.gov.gsa.fssi.helpers.DateHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MaximumConstraintValidationStrategy
-		implements
-			ConstraintValidationStrategy {
+public class MaximumConstraintValidationStrategy implements
+		ConstraintValidationStrategy {
 	private static final Logger logger = LoggerFactory
 			.getLogger(MaximumConstraintValidationStrategy.class);
+
 	@Override
 	public boolean isValid(SchemaField field, FieldConstraint constraint,
 			Data data) {

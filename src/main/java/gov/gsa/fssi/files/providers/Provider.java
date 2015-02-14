@@ -15,14 +15,14 @@ import org.slf4j.LoggerFactory;
 public class Provider extends File {
 	private static final Logger logger = LoggerFactory
 			.getLogger(Provider.class);
-	
+
 	public static final String DEFAULT_PROVIDER_NAME = "N/A";
 	public static final String DEFAULT_PROVIDER_ID = "N/A";
 	public static final String DEFAULT_PROVIDER_IDENTIFIER = "N/A";
 	public static final String DEFAULT_PROVIDER_EMAIL = "N/A";
 	public static final String DEFAULT_FILE_OUTPUT_TYPE = File.FILETYPE_CSV;
 	public static final String DEFAULT_SCHEMA_NAME = "N/A";
-	
+
 	private String schemaName = null;
 
 	/**

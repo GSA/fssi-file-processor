@@ -28,11 +28,11 @@ import org.slf4j.LoggerFactory;
  * @author davidlarrimore
  *
  */
-public class CSVSourceFileExporterStrategy
-		implements
-			SourceFileExporterStrategy {
+public class CSVSourceFileExporterStrategy implements
+		SourceFileExporterStrategy {
 	private static final Logger logger = LoggerFactory
 			.getLogger(CSVSourceFileExporterStrategy.class);
+
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory

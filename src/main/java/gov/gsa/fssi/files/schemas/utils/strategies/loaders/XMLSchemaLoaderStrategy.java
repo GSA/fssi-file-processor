@@ -34,6 +34,7 @@ import org.w3c.dom.NodeList;
 public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 	private static final Logger logger = LoggerFactory
 			.getLogger(XMLSchemaLoaderStrategy.class);
+
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
@@ -44,16 +45,16 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 		Document doc = null;
 		if (schema.getFileName() != null) {
 			try {
-				if(file.isFile()){
+				if (file.isFile()) {
 					DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 							.newInstance();
 					DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 					doc = dBuilder.parse(file);
-				}else{
+				} else {
 					schema.setMaxErrorLevel(3);
-					schema.addLoadStatusMessage(schema.getFileName()+" is not a File.");
-					logger.error(
-							"'{}' is not a file. unable to process", 
+					schema.addLoadStatusMessage(schema.getFileName()
+							+ " is not a File.");
+					logger.error("'{}' is not a file. unable to process",
 							schema.getFileName());
 				}
 			} catch (Exception e) {
@@ -61,7 +62,9 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 						"Received Exception error '{}' while processing file {}",
 						e.getMessage(), schema.getFileName());
 				schema.setMaxErrorLevel(3);
-				schema.addLoadStatusMessage("Received Exception error '"+e.getMessage()+"' while processing file '"+schema.getFileName()+"'");
+				schema.addLoadStatusMessage("Received Exception error '"
+						+ e.getMessage() + "' while processing file '"
+						+ schema.getFileName() + "'");
 			}
 
 			if (doc != null) {
@@ -94,19 +97,18 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 				logger.info("successfully loaded Schema '{}' from file '{}'",
 						schema.getName(), schema.getFileName());
 				schema.setLoadStage(main.java.gov.gsa.fssi.files.File.STAGE_LOADED);
-			}else{
+			} else {
 				logger.error(
 						"No document found in file '{}'. Unable to load any schema",
 						schema.getFileName());
 				schema.setMaxErrorLevel(3);
 				schema.addLoadStatusMessage("No document found in file '"
-						+ schema.getFileName()
-						+ "'. Unable to load any schema");
+						+ schema.getFileName() + "'. Unable to load any schema");
 			}
 		} else {
 			logger.error("Could not build Schema from file '{}', no fileName was set");
 			schema.setMaxErrorLevel(3);
-			schema.addLoadStatusMessage(file.getPath() + " is not a File.");	
+			schema.addLoadStatusMessage(file.getPath() + " is not a File.");
 		}
 	}
 
@@ -176,16 +178,21 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 						&& currentNode.getNodeName() != null) {
 					if ("name".equals(currentNode.getNodeName())) {
 						field.setName(currentNode.getTextContent());
-					} else if ("description".equalsIgnoreCase(currentNode.getNodeName())) {
+					} else if ("description".equalsIgnoreCase(currentNode
+							.getNodeName())) {
 						field.setDescription(currentNode.getTextContent());
-					} else if ("title".equalsIgnoreCase(currentNode.getNodeName())) {
+					} else if ("title".equalsIgnoreCase(currentNode
+							.getNodeName())) {
 						field.setTitle(currentNode.getTextContent());
-					} else if ("format".equalsIgnoreCase(currentNode.getNodeName())) {
+					} else if ("format".equalsIgnoreCase(currentNode
+							.getNodeName())) {
 						field.setFormat(currentNode.getTextContent());
-					} else if ("type".equalsIgnoreCase(currentNode.getNodeName())) {
+					} else if ("type".equalsIgnoreCase(currentNode
+							.getNodeName())) {
 						field.setType(currentNode.getTextContent()
 								.toLowerCase().trim());
-					} else if ("constraints".equalsIgnoreCase(currentNode.getNodeName())) {
+					} else if ("constraints".equalsIgnoreCase(currentNode
+							.getNodeName())) {
 						logger.info("Processing Constraints");
 						NodeList constraintList = currentNode.getChildNodes();
 						if (constraintList != null) {

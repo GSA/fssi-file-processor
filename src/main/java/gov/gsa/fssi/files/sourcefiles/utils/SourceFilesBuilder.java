@@ -29,9 +29,8 @@ public class SourceFilesBuilder {
 	 * @param sourceFileDirectory
 	 * @return
 	 */
-	public List<SourceFile> build(String directory,
-			List<Schema> schemas, String exportMode,
-			List<Provider> providers) {
+	public List<SourceFile> build(String directory, List<Schema> schemas,
+			String exportMode, List<Provider> providers) {
 		List<SourceFile> sourceFiles = new ArrayList<SourceFile>();
 		// Loop through files in sourceFileDirectory and populate SourceFile
 		// objects

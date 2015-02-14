@@ -26,6 +26,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 		}
 		return true;
 	}
+
 	public static final Logger logger = LoggerFactory
 			.getLogger(ExcelProviderLoaderStrategy.class);
 

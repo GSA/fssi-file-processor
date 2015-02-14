@@ -92,8 +92,8 @@ public class SourceFileValidator {
 							sourceFileRecord.getRowIndex(), File
 									.getErrorLevelName(sourceFileRecord
 											.getMaxErrorLevel()));
-				
-			sourceFile.logError(sourceFileRecord.getMaxErrorLevel());
+
+				sourceFile.logError(sourceFileRecord.getMaxErrorLevel());
 			}
 		}
 		if (sourceFile.getMaxErrorLevel() == 3)

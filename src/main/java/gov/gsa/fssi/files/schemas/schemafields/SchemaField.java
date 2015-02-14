@@ -76,18 +76,21 @@ public class SchemaField {
 	 * value of field may be any type
 	 */
 	public static final String TYPE_ANY = "any";
+
 	/**
 	 * @param alias
 	 */
 	public void addAlias(String alias) {
 		this.alias.add(alias);
 	}
+
 	/**
 	 * @param constraint
 	 */
 	public void addConstraint(FieldConstraint constraint) {
 		this.constraints.add(constraint);
 	}
+
 	/**
 	 * @return
 	 */
@@ -105,13 +108,15 @@ public class SchemaField {
 		arrayList.add(TYPE_ANY);
 		return arrayList;
 	}
+
 	/**
 	 * @return the alias
 	 */
 	public List<String> getAlias() {
 		return alias;
 	}
-															/**
+
+	/**
 	 * @return the constraints
 	 */
 	public List<FieldConstraint> getConstraints() {
@@ -136,6 +141,7 @@ public class SchemaField {
 	public String getFormat() {
 		return format;
 	}
+
 	/**
 	 * This constructor class takes a file name and uses it to initialize the
 	 * basic elements of a SourceFile

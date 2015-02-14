@@ -115,6 +115,7 @@ public class File {
 	 */
 	public File() {
 	}
+
 	/**
 	 * This constructor class takes a file name and uses it to initialize the
 	 * basic elements of a SourceFile
@@ -132,6 +133,7 @@ public class File {
 		// defaulted to underscore
 		this.setFileNameParts(SEPARATOR_UNDERSCORE);
 	}
+
 	/**
 	 * @param filepart
 	 *            String filepart to add
@@ -139,6 +141,7 @@ public class File {
 	public void addFileNameParts(String filepart) {
 		this.fileNameParts.add(filepart);
 	}
+
 	public void addLoadStatusMessage(String loadStatusMessage) {
 		this.loadStatusMessages.add(loadStatusMessage);
 	}
@@ -350,7 +353,7 @@ public class File {
 	public void setLoadStatusMessage(List<String> loadStatusMessages) {
 		this.loadStatusMessages = loadStatusMessages;
 	}
-	
+
 	public void setMaxErrorLevel(int errorLevel) {
 		setStatus(errorLevel);
 		if (errorLevel > this.maxErrorLevel)
@@ -396,20 +399,20 @@ public class File {
 		String name = null;
 		if (errorLevel <= 3) {
 			switch (errorLevel) {
-				case 0 :
-					name = File.STATUS_PASS;
-					break;
-				case 1 :
-					name = File.STATUS_WARNING;
-					break;
-				case 2 :
-					name = File.STATUS_ERROR;
-					break;
-				case 3 :
-					name = File.STATUS_FATAL;
-					break;
-				default :
-					break;
+			case 0:
+				name = File.STATUS_PASS;
+				break;
+			case 1:
+				name = File.STATUS_WARNING;
+				break;
+			case 2:
+				name = File.STATUS_ERROR;
+				break;
+			case 3:
+				name = File.STATUS_FATAL;
+				break;
+			default:
+				break;
 			}
 		}
 		return name;

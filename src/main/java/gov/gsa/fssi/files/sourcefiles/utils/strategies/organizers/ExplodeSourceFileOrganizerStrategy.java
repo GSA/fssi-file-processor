@@ -19,11 +19,11 @@ import org.slf4j.LoggerFactory;
  * @author davidlarrimore
  *
  */
-public class ExplodeSourceFileOrganizerStrategy
-		implements
-			SourceFileOrganizerStrategy {
+public class ExplodeSourceFileOrganizerStrategy implements
+		SourceFileOrganizerStrategy {
 	private static final Logger logger = LoggerFactory
 			.getLogger(ExplodeSourceFileOrganizerStrategy.class);
+
 	/**
 	 * This method maps a sourceFile to its schema and then conforms the
 	 * file/data to the schema format We delete any data that is no longer

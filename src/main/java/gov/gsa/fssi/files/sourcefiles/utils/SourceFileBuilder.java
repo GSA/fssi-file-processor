@@ -37,9 +37,10 @@ public class SourceFileBuilder {
 		mapProviderToSourceFile(providers, sourceFile);
 
 		if (sourceFile.getProvider() == null && sourceFile.getStatus()) {
-			logger.error("Could not find Provider for file '{}'. Will use defaults",
+			logger.error(
+					"Could not find Provider for file '{}'. Will use defaults",
 					fileName);
-		}else{
+		} else {
 			// Map Schema to SourceFile
 			if (sourceFile.getStatus()
 					&& sourceFile.getProvider().getSchemaName() != null
@@ -47,13 +48,13 @@ public class SourceFileBuilder {
 				logger.warn("Attemping to map Schema to SourceFile '{}'",
 						sourceFile.getFileName());
 				mapSchemaToSourceFile(schemas, sourceFile);
-	
+
 			} else {
 				logger.warn(
 						"Provider '{}' for SourceFile '{}' does not have a Schema",
 						sourceFile.getProvider().getProviderName(), fileName);
 			}
-	
+
 			// Provider noted a schema, but couldn't find it
 			if (sourceFile.getStatus() && sourceFile.getSchema() != null) {
 				personalizeSourceFileSchema(sourceFile);
@@ -68,9 +69,9 @@ public class SourceFileBuilder {
 						"No schema for file '{}', ignoring Schema processing activities",
 						fileName);
 			}
-		
+
 		}
-		
+
 		// Load File
 		if (sourceFile.getStatus()) {
 			logger.info("Loading SourceFile '{}'", sourceFile.getFileName());
@@ -152,7 +153,8 @@ public class SourceFileBuilder {
 			logger.error("Could not find provider for file: '{}'",
 					sourceFile.getFileName());
 			sourceFile.setMaxErrorLevel(2);
-			sourceFile.addLoadStatusMessage("Could not find provider, will have to use defaults");
+			sourceFile
+					.addLoadStatusMessage("Could not find provider, will have to use defaults");
 		} else {
 			logger.info("Mapped Provider '{}' successfully", sourceFile
 					.getProvider().getProviderIdentifier());
@@ -199,13 +201,13 @@ public class SourceFileBuilder {
 					sourceFile.getFileName(), sourceFile.getSchema().getName());
 			for (SchemaField field : sourceFile.getSchema().getFields()) {
 				List<String> aliasNames = new ArrayList<String>();// getting
-																		// array
-																		// list
-																		// of
-																		// field
-																		// name
-																		// and
-																		// alias
+																	// array
+																	// list
+																	// of
+																	// field
+																	// name
+																	// and
+																	// alias
 				aliasNames.add(field.getName()); // Adding Field Name
 				aliasNames.addAll(field.getAlias()); // Adding all of its
 														// aliases

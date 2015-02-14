@@ -3,7 +3,6 @@ package main.java.gov.gsa.fssi.files.sourcefiles.records.datas;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.results.ValidationResult;
 
 import org.slf4j.Logger;

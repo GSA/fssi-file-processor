@@ -9,5 +9,6 @@ import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
  */
 public interface TypeValidationStrategy {
 	boolean isValid(SchemaField field, Data data);
+
 	void validate(SchemaField field, Data data);
 }

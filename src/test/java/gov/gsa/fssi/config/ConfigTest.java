@@ -21,5 +21,5 @@ public class ConfigTest {
 		Assert.assertEquals("failure - ConfigTest", "./testfiles/providers/",
 				config.getProperty(Config.PROVIDERS_DIRECTORY));
 	}
-	
+
 }

@@ -104,8 +104,7 @@ public class FieldConstraint {
 	}
 
 	public Date getEffectiveDate() {
-		return (effectiveDate == null
-				? null
+		return (effectiveDate == null ? null
 				: new Date(effectiveDate.getTime()));
 	}
 
@@ -184,8 +183,9 @@ public class FieldConstraint {
 			return 1;
 		}
 		return 0;
-		
-	}	
+
+	}
+
 	public void setLevelName(String levelName) {
 		this.levelName = levelName;
 	}

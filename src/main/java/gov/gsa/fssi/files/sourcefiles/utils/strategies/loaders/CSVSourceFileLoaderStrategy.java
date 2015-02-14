@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 	private static final Logger logger = LoggerFactory
 			.getLogger(CSVSourceFileLoaderStrategy.class);
+
 	/**
 	 *
 	 * @return Schema loaded from fileName in schemas_directory
@@ -46,22 +47,22 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 			final CSVParser parser = new CSVParser(reader,
 					CSVFormat.EXCEL.withHeader());
 
-			
 			try {
 				processHeaders(fileName, sourceFile, parser);
 			} catch (NullPointerException e) {
 				logger.error(
 						"Received NullPointerException '{}' while processing headers for file '{}'",
-						e.getMessage(), sourceFile.getFileName());	
-						sourceFile.setMaxErrorLevel(3);
-						sourceFile.setLoadStatus(false);
-						sourceFile.addLoadStatusMessage("Received error processing headers");
+						e.getMessage(), sourceFile.getFileName());
+				sourceFile.setMaxErrorLevel(3);
+				sourceFile.setLoadStatus(false);
+				sourceFile
+						.addLoadStatusMessage("Received error processing headers");
 			}
-			
-			if(sourceFile.getStatus()){
+
+			if (sourceFile.getStatus()) {
 				for (final CSVRecord csvRecord : parser) {
 					processRecord(sourceFile, csvRecord);
-				}				
+				}
 			}
 
 			if (sourceFile.getTotalEmptyRecords()
@@ -90,28 +91,29 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 			logger.error(
 					"There was an IllegalArgumentException error with file {}",
 					sourceFile.getFileName());
-		}catch (NullPointerException e){
+		} catch (NullPointerException e) {
 			logger.error(
 					"Received NullPointerException '{}' while creating log for file '{}'",
-					e.getMessage(), sourceFile.getFileName());							
+					e.getMessage(), sourceFile.getFileName());
 		}
-		if(sourceFile.getStatus()){
+		if (sourceFile.getStatus()) {
 			sourceFile.setLoadStage(File.STAGE_LOADED);
 		}
-		
+
 	}
+
 	/**
 	 * @param fileName
 	 * @param sourceFile
 	 * @param parser
 	 */
 	private void processHeaders(String fileName, SourceFile sourceFile,
-			final CSVParser parser) throws NullPointerException{
+			final CSVParser parser) throws NullPointerException {
 		/*
-		 * Converting Apache Commons CSV header map from <String, Integer>
-		 * to <Integer,String>
+		 * Converting Apache Commons CSV header map from <String, Integer> to
+		 * <Integer,String>
 		 */
-		
+
 		Map<String, Integer> parserHeaderMap = parser.getHeaderMap();
 		Iterator<?> parserHeaderMapIterator = parserHeaderMap.entrySet()
 				.iterator();
@@ -124,6 +126,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 		logger.info("file '{}' had the following headers: {}", fileName,
 				parser.getHeaderMap());
 	}
+
 	/**
 	 * @param sourceFile
 	 * @param csvRecord
@@ -134,16 +137,15 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 		SourceFileRecord thisRecord = new SourceFileRecord();
 		thisRecord.setRowIndex((int) csvRecord.getRecordNumber() + 1);
 		// Ignoring null rows
-		if (csvRecord.size() > 1
-				&& sourceFile.getSourceHeaders().size() > 1) {
+		if (csvRecord.size() > 1 && sourceFile.getSourceHeaders().size() > 1) {
 			Iterator<?> headerIterator = sourceFile.getSourceHeaders()
 					.entrySet().iterator();
 			while (headerIterator.hasNext()) {
 				Map.Entry dataPairs = (Map.Entry) headerIterator.next();
 				try {
 					Data data = new Data();
-					data.setData(csvRecord.get(
-							dataPairs.getValue().toString()).trim());
+					data.setData(csvRecord.get(dataPairs.getValue().toString())
+							.trim());
 					data.setHeaderIndex((Integer) dataPairs.getKey());
 					thisRecord.addData(data);
 				} catch (IllegalArgumentException e) {
@@ -152,7 +154,8 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 							e.getMessage(), sourceFile.getFileName());
 					sourceFile.setMaxErrorLevel(3);
 					sourceFile.setLoadStatus(false);
-					sourceFile.addLoadStatusMessage("Received error processing record");
+					sourceFile
+							.addLoadStatusMessage("Received error processing record");
 				}
 
 			}

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 public class DateTypeValidationStrategy implements TypeValidationStrategy {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DateTypeValidationStrategy.class);
+
 	@Override
 	public boolean isValid(SchemaField field, Data data) {
 		// TODO Auto-generated method stub
@@ -32,7 +33,8 @@ public class DateTypeValidationStrategy implements TypeValidationStrategy {
 
 				if (date == null) {
 					data.addValidationResult(false, 3,
-							"Type(" + field.getType() + ")/Format("+dateFormatString+")");
+							"Type(" + field.getType() + ")/Format("
+									+ dateFormatString + ")");
 				} else if (date.compareTo(DateHelper.getMinDate()) < 0) {
 					if (logger.isDebugEnabled())
 						logger.debug(

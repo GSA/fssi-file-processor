@@ -1,13 +1,14 @@
 package main.java.gov.gsa.fssi.config;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.List;
 import java.util.Properties;
 
-import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 
 import org.slf4j.Logger;
@@ -28,8 +29,8 @@ public class Config {
 	public static final String LOGGING_LEVEL_ALL = "all";
 	public static final String LOGGING_LEVEL_WARNING = "warning";
 	public static final String LOGGING_LEVEL_ERROR = "error";
-	public static final String LOGGING_LEVEL_FATAL = "fatal";	
-	
+	public static final String LOGGING_LEVEL_FATAL = "fatal";
+
 	/**
 	 * @deprecated
 	 */
@@ -102,7 +103,7 @@ public class Config {
 	public static final String DEFAULT_EXPORT_MODE = "implode";
 	public static final String DEFAULT_VALIDATION_MODE = "";
 	public static final String DEFAULT_PROPFILE_NAME = "config.properties";
-	public static final String DEFAULT_LOGGING_LEVEL = LOGGING_LEVEL_ALL;
+	public static final String DEFAULT_LOGGING_LEVEL = LOGGING_LEVEL_WARNING;
 
 	/**
 	 * Config
@@ -171,24 +172,37 @@ public class Config {
 	 */
 	public void getPropValues(String directory, String fileName)
 			throws IOException {
+		boolean foundPropFile = false;
 		Properties prop = new Properties();
 		String fullFileName = FileHelper.getFullPath(directory, fileName);
-		logger.info("Attempting to get configurations from configfile '{}'",
-				fullFileName);
-		InputStream inputStream = null;
+		logger.info("Attempting to get configurations from configfile '{}'",fullFileName);
+		File file = FileHelper.getFile(fullFileName);
+		
+		if(!file.isFile()){
+			logger.warn("could not find default properties file '{}', scanning home directory", DEFAULT_PROPFILE_NAME);
+			List<String> fileNames = FileHelper.getFilesFromDirectory(directory, ".properties");
+			for (String thisFileName : fileNames) {
+				file = FileHelper.getFile(thisFileName);
+				if(file.isFile()) foundPropFile = true;
+				fullFileName = file.getAbsolutePath();
+			}			
+		}else{
+			foundPropFile = true;
+		}
+		
+		if(foundPropFile){
+			logger.info("found propfile '{}'", fullFileName);
+			InputStream inputStream = new FileInputStream(fullFileName);
 
-		if (fullFileName.startsWith("."))
-			inputStream = new FileInputStream(FileHelper.getFullPath(directory,
-					fileName));
-		else
-			inputStream = getClass().getResourceAsStream(fullFileName);
-
-		Reader reader = new InputStreamReader(inputStream, "UTF-8");
-		prop.load(reader); // Attempting to Load File
-		validatePropFile(prop); // Now we validate the file
-		this.prop = prop;
-		reader.close();
-		inputStream.close();
+			Reader reader = new InputStreamReader(inputStream, "UTF-8");
+			prop.load(reader); // Attempting to Load File
+			validatePropFile(prop); // Now we validate the file
+			this.prop = prop;
+			reader.close();
+			inputStream.close();			
+		}else{
+			logger.error("Could not find Prop File");
+		}
 	}
 
 	/**
@@ -251,11 +265,11 @@ public class Config {
 					"No '{}' property found in config file, loading default: '{}'",
 					EXPORT_MODE, DEFAULT_EXPORT_MODE);
 			prop.put(EXPORT_MODE, DEFAULT_EXPORT_MODE);
-		}else if(!isValidExportMode(prop.getProperty(EXPORT_MODE))){
+		} else if (!isValidExportMode(prop.getProperty(EXPORT_MODE))) {
 			logger.warn(
 					"BAD '{}' property found in config file, loading default: '{}'",
 					EXPORT_MODE, DEFAULT_EXPORT_MODE);
-			prop.put(EXPORT_MODE, DEFAULT_EXPORT_MODE);			
+			prop.put(EXPORT_MODE, DEFAULT_EXPORT_MODE);
 		}
 
 		if (!prop.containsKey(LOGGING_LEVEL)) {
@@ -263,16 +277,16 @@ public class Config {
 					"No '{}' property found in config file, loading default: '{}'",
 					LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);
 			prop.put(LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);
-		}else if(!isValidLoggingLevel(prop.getProperty(LOGGING_LEVEL))){
+		} else if (!isValidLoggingLevel(prop.getProperty(LOGGING_LEVEL))) {
 			logger.warn(
 					"BAD '{}' property found in config file, loading default: '{}'",
 					LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);
-			prop.put(LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);			
+			prop.put(LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);
 		}
-		
+
 		return prop;
 	}
-	
+
 	public static boolean isValidLoggingLevel(String val) {
 		if (val.equalsIgnoreCase(LOGGING_LEVEL_FATAL)) {
 			return true;
@@ -280,12 +294,12 @@ public class Config {
 			return true;
 		} else if (val.equalsIgnoreCase(LOGGING_LEVEL_WARNING)) {
 			return true;
-		} else if (val.equalsIgnoreCase(LOGGING_LEVEL_ALL)){
-			return true;			
+		} else if (val.equalsIgnoreCase(LOGGING_LEVEL_ALL)) {
+			return true;
 		}
 		return false;
-	}	
-	
+	}
+
 	public static boolean isValidExportMode(String val) {
 		if (val.equalsIgnoreCase(EXPORT_MODE_IMPLODE)) {
 			return true;
@@ -293,6 +307,6 @@ public class Config {
 			return true;
 		}
 		return false;
-	}		
-	
+	}
+
 }

@@ -8,11 +8,11 @@ import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.ConstraintValid
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MinimumConstraintValidationStrategy
-		implements
-			ConstraintValidationStrategy {
+public class MinimumConstraintValidationStrategy implements
+		ConstraintValidationStrategy {
 	private static final Logger logger = LoggerFactory
 			.getLogger(MinimumConstraintValidationStrategy.class);
+
 	@Override
 	public boolean isValid(SchemaField field, FieldConstraint constraint,
 			Data data) {

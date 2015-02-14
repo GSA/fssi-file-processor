@@ -28,9 +28,8 @@ import org.slf4j.LoggerFactory;
  * @author davidlarrimore
  *
  */
-public class ExcelSourceFileExporterStrategy
-		implements
-			SourceFileExporterStrategy {
+public class ExcelSourceFileExporterStrategy implements
+		SourceFileExporterStrategy {
 	public static void closeOutputStream(FileOutputStream out, String fileName) {
 		try {
 			out.flush();
@@ -42,6 +41,7 @@ public class ExcelSourceFileExporterStrategy
 			out = null;
 		}
 	}
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(ExcelSourceFileExporterStrategy.class);
 
@@ -61,8 +61,7 @@ public class ExcelSourceFileExporterStrategy
 							sourceFile.getProvider().getFileOutputType()));
 
 			Workbook wb = sourceFile.getProvider().getFileOutputType()
-					.equalsIgnoreCase("XLSX")
-					? new XSSFWorkbook()
+					.equalsIgnoreCase("XLSX") ? new XSSFWorkbook()
 					: new HSSFWorkbook(); // create a new workbook
 
 			Sheet s = wb.createSheet(); // create a new sheet
@@ -76,11 +75,13 @@ public class ExcelSourceFileExporterStrategy
 						.next();
 				String fieldName = headerMapIteratorPairs.getValue().toString();
 				c = r.createCell(headerMapIteratorPairs.getKey());
-				if(sourceFile.getSchema() != null && sourceFile.getSchema().getStatus()){
-					for (SchemaField field : sourceFile.getSchema().getFields()) { 
+				if (sourceFile.getSchema() != null
+						&& sourceFile.getSchema().getStatus()) {
+					for (SchemaField field : sourceFile.getSchema().getFields()) {
 						if (field.getHeaderIndex() == headerMapIteratorPairs
 								.getKey()) {
-							logger.info("Using Schema name '{}' for field '{}'",
+							logger.info(
+									"Using Schema name '{}' for field '{}'",
 									field.getName(), headerMapIteratorPairs
 											.getValue().toString());
 							fieldName = field.getName();

@@ -19,9 +19,10 @@ import org.junit.Test;
 public class SourceFileLoadTest {
 	Config config = new Config("./testfiles/", "config.properties");
 	private static final String SOURCEFILENAME = "goodfileschematest_012015.csv";
+
 	@Test
 	public void loadSourceFile() {
-		
+
 		SourceFile sourceFile = new SourceFile(SOURCEFILENAME);
 		sourceFile.load(config.getProperty(Config.SOURCEFILES_DIRECTORY));
 
@@ -57,8 +58,7 @@ public class SourceFileLoadTest {
 		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
 		SourceFile sourceFile = sourceFileBuilder.build(
 				config.getProperty(Config.SOURCEFILES_DIRECTORY),
-				SOURCEFILENAME, Config.EXPORT_MODE_IMPLODE,
-				schemas, providers);
+				SOURCEFILENAME, Config.EXPORT_MODE_IMPLODE, schemas, providers);
 
 		Assert.assertEquals("failure - loadSourceFile recordCount", 6,
 				sourceFile.recordCount());

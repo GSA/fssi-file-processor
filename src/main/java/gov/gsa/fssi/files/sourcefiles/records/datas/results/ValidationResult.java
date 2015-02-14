@@ -56,6 +56,7 @@ public class ValidationResult {
 	public void setErrorLevel(int errorLevel) {
 		this.errorLevel = errorLevel;
 	}
+
 	/**
 	 * @param rule
 	 *            the rule to set
@@ -63,6 +64,7 @@ public class ValidationResult {
 	public void setRule(String rule) {
 		this.rule = rule;
 	}
+
 	/**
 	 * @param status
 	 *            the status to set

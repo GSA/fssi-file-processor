@@ -22,16 +22,18 @@ public class DateHelper {
 	 */
 	public static Date getDate(String string, String dateFormat) {
 		Date date;
-		if(logger.isDebugEnabled()) logger.debug(
-				"Attempting to extract date from string: '{}' using format '{}'",
-				string, dateFormat);
+		if (logger.isDebugEnabled())
+			logger.debug(
+					"Attempting to extract date from string: '{}' using format '{}'",
+					string, dateFormat);
 		try {
 			date = parseDate(string, dateFormat);
 		} catch (ParseException e) {
 			date = null;
-			if(logger.isDebugEnabled()) logger.debug(
-					"There was an ParseException error '{}' attempting to get date from string: '{}'",
-					e.getMessage(), string);
+			if (logger.isDebugEnabled())
+				logger.debug(
+						"There was an ParseException error '{}' attempting to get date from string: '{}'",
+						e.getMessage(), string);
 		}
 
 		return date;
@@ -45,6 +47,7 @@ public class DateHelper {
 		date = c.getTime();
 		return date;
 	}
+
 	/**
 	 * Based upon the wisdom of the powers at be, we determined that a date that
 	 * 
@@ -58,6 +61,7 @@ public class DateHelper {
 		date = c.getTime();
 		return date;
 	}
+
 	/**
 	 * @return
 	 */
@@ -68,16 +72,19 @@ public class DateHelper {
 		c.set(Calendar.SECOND, 0);
 		return c.getTime();
 	}
+
 	public static String getTodaysDateAndTime(String format) {
 		DateFormat dateFormat = new SimpleDateFormat(format);
 		Date date = new Date();
 		return dateFormat.format(date);
-	}	
+	}
+
 	public static String getFormattedDate(Date date, String format) {
 		DateFormat dateFormat = new SimpleDateFormat(format);
 		Date newDate = date;
 		return dateFormat.format(newDate);
-	}		
+	}
+
 	private static Date parseDate(String string, String dateFormat)
 			throws ParseException {
 		TimeZone timeZone = TimeZone.getTimeZone(TIMEZONE_UTC);
@@ -85,6 +92,7 @@ public class DateHelper {
 		format.setTimeZone(timeZone);
 		return format.parse(string);
 	}
+
 	public static Date tomorrowsDate() {
 		Date newDate = new Date();
 		Calendar c = Calendar.getInstance();
