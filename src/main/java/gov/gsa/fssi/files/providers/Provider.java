@@ -17,7 +17,6 @@ public class Provider extends File {
 			.getLogger(Provider.class);
 
 	public static final String DEFAULT_PROVIDER_NAME = "N/A";
-	public static final String DEFAULT_PROVIDER_ID = "N/A";
 	public static final String DEFAULT_PROVIDER_IDENTIFIER = "N/A";
 	public static final String DEFAULT_PROVIDER_EMAIL = "N/A";
 	public static final String DEFAULT_FILE_OUTPUT_TYPE = File.FILETYPE_CSV;
@@ -25,11 +24,6 @@ public class Provider extends File {
 
 	private String schemaName = null;
 
-	/**
-	 * id of the provider, which uniquely identifies the provider. Not currently
-	 * used
-	 */
-	private String providerId = null;
 	/**
 	 * Name of the provider, which has a one-to-many relationship with the
 	 * providerIdentifier
@@ -74,13 +68,6 @@ public class Provider extends File {
 	}
 
 	/**
-	 * @return current providerId
-	 */
-	public String getProviderId() {
-		return providerId;
-	}
-
-	/**
 	 * @return current providerIdentifier
 	 */
 	public String getProviderIdentifier() {
@@ -106,8 +93,8 @@ public class Provider extends File {
 	 */
 	public void print() {
 		logger.debug(
-				"Id: '{}' Name: '{}' Identifier: '{}' Email: '{}' OutputType '{}' SchemaName '{}'",
-				this.getProviderId(), this.getProviderName(),
+				"Name: '{}' Identifier: '{}' Email: '{}' OutputType '{}' SchemaName '{}'",
+				this.getProviderName(),
 				this.getProviderIdentifier(), this.getProviderEmail(),
 				this.getFileOutputType(), this.getSchemaName());
 	}
@@ -128,13 +115,6 @@ public class Provider extends File {
 		this.providerEmail = contactEmail;
 	}
 
-	/**
-	 * @param providerId
-	 *            the providerId to set
-	 */
-	public void setProviderId(String providerId) {
-		this.providerId = providerId;
-	}
 
 	/**
 	 * @param providerIdentifier

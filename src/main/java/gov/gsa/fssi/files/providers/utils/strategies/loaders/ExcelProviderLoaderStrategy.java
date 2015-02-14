@@ -37,9 +37,8 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 				fileName);
 		Workbook wb;
 		try {
-			int providerIdentifierColumn = 0;
 			int providerNameColumn = 0;
-			int providerIdColumn = 0;
+			int providerIdentifierColumn = 0;
 			int fileOutputTypeColumn = 0;
 			int schemaNameColumn = 0;
 			int providerEmailColumn = 0;
@@ -62,17 +61,14 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 								.toUpperCase());
 
 						if (cell.getStringCellValue().toString()
-								.equalsIgnoreCase("PROVIDER_ID")) {
-							providerIdColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue().toString()
 								.equalsIgnoreCase("PROVIDER_NAME")) {
 							providerNameColumn = cell.getColumnIndex();
 						} else if (cell.getStringCellValue().toString()
 								.equalsIgnoreCase("PROVIDER_IDENTIFIER")) {
 							providerIdentifierColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue().toString()
-								.equalsIgnoreCase("FILE_OUTPUT_TYPE")) {
-							fileOutputTypeColumn = cell.getColumnIndex();
+						}else if (cell.getStringCellValue().toString()
+									.equalsIgnoreCase("FILE_OUTPUT_TYPE")) {
+							fileOutputTypeColumn = cell.getColumnIndex();	
 						} else if (cell.getStringCellValue().toString()
 								.equalsIgnoreCase("SCHEMA")) {
 							schemaNameColumn = cell.getColumnIndex();
@@ -86,16 +82,6 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 
 					// TODO: Add logic to ignore empty rows
 					if (!isRowEmpty(row)) {
-						if (!(row.getCell(providerIdColumn) == null)
-								&& !(row.getCell(providerIdColumn)
-										.getStringCellValue().isEmpty())
-								&& !(row.getCell(providerIdColumn)
-										.getStringCellValue()
-										.equalsIgnoreCase("NULL"))) {
-							newProvider.setProviderId(row
-									.getCell(providerIdColumn)
-									.getStringCellValue().toUpperCase());
-						}
 
 						if (!(row.getCell(providerNameColumn) == null)
 								&& !(row.getCell(providerNameColumn)
@@ -107,7 +93,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 									.getCell(providerNameColumn)
 									.getStringCellValue().toUpperCase());
 						}
-
+						
 						if (!(row.getCell(providerIdentifierColumn) == null)
 								&& !(row.getCell(providerIdentifierColumn)
 										.getStringCellValue().isEmpty())
@@ -117,7 +103,7 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 							newProvider.setProviderIdentifier(row
 									.getCell(providerIdentifierColumn)
 									.getStringCellValue().toUpperCase());
-						}
+						}						
 
 						if (!(row.getCell(fileOutputTypeColumn) == null)
 								&& !(row.getCell(fileOutputTypeColumn)

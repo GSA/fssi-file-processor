@@ -26,11 +26,13 @@ public class ProviderValidator {
 	 */
 	public void validate(Provider provider) {
 		// Certain fields are required.
-		if (provider.getProviderId() == null
-				|| provider.getProviderName() == null
+		if (provider.getProviderName() == null
 				|| provider.getProviderIdentifier() == null) {
-			logger.error("Provider found Without all of the required fields (ID, Name, Identifier)...ignoring");
+			logger.warn("Provider found Without all of the required fields (Name, Identifier)...ignoring");
 			provider.setValidatorStatus(false);
+			provider.setStatus(false);
+			provider.setMaxErrorLevel(3);
+			provider.addValidatorStatusMessage("Provider found Without all of the required fields (Name, Identifier)...ignoring");
 		}
 	}
 

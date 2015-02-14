@@ -40,9 +40,14 @@ public class CSVSourceFileExporterStrategy implements
 	@Override
 	public void export(String directory, SourceFile sourceFile) {
 		try {
-			String newFileName = FileHelper.buildNewFileName(sourceFile
-					.getFileName(), sourceFile.getProvider()
-					.getFileOutputType()); // Delimiter used in CSV file
+			
+			String newFileName = null;
+			
+			newFileName = FileHelper.buildNewFileName(sourceFile
+					.getFileName(), main.java.gov.gsa.fssi.files.File.FILETYPE_CSV); // Delimiter used in CSV file				
+
+			
+			
 			String newLineSeparator = "\n";
 			CSVPrinter csvFilePrinter = null;
 			CSVFormat csvFileFormat = CSVFormat.DEFAULT

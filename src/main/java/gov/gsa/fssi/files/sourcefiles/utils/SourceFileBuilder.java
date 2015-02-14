@@ -56,14 +56,22 @@ public class SourceFileBuilder {
 			}
 
 			// Provider noted a schema, but couldn't find it
-			if (sourceFile.getStatus() && sourceFile.getSchema() != null) {
+			if (sourceFile.getStatus() && sourceFile.getSchema() != null && sourceFile.getReportingPeriod() == null) {
+				logger.error(
+						"sourceFile '{}' noted schema '{}', but has no reporting period. Please add a valid reporting period",
+						sourceFile .getFileName(), sourceFile.getSchema().getName());
+				sourceFile.addLoadStatusMessage("SourceFile noted schema '"+ sourceFile.getSchema().getName()+"' but has no reporting period. Please add a valid reporting period to the file name");
+				sourceFile.setMaxErrorLevel(3);
+			}else if (sourceFile.getStatus() && sourceFile.getSchema() != null) {
 				personalizeSourceFileSchema(sourceFile);
-			} else if (sourceFile.getStatus() && sourceFile.getSchema() == null) {
+			} else if (sourceFile.getStatus() && sourceFile.getSchema() == null && sourceFile.getProvider().getSchemaName() != null && !sourceFile.getProvider().getSchemaName().isEmpty()) {
 				logger.error(
 						"Provider '{}' for sourceFile '{}' noted schema '{}', but it could not be found",
 						sourceFile.getProvider().getProviderName(), sourceFile
 								.getFileName(), sourceFile.getProvider()
 								.getSchemaName());
+				sourceFile.addLoadStatusMessage("Schema could not be found.");
+				sourceFile.setMaxErrorLevel(3);
 			} else if (sourceFile.getStatus()) {
 				logger.error(
 						"No schema for file '{}', ignoring Schema processing activities",

@@ -51,16 +51,16 @@ public class ExcelSourceFileExporterStrategy implements
 	 */
 	@Override
 	public void export(String directory, SourceFile sourceFile) {
-		logger.info("Exporting File {} as a 'XLS'", sourceFile.getFileName());
-
+		String fileOutputType = (sourceFile.getProvider() == null? "XLSX" : sourceFile.getProvider().getFileOutputType());
+		logger.info("Exporting File {} as a '{}'", sourceFile.getFileName(), fileOutputType);
 		FileOutputStream out = null;
 
 		try {
 			out = new FileOutputStream(directory
-					+ FileHelper.buildNewFileName(sourceFile.getFileName(),
-							sourceFile.getProvider().getFileOutputType()));
+					+ FileHelper.buildNewFileName(sourceFile.getFileName(),fileOutputType));				
 
-			Workbook wb = sourceFile.getProvider().getFileOutputType()
+
+			Workbook wb = fileOutputType
 					.equalsIgnoreCase("XLSX") ? new XSSFWorkbook()
 					: new HSSFWorkbook(); // create a new workbook
 

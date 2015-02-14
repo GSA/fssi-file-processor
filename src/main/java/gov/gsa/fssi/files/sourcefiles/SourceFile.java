@@ -61,9 +61,8 @@ public class SourceFile extends File {
 		super(fileName);
 		this.setReportingPeriodUsingFileNameParts();
 		if (this.getReportingPeriod() == null) {
-			logger.error("No reporting period found, unable to process");
-			this.setMaxErrorLevel(3);
-			this.setStatus(false);
+			logger.warn("No reporting period found");
+			this.setMaxErrorLevel(1);
 		}
 	}
 
@@ -85,24 +84,31 @@ public class SourceFile extends File {
 	public void export(String directory) {
 		SourceFileExporterContext context = new SourceFileExporterContext();
 		if (this.getRecords() != null) {
-			if (this.getProvider().getFileOutputType()
-					.equalsIgnoreCase(File.FILETYPE_CSV)) {
+				if(this.getProvider() !=null){
+				if (this.getProvider().getFileOutputType()
+						.equalsIgnoreCase(File.FILETYPE_CSV)) {
+					context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
+				} else if (this.getProvider().getFileOutputType()
+						.equalsIgnoreCase(File.FILETYPE_XLS)) {
+					context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
+				} else if (this.getProvider().getFileOutputType()
+						.equalsIgnoreCase(File.FILETYPE_XLSX)) {
+					context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
+				} else {
+					logger.warn(
+							"We cannot currently export to a '{}'. defaulting to '{}'",
+							this.getProvider().getFileOutputType(),
+							File.FILETYPE_CSV);
+					context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
+				}
+	
+				context.export(directory, this);
+			}else{
+				logger.error("No provider found, defaulting to '{}'",
+						File.FILETYPE_CSV);	
 				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
-			} else if (this.getProvider().getFileOutputType()
-					.equalsIgnoreCase(File.FILETYPE_XLS)) {
-				context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
-			} else if (this.getProvider().getFileOutputType()
-					.equalsIgnoreCase(File.FILETYPE_XLSX)) {
-				context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
-			} else {
-				logger.warn(
-						"We cannot currently export to a '{}'. defaulting to '{}'",
-						this.getProvider().getFileOutputType(),
-						File.FILETYPE_CSV);
-				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
+				context.export(directory, this);
 			}
-
-			context.export(directory, this);
 		} else {
 			logger.error("Cannot export sourceFile '{}'. No data found",
 					this.getFileName());

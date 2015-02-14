@@ -153,7 +153,7 @@ public class BasicTextSourceFileLoggerStrategy implements
 			System.out.println("Done");
 
 		} catch (IOException e) {
-			logger.error("There was a '{}' error while attempting to export the text file");
+			logger.error("There was a '{}' error while attempting to export the text file", e.getMessage());
 		}
 	}
 

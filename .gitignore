@@ -3,3 +3,5 @@ working/
 /*.log
 cov-int/
 target/
+*config.properties
+*.DS_Store

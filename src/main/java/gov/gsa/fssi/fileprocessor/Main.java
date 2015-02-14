@@ -1,5 +1,6 @@
 package main.java.gov.gsa.fssi.fileprocessor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import main.java.gov.gsa.fssi.config.Config;
@@ -26,43 +27,99 @@ public class Main {
 	public static void main(String[] args) {
 		logger.info("Starting FSSI File Processor");
 
-		logger.info("Building Providers");
-		ProvidersBuilder providersBuilder = new ProvidersBuilder();
-		List<Provider> providers = providersBuilder.build(config
-				.getProperty(Config.PROVIDERS_DIRECTORY));
-		printAllProviders(providers);
-
-		logger.info("Building Schemas");
-		SchemasBuilder schemasBuilder = new SchemasBuilder();
-		List<Schema> schemas = schemasBuilder.build(config
-				.getProperty(Config.SCHEMAS_DIRECTORY));
-		printAllSchemas(schemas);
-
-		for (String fileName : FileHelper.getFilesFromDirectory(
-				config.getProperty(Config.SOURCEFILES_DIRECTORY), ".csv")) {
-			SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
-			SourceFile sourceFile = sourceFileBuilder.build(
-					config.getProperty(Config.SOURCEFILES_DIRECTORY), fileName,
-					config.getProperty(Config.EXPORT_MODE), schemas, providers);
-			if (sourceFile != null) {
-				if (sourceFile.getStatus())
-					sourceFile.export(config
-							.getProperty(Config.STAGED_DIRECTORY));
-				else
-					logger.error(
-							"File '{}' is in Error state and is being ignored for exporting",
-							fileName);
-			} else
-				logger.error(
-						"File '{}' is in null and is being ignored for exporting",
-						fileName);
-
-			SourceFileLoggerContext context = new SourceFileLoggerContext();
-			context.setSourceFileLoggerStrategy(new BasicTextSourceFileLoggerStrategy());
-			context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile,
-					config.getProperty(Config.LOGGING_LEVEL));
+		logger.info("Validating Config");
+		
+		boolean validConfig = true;
+		
+		if(!FileHelper.isDirectory(config
+				.getProperty(Config.PROVIDERS_DIRECTORY))){
+			logger.error("'{}' is not a valid Providers Directory", config.getProperty(Config.PROVIDERS_DIRECTORY));
+			validConfig = false;
 		}
-
+		
+		if(!FileHelper.isDirectory(config
+				.getProperty(Config.SCHEMAS_DIRECTORY))){
+			logger.error("'{}' is not a valid Schemas Directory", config.getProperty(Config.SCHEMAS_DIRECTORY));
+			validConfig = false;
+		}
+		
+		if(!FileHelper.isDirectory(config
+				.getProperty(Config.SOURCEFILES_DIRECTORY))){
+			logger.error("'{}' is not a valid Providers Directory", config.getProperty(Config.SOURCEFILES_DIRECTORY));
+			logger.error("");
+			validConfig = false;
+		}
+		
+		if(!FileHelper.isDirectory(config
+				.getProperty(Config.LOGS_DIRECTORY))){
+			logger.error("'{}' is not a valid Logs Directory", config.getProperty(Config.LOGS_DIRECTORY));
+			logger.error("");
+			validConfig = false;
+		}
+		
+		if(validConfig){
+			List<Provider> providers = new ArrayList<Provider>();
+			if(FileHelper.isDirectory(config
+					.getProperty(Config.PROVIDERS_DIRECTORY))){
+				logger.info("Building Providers");
+				ProvidersBuilder providersBuilder = new ProvidersBuilder();
+				providers = providersBuilder.build(config
+						.getProperty(Config.PROVIDERS_DIRECTORY));
+				printAllProviders(providers);
+			}else{
+				logger.error("'{}' directory is not a valid directory, unable to process providers", config.getProperty(Config.PROVIDERS_DIRECTORY));
+			}
+	
+			
+			List<Schema> schemas = new ArrayList<Schema>();
+			if(FileHelper.isDirectory(config
+					.getProperty(Config.SCHEMAS_DIRECTORY))){
+					SchemasBuilder schemasBuilder = new SchemasBuilder();
+					schemas = schemasBuilder.build(config
+							.getProperty(Config.SCHEMAS_DIRECTORY));
+					printAllSchemas(schemas);			
+			}else{
+				logger.error("'{}' directory is not a valid directory, unable to process schemas", config.getProperty(Config.SCHEMAS_DIRECTORY));
+			}
+			
+	
+			if(FileHelper.isDirectory(config.getProperty(Config.SOURCEFILES_DIRECTORY))){
+				for (String fileName : FileHelper.getFilesFromDirectory(
+						config.getProperty(Config.SOURCEFILES_DIRECTORY), ".csv")) {
+					SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
+					SourceFile sourceFile = sourceFileBuilder.build(
+							config.getProperty(Config.SOURCEFILES_DIRECTORY), fileName,
+							config.getProperty(Config.EXPORT_MODE), schemas, providers);
+					if (sourceFile != null) {
+						if (sourceFile.getStatus())
+							sourceFile.export(config
+									.getProperty(Config.STAGED_DIRECTORY));
+						else
+							logger.error(
+									"File '{}' is in Error state and is being ignored for exporting",
+									fileName);
+					} else
+						logger.error(
+								"File '{}' is in null and is being ignored for exporting",
+								fileName);
+	
+					if(FileHelper.isDirectory(config.getProperty(Config.LOGS_DIRECTORY))){
+						SourceFileLoggerContext context = new SourceFileLoggerContext();
+						context.setSourceFileLoggerStrategy(new BasicTextSourceFileLoggerStrategy());
+						context.log(config.getProperty(Config.LOGS_DIRECTORY), sourceFile,
+								config.getProperty(Config.LOGGING_LEVEL));
+					} else
+						logger.error(
+								"logs_directory '{}' is not a valid directory. Logs cannot be created",
+								config.getProperty(Config.LOGS_DIRECTORY));
+	
+				}
+				
+			}else{
+				logger.error("'{}' directory is not a valid directory, unable to process souce files", config.getProperty(Config.SOURCEFILES_DIRECTORY));
+			}
+			
+		}else logger.error("File Processor could run because required config directories could not be found.");
 		logger.info("Completed FSSI File Processor");
 	}
 
