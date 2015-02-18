@@ -4,11 +4,13 @@
        src="https://scan.coverity.com/projects/4177/badge.svg"/>
 </a>
 
-#FSSI File Processor
+#Federal Strategic Sourcing Initiative (FSSI) File Processor
 
 Traditional Data warehouses and Data Integration platforms provide a great way to manage structured data. But what happens when your data is semi-structured? or unstructured? This application aims to "Assist" with turning semi-structured and unstructured data into structured data.
 
 This J2SE Application, which is used by the FSSI Data Management team, pre-processes Source files for validation and data ingest into the FSSI Data Management Data Warehouse.
+
+You can find more on the Federal Strategic Sourcing Initiative by going here: [https://strategicsourcing.gov/](https://strategicsourcing.gov/)
 
 ##Overview
 The FSSI File Processor at its core can accept information from a multitude of different file types, process that data as standard java objects, and then export that data in any format requested (Pretty cool, right?).
