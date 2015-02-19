@@ -1,6 +1,5 @@
 *.log
 working/
-/*.log
 cov-int/
 target/
 *config.properties
