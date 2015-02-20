@@ -3,4 +3,5 @@ working/
 cov-int/
 target/
 *config.properties
+samplefiles/staged/*.xlsx
 *.DS_Store
