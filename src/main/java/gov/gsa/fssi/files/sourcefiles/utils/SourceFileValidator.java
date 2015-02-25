@@ -28,7 +28,7 @@ public class SourceFileValidator {
 				sourceFile.getFileName(), sourceFile.getStatusName());
 
 		if (sourceFile.getSchema() == null) {
-			logger.error("Cannot validate file '{}', no Schema",
+			logger.error("Cannot validate file '{}', it has no Schema",
 					sourceFile.getFileName());
 		} else if (!sourceFile.getStatus()) {
 			logger.error("file '{}' is in '{}' state and cannot be processed",
@@ -67,48 +67,17 @@ public class SourceFileValidator {
 						sourceFileRecord.setStatus(data.getMaxErrorLevel());
 					}
 				}
-				if (logger.isDebugEnabled()
-						&& sourceFileRecord.getMaxErrorLevel() == 3)
-					logger.error(
+				if (logger.isDebugEnabled())
+					logger.debug(
 							"sourceFileRecord for Row '{}' is in '{}' State",
 							sourceFileRecord.getRowIndex(), File
 									.getErrorLevelName(sourceFileRecord
 											.getMaxErrorLevel()));
-				else if (logger.isDebugEnabled()
-						&& sourceFileRecord.getMaxErrorLevel() == 2)
-					logger.error("sourceFileRecord Row '{}' is in '{}' State",
-							sourceFileRecord.getRowIndex(), File
-									.getErrorLevelName(sourceFileRecord
-											.getMaxErrorLevel()));
-				else if (logger.isDebugEnabled()
-						&& sourceFileRecord.getMaxErrorLevel() == 1)
-					logger.warn("sourceFileRecord Row '{}' is in '{}' State",
-							sourceFileRecord.getRowIndex(), File
-									.getErrorLevelName(sourceFileRecord
-											.getMaxErrorLevel()));
-				else if (logger.isDebugEnabled())
-					logger.info(
-							"sourceFileRecord Row '{}' is in '{}' and had no issues",
-							sourceFileRecord.getRowIndex(), File
-									.getErrorLevelName(sourceFileRecord
-											.getMaxErrorLevel()));
-
 				sourceFile.logError(sourceFileRecord.getMaxErrorLevel());
 			}
 		}
-		if (sourceFile.getMaxErrorLevel() == 3)
-			logger.error("File '{}' is in '{}' State",
-					sourceFile.getFileName(),
-					File.getErrorLevelName(sourceFile.getMaxErrorLevel()));
-		else if (sourceFile.getMaxErrorLevel() == 2)
-			logger.error("File '{}' is in '{}' State",
-					sourceFile.getFileName(),
-					File.getErrorLevelName(sourceFile.getMaxErrorLevel()));
-		else if (sourceFile.getMaxErrorLevel() == 1)
-			logger.warn("File '{}' is in '{}' State", sourceFile.getFileName(),
-					File.getErrorLevelName(sourceFile.getMaxErrorLevel()));
-		else
-			logger.info("File '{}' is in '{}' and had no issuess",
+		if (logger.isDebugEnabled())
+			logger.debug("File '{}' is in '{}' State",
 					sourceFile.getFileName(),
 					File.getErrorLevelName(sourceFile.getMaxErrorLevel()));
 		if (!sourceFile.getStatus())
