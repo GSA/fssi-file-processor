@@ -2,7 +2,6 @@ package main.java.gov.gsa.fssi.files.schemas.utils.strategies.loaders;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -126,7 +125,7 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 			newConstraint.setType(currentNode.getNodeName().trim());
 			newConstraint.setValue(currentNode.getTextContent().trim());
 
-			HashMap<String, String> attributeMap = XmlHelper
+			Map<String, String> attributeMap = XmlHelper
 					.convertXmlAttributeToHashMap(currentNode.getAttributes());
 			Iterator<?> optionsIterator = attributeMap.entrySet().iterator();
 

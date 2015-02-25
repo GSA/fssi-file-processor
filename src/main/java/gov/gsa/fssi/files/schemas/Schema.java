@@ -70,8 +70,8 @@ public class Schema extends File {
 		return null;
 	}
 
-	public ArrayList<String> getFieldAndAliasNames() {
-		ArrayList<String> aliasNames = new ArrayList<String>();
+	public List<String> getFieldAndAliasNames() {
+		List<String> aliasNames = new ArrayList<String>();
 		for (SchemaField field : this.getFields()) {
 			aliasNames.add(field.getName());
 			for (String alias : field.getAlias()) {
@@ -116,8 +116,8 @@ public class Schema extends File {
 		return null;
 	}
 
-	public ArrayList<String> getFieldNames() {
-		ArrayList<String> fieldNames = new ArrayList<String>();
+	public List<String> getFieldNames() {
+		List<String> fieldNames = new ArrayList<String>();
 		for (SchemaField field : this.getFields()) {
 			fieldNames.add(field.getName());
 		}

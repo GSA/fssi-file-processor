@@ -35,14 +35,14 @@ public class ImplodeSourceFileOrganizerStrategy implements
 	public void organize(SourceFile sourceFile) {
 		logger.info("Imploding sourceFile '{}' to Schema '{}'",
 				sourceFile.getFileName(), sourceFile.getSchema().getName());
-		HashMap<Integer, String> newHeader = new HashMap<Integer, String>();
+		Map<Integer, String> newHeader = new HashMap<Integer, String>();
 		// This is our count to determine location of each header
 		Integer headerCounter = 0;
 
 		// The headerTranslationMap object translates the old headerIndex, to
 		// the new header index.
 		// Key = Old Index, Value = New Index
-		HashMap<Integer, Integer> headerTranslationMap = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> headerTranslationMap = new HashMap<Integer, Integer>();
 
 		// First, lets add all of the fields from our Schema, they always go
 		// first
