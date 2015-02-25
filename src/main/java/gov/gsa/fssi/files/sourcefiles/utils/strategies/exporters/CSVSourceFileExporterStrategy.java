@@ -66,28 +66,23 @@ public class CSVSourceFileExporterStrategy implements
 																			// object
 
 			List<String> csvHeaders = new ArrayList<String>();
-			Map<Integer, String> headerMap = sourceFile.getSourceHeaders(); // Writing
-																			// Headers
-			Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
-			while (headerMapIterator.hasNext()) {
-				String fieldName = null;
-				Map.Entry<Integer, String> headerMapIteratorPairs = (Map.Entry) headerMapIterator
-						.next();
-				// getting correct header name from Schema
-				if (sourceFile.getSchema() != null) {
-					for (SchemaField field : sourceFile.getSchema().getFields()) {
-						if (field.getHeaderIndex() == headerMapIteratorPairs
-								.getKey()) {
-							logger.info(
-									"Using Schema name '{}' for field '{}'",
-									field.getName(), headerMapIteratorPairs
-											.getValue().toString());
-							fieldName = field.getName();
-						}
+
+			String fieldName = null;
+			for (int i = 0; i < sourceFile.getSourceHeaders().size(); i++) {
+				for (SchemaField field : sourceFile.getSchema().getFields()) {
+					if (field.getHeaderIndex() == i) {
+						logger.info("Using Schema name '{}' for field '{}'",field.getName(), sourceFile.getSourceHeaderName(i));
+						fieldName = field.getName();					
 					}
 				}
-				csvHeaders.add((fieldName == null ? headerMapIteratorPairs
-						.getValue().toString() : fieldName));
+				if (fieldName == null && sourceFile.getSourceHeaders().containsKey(i)){
+					if(logger.isDebugEnabled()) logger.debug("Using source file field name '{}'", sourceFile.getSourceHeaderName(i));
+					fieldName = sourceFile.getSourceHeaderName(i);
+				}else if(fieldName == null) {
+					logger.warn("There was an issue finding a fieldname for header index '{}'", i);
+					fieldName = "";
+				}
+				csvHeaders.add(fieldName);
 			}
 
 			// Create CSV file header

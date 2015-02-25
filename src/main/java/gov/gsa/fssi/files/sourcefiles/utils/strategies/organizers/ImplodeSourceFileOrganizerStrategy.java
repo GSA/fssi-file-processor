@@ -75,10 +75,7 @@ public class ImplodeSourceFileOrganizerStrategy implements
 			}
 
 			field.setHeaderIndex(headerCounter);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Adding '{} - {}' to newHeader", headerCounter,
-						fieldName);
-			}
+			if (logger.isDebugEnabled()) logger.debug("Adding '{} - {}' to newHeader", headerCounter,fieldName);
 			newHeader.put(headerCounter, fieldName);
 			headerCounter++;
 		}
@@ -138,16 +135,12 @@ public class ImplodeSourceFileOrganizerStrategy implements
 			}
 
 			// Now we fill in the blanks
-			Iterator<?> sourceFileHeaderIterator2 = sourceFile
-					.getSourceHeaders().entrySet().iterator();
+			Iterator<?> sourceFileHeaderIterator2 = sourceFile.getSourceHeaders().entrySet().iterator();
 			while (sourceFileHeaderIterator2.hasNext()) {
-				Map.Entry<Integer, String> newHeaderPairs = (Map.Entry) sourceFileHeaderIterator2
-						.next();
-				Data data = sourceFileRecord
-						.getDataByHeaderIndex(newHeaderPairs.getKey());
+				Map.Entry<Integer, String> newHeaderPairs = (Map.Entry) sourceFileHeaderIterator2.next();
+				Data data = sourceFileRecord.getDataByHeaderIndex(newHeaderPairs.getKey());
 				if (data == null) {
-					sourceFileRecord.addData(new Data(newHeaderPairs.getKey(),
-							""));
+					sourceFileRecord.addData(new Data(newHeaderPairs.getKey(),""));
 				}
 			}
 		}

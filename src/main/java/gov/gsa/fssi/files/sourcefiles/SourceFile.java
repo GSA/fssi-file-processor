@@ -83,6 +83,7 @@ public class SourceFile extends File {
 
 	public void export(String directory) {
 		SourceFileExporterContext context = new SourceFileExporterContext();
+		logger.info("Attempting to export file '{}' in '{}' format",this.getFileName(), this.getProvider().getFileOutputType());
 		if (this.getRecords() != null) {
 				if(this.getProvider() !=null){
 				if (this.getProvider().getFileOutputType()

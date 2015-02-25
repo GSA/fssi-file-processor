@@ -68,6 +68,8 @@ public class ExcelSourceFileExporterStrategy implements
 			Row r = null; // declare a row object reference
 			Cell c = null; // declare a cell object reference
 			r = s.createRow(0); // creating header row
+			
+			
 			Map<Integer, String> headerMap = sourceFile.getSourceHeaders();
 			Iterator<?> headerMapIterator = headerMap.entrySet().iterator();
 			while (headerMapIterator.hasNext()) {
@@ -92,6 +94,9 @@ public class ExcelSourceFileExporterStrategy implements
 						.getValue().toString() : fieldName));
 			}
 
+			
+			
+			
 			int counter = 0;
 
 			// Now lets put some data in there....
