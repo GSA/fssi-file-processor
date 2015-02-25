@@ -417,4 +417,27 @@ public class File {
 		}
 		return name;
 	}
+	
+	public static char getErrorLevelInitial(int errorLevel) {
+		char name = 'P';
+		if (errorLevel <= 3) {
+			switch (errorLevel) {
+			case 0:
+				name = 'P';
+				break;
+			case 1:
+				name = 'W';
+				break;
+			case 2:
+				name = 'E';
+				break;
+			case 3:
+				name = 'F';
+				break;
+			default:
+				break;
+			}
+		}
+		return name;
+	}	
 }

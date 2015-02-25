@@ -53,7 +53,7 @@ public class BasicTextSourceFileLoggerStrategy implements
 			bufferedWriter.write("FSSI File Processor Basic Text Log");
 			bufferedWriter.newLine();
 
-			bufferedWriter.write("Version: 1.0");
+			bufferedWriter.write("Version: 1.1");
 			bufferedWriter.newLine();
 
 			bufferedWriter.write("*******************************");
@@ -88,17 +88,17 @@ public class BasicTextSourceFileLoggerStrategy implements
 			bufferedWriter.write("Highest Error Level: "
 					+ File.getErrorLevelName(sourceFile.getMaxErrorLevel()));
 			bufferedWriter.newLine();
-			bufferedWriter.write("Number of Records with Fatal Errors: "
+			bufferedWriter.write("Number of Fatal Record: "
 					+ sourceFile.getTotalFatalRecords());
 			bufferedWriter.newLine();
-			bufferedWriter.write("Number of Records with Errors: "
+			bufferedWriter.write("Number of Error Records: "
 					+ sourceFile.getTotalErrorRecords());
 			bufferedWriter.newLine();
-			bufferedWriter.write("Number of Records with Warnings: "
+			bufferedWriter.write("Number of Warning Records: "
 					+ sourceFile.getTotalWarningRecords());
 			bufferedWriter.newLine();
 			bufferedWriter
-					.write("Number of Passsing Records (Includings Warnings): "
+					.write("Number of Passsing Records (Includes Warnings): "
 							+ passingRecords);
 			bufferedWriter.newLine();
 			bufferedWriter.write("Total Records Processed: "
@@ -110,42 +110,16 @@ public class BasicTextSourceFileLoggerStrategy implements
 
 			if (sourceFile.getSchema() != null
 					&& sourceFile.getSchema().getStatus()) {
-				bufferedWriter.write("Validation Results:");
+				bufferedWriter.write("Validation Results (Showing ");
+				if(FieldConstraint.getErrorLevel(errorLevel) == 0) bufferedWriter.write("All");
+				else if(FieldConstraint.getErrorLevel(errorLevel) == 1) bufferedWriter.write("[W]arning, [E]rror, and [F]atal");
+				else if(FieldConstraint.getErrorLevel(errorLevel) == 2) bufferedWriter.write("[E]rror and [F]atal");
+				else if(FieldConstraint.getErrorLevel(errorLevel) == 3) bufferedWriter.write("[F]atal Only");
+				bufferedWriter.write("):");
+				bufferedWriter.newLine();				
 				bufferedWriter.newLine();
-
-				for (SourceFileRecord record : sourceFile.getRecords()) {
-					bufferedWriter
-							.write("Line: "
-									+ record.getRowIndex()
-									+ " Status: "
-									+ sourceFile.getStatusName()
-									+ " Level: "
-									+ File.getErrorLevelName(record
-											.getMaxErrorLevel()));
-					bufferedWriter.newLine();
-					for (Data data : record.getDatas()) {
-						if (data.getMaxErrorLevel() > FieldConstraint
-								.getErrorLevel(errorLevel)) {
-							bufferedWriter.write("     Field: "
-									+ sourceFile.getSourceHeaderName(data
-											.getHeaderIndex())
-									+ " failed constraints: ");
-							for (ValidationResult result : data
-									.getValidationResults()) {
-								if (!result.getStatus()) {
-									bufferedWriter.write("["
-											+ File.getErrorLevelName(result
-													.getErrorLevel()) + "] "
-											+ result.getRule());
-								}
-
-							}
-							bufferedWriter.write(" against value: '"
-									+ data.getData() + "'");
-							bufferedWriter.newLine();
-						}
-					}
-				}
+				
+				printRecordValidationErrors(sourceFile, errorLevel, bufferedWriter);
 			}
 			bufferedWriter.flush();
 			bufferedWriter.close();
@@ -154,6 +128,60 @@ public class BasicTextSourceFileLoggerStrategy implements
 
 		} catch (IOException e) {
 			logger.error("There was a '{}' error while attempting to export the text file", e.getMessage());
+		}
+	}
+
+	private void printRecordValidationErrors(SourceFile sourceFile,
+			String errorLevel, BufferedWriter bufferedWriter)
+			throws IOException {
+		for (SourceFileRecord record : sourceFile.getRecords()) {
+			if (record.getMaxErrorLevel() >= FieldConstraint.getErrorLevel(errorLevel)) {
+				printRecordValidationError(sourceFile, errorLevel, bufferedWriter, record);
+			}
+		}
+	}
+
+	private void printRecordValidationError(SourceFile sourceFile, String errorLevel,
+			BufferedWriter bufferedWriter, SourceFileRecord record)
+			throws IOException {
+		if (record.getMaxErrorLevel() >= FieldConstraint.getErrorLevel(errorLevel)) {		
+			bufferedWriter
+					.write("Line: "
+							+ record.getRowIndex()
+							+ " Status: "
+							+ sourceFile.getStatusName()
+							+ " Error Level: "
+							+ File.getErrorLevelName(record
+									.getMaxErrorLevel()));
+			bufferedWriter.newLine();
+			printDataValidationErrors(sourceFile, errorLevel, bufferedWriter,
+					record);
+		}
+	}
+
+	private void printDataValidationErrors(SourceFile sourceFile,
+			String errorLevel, BufferedWriter bufferedWriter,
+			SourceFileRecord record) throws IOException {
+		for (Data data : record.getDatas()) {
+			if (data.getMaxErrorLevel() >= FieldConstraint.getErrorLevel(errorLevel)) {
+				printDataValidationError(sourceFile, errorLevel, bufferedWriter,
+						data);
+			}
+		}
+	}
+
+	private void printDataValidationError(SourceFile sourceFile,
+			String errorLevel, BufferedWriter bufferedWriter, Data data)
+			throws IOException {
+		if (data.getMaxErrorLevel() >= FieldConstraint.getErrorLevel(errorLevel)) {
+			bufferedWriter.write("     Field '" + sourceFile.getSourceHeaderName(data.getHeaderIndex()) + "' failed constraints: ");
+			for (ValidationResult result : data.getValidationResults()) {
+				if (!result.getStatus()) {
+					bufferedWriter.write("["+ File.getErrorLevelInitial(result.getErrorLevel()) + "] "+ result.getRule());
+				}
+			}
+			bufferedWriter.write(" with value: '" + data.getData() + "'");
+			bufferedWriter.newLine();
 		}
 	}
 
