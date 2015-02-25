@@ -36,10 +36,14 @@ public class SourceFileBuilder {
 		SourceFile sourceFile = new SourceFile(fileName);
 		mapProviderToSourceFile(providers, sourceFile);
 
-		if (sourceFile.getProvider() == null && sourceFile.getStatus()) {
+		if (sourceFile.getProvider() == null) {
 			logger.error(
 					"Could not find Provider for file '{}'. Will use defaults",
 					fileName);
+		} else if (!sourceFile.getStatus()) {
+			logger.error(
+					"File is in error state, will not process schema activities",
+					fileName);			
 		} else {
 			// Map Schema to SourceFile
 			if (sourceFile.getStatus()
@@ -156,18 +160,16 @@ public class SourceFileBuilder {
 					}
 				}
 			}
+			
+			if (sourceFile.getProvider() == null) {
+				logger.error("Could not find provider for file: '{}'",
+						sourceFile.getFileName());
+				sourceFile.setMaxErrorLevel(2);
+				sourceFile.addLoadStatusMessage("Could not find provider, will have to use defaults");
+			} else {
+				logger.info("Mapped Provider '{}' successfully", sourceFile.getProvider().getProviderIdentifier());
+			}
 		}
-		if (sourceFile.getProvider() == null) {
-			logger.error("Could not find provider for file: '{}'",
-					sourceFile.getFileName());
-			sourceFile.setMaxErrorLevel(2);
-			sourceFile
-					.addLoadStatusMessage("Could not find provider, will have to use defaults");
-		} else {
-			logger.info("Mapped Provider '{}' successfully", sourceFile
-					.getProvider().getProviderIdentifier());
-		}
-
 	}
 
 	/**
@@ -188,6 +190,7 @@ public class SourceFileBuilder {
 			if (sourceFile.getSchema() == null) {
 				logger.error("Could not find schema for file: '{}'",
 						sourceFile.getFileName());
+				sourceFile.addLoadStatusMessage("Could not find schema for file");
 			}
 		}
 	}
@@ -208,17 +211,9 @@ public class SourceFileBuilder {
 					"Atempting to map field names from File '{}' to Schema '{}'",
 					sourceFile.getFileName(), sourceFile.getSchema().getName());
 			for (SchemaField field : sourceFile.getSchema().getFields()) {
-				List<String> aliasNames = new ArrayList<String>();// getting
-																	// array
-																	// list
-																	// of
-																	// field
-																	// name
-																	// and
-																	// alias
-				aliasNames.add(field.getName()); // Adding Field Name
-				aliasNames.addAll(field.getAlias()); // Adding all of its
-														// aliases
+				List<String> aliasNames = new ArrayList<String>();
+				aliasNames.add(field.getName()); 
+				aliasNames.addAll(field.getAlias());
 				Iterator<?> thisHeaderIterator = sourceFile.getSourceHeaders()
 						.entrySet().iterator();
 				while (thisHeaderIterator.hasNext()) {

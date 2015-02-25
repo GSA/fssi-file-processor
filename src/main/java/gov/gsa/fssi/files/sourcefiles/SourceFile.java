@@ -423,13 +423,15 @@ public class SourceFile extends File {
 
 						if (date.compareTo(todaysDate) > 0) {
 							logger.error(
-									"ReportingPeriod '{}' found in FileName is later than current date. Please check file name",
+									"ReportingPeriod '{}' found in file name is later than current date. Please check file name",
 									date.toString());
 							this.setStatus(false);
+							addLoadStatusMessage("ReportingPeriod '"+ fileNamePart + "' (Translated to " + DateHelper.getFormattedDate(date, DateHelper.FORMAT_YYYY_MM_DD) + ")" + "' found in FileName is later than current date. Please check file name");
 						} else if (date.compareTo(minimumDate) < 0) {
 							logger.error(
-									"ReportingPeriod '{}' found in FileName is before the year 2000 and may be inacurate. Please check file name",
+									"ReportingPeriod '{}' found in file name is before the year 2000 and may be inacurate. Please check file name",
 									date.toString());
+							addLoadStatusMessage("ReportingPeriod '"+ fileNamePart + "' (Translated to " + DateHelper.getFormattedDate(date, DateHelper.FORMAT_YYYY_MM_DD) + ")" + "' found in FileName is before the year 2000 and may be inacurate. Please check file name");
 							this.setStatus(false);
 						} else {
 							logger.info(

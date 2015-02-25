@@ -107,7 +107,16 @@ public class BasicTextSourceFileLoggerStrategy implements
 			bufferedWriter.write("*******************************");
 			bufferedWriter.newLine();
 			bufferedWriter.newLine();
-
+			
+			if(sourceFile.getLoadStatusMessage() != null && sourceFile.getLoadStatusMessage().size() > 0){
+				bufferedWriter.write("File received the following load status messages:");
+				bufferedWriter.newLine();
+				for(String loadStatusMessage: sourceFile.getLoadStatusMessage()){
+					bufferedWriter.write("     - " + loadStatusMessage);
+					bufferedWriter.newLine();					
+				}					
+			}
+			
 			if (sourceFile.getSchema() != null
 					&& sourceFile.getSchema().getStatus()) {
 				bufferedWriter.write("Validation Results (Showing ");
