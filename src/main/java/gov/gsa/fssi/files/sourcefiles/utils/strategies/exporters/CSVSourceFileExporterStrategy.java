@@ -59,18 +59,17 @@ public class CSVSourceFileExporterStrategy implements
 			Writer writer = new OutputStreamWriter(new FileOutputStream(file),
 					"UTF-8");
 			PrintWriter printWriter = new PrintWriter(writer);
-			csvFilePrinter = new CSVPrinter(printWriter, csvFileFormat); // initialize
-																			// CSVPrinter
-																			// object
-
+			csvFilePrinter = new CSVPrinter(printWriter, csvFileFormat); 
+			
 			List<String> csvHeaders = new ArrayList<String>();
-
-			String fieldName = null;
 			for (int i = 0; i < sourceFile.getSourceHeaders().size(); i++) {
-				for (SchemaField field : sourceFile.getSchema().getFields()) {
-					if (field.getHeaderIndex() == i) {
-						logger.info("Using Schema name '{}' for field '{}'",field.getName(), sourceFile.getSourceHeaderName(i));
-						fieldName = field.getName();					
+				String fieldName = null;
+				if(sourceFile.getSchema() != null && sourceFile.getSchema().getStatus()){
+					for (SchemaField field : sourceFile.getSchema().getFields()) {
+						if (field.getHeaderIndex() == i) {
+							logger.info("Using Schema name '{}' for field '{}'",field.getName(), sourceFile.getSourceHeaderName(i));
+							fieldName = field.getName();					
+						}
 					}
 				}
 				if (fieldName == null && sourceFile.getSourceHeaders().containsKey(i)){

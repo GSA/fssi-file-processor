@@ -107,9 +107,8 @@ public class File {
 	private boolean exportStatus = false;
 	private List<String> loadStatusMessages = new ArrayList<String>();
 	private List<String> validatorStatusMessages = new ArrayList<String>();
-
-	private String exportStatusMessage = null;
-
+	private List<String> exportStatusMessages = new ArrayList<String>();
+	
 	/**
 	 * Blank Constructor
 	 */
@@ -160,8 +159,8 @@ public class File {
 	/**
 	 * @return current exportStatusMessage
 	 */
-	public String getExportStatusMessage() {
-		return exportStatusMessage;
+	public List<String> getExportStatusMessages() {
+		return exportStatusMessages;
 	}
 
 	/**
@@ -258,9 +257,13 @@ public class File {
 	 * @param exportStatusMessage
 	 *            String exportStatusMessage to set
 	 */
-	public void setExportStatusMessage(String exportStatusMessage) {
-		this.exportStatusMessage = exportStatusMessage;
+	public void setExportStatusMessages(List<String> exportStatusMessages) {
+		this.exportStatusMessages = exportStatusMessages;
 	}
+	
+	public void addExportStatusMessages(String exportStatusMessage) {
+		this.exportStatusMessages.add(exportStatusMessage);
+	}	
 
 	/**
 	 * @param fileExtension

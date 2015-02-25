@@ -83,11 +83,12 @@ public class SourceFile extends File {
 
 	public void export(String directory) {
 		SourceFileExporterContext context = new SourceFileExporterContext();
-		logger.info("Attempting to export file '{}' in '{}' format",this.getFileName(), this.getProvider().getFileOutputType());
 		if (this.getRecords() != null) {
-				if(this.getProvider() !=null){
+			if(this.getProvider() !=null && this.getProvider().getFileOutputType() != null && "".equals(this.getProvider().getFileOutputType())){
+				logger.info("Attempting to export file '{}' in '{}' format",this.getFileName(), this.getProvider().getFileOutputType());
 				if (this.getProvider().getFileOutputType()
 						.equalsIgnoreCase(File.FILETYPE_CSV)) {
+					
 					context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
 				} else if (this.getProvider().getFileOutputType()
 						.equalsIgnoreCase(File.FILETYPE_XLS)) {
@@ -105,10 +106,11 @@ public class SourceFile extends File {
 	
 				context.export(directory, this);
 			}else{
-				logger.error("No provider found, defaulting to '{}'",
+				logger.error("No provider found or file Output Type found, defaulting to '{}'",
 						File.FILETYPE_CSV);	
 				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
 				context.export(directory, this);
+				this.addExportStatusMessages("No provider found or file Output Type found, defaulting to '" + File.FILETYPE_CSV + "'");
 			}
 		} else {
 			logger.error("Cannot export sourceFile '{}'. No data found",

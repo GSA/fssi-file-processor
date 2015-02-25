@@ -108,14 +108,9 @@ public class BasicTextSourceFileLoggerStrategy implements
 			bufferedWriter.newLine();
 			bufferedWriter.newLine();
 			
-			if(sourceFile.getLoadStatusMessage() != null && sourceFile.getLoadStatusMessage().size() > 0){
-				bufferedWriter.write("File received the following load status messages:");
-				bufferedWriter.newLine();
-				for(String loadStatusMessage: sourceFile.getLoadStatusMessage()){
-					bufferedWriter.write("     - " + loadStatusMessage);
-					bufferedWriter.newLine();					
-				}					
-			}
+			printLoadStatusMessages(sourceFile, bufferedWriter);
+			printExportStatusMessages(sourceFile, bufferedWriter);
+			
 			
 			if (sourceFile.getSchema() != null
 					&& sourceFile.getSchema().getStatus()) {
@@ -140,6 +135,47 @@ public class BasicTextSourceFileLoggerStrategy implements
 		}
 	}
 
+	private void printLoadStatusMessages(SourceFile sourceFile,
+			BufferedWriter bufferedWriter) throws IOException {
+		if(sourceFile.getLoadStatusMessage() != null && sourceFile.getLoadStatusMessage().size() > 0){
+			bufferedWriter.write("File received the following load status messages:");
+			bufferedWriter.newLine();
+			for(String loadStatusMessage: sourceFile.getLoadStatusMessage()){
+				bufferedWriter.write("     - " + loadStatusMessage);
+				bufferedWriter.newLine();					
+			}					
+		}
+		bufferedWriter.newLine();	
+	}
+
+	private void printExportStatusMessages(SourceFile sourceFile,
+			BufferedWriter bufferedWriter) throws IOException {
+		if(sourceFile.getExportStatusMessages() != null && sourceFile.getExportStatusMessages().size() > 0){
+			bufferedWriter.write("File received the following export status messages:");
+			bufferedWriter.newLine();
+			for(String exportStatusMessage: sourceFile.getExportStatusMessages()){
+				bufferedWriter.write("     - " + exportStatusMessage);
+				bufferedWriter.newLine();					
+			}					
+		}
+		bufferedWriter.newLine();	
+	}
+	
+
+	private void printValidatorStatusMessages(SourceFile sourceFile,
+			BufferedWriter bufferedWriter) throws IOException {
+		if(sourceFile.getExportStatusMessages() != null && sourceFile.getExportStatusMessages().size() > 0){
+			bufferedWriter.write("File received the following export status messages:");
+			bufferedWriter.newLine();
+			for(String exportStatusMessage: sourceFile.getExportStatusMessages()){
+				bufferedWriter.write("     - " + exportStatusMessage);
+				bufferedWriter.newLine();					
+			}					
+		}
+		bufferedWriter.newLine();	
+	}
+	
+	
 	private void printRecordValidationErrors(SourceFile sourceFile,
 			String errorLevel, BufferedWriter bufferedWriter)
 			throws IOException {
