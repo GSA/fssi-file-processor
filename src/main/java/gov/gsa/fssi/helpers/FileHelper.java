@@ -57,6 +57,10 @@ public class FileHelper {
 								logger.info(
 										"Ignoring '{}' because it is not in whitelist",
 										file.getName());
+							} else if (file.getName().startsWith(".") || file.getName().startsWith("~") || file.isHidden()) {
+								logger.info(
+										"Ignoring '{}' because it is hidden or a system file",
+										file.getName());								
 							} else {
 								logger.info("Added '{}' to ArrayList",
 										file.getName());
