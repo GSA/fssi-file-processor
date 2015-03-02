@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>gov.gsa.fssi</groupId>
   <artifactId>fssi-fileprocessor</artifactId>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,6 +36,11 @@
 		<groupId>org.apache.poi</groupId>
 		<artifactId>poi-ooxml</artifactId>
 		<version>3.10.1</version>
+	</dependency>
+	<dependency>
+		<groupId>commons-io</groupId>
+		<artifactId>commons-io</artifactId>
+		<version>2.4</version>
 	</dependency>
   </dependencies>
   <reporting>

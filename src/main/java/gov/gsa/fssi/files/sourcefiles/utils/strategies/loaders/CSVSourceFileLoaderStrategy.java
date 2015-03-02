@@ -1,9 +1,7 @@
 package main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.loaders;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
@@ -45,9 +43,7 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 
 			final URL url = FileHelper.getFile(FileHelper.getFullPath(directory, fileName)).toURI().toURL();
 			final Reader reader = new InputStreamReader(new BOMInputStream(url.openStream()), "UTF-8");
-//			Reader reader = new InputStreamReader(inputStream, "UTF-8");
-			final CSVParser parser = new CSVParser(reader,
-					CSVFormat.EXCEL.withHeader());
+			final CSVParser parser = new CSVParser(reader,CSVFormat.EXCEL.withHeader());
 
 			try {
 				processHeaders(fileName, sourceFile, parser);
