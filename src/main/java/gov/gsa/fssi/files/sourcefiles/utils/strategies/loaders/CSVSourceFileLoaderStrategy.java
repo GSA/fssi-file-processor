@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import main.java.gov.gsa.fssi.helpers.FileHelper;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.input.BOMInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,9 +43,9 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 		sourceFile.setLoadStage(File.STAGE_LOADING);
 		try {
 
-			InputStream inputStream = new FileInputStream(
-					FileHelper.getFullPath(directory, fileName));
-			Reader reader = new InputStreamReader(inputStream, "UTF-8");
+			final URL url = FileHelper.getFile(FileHelper.getFullPath(directory, fileName)).toURI().toURL();
+			final Reader reader = new InputStreamReader(new BOMInputStream(url.openStream()), "UTF-8");
+//			Reader reader = new InputStreamReader(inputStream, "UTF-8");
 			final CSVParser parser = new CSVParser(reader,
 					CSVFormat.EXCEL.withHeader());
 
@@ -82,19 +84,27 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 			parser.close();
 		} catch (FileNotFoundException e) {
 			logger.error(
-					"There was an FileNotFoundException error with file {}",
+					"There was an FileNotFoundException error '{}' with file {}",e.getMessage(),
 					sourceFile.getFileName());
+			sourceFile.addLoadStatusMessage(e.getMessage());
+			sourceFile.setMaxErrorLevel(3);			
 		} catch (IOException e) {
-			logger.error("There was an IOException error with file {}",
+			logger.error("There was an IOException error '{}' with file {}",e.getMessage(),
 					sourceFile.getFileName());
+			sourceFile.addLoadStatusMessage(e.getMessage());
+			sourceFile.setMaxErrorLevel(3);			
 		} catch (IllegalArgumentException e) {
 			logger.error(
-					"There was an IllegalArgumentException error with file {}",
+					"There was an IllegalArgumentException '{}' error with file {}",e.getMessage(),
 					sourceFile.getFileName());
+			sourceFile.addLoadStatusMessage(e.getMessage());
+			sourceFile.setMaxErrorLevel(3);
 		} catch (NullPointerException e) {
 			logger.error(
 					"Received NullPointerException '{}' while creating log for file '{}'",
 					e.getMessage(), sourceFile.getFileName());
+			sourceFile.addLoadStatusMessage(e.getMessage());
+			sourceFile.setMaxErrorLevel(3);			
 		}
 		if (sourceFile.getStatus()) {
 			sourceFile.setLoadStage(File.STAGE_LOADED);
