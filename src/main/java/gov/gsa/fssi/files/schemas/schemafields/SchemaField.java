@@ -20,10 +20,6 @@ public class SchemaField {
 	private String description = null;
 	private List<FieldConstraint> constraints = new ArrayList<FieldConstraint>();
 	private List<String> alias = new ArrayList<String>();
-	private String loadStatusLevel = null;
-	private String loadStatusMessage = null;
-	private String validatorStatusMessage = null;
-	private String validatorStatusLevel = null;
 
 	/**
 	 * a string (of arbitrary length)
@@ -153,13 +149,6 @@ public class SchemaField {
 		return headerIndex;
 	}
 
-	public String getLoadStatusLevel() {
-		return loadStatusLevel;
-	}
-
-	public String getLoadStatusMessage() {
-		return loadStatusMessage;
-	}
 
 	/**
 	 * @return the name
@@ -202,13 +191,6 @@ public class SchemaField {
 		return type;
 	}
 
-	public String getValidatorStatusLevel() {
-		return validatorStatusLevel;
-	}
-
-	public String getValidatorStatusMessage() {
-		return validatorStatusMessage;
-	}
 
 	/**
 	 * Validates that a string is a valid SchemaFieldType
@@ -280,13 +262,6 @@ public class SchemaField {
 		this.headerIndex = headerIndex;
 	}
 
-	public void setLoadStatusLevel(String loadStatusLevel) {
-		this.loadStatusLevel = loadStatusLevel;
-	}
-
-	public void setLoadStatusMessage(String loadStatusMessage) {
-		this.loadStatusMessage = loadStatusMessage;
-	}
 
 	/**
 	 * @param name
@@ -312,14 +287,6 @@ public class SchemaField {
 	 */
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public void setValidatorStatusLevel(String validatorStatusLevel) {
-		this.validatorStatusLevel = validatorStatusLevel;
-	}
-
-	public void setValidatorStatusMessage(String validatorStatusMessage) {
-		this.validatorStatusMessage = validatorStatusMessage;
 	}
 
 }

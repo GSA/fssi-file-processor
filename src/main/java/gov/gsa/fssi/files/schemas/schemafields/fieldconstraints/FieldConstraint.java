@@ -18,9 +18,6 @@ import org.slf4j.LoggerFactory;
 public class FieldConstraint {
 	private static final Logger logger = LoggerFactory
 			.getLogger(SchemaField.class);
-	private String loadStatusLevel = null;
-	private String loadStatusMessage = null;
-	private String validatorStatusMessage = null;
 
 	/**
 	 * This denotes as to whether or not the Schema Field Constraint is valid
@@ -116,14 +113,6 @@ public class FieldConstraint {
 		return levelName;
 	}
 
-	public String getLoadStatusLevel() {
-		return loadStatusLevel;
-	}
-
-	public String getLoadStatusMessage() {
-		return loadStatusMessage;
-	}
-
 	public HashMap<String, String> getOptions() {
 		return options;
 	}
@@ -142,10 +131,6 @@ public class FieldConstraint {
 
 	public String getValidatorStatusLevel() {
 		return validatorStatusLevel;
-	}
-
-	public String getValidatorStatusMessage() {
-		return validatorStatusMessage;
 	}
 
 	public String getValue() {
@@ -194,13 +179,6 @@ public class FieldConstraint {
 		this.level = loadStatusLevel;
 	}
 
-	public void setLoadStatusLevel(String loadStatusLevel) {
-		this.loadStatusLevel = loadStatusLevel;
-	}
-
-	public void setLoadStatusMessage(String loadStatusMessage) {
-		this.loadStatusMessage = loadStatusMessage;
-	}
 
 	public void setOptions(HashMap<String, String> options) {
 		this.options = options;
@@ -212,10 +190,6 @@ public class FieldConstraint {
 
 	public void setValidatorStatusLevel(String validatorStatusLevel) {
 		this.validatorStatusLevel = validatorStatusLevel;
-	}
-
-	public void setValidatorStatusMessage(String validatorStatusMessage) {
-		this.validatorStatusMessage = validatorStatusMessage;
 	}
 
 	public void setValue(String value) {

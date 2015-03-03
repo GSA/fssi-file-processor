@@ -137,9 +137,9 @@ public class BasicTextSourceFileLoggerStrategy implements
 			for(String loadStatusMessage: sourceFile.getLoadStatusMessage()){
 				bufferedWriter.write("     - " + loadStatusMessage);
 				bufferedWriter.newLine();					
-			}					
+			}	
+			bufferedWriter.newLine();	
 		}
-		bufferedWriter.newLine();	
 	}
 
 	private void printSchemaValidatorStatusMessages(SourceFile sourceFile,
@@ -150,9 +150,9 @@ public class BasicTextSourceFileLoggerStrategy implements
 			for(String validatorStatusMessage: sourceFile.getValidatorStatusMessages()){
 				bufferedWriter.write("     - " + validatorStatusMessage);
 				bufferedWriter.newLine();					
-			}					
+			}	
+			bufferedWriter.newLine();	
 		}
-		bufferedWriter.newLine();	
 	}	
 	
 	
@@ -164,9 +164,9 @@ public class BasicTextSourceFileLoggerStrategy implements
 			for(String exportStatusMessage: sourceFile.getExportStatusMessages()){
 				bufferedWriter.write("     - " + exportStatusMessage);
 				bufferedWriter.newLine();					
-			}					
+			}	
+			bufferedWriter.newLine();	
 		}
-		bufferedWriter.newLine();	
 	}
 	
 
@@ -178,9 +178,9 @@ public class BasicTextSourceFileLoggerStrategy implements
 			for(String exportStatusMessage: sourceFile.getExportStatusMessages()){
 				bufferedWriter.write("     - " + exportStatusMessage);
 				bufferedWriter.newLine();					
-			}					
+			}	
+			bufferedWriter.newLine();	
 		}
-		bufferedWriter.newLine();	
 	}
 	
 	

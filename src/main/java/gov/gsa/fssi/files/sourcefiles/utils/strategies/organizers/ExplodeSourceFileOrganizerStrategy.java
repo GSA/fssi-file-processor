@@ -53,37 +53,27 @@ public class ExplodeSourceFileOrganizerStrategy implements
 				Iterator<?> currentHeaderIterator = sourceFile
 						.getSourceHeaders().entrySet().iterator();
 				while (currentHeaderIterator.hasNext()) {
-					Map.Entry<Integer, String> currentHeaderIteratorPairs = (Map.Entry) currentHeaderIterator
-							.next();
-					if (currentHeaderIteratorPairs.getKey() == field
-							.getHeaderIndex()) {
+					Map.Entry<Integer, String> currentHeaderIteratorPairs = (Map.Entry) currentHeaderIterator.next();
+					if (currentHeaderIteratorPairs.getKey() == field.getHeaderIndex()) {
 						if (logger.isDebugEnabled()) {
-							logger.debug(
-									"Found SourceFile Field '{}' that matched Schema Field!",
-									currentHeaderIteratorPairs.getValue());
+							logger.debug("Found SourceFile Field '{}' that matched Schema Field!",currentHeaderIteratorPairs.getValue());
 						}
 						// we allways use the source files naming to keep it
 						// consistant
-						headerTranslationMap.put(
-								currentHeaderIteratorPairs.getKey(),
-								headerCounter);
+						headerTranslationMap.put(currentHeaderIteratorPairs.getKey(),headerCounter);
 						fieldName = currentHeaderIteratorPairs.getValue();
 					}
 				}
 			}
 
-			field.setHeaderIndex(headerCounter);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Adding '{} - {}' to newHeader", headerCounter,
-						fieldName);
-			}
+			field.setHeaderIndex(headerCounter);	
+			if (logger.isDebugEnabled()) logger.debug("Adding '{} - {}' to newHeader", headerCounter, fieldName);
 			newHeader.put(headerCounter, fieldName);
 			headerCounter++;
 		}
 
 		// Next lets add the stragglers.....
-		Iterator<?> currentHeaderIterator = sourceFile.getSourceHeaders()
-				.entrySet().iterator();
+		Iterator<?> currentHeaderIterator = sourceFile.getSourceHeaders().entrySet().iterator();
 		while (currentHeaderIterator.hasNext()) {
 			Map.Entry<Integer, String> currentHeaderIteratorPairs = (Map.Entry) currentHeaderIterator
 					.next();
@@ -115,31 +105,30 @@ public class ExplodeSourceFileOrganizerStrategy implements
 			}
 		}
 
+		Map<Integer, String> fieldMap = new HashMap<Integer, String>();
+		for(SchemaField fieldTemp : sourceFile.getSchema().getFields()){
+			fieldMap.put(fieldTemp.getHeaderIndex(), fieldTemp.getName());
+		}
 		// Lets print the new headers
-		logger.info("Old Header:{}", sourceFile.getSourceHeaders());
-		sourceFile.setSourceHeaders(newHeader);
+		sourceFile.setSourceHeaders(newHeader);		
+		logger.info("Old Header:{}", sourceFile.getSourceHeaders());		
 		logger.debug("New Header: {}", sourceFile.getSourceHeaders());
+		logger.info("New Field List:{}", fieldMap);
 
 		// now we can process the data by restacking data and filling in the
 		// blanks
 		for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
 			// Restacking
 			for (Data data : sourceFileRecord.getDatas()) {
-				data.setHeaderIndex(headerTranslationMap.get(data
-						.getHeaderIndex()));
+				data.setHeaderIndex(headerTranslationMap.get(data.getHeaderIndex()));
 			}
 
 			// Now we fill in the blanks
-			Iterator<?> sourceFileHeaderIterator2 = sourceFile
-					.getSourceHeaders().entrySet().iterator();
+			Iterator<?> sourceFileHeaderIterator2 = sourceFile.getSourceHeaders().entrySet().iterator();
 			while (sourceFileHeaderIterator2.hasNext()) {
-				Map.Entry<Integer, String> newHeaderPairs = (Map.Entry) sourceFileHeaderIterator2
-						.next();
-				Data data = sourceFileRecord
-						.getDataByHeaderIndex(newHeaderPairs.getKey());
-				if (data == null) {
-					sourceFileRecord.addData(new Data(newHeaderPairs.getKey(),
-							""));
+				Map.Entry<Integer, String> newHeaderPairs = (Map.Entry) sourceFileHeaderIterator2.next();
+				Data data = sourceFileRecord.getDataByHeaderIndex(newHeaderPairs.getKey());
+				if (data == null) {sourceFileRecord.addData(new Data(newHeaderPairs.getKey(),""));
 				}
 			}
 		}
