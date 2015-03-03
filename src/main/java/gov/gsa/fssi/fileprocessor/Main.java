@@ -89,7 +89,7 @@ public class Main {
 					SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
 					SourceFile sourceFile = sourceFileBuilder.build(
 							config.getProperty(Config.SOURCEFILES_DIRECTORY), fileName,
-							config.getProperty(Config.EXPORT_MODE), schemas, providers);
+							config.getProperty(Config.EXPORT_MODE), config.getProperty(Config.PROVIDER_MODE), schemas, providers);
 					if (sourceFile != null) {
 						if (sourceFile.getStatus())
 							sourceFile.export(config

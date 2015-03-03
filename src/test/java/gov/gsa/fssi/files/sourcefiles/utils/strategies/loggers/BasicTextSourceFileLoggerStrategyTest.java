@@ -53,7 +53,7 @@ public class BasicTextSourceFileLoggerStrategyTest {
 		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
 		SourceFile sourceFile = sourceFileBuilder.build(
 				config.getProperty(Config.SOURCEFILES_DIRECTORY),
-				"goodfileschematest_012015.csv", Config.EXPORT_MODE_IMPLODE,
+				"goodfileschematest_012015.csv", Config.EXPORT_MODE_IMPLODE, Config.PROVIDER_MODE_DEBUG,
 				schemas, providers);
 
 		SourceFileLoggerContext context = new SourceFileLoggerContext();

@@ -30,7 +30,7 @@ public class SourceFilesBuilder {
 	 * @return
 	 */
 	public List<SourceFile> build(String directory, List<Schema> schemas,
-			String exportMode, List<Provider> providers) {
+			String exportMode, String providerMode, List<Provider> providers) {
 		List<SourceFile> sourceFiles = new ArrayList<SourceFile>();
 		// Loop through files in sourceFileDirectory and populate SourceFile
 		// objects
@@ -38,7 +38,7 @@ public class SourceFilesBuilder {
 				".csv")) {
 			SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
 			sourceFiles.add(sourceFileBuilder.build(directory, fileName,
-					exportMode, schemas, providers));
+					exportMode, providerMode, schemas, providers));
 		}
 		return sourceFiles;
 	}

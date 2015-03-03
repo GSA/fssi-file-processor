@@ -58,7 +58,7 @@ public class SourceFileLoadTest {
 		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
 		SourceFile sourceFile = sourceFileBuilder.build(
 				config.getProperty(Config.SOURCEFILES_DIRECTORY),
-				SOURCEFILENAME, Config.EXPORT_MODE_IMPLODE, schemas, providers);
+				SOURCEFILENAME, Config.EXPORT_MODE_IMPLODE, Config.PROVIDER_MODE_DEBUG, schemas, providers);
 
 		Assert.assertEquals("failure - loadSourceFile recordCount", 6,
 				sourceFile.recordCount());

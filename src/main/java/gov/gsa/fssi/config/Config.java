@@ -108,7 +108,7 @@ public class Config {
 	 */	
 	public static final String PROVIDER_MODE = "provider_mode";
 	public static final String PROVIDER_MODE_STRICT = "strict";
-	public static final String PROVIDER_MODE_LOOSE = "loose";	
+	public static final String PROVIDER_MODE_DEBUG = "debug";	
 	public static final String DEFAULT_PROVIDER_MODE = PROVIDER_MODE_STRICT;
 	
 	
@@ -308,7 +308,7 @@ public class Config {
 					"No '{}' property found in config file, loading default: '{}'",
 					PROVIDER_MODE, DEFAULT_PROVIDER_MODE);
 			prop.put(PROVIDER_MODE, DEFAULT_PROVIDER_MODE);
-		} else if (!isValidLoggingLevel(prop.getProperty(PROVIDER_MODE))) {
+		} else if (!isValidProviderMode(prop.getProperty(PROVIDER_MODE))) {
 			logger.warn(
 					"BAD '{}' property found in config file, loading default: '{}'",
 					PROVIDER_MODE, DEFAULT_PROVIDER_MODE);
@@ -345,7 +345,7 @@ public class Config {
 	public static boolean isValidProviderMode(String val) {
 		if (val.equalsIgnoreCase(PROVIDER_MODE_STRICT)) {
 			return true;
-		} else if (val.equalsIgnoreCase(PROVIDER_MODE_LOOSE)) {
+		} else if (val.equalsIgnoreCase(PROVIDER_MODE_DEBUG)) {
 			return true;
 		} 
 		return false;

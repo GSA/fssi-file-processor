@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
@@ -32,14 +33,16 @@ public class SourceFileBuilder {
 	 * @param sourceFileDirectory
 	 */
 	public SourceFile build(String directory, String fileName,
-			String exportMode, List<Schema> schemas, List<Provider> providers) {
+			String exportMode, String providerMode, List<Schema> schemas, List<Provider> providers) {
 		SourceFile sourceFile = new SourceFile(fileName);
 		mapProviderToSourceFile(providers, sourceFile);
 
-		if (sourceFile.getProvider() == null) {
-			logger.error(
-					"Could not find Provider for file '{}'. Will use defaults",
-					fileName);
+		if (sourceFile.getProvider() == null && Config.PROVIDER_MODE_STRICT.equalsIgnoreCase(providerMode)) {
+			logger.error("No provider was found and provider mode was set to 'Strict' Mode. File cannot be processed");
+			sourceFile.addLoadStatusMessage("No provider was found and provider mode was set to 'Strict' Mode. File cannot be processed");
+			sourceFile.setMaxErrorLevel(3);
+		}else if (sourceFile.getProvider() == null) {
+			logger.error("Could not find Provider for file '{}'. Will use defaults", fileName);
 		} else if (!sourceFile.getStatus()) {
 			logger.error(
 					"File is in error state, will not process schema activities",
@@ -162,10 +165,10 @@ public class SourceFileBuilder {
 			}
 			
 			if (sourceFile.getProvider() == null) {
-				logger.error("Could not find provider for file: '{}'",
+				logger.warn("Could not find provider for file: '{}'",
 						sourceFile.getFileName());
 				sourceFile.setMaxErrorLevel(2);
-				sourceFile.addLoadStatusMessage("Could not find provider, will have to use defaults");
+				sourceFile.addLoadStatusMessage("Could not find provider");
 			} else {
 				logger.info("Mapped Provider '{}' successfully", sourceFile.getProvider().getProviderIdentifier());
 			}

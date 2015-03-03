@@ -1,16 +1,13 @@
 package test.java.gov.gsa.fssi.providers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
-import main.java.gov.gsa.fssi.files.providers.utils.ProviderValidator;
 import main.java.gov.gsa.fssi.files.providers.utils.ProvidersBuilder;
 import main.java.gov.gsa.fssi.helpers.mockdata.MockProvider;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ProviderLoadTest {
