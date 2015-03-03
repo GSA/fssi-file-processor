@@ -84,7 +84,7 @@ public class SourceFile extends File {
 	public void export(String directory) {
 		SourceFileExporterContext context = new SourceFileExporterContext();
 		if (this.getRecords() != null) {
-			if(this.getProvider() !=null && this.getProvider().getFileOutputType() != null && "".equals(this.getProvider().getFileOutputType())){
+			if(this.getProvider() != null){
 				logger.info("Attempting to export file '{}' in '{}' format",this.getFileName(), this.getProvider().getFileOutputType());
 				if (this.getProvider().getFileOutputType()
 						.equalsIgnoreCase(File.FILETYPE_CSV)) {
@@ -96,6 +96,12 @@ public class SourceFile extends File {
 				} else if (this.getProvider().getFileOutputType()
 						.equalsIgnoreCase(File.FILETYPE_XLSX)) {
 					context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
+				}else if (this.getProvider().getFileOutputType() != null || "".equals(this.getProvider().getFileOutputType())){
+					logger.warn(
+							"Provider identifier '{}' does not have a file output type, defauting to '{}'",
+							this.getProvider().getProviderIdentifier(),
+							File.FILETYPE_CSV);
+					context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());					
 				} else {
 					logger.warn(
 							"We cannot currently export to a '{}'. defaulting to '{}'",
@@ -103,18 +109,18 @@ public class SourceFile extends File {
 							File.FILETYPE_CSV);
 					context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
 				}
-	
-				context.export(directory, this);
 			}else{
-				logger.error("No provider found or file Output Type found, defaulting to '{}'",
-						File.FILETYPE_CSV);	
+				logger.warn("No provider found for file, defaulting output to '{}'",File.FILETYPE_CSV);	
 				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
-				context.export(directory, this);
 				this.addExportStatusMessages("No provider found or file Output Type found, defaulting to '" + File.FILETYPE_CSV + "'");
 			}
+			
+			context.export(directory, this);	
+			
 		} else {
 			logger.error("Cannot export sourceFile '{}'. No data found",
 					this.getFileName());
+			this.addExportStatusMessages("Cannot export file. No data found");
 		}
 	}
 

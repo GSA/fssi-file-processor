@@ -107,18 +107,21 @@ public class SchemaValidator {
 		logger.info("Started schema validation for schema '{}'",
 				schema.getName());
 
-		if (schema.getName() == null || schema.getName().isEmpty()) {
-			logger.error("Schema in file '{}' does not have a name",
-					schema.getFileName());
+		if (schema.getName() == null || "".equals(schema.getName())) {
+			logger.error("Schema in file '{}' does not have a name",schema.getFileName());
+			schema.addValidatorStatusMessage("Schema in file '" + schema.getFileName() + "' does not have a name");
+			schema.setMaxErrorLevel(3);
 			schema.setValidatorStatus(false);
 		}
 
-		schema.setFields(validateFields(schema));
-
+		
 		if (schema.getFields() == null || schema.getFields().isEmpty()) {
-			logger.warn("Schema '{}' in file '{}' does not have any fields",
-					schema.getName(), schema.getFileName());
+			logger.error("Schema '{}' in file '{}' does not have any fields",schema.getName(), schema.getFileName());
+			schema.addValidatorStatusMessage("Schema in file '" + schema.getFileName() + "' does not have any fields");			
+			schema.setMaxErrorLevel(3);
 			schema.setValidatorStatus(false);
+		}else{
+			schema.setFields(validateFields(schema));			
 		}
 	}
 
@@ -133,45 +136,44 @@ public class SchemaValidator {
 	 * 
 	 * @param schemaField
 	 */
-	private List<String> validateFieldAlias(Schema newSchema,
+	private List<String> validateFieldAliass(Schema newSchema,
 			SchemaField newField) {
 		List<String> newAliasList = new ArrayList<String>();
 		for (String alias : newField.getAlias()) {
-			String newAlias = alias.toUpperCase().trim();
-			if (newField.getName().equals(newAlias)) {
-				logger.warn(
-						"Alias '{}' is the same as the field itself, it can be ignored",
-						newAlias);
-			} else if (newAliasList.contains(newAlias)) {
-				logger.warn(
-						"Alias '{}' is a duplicate of an existing alias, it can be ignored",
-						newAlias);
-			} else {
-				boolean dupeCheck = false;
-				// we need to check other fields to see if the alias already
-				// exists.
-				// They need to be unique to prevent unintended processing
-				for (SchemaField field : newSchema.getFields()) {
-					if (field.getName().equals(newAlias)) {
-						logger.warn(
-								"Alias '{}' is a duplicate of another fields name, it can be ignored",
-								newAlias);
-						dupeCheck = true;
-					}
-					if (field.getAlias().contains(newAlias)) {
-						logger.warn(
-								"Alias '{}' is a duplicate of another alias in field '{}', it can be ignored",
-								newAlias, field.getName());
-						dupeCheck = true;
-					}
-				}
-
-				if (dupeCheck == false) {
-					newAliasList.add(newAlias);
-				}
-			}
+			validateFieldAlias(newSchema, newField, newAliasList, alias);
 		}
 		return newAliasList;
+	}
+
+	private void validateFieldAlias(Schema newSchema, SchemaField newField,
+			List<String> newAliasList, String alias) {
+		String newAlias = alias.toUpperCase().trim();
+		if (newField.getName().equals(newAlias)) {
+			logger.warn(
+					"Alias '{}' is the same as the field itself, it can be ignored", newAlias);
+		} else if (newAliasList.contains(newAlias)) {
+			logger.warn(
+					"Alias '{}' is a duplicate of an existing alias, it can be ignored", newAlias);
+		} else {
+			boolean dupeCheck = false;
+			// we need to check other fields to see if the alias already
+			// exists.
+			// They need to be unique to prevent unintended processing
+			for (SchemaField field : newSchema.getFields()) {
+				if (field.getName().equals(newAlias)) {
+					logger.warn("Alias '{}' is a duplicate of another fields name, it can be ignored",newAlias);
+					dupeCheck = true;
+				}
+				if (field.getAlias().contains(newAlias)) {
+					logger.warn("Alias '{}' is a duplicate of another alias in field '{}', it can be ignored",newAlias, field.getName());
+					dupeCheck = true;
+				}
+			}
+
+			if (dupeCheck == false) {
+				newAliasList.add(newAlias);
+			}
+		}
 	}
 
 	private List<FieldConstraint> validateFieldConstraints(SchemaField newField) {
@@ -181,7 +183,7 @@ public class SchemaValidator {
 
 			if (newConstraint.getType() == null
 					|| newConstraint.getType().isEmpty()) {
-				logger.error("No constraint type provided, constraints requires a type. ignoring.");
+				logger.warn("No constraint type provided, constraints requires a type. ignoring.");
 			} else if (!isValidType(newConstraint.getType())) {
 				logger.warn("'{}' is an invalid type, ignoring",
 						newConstraint.getType());
@@ -268,33 +270,43 @@ public class SchemaValidator {
 	private List<SchemaField> validateFields(Schema schema) {
 		Schema newSchema = new Schema();
 		for (SchemaField field : schema.getFields()) {
-			SchemaField newField = field;
-			if (newField.getName() == null || newField.getName().isEmpty()) {
-				logger.warn("Field has no name, removing");
-			} else if (newSchema.getFieldNames().contains(newField.getName())) {
-				logger.warn("Field '{}' is a duplicate, removing",
-						field.getName());
-			} else {
-				if (field.getAlias() != null && !field.getAlias().isEmpty()) {
-					newField.setAlias(validateFieldAlias(newSchema, newField));
-				}
-				if (newField.getType() == null || newField.getType().isEmpty()) {
-					logger.info("Setting default type 'ANY' for field '{}'",
-							newField.getName());
-					newField.setType(SchemaField.TYPE_ANY);
-				}
-
-				if (newField.getConstraints() != null
-						&& !newField.getConstraints().isEmpty()) {
-					newField.setConstraints(validateFieldConstraints(newField));
-				}
-
-				// TODO: Validate format to make sure it is compatible with type
-				newSchema.addField(newField);
-			}
+			validateField(schema, newSchema, field);
 		}
 
 		return newSchema.getFields();
+	}
+
+	private void validateField(Schema schema, Schema newSchema,
+			SchemaField field) {
+		SchemaField newField = field;
+		if (newField.getName() == null || newField.getName().isEmpty()) {
+			logger.error("Field has no name, removing");
+			schema.addValidatorStatusMessage("Schema '" + schema.getName() + "' has a field with no name");			
+			schema.setMaxErrorLevel(3);
+			schema.setValidatorStatus(false);
+		} else if (newSchema.getFieldNames().contains(newField.getName())) {
+			logger.error("Field '{}' is a duplicate",field.getName());
+			schema.addValidatorStatusMessage("Schema '" + schema.getName() + "' has a duplicate field '" + field.getName() + "'");	
+			schema.setMaxErrorLevel(3);
+			schema.setValidatorStatus(false);
+		} else {
+			if (field.getAlias() != null && !field.getAlias().isEmpty()) {
+				newField.setAlias(validateFieldAliass(newSchema, newField));
+			}
+			if (newField.getType() == null || newField.getType().isEmpty()) {
+				logger.info("Setting default type 'ANY' for field '{}'",
+						newField.getName());
+				newField.setType(SchemaField.TYPE_ANY);
+			}
+
+			if (newField.getConstraints() != null
+					&& !newField.getConstraints().isEmpty()) {
+				newField.setConstraints(validateFieldConstraints(newField));
+			}
+
+			// TODO: Validate format to make sure it is compatible with type
+			newSchema.addField(newField);
+		}
 	}
 
 }

@@ -74,6 +74,7 @@ public class BasicTextSourceFileLoggerStrategy implements
 			bufferedWriter.write("Schema: "
 					+ (sourceFile.getSchema() == null ? "N/A" : sourceFile
 							.getSchema().getName()));
+			if(sourceFile.getSchema() != null && !sourceFile.getSchema().getStatus()) bufferedWriter.write(" [has Errors, see below]");
 			bufferedWriter.newLine();
 			bufferedWriter
 					.write("Email: "
@@ -109,22 +110,15 @@ public class BasicTextSourceFileLoggerStrategy implements
 			bufferedWriter.newLine();
 			
 			printLoadStatusMessages(sourceFile, bufferedWriter);
+			printSchemaValidatorStatusMessages(sourceFile, bufferedWriter);
 			printExportStatusMessages(sourceFile, bufferedWriter);
 			
 			
-			if (sourceFile.getSchema() != null
-					&& sourceFile.getSchema().getStatus()) {
-				bufferedWriter.write("Validation Results (Showing ");
-				if(FieldConstraint.getErrorLevel(errorLevel) == 0) bufferedWriter.write("All");
-				else if(FieldConstraint.getErrorLevel(errorLevel) == 1) bufferedWriter.write("[W]arning, [E]rror, and [F]atal");
-				else if(FieldConstraint.getErrorLevel(errorLevel) == 2) bufferedWriter.write("[E]rror and [F]atal");
-				else if(FieldConstraint.getErrorLevel(errorLevel) == 3) bufferedWriter.write("[F]atal Only");
-				bufferedWriter.write("):");
-				bufferedWriter.newLine();				
-				bufferedWriter.newLine();
-				
+			if (sourceFile.getSchema() != null && sourceFile.getSchema().getStatus()) {
 				printRecordValidationErrors(sourceFile, errorLevel, bufferedWriter);
 			}
+			
+			
 			bufferedWriter.flush();
 			bufferedWriter.close();
 
@@ -148,6 +142,20 @@ public class BasicTextSourceFileLoggerStrategy implements
 		bufferedWriter.newLine();	
 	}
 
+	private void printSchemaValidatorStatusMessages(SourceFile sourceFile,
+			BufferedWriter bufferedWriter) throws IOException {
+		if(sourceFile.getValidatorStatusMessages() != null && sourceFile.getValidatorStatusMessages().size() > 0){
+			bufferedWriter.write("Schema failed validation with the following status messages:");
+			bufferedWriter.newLine();
+			for(String validatorStatusMessage: sourceFile.getValidatorStatusMessages()){
+				bufferedWriter.write("     - " + validatorStatusMessage);
+				bufferedWriter.newLine();					
+			}					
+		}
+		bufferedWriter.newLine();	
+	}	
+	
+	
 	private void printExportStatusMessages(SourceFile sourceFile,
 			BufferedWriter bufferedWriter) throws IOException {
 		if(sourceFile.getExportStatusMessages() != null && sourceFile.getExportStatusMessages().size() > 0){
@@ -176,9 +184,18 @@ public class BasicTextSourceFileLoggerStrategy implements
 	}
 	
 	
-	private void printRecordValidationErrors(SourceFile sourceFile,
-			String errorLevel, BufferedWriter bufferedWriter)
+	private void printRecordValidationErrors(SourceFile sourceFile, String errorLevel, BufferedWriter bufferedWriter)
 			throws IOException {
+		
+		bufferedWriter.write("Validation Results (Showing ");
+		if(FieldConstraint.getErrorLevel(errorLevel) == 0) bufferedWriter.write("All");
+		else if(FieldConstraint.getErrorLevel(errorLevel) == 1) bufferedWriter.write("[W]arning, [E]rror, and [F]atal");
+		else if(FieldConstraint.getErrorLevel(errorLevel) == 2) bufferedWriter.write("[E]rror and [F]atal");
+		else if(FieldConstraint.getErrorLevel(errorLevel) == 3) bufferedWriter.write("[F]atal Only");
+		bufferedWriter.write("):");
+		bufferedWriter.newLine();				
+		bufferedWriter.newLine();
+		
 		for (SourceFileRecord record : sourceFile.getRecords()) {
 			if (record.getMaxErrorLevel() >= FieldConstraint.getErrorLevel(errorLevel)) {
 				printRecordValidationError(sourceFile, errorLevel, bufferedWriter, record);

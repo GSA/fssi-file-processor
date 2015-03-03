@@ -1,13 +1,16 @@
 package test.java.gov.gsa.fssi.providers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
+import main.java.gov.gsa.fssi.files.providers.utils.ProviderValidator;
 import main.java.gov.gsa.fssi.files.providers.utils.ProvidersBuilder;
 import main.java.gov.gsa.fssi.helpers.mockdata.MockProvider;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ProviderLoadTest {
@@ -17,7 +20,7 @@ public class ProviderLoadTest {
 	 * This should test to make sure that we are catching required Fields
 	 */
 	@Test
-	public void load() {
+	public void loadFromExcelFile() {
 		ProvidersBuilder providersBuilder = new ProvidersBuilder();
 		List<Provider> providers = providersBuilder.build(config
 				.getProperty(Config.PROVIDERS_DIRECTORY));
@@ -36,4 +39,5 @@ public class ProviderLoadTest {
 				providers.size());
 
 	}
+	
 }

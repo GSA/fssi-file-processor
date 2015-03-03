@@ -34,4 +34,16 @@ public class MockProvider {
 		provider.setFileOutputType(fileOutputType);
 		return provider;
 	}
+
+	public static Provider make(String providerName, String providerIdentifier,
+			String schemaName, String fileOutputType, String providerEmail) {
+		Provider provider = new Provider();
+		provider.setProviderName(providerName);
+		provider.setProviderIdentifier(providerIdentifier);
+		provider.setSchemaName(schemaName);
+		provider.setFileOutputType(fileOutputType);
+		provider.setProviderEmail(providerEmail);
+		
+		return provider;
+	}	
 }

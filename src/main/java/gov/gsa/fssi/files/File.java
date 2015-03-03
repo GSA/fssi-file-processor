@@ -229,7 +229,7 @@ public class File {
 	/**
 	 * @return current validatorStatusMessage
 	 */
-	public List<String> getValidatorStatusMessage() {
+	public List<String> getValidatorStatusMessages() {
 		return this.validatorStatusMessages;
 	}
 
@@ -388,14 +388,6 @@ public class File {
 		this.setStatus(validatorStatus);
 		if (this.getValidatorStatus())
 			this.validatorStatus = validatorStatus;
-	}
-
-	/**
-	 * @param validatorStatusMessage
-	 *            String validatorStatusMessage to set
-	 */
-	public void setValidatorStatusMessage(List<String> validatorStatusMessages) {
-		this.validatorStatusMessages = validatorStatusMessages;
 	}
 
 	public static String getErrorLevelName(int errorLevel) {

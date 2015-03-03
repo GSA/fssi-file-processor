@@ -26,14 +26,22 @@ public class ProviderValidator {
 	 */
 	public void validate(Provider provider) {
 		// Certain fields are required.
-		if (provider.getProviderName() == null
-				|| provider.getProviderIdentifier() == null) {
+		if (provider.getProviderName() == null || "".equals(provider.getProviderName())|| provider.getProviderIdentifier() == null) {
 			logger.warn("Provider found Without all of the required fields (Name, Identifier)...ignoring");
 			provider.setValidatorStatus(false);
 			provider.setStatus(false);
 			provider.setMaxErrorLevel(3);
 			provider.addValidatorStatusMessage("Provider found Without all of the required fields (Name, Identifier)...ignoring");
 		}
+		// Certain fields are required.
+		if (provider.getProviderIdentifier() == null || "".equals(provider.getProviderIdentifier())) {
+			logger.warn("Provider found Without all of the required fields (Name, Identifier)...ignoring");
+			provider.setValidatorStatus(false);
+			provider.setStatus(false);
+			provider.setMaxErrorLevel(3);
+			provider.addValidatorStatusMessage("Provider found Without all of the required fields (Name, Identifier)...ignoring");
+		}		
+		
 	}
 
 	/**
