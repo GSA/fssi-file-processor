@@ -94,6 +94,24 @@ public class Config {
 	 * and "fatal". if undefined, it defaults to showing all errors.
 	 */
 	public static final String LOGGING_LEVEL = "logging_level";
+	
+	/**
+	 * The provider mode option tells the program whether or not to allow files
+	 * that do not have a provider to be processed and staged. This is useful in a production
+	 * setting where you want to catch when files are named poorly, or must be processed by a
+	 * certain schema.<p>
+	 * 
+	 * Options:<br>
+	 *      strict = A providers file is required and files will fail if the provider is not found.<br>
+	 *      debug = A provider file is not required and Files without providers will process normally, but will accept system defaults
+	 * 
+	 */	
+	public static final String PROVIDER_MODE = "provider_mode";
+	public static final String PROVIDER_MODE_STRICT = "strict";
+	public static final String PROVIDER_MODE_LOOSE = "loose";	
+	public static final String DEFAULT_PROVIDER_MODE = PROVIDER_MODE_STRICT;
+	
+	
 	public static final String DEFAULT_WORKING_DIRECTORY = "./working/";
 	public static final String DEFAULT_SOURCEFILES_DIRECTORY = "./working/srcfiles/";
 	public static final String DEFAULT_SCHEMAS_DIRECTORY = "./working/schemas/";
@@ -142,14 +160,14 @@ public class Config {
 	 */
 	private void getDefaultPropValue() {
 		Properties prop = new Properties();
-		prop.setProperty(WORKING_DIRECTORY, DEFAULT_WORKING_DIRECTORY);
 		prop.setProperty(SOURCEFILES_DIRECTORY, DEFAULT_SOURCEFILES_DIRECTORY);
 		prop.setProperty(SCHEMAS_DIRECTORY, DEFAULT_SCHEMAS_DIRECTORY);
 		prop.setProperty(LOGS_DIRECTORY, DEFAULT_LOGS_DIRECTORY);
 		prop.setProperty(PROVIDERS_DIRECTORY, DEFAULT_PROVIDERS_DIRECTORY);
 		prop.setProperty(STAGED_DIRECTORY, DEFAULT_STAGED_DIRECTORY);
 		prop.setProperty(EXPORT_MODE, DEFAULT_EXPORT_MODE);
-		prop.setProperty(VALIDATION_MODE, DEFAULT_VALIDATION_MODE);
+		prop.setProperty(PROVIDER_MODE, DEFAULT_PROVIDER_MODE);		
+		prop.setProperty(LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);				
 		this.prop = prop;
 	}
 
@@ -283,6 +301,20 @@ public class Config {
 					LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);
 			prop.put(LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);
 		}
+		
+		
+		if (!prop.containsKey(PROVIDER_MODE)) {
+			logger.info(
+					"No '{}' property found in config file, loading default: '{}'",
+					PROVIDER_MODE, DEFAULT_PROVIDER_MODE);
+			prop.put(PROVIDER_MODE, DEFAULT_PROVIDER_MODE);
+		} else if (!isValidLoggingLevel(prop.getProperty(PROVIDER_MODE))) {
+			logger.warn(
+					"BAD '{}' property found in config file, loading default: '{}'",
+					PROVIDER_MODE, DEFAULT_PROVIDER_MODE);
+			prop.put(PROVIDER_MODE, DEFAULT_PROVIDER_MODE);
+		}		
+		
 
 		return prop;
 	}
@@ -308,5 +340,16 @@ public class Config {
 		}
 		return false;
 	}
+	
+
+	public static boolean isValidProviderMode(String val) {
+		if (val.equalsIgnoreCase(PROVIDER_MODE_STRICT)) {
+			return true;
+		} else if (val.equalsIgnoreCase(PROVIDER_MODE_LOOSE)) {
+			return true;
+		} 
+		return false;
+	}	
+	
 
 }
