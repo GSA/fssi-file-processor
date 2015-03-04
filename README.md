@@ -43,7 +43,7 @@ If using a production release, you may simply use the provided run.sh (Unix/Linu
 
 If you are directly downloading the current head you can use maven to package the code (mvn package) and then run the following command:
 
-    java -Xms512m -Xmx1028m -jar ./target/fssi-fileprocessor-1.0-jar-with-dependencies.jar
+    java -Xms512m -Xmx1028m -jar ./target/fssi-fileprocessor-*-jar-with-dependencies.jar
 
 ##Point of Contact
 If you have any questions on this repository, please feel free to contact [strategicsourcing@gsa.gov](mailto:strategicsourcing@gsa.gov).
