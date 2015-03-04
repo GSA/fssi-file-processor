@@ -5,6 +5,7 @@ import java.util.List;
 import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.providers.utils.ProvidersBuilder;
+import main.java.gov.gsa.fssi.files.providers.utils.strategies.loaders.ExcelProviderLoaderStrategy;
 import main.java.gov.gsa.fssi.helpers.mockdata.MockProvider;
 
 import org.junit.Assert;
@@ -21,20 +22,18 @@ public class ProviderLoadTest {
 		ProvidersBuilder providersBuilder = new ProvidersBuilder();
 		List<Provider> providers = providersBuilder.build(config
 				.getProperty(Config.PROVIDERS_DIRECTORY));
-		Provider mockProvider = MockProvider.make("TEST", "TEST", "", "CSV");
 
 		Assert.assertEquals("failure - ProviderLoadTest getProviderName",
-				providers.get(0).getProviderName(),
-				mockProvider.getProviderName());
+				"TEST",providers.get(0).getProviderName());
 		Assert.assertEquals("failure - ProviderLoadTest getProviderIdentifier",
-				providers.get(0).getProviderIdentifier(),
-				mockProvider.getProviderIdentifier());
+				"TEST", providers.get(0).getProviderIdentifier());
 		Assert.assertEquals("failure - ProviderLoadTest getFileOutputType",
-				providers.get(0).getFileOutputType(),
-				mockProvider.getFileOutputType());
+				"csv",providers.get(0).getFileOutputType());
 		Assert.assertEquals("failure - ProviderLoadTest count", 3,
 				providers.size());
+		
 
 	}
+	
 	
 }

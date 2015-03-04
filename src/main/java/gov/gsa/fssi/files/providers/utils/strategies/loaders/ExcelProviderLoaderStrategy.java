@@ -7,6 +7,7 @@ import java.util.List;
 
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.providers.utils.strategies.ProviderLoaderStrategy;
+import main.java.gov.gsa.fssi.helpers.ExcelHelper;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -18,23 +19,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
-	public static boolean isRowEmpty(Row row) {
-		for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
-			Cell cell = row.getCell(c);
-			if (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK)
-				return false;
-		}
-		return true;
-	}
-
+	
 	public static final Logger logger = LoggerFactory
 			.getLogger(ExcelProviderLoaderStrategy.class);
 
 	@Override
 	public void load(String directory, String fileName, List<Provider> providers) {
-		logger.info(
-				"Running ExcelProviderLoaderStrategy to get providers from '{}'",
-				fileName);
+		logger.info("Running ExcelProviderLoaderStrategy to get providers from '{}'", fileName);
 		Workbook wb;
 		try {
 			int providerNameColumn = 0;
@@ -55,94 +46,41 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 				// If this is the header row, we need to figure out where the
 				// columns we need are
 				if (row.getRowNum() == 0) {
+					if (!ExcelHelper.isRowEmpty(row)) {					
 					for (Cell cell : row) {
-						logger.debug("Loading Header Row {} - {}", cell
-								.getColumnIndex(), cell.getStringCellValue()
-								.toUpperCase());
-
-						if (cell.getStringCellValue().toString()
-								.equalsIgnoreCase("PROVIDER_NAME")) {
-							providerNameColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue().toString()
-								.equalsIgnoreCase("PROVIDER_IDENTIFIER")) {
-							providerIdentifierColumn = cell.getColumnIndex();
-						}else if (cell.getStringCellValue().toString()
-									.equalsIgnoreCase("FILE_OUTPUT_TYPE")) {
-							fileOutputTypeColumn = cell.getColumnIndex();	
-						} else if (cell.getStringCellValue().toString()
-								.equalsIgnoreCase("SCHEMA")) {
-							schemaNameColumn = cell.getColumnIndex();
-						} else if (cell.getStringCellValue().toString()
-								.equalsIgnoreCase("PROVIDER_EMAIL")) {
-							providerEmailColumn = cell.getColumnIndex();
+						logger.debug("Loading Header Row {} - {}", cell.getColumnIndex(), cell.getStringCellValue().toUpperCase());
+						if(!ExcelHelper.isCellEmpty(cell)){
+							if("PROVIDER_NAME".equalsIgnoreCase(ExcelHelper.getStringValueFromCell(cell))){
+								providerNameColumn = cell.getColumnIndex();
+							}else if("PROVIDER_IDENTIFIER".equalsIgnoreCase(ExcelHelper.getStringValueFromCell(cell))){
+								providerIdentifierColumn = cell.getColumnIndex();
+							}else if("FILE_OUTPUT_TYPE".equalsIgnoreCase(ExcelHelper.getStringValueFromCell(cell))){
+								fileOutputTypeColumn = cell.getColumnIndex();	
+							}else if("SCHEMA".equalsIgnoreCase(ExcelHelper.getStringValueFromCell(cell)) || "SCHEMA_NAME".equalsIgnoreCase(ExcelHelper.getStringValueFromCell(cell)) ){
+								schemaNameColumn = cell.getColumnIndex();
+							}else if("PROVIDER_EMAIL".equalsIgnoreCase(ExcelHelper.getStringValueFromCell(cell))){
+								providerEmailColumn = cell.getColumnIndex();
+							}	
 						}
 					}
 					logger.info("Completed mapping header indexes");
+				} else logger.error("Header row (0) was empty in file '{}'.", fileName);
 				} else {
-
 					// TODO: Add logic to ignore empty rows
-					if (!isRowEmpty(row)) {
+					if (!ExcelHelper.isRowEmpty(row)) {
 
-						if (!(row.getCell(providerNameColumn) == null)
-								&& !(row.getCell(providerNameColumn)
-										.getStringCellValue().isEmpty())
-								&& !(row.getCell(providerNameColumn)
-										.getStringCellValue()
-										.equalsIgnoreCase("NULL"))) {
-							newProvider.setProviderName(row
-									.getCell(providerNameColumn)
-									.getStringCellValue().toUpperCase());
-						}
+						if (!ExcelHelper.isCellEmpty(row.getCell(providerNameColumn))) newProvider.setProviderName(ExcelHelper.getStringValueFromCell(row.getCell(providerNameColumn)));
+						if (!ExcelHelper.isCellEmpty(row.getCell(providerIdentifierColumn))) newProvider.setProviderIdentifier(ExcelHelper.getStringValueFromCell(row.getCell(providerIdentifierColumn)));						
+						if (!ExcelHelper.isCellEmpty(row.getCell(fileOutputTypeColumn))) newProvider.setFileOutputType(ExcelHelper.getStringValueFromCell(row.getCell(fileOutputTypeColumn)));
+						if (!ExcelHelper.isCellEmpty(row.getCell(schemaNameColumn))) newProvider.setSchemaName(ExcelHelper.getStringValueFromCell(row.getCell(schemaNameColumn)));
+						if (!ExcelHelper.isCellEmpty(row.getCell(providerEmailColumn))) newProvider.setProviderEmail(ExcelHelper.getStringValueFromCell(row.getCell(providerEmailColumn)));
+				
 						
-						if (!(row.getCell(providerIdentifierColumn) == null)
-								&& !(row.getCell(providerIdentifierColumn)
-										.getStringCellValue().isEmpty())
-								&& !(row.getCell(providerIdentifierColumn)
-										.getStringCellValue()
-										.equalsIgnoreCase("NULL"))) {
-							newProvider.setProviderIdentifier(row
-									.getCell(providerIdentifierColumn)
-									.getStringCellValue().toUpperCase());
-						}						
-
-						if (!(row.getCell(fileOutputTypeColumn) == null)
-								&& !(row.getCell(fileOutputTypeColumn)
-										.getStringCellValue().isEmpty())
-								&& !(row.getCell(fileOutputTypeColumn)
-										.getStringCellValue()
-										.equalsIgnoreCase("NULL"))) {
-							newProvider.setFileOutputType(row
-									.getCell(fileOutputTypeColumn)
-									.getStringCellValue().toUpperCase());
-						}
-
-						if (!(row.getCell(schemaNameColumn) == null)
-								&& !(row.getCell(schemaNameColumn)
-										.getStringCellValue().isEmpty())
-								&& !(row.getCell(schemaNameColumn)
-										.getStringCellValue()
-										.equalsIgnoreCase("NULL"))) {
-							newProvider.setSchemaName(row
-									.getCell(schemaNameColumn)
-									.getStringCellValue().toUpperCase());
-						}
-
-						if (!(row.getCell(providerEmailColumn) == null)
-								&& !(row.getCell(providerEmailColumn)
-										.getStringCellValue().isEmpty())
-								&& !(row.getCell(providerEmailColumn)
-										.getStringCellValue()
-										.equalsIgnoreCase("NULL"))) {
-							newProvider.setProviderEmail(row
-									.getCell(providerEmailColumn)
-									.getStringCellValue().toUpperCase());
-						}
-
 						providers.add(newProvider);
-						logger.info(
-								"Added new provider '{}' to list of Providers",
-								newProvider.getProviderIdentifier());
-
+						logger.info("Added new provider '{}' to list of Providers",newProvider.getProviderIdentifier());
+						passCounter++;
+					}else{
+						failCounter++;
 					}
 				}
 			}
@@ -169,5 +107,4 @@ public class ExcelProviderLoaderStrategy implements ProviderLoaderStrategy {
 		}
 
 	}
-
 }
