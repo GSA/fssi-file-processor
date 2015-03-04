@@ -148,8 +148,7 @@ public class SourceFileLoadTest {
 			}
 		}
 		Assert.assertEquals(
-				"failure - mapSourceFileFieldsToSchemaTest totalDataCount",
-				204, totalDataCount);
+				"failure - mapSourceFileFieldsToSchemaTest totalDataCount",204, totalDataCount);
 	}
 
 }

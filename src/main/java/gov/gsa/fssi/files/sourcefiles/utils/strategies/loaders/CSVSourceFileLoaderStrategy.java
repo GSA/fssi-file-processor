@@ -13,6 +13,7 @@ import main.java.gov.gsa.fssi.files.sourcefiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.SourceFileLoaderStrategy;
+import main.java.gov.gsa.fssi.helpers.CSVHelper;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
 
 import org.apache.commons.csv.CSVFormat;
@@ -59,7 +60,11 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 
 			if (sourceFile.getStatus()) {
 				for (final CSVRecord csvRecord : parser) {
-					processRecord(sourceFile, csvRecord);
+					if (csvRecord.size() > 1 && sourceFile.getSourceHeaders().size() > 1) {
+						if(!CSVHelper.isRowEmpty(csvRecord)){
+							processRecord(sourceFile, csvRecord);						
+						}else sourceFile.incrementTotalEmptyRecords();						
+					}else sourceFile.incrementTotalNullRecords();
 				}
 			}
 
@@ -144,50 +149,26 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 		thisRecord.setRowIndex((int) csvRecord.getRecordNumber() + 1);
 		// Ignoring null rows
 		if (csvRecord.size() > 1 && sourceFile.getSourceHeaders().size() > 1) {
-			Iterator<?> headerIterator = sourceFile.getSourceHeaders()
-					.entrySet().iterator();
+
+			Iterator<?> headerIterator = sourceFile.getSourceHeaders().entrySet().iterator();
 			while (headerIterator.hasNext()) {
 				Map.Entry dataPairs = (Map.Entry) headerIterator.next();
 				try {
 					Data data = new Data();
-					data.setData(csvRecord.get(dataPairs.getValue().toString())
-							.trim());
+					data.setData(csvRecord.get(dataPairs.getValue().toString()).trim());
 					data.setHeaderIndex((Integer) dataPairs.getKey());
 					thisRecord.addData(data);
 				} catch (IllegalArgumentException e) {
-					logger.error(
-							"Received IllegalArgumentExceptions '{}' while loading file '{}'",
-							e.getMessage(), sourceFile.getFileName());
+					logger.error("Received IllegalArgumentExceptions '{}' while loading file '{}'",e.getMessage(), sourceFile.getFileName());
 					sourceFile.setMaxErrorLevel(3);
 					sourceFile.setLoadStatus(false);
-					sourceFile
-							.addLoadStatusMessage("Received error processing record");
-				}
-
-			}
-
-			// Checking to see if any data was in the row. if nothing is
-			// found, we consider this an Empty Record
-			boolean emptyRowCheck = false;
-			for (Data data : thisRecord.getDatas()) {
-				if (data.getData() == null || data.getData().isEmpty()
-						|| data.getData().equals("")) {
-					emptyRowCheck = true;
-				} else {
-					emptyRowCheck = false;
-					break;
+					sourceFile.addLoadStatusMessage("Received error processing record");
 				}
 			}
-
-			if (emptyRowCheck == false) {
-				sourceFile.addRecord(thisRecord);
-			} else {
-				sourceFile.incrementTotalEmptyRecords();
-			}
+			sourceFile.addRecord(thisRecord);
 
 		} else {
 			sourceFile.incrementTotalNullRecords();
 		}
 	}
-
 }
