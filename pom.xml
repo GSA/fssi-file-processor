@@ -171,7 +171,7 @@
                <execution>
                   <phase>package</phase>
                   <goals>
-                     <goal>single</goal>
+                     <goal>create</goal>
                   </goals>
                </execution>
             </executions>
