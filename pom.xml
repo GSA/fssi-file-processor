@@ -122,15 +122,16 @@
          </plugin>
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
-    <configuration>
-     <archive>
-      <!-- will put the entries into META-INF/MANIFEST.MF file -->
-      <manifestentries>
-       <implementation-version>${project.version}</implementation-version>
-       <implementation-build>${buildNumber}</implementation-build>
-      </manifestentries>
-     </archive>
-    </configuration>
+            <configuration>
+               <archive>
+                  <manifest>
+                     <mainClass>main.java.gov.gsa.fssi.fileprocessor.Main</mainClass>
+                  </manifest>
+               </archive>
+               <descriptorRefs>
+                  <descriptorRef>${buildNumber}-packaged</descriptorRef>
+               </descriptorRefs>
+            </configuration>
             <executions>
                <execution>
                   <id>make-assembly</id>
