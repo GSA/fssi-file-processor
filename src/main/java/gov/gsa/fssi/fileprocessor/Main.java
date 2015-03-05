@@ -27,7 +27,6 @@ public class Main {
 	public static void main(String[] args) {
 		logger.info("*******************************");		
 		logger.info("Starting FSSI File Processor");
-		logger.info("Version 1.2-SNAPSHOT");
 		logger.info("*******************************");	
 		
 		logger.info("Validating Config");
