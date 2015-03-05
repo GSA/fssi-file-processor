@@ -3,7 +3,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>gov.gsa.fssi</groupId>
    <artifactId>fssi-fileprocessor</artifactId>
-   <version>1.2-SNAPSHOT</version>
+   <version>1.2-SNAPSHOT-${buildNumber}</version>
    <packaging>jar</packaging>
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -129,7 +129,7 @@
                   </manifest>
                </archive>
                <descriptorRefs>
-                  <descriptorRef>${buildNumber}-jar-with-dependencies</descriptorRef>
+                  <descriptorRef>jar-with-dependencies</descriptorRef>
                </descriptorRefs>
             </configuration>
             <executions>
