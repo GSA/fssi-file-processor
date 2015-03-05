@@ -15,6 +15,7 @@
       <connection>scm:git:git@github.com:GSA/fssi-file-processor.git</connection>
       <developerConnection>scm:git:git@github.com::GSA/fssi-file-processor.git</developerConnection>
    </scm>
+   
    <dependencies>
       <dependency>
          <groupId>junit</groupId>
@@ -97,6 +98,7 @@
       </plugins>
    </reporting>
    <build>
+    <finalName>${project.name}-{buildNumber}</finalName>
       <plugins>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
