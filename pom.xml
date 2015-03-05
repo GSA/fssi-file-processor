@@ -2,13 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
    <groupId>gov.gsa.fssi</groupId>
-   <artifactId>fssi-fileprocessor</artifactId>
+   <artifactId>fssi-file-processor</artifactId>
    <version>1.2-SNAPSHOT</version>
    <packaging>jar</packaging>
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
    </properties>
-   <name>FSSI File Processor</name>
+   <name>fssi-file-processor</name>
    <url>https://github.com/GSA/fssi-file-processor</url>
    <scm>
       <url>scm:git:git@github.com:GSA/fssi-file-processor</url>
@@ -47,7 +47,7 @@
          <groupId>commons-io</groupId>
          <artifactId>commons-io</artifactId>
          <version>2.4</version>
-      </dependency>
+      </dependency>  
    </dependencies>
    <reporting>
       <plugins>
@@ -98,7 +98,7 @@
       </plugins>
    </reporting>
    <build>
-    <finalName>${project.name}-$\{buildNumber}</finalName>
+    <finalName>${project.name}-${buildNumber}</finalName>
       <plugins>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -113,6 +113,8 @@
                   <manifestEntries>
                      <mode>development</mode>
                      <url>${project.url}</url>
+                     <implementation-version>${project.version}</implementation-version>
+       				 <implementation-build>${buildNumber}</implementation-build>
                   </manifestEntries>
                </archive>
             </configuration>
@@ -130,8 +132,11 @@
                      <mainClass>main.java.gov.gsa.fssi.fileprocessor.Main</mainClass>
                   </manifest>
                   <manifestEntries>
-                     <Implementation-Build>$\{buildNumber}</Implementation-Build>
-            	</manifestEntries>
+                     <mode>development</mode>
+                     <url>${project.url}</url>
+                     <implementation-version>${project.version}</implementation-version>
+       				 <implementation-build>${buildNumber}</implementation-build>
+                  </manifestEntries>
                </archive>
                <descriptorRefs>
                   <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -169,23 +174,43 @@
             </configuration>
          </plugin>
          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>buildnumber-maven-plugin</artifactId>
-            <version>1.3</version>
-            <executions>
-               <execution>
-                  <phase>package</phase>
-                  <goals>
-                     <goal>create</goal>
-                  </goals>
-               </execution>
-            </executions>
-            <configuration>
-               <shortRevisionLength>5</shortRevisionLength>
-               <doCheck>true</doCheck>
-               <doUpdate>true</doUpdate>
-            </configuration>
-         </plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>buildnumber-maven-plugin</artifactId>
+    <version>1.1</version>
+    <executions>
+     <execution>
+      <phase>generate-resources</phase>
+      <goals>
+       <goal>create</goal>
+      </goals>
+     </execution>
+    </executions>
+    <configuration>
+     <shortRevisionLength>6</shortRevisionLength>
+     <!-- 
+      doCheck and doUpdate actually talk to repository if it's true,
+      Check would check that there are no local changes. 
+      Update would update it 
+     -->
+     <docheck>false</docheck>
+     <doupdate>false</doupdate>
+     <!-- 
+      This ensures that even if we are not connected to scm than also
+      take the version from local .svn file 
+     -->
+     <revisiononscmfailure>
+      
+     <!--
+      Generate sequence build number based on:
+      build number and timestamp      
+     -->
+     <format>Build: #{0} ({1,date})</format>
+     <items>
+      <item>buildNumber\d*</item>
+      <item>timestamp</item>
+     </items>
+    </revisiononscmfailure></configuration>
+   </plugin>
       </plugins>
    </build>
 </project>
