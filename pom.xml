@@ -11,9 +11,9 @@
    <name>FSSI File Processor</name>
    <url>https://github.com/GSA/fssi-file-processor</url>
    <scm>
-      <url>https://github.com/GSA/fssi-file-processor</url>
-      <connection>scm:git:ssh://git@github.com:GSA/fssi-file-processor.git</connection>
-      <developerConnection>scm:git:ssh://git@github.com:GSA/fssi-file-processor.git</developerConnection>
+      <url>scm:git:git@github.com:GSA/fssi-file-processor</url>
+      <connection>scm:git:git@github.com:GSA/fssi-file-processor.git</connection>
+      <developerConnection>scm:git:git@github.com::GSA/fssi-file-processor.git</developerConnection>
    </scm>
    <dependencies>
       <dependency>
