@@ -3,7 +3,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>gov.gsa.fssi</groupId>
    <artifactId>fssi-file-processor</artifactId>
-   <version>1.2-SNAPSHOT</version>
+   <version>1.2</version>
    <packaging>jar</packaging>
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -98,7 +98,7 @@
       </plugins>
    </reporting>
    <build>
-    <finalName>${project.name}-${buildNumber}</finalName>
+    <finalName>${project.name}-${project.version}-${buildNumber}</finalName>
       <plugins>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -186,7 +186,7 @@
      </execution>
     </executions>
     <configuration>
-     <shortRevisionLength>6</shortRevisionLength>
+     <shortRevisionLength>7</shortRevisionLength>
      <!-- 
       doCheck and doUpdate actually talk to repository if it's true,
       Check would check that there are no local changes. 
