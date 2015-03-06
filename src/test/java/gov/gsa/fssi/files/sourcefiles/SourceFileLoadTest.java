@@ -22,9 +22,10 @@ public class SourceFileLoadTest {
 
 	@Test
 	public void loadSourceFile() {
-
+		
 		SourceFile sourceFile = new SourceFile(SOURCEFILENAME);
-		sourceFile.load(config.getProperty(Config.SOURCEFILES_DIRECTORY));
+		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
+		sourceFileBuilder.load(sourceFile, config.getProperty(Config.SOURCEFILES_DIRECTORY));
 
 		Assert.assertEquals("failure - loadSourceFile recordCount", 6,
 				sourceFile.recordCount());
@@ -60,10 +61,8 @@ public class SourceFileLoadTest {
 				config.getProperty(Config.SOURCEFILES_DIRECTORY),
 				SOURCEFILENAME, Config.EXPORT_MODE_IMPLODE, Config.PROVIDER_MODE_DEBUG, schemas, providers);
 
-		Assert.assertEquals("failure - loadSourceFile recordCount", 6,
-				sourceFile.recordCount());
-		Assert.assertEquals("failure - loadSourceFile getSourceHeaders", 50,
-				sourceFile.getSourceHeaders().size());
+		Assert.assertEquals("failure - loadSourceFile recordCount", 6,sourceFile.recordCount());
+		Assert.assertEquals("failure - loadSourceFile getSourceHeaders", 35,sourceFile.getSourceHeaders().size());
 
 		int totalDataCount = 0;
 		for (SourceFileRecord record : sourceFile.getRecords()) {
@@ -120,7 +119,7 @@ public class SourceFileLoadTest {
 		SourceFile sourceFile = new SourceFile(SOURCEFILENAME);
 		SourceFileBuilder sourceFileBuilder = new SourceFileBuilder();
 		sourceFileBuilder.mapProviderToSourceFile(providers, sourceFile);
-		sourceFile.load(config.getProperty(Config.SOURCEFILES_DIRECTORY));
+		sourceFileBuilder.load(sourceFile, config.getProperty(Config.SOURCEFILES_DIRECTORY));
 		sourceFileBuilder.mapSchemaToSourceFile(schemas, sourceFile);
 		sourceFileBuilder.personalizeSourceFileSchema(sourceFile);
 

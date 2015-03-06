@@ -12,6 +12,11 @@ import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.fieldconstraints.FieldConstraint;
 import main.java.gov.gsa.fssi.files.sourcefiles.SourceFile;
+import main.java.gov.gsa.fssi.files.sourcefiles.utils.contexts.SourceFileLoaderContext;
+import main.java.gov.gsa.fssi.files.sourcefiles.utils.contexts.SourceFileOrganizerContext;
+import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.loaders.CSVSourceFileLoaderStrategy;
+import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.organizers.ExplodeSourceFileOrganizerStrategy;
+import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.organizers.ImplodeSourceFileOrganizerStrategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +38,7 @@ public class SourceFileBuilder {
 	 * @param sourceFileDirectory
 	 */
 	public SourceFile build(String directory, String fileName,
-			String exportMode, String providerMode, List<Schema> schemas, List<Provider> providers) {
+			String exportMode, String providerMode, final List<Schema> schemas, final List<Provider> providers) {
 		SourceFile sourceFile = new SourceFile(fileName);
 		mapProviderToSourceFile(providers, sourceFile);
 
@@ -51,7 +56,7 @@ public class SourceFileBuilder {
 			// Map Schema to SourceFile
 			if (sourceFile.getStatus()
 					&& sourceFile.getProvider().getSchemaName() != null
-					&& !sourceFile.getProvider().getSchemaName().isEmpty()) {
+					&& !"".equals(sourceFile.getProvider().getSchemaName())) {
 				logger.warn("Attemping to map Schema to SourceFile '{}'",
 						sourceFile.getFileName());
 				mapSchemaToSourceFile(schemas, sourceFile);
@@ -90,7 +95,8 @@ public class SourceFileBuilder {
 		// Load File
 		if (sourceFile.getStatus()) {
 			logger.info("Loading SourceFile '{}'", sourceFile.getFileName());
-			sourceFile.load(directory);
+			load(sourceFile, directory);
+			logger.info("Source file has the following headers after loading: '{}'",sourceFile.getSourceHeaders());
 			logger.info("Completed loading SourceFile '{}'",
 					sourceFile.getFileName());
 		}
@@ -103,12 +109,12 @@ public class SourceFileBuilder {
 		// Organize file based upon schema
 		if (sourceFile.getStatus() && sourceFile.getSchema() != null
 				&& sourceFile.getRecords() != null) {
-			logger.info("Mapping SourceFile '{}' fields to Schema '{}'",
-					sourceFile.getFileName(), sourceFile.getSchema().getName());
+			logger.info("Mapping SourceFile '{}' fields to Schema '{}'",sourceFile.getFileName(), sourceFile.getSchema().getName());
 			mapSourceFileFieldsToSchema(sourceFile);
+			logger.info("Source file has the following headers after mapping: '{}'",sourceFile.getSourceHeaders());
 			logger.info("Completed Mapping");
 			logger.info("Organizing SourceFile '{}'", sourceFile.getFileName());
-			sourceFile.organize(exportMode);
+			organize(sourceFile, exportMode);
 			logger.info("Completed Organizing SourceFile '{}'",
 					sourceFile.getFileName());
 		}
@@ -123,7 +129,8 @@ public class SourceFileBuilder {
 		if (sourceFile.getStatus() && sourceFile.getSchema() != null
 				&& sourceFile.getRecords() != null) {
 			logger.info("Validating SourceFile '{}'", sourceFile.getFileName());
-			sourceFile.validate();
+			SourceFileValidator validator = new SourceFileValidator();
+			validator.validate(sourceFile);
 			logger.info("Completed validating SourceFile '{}'",
 					sourceFile.getFileName());
 		}
@@ -154,11 +161,11 @@ public class SourceFileBuilder {
 							.matches(
 									fileNamePart.toUpperCase().trim()
 											.toUpperCase())) {
+						sourceFile.setProvider(provider);
 						logger.info("Mapped provider {} - {} to file '{}'",
 								provider.getProviderName(),
 								provider.getProviderIdentifier(),
 								sourceFile.getFileName());
-						sourceFile.setProvider(provider);
 						break;
 					}
 				}
@@ -179,17 +186,11 @@ public class SourceFileBuilder {
 	 * @param schemas
 	 * @param sourceFile
 	 */
-	public void mapSchemaToSourceFile(List<Schema> schemas,
-			SourceFile sourceFile) {
+	public void mapSchemaToSourceFile(List<Schema> schemas,SourceFile sourceFile) {
 		logger.info("Attempting to map Schema to file {}",
 				sourceFile.getFileName());
 		if (sourceFile.getStatus()) {
-			for (Schema schema : schemas) {
-				if (sourceFile.getProvider().getSchemaName()
-						.equalsIgnoreCase(schema.getName())) {
-					sourceFile.setSchema(schema);
-				}
-			}
+			sourceFile.setSchema(getSourceFileSchema(schemas, sourceFile));
 			if (sourceFile.getSchema() == null) {
 				logger.error("Could not find schema for file: '{}'",
 						sourceFile.getFileName());
@@ -197,7 +198,19 @@ public class SourceFileBuilder {
 			}
 		}
 	}
-
+	
+	public static Schema getSourceFileSchema(List<Schema> schemas,SourceFile sourceFile) {
+		if (sourceFile.getStatus()) {
+			for (Schema schema : schemas) {
+				if (sourceFile.getProvider().getSchemaName().equalsIgnoreCase(schema.getName())) {
+					logger.info("Mapped schema '{}' to sourceFile '{}", sourceFile.getSchema().getName(), sourceFile.getFileName());
+					return new Schema(schema);
+				}
+			}
+		}
+		return null;
+	}	
+	
 	/**
 	 * This method takes a populated sourcefile and maps the fields to the
 	 * schema header indexes This allows us to easily organize and validate.
@@ -208,22 +221,18 @@ public class SourceFileBuilder {
 	 * @param sourceFile
 	 */
 	public void mapSourceFileFieldsToSchema(SourceFile sourceFile) {
-		if (sourceFile.getSourceHeaders() != null
-				|| sourceFile.getSchema() != null) {
+		if (sourceFile.getSourceHeaders() != null || sourceFile.getSchema() != null) {
 			logger.info(
 					"Atempting to map field names from File '{}' to Schema '{}'",
-					sourceFile.getFileName(), sourceFile.getSchema().getName());
+					sourceFile.getFileName(), sourceFile.getSchema().getName());	
 			for (SchemaField field : sourceFile.getSchema().getFields()) {
 				List<String> aliasNames = new ArrayList<String>();
 				aliasNames.add(field.getName()); 
 				aliasNames.addAll(field.getAlias());
-				Iterator<?> thisHeaderIterator = sourceFile.getSourceHeaders()
-						.entrySet().iterator();
+				Iterator<?> thisHeaderIterator = sourceFile.getSourceHeaders().entrySet().iterator();
 				while (thisHeaderIterator.hasNext()) {
-					Map.Entry<Integer, String> thisHeaderPairs = (Map.Entry<Integer, String>) thisHeaderIterator
-							.next();
-					if (aliasNames.contains(thisHeaderPairs.getValue()
-							.toUpperCase())) {
+					Map.Entry<Integer, String> thisHeaderPairs = (Map.Entry<Integer, String>) thisHeaderIterator.next();
+					if (aliasNames.contains(thisHeaderPairs.getValue().toUpperCase())) {
 						logger.info(
 								"Matched sourcFile field '{} - {}' with Schema field '{}'",
 								thisHeaderPairs.getKey(),
@@ -241,9 +250,10 @@ public class SourceFileBuilder {
 			}
 		} else {
 			logger.info(
-					"No schema or header found was found for file {}. Will not Map header indexes to schema fields",
+					"No schema or header found was found for file {}. Will not Map header indexes to schema fields, error",
 					sourceFile.getFileName());
-		}
+			sourceFile.setMaxErrorLevel(3);
+		}	
 	}
 
 	/**
@@ -256,7 +266,6 @@ public class SourceFileBuilder {
 	 * @return
 	 */
 	public void personalizeSourceFileSchema(SourceFile sourceFile) {
-
 		if (!sourceFile.getStatus()) {
 			logger.error(
 					"SourceFile '{}' is in error status, unable to personalize",
@@ -356,7 +365,52 @@ public class SourceFileBuilder {
 			}
 			newSchema.setFields(newFields);
 			sourceFile.setSchema(newSchema);
+			if(logger.isDebugEnabled()) logger.debug("Printing personalized Schema");
+			if(logger.isDebugEnabled()) newSchema.printAll();
 		}
 	}
+	
+	/**
+	 * This method processes a file against its schema
+	 */
+	private void organize(SourceFile sourceFile, String exportMode) {
+		SourceFileOrganizerContext context = new SourceFileOrganizerContext();
+		if (sourceFile.getSchema() != null) {
+			if (exportMode.equals(Config.EXPORT_MODE_EXPLODE)) {
+				context.setSourceFileOrganizerStrategy(new ExplodeSourceFileOrganizerStrategy());
+			}
+			if (exportMode.equals(Config.EXPORT_MODE_IMPLODE)) {
+				context.setSourceFileOrganizerStrategy(new ImplodeSourceFileOrganizerStrategy());
+			} else {
+				logger.warn("No Export Mode provided, defaulting to Implode");
+				context.setSourceFileOrganizerStrategy(new ImplodeSourceFileOrganizerStrategy());
+			}
 
+			context.organize(sourceFile);
+		} else {
+			logger.info(
+					"No schema was found for file {}. Ignoring sourceFile schema organizing",
+					sourceFile.getFileName());
+		}
+	}
+	
+	
+	/**
+	 * @param sourceFile
+	 */
+	public void load(SourceFile sourceFile, String directory) {
+		SourceFileLoaderContext context = new SourceFileLoaderContext();
+		if (sourceFile.getFileExtension().equalsIgnoreCase(File.FILETYPE_CSV)) {
+			logger.info("Loading file {} as a '{}'", sourceFile.getFileName(),
+					sourceFile.getFileExtension());
+			context.setSourceFileLoaderStrategy(new CSVSourceFileLoaderStrategy());
+		} else {
+			logger.warn("Could not load file '{}' as a '{}'",
+					sourceFile.getFileName(), sourceFile.getFileExtension());
+			sourceFile.setStatus(false);
+		}
+
+		context.load(directory, sourceFile.getFileName(), sourceFile);
+	}
+	
 }

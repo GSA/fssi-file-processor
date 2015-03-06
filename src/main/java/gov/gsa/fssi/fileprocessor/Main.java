@@ -1,11 +1,7 @@
 package main.java.gov.gsa.fssi.fileprocessor;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.jar.Manifest;
 
 import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.providers.Provider;
@@ -14,6 +10,7 @@ import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.utils.SchemasBuilder;
 import main.java.gov.gsa.fssi.files.sourcefiles.SourceFile;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.SourceFileBuilder;
+import main.java.gov.gsa.fssi.files.sourcefiles.utils.SourceFileExporter;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.contexts.SourceFileLoggerContext;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.loggers.BasicTextSourceFileLoggerStrategy;
 import main.java.gov.gsa.fssi.helpers.FileHelper;
@@ -31,7 +28,6 @@ public class Main {
 	public static void main(String[] args) {
 		logger.info("*******************************");		
 		logger.info("Starting FSSI File Processor");
-		logger.info("Version 1.2-20140305.1");
 		logger.info("*******************************");	
 		
 		logger.info("Validating Config");
@@ -72,7 +68,7 @@ public class Main {
 				ProvidersBuilder providersBuilder = new ProvidersBuilder();
 				providers = providersBuilder.build(config
 						.getProperty(Config.PROVIDERS_DIRECTORY));
-				printAllProviders(providers);
+				if(logger.isDebugEnabled()) printAllProviders(providers);
 			}else{
 				logger.error("'{}' directory is not a valid directory, unable to process providers", config.getProperty(Config.PROVIDERS_DIRECTORY));
 			}
@@ -84,10 +80,11 @@ public class Main {
 					SchemasBuilder schemasBuilder = new SchemasBuilder();
 					schemas = schemasBuilder.build(config
 							.getProperty(Config.SCHEMAS_DIRECTORY));
-					printAllSchemas(schemas);			
+					if(logger.isDebugEnabled()) printAllSchemas(schemas);			
 			}else{
 				logger.error("'{}' directory is not a valid directory, unable to process schemas", config.getProperty(Config.SCHEMAS_DIRECTORY));
 			}
+			
 			
 	
 			if(FileHelper.isDirectory(config.getProperty(Config.SOURCEFILES_DIRECTORY))){
@@ -98,9 +95,11 @@ public class Main {
 							config.getProperty(Config.SOURCEFILES_DIRECTORY), fileName,
 							config.getProperty(Config.EXPORT_MODE), config.getProperty(Config.PROVIDER_MODE), schemas, providers);
 					if (sourceFile != null) {
-						if (sourceFile.getStatus())
-							sourceFile.export(config
-									.getProperty(Config.STAGED_DIRECTORY));
+						if (sourceFile.getStatus()){
+							SourceFileExporter sourceFileExporter = new SourceFileExporter();
+							sourceFileExporter.export(sourceFile, config.getProperty(Config.STAGED_DIRECTORY));
+						}
+									
 						else
 							logger.error(
 									"File '{}' is in Error state and is being ignored for exporting",

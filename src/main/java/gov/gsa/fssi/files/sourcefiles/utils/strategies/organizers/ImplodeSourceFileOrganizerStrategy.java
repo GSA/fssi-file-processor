@@ -57,6 +57,9 @@ public class ImplodeSourceFileOrganizerStrategy implements
 			 */
 			if (field.getHeaderIndex() >= 0) {
 				newHeader.put(headerCounter, field.getName());
+				if(sourceFile.getSourceHeaders().containsKey(field.getHeaderIndex())){
+					
+				}
 				Iterator<?> currentHeaderIterator = sourceFile.getSourceHeaders().entrySet().iterator();
 				while (currentHeaderIterator.hasNext()) {
 					Map.Entry<Integer, String> currentHeaderIteratorPairs = (Map.Entry) currentHeaderIterator.next();
@@ -73,8 +76,7 @@ public class ImplodeSourceFileOrganizerStrategy implements
 
 			field.setHeaderIndex(headerCounter);
 			if (logger.isDebugEnabled()) logger.debug("Adding '{} - {}' to newHeader", headerCounter,fieldName);
-			newHeader.put(headerCounter, fieldName);
-			field.setHeaderIndex(headerCounter);
+			//newHeader.put(headerCounter, fieldName);
 			headerCounter++;
 		}
 
@@ -82,8 +84,7 @@ public class ImplodeSourceFileOrganizerStrategy implements
 		 *  Now we need to find the stragglers...so we can delete them!
 		 */
 		List<Integer> deleteFieldDataList = new ArrayList<Integer>();
-		Iterator<?> currentHeaderIterator = sourceFile.getSourceHeaders()
-				.entrySet().iterator();
+		Iterator<?> currentHeaderIterator = sourceFile.getSourceHeaders().entrySet().iterator();
 		while (currentHeaderIterator.hasNext()) {
 			Map.Entry<Integer, String> currentHeaderIteratorPairs = (Map.Entry) currentHeaderIterator.next();
 			boolean foundColumn = false;

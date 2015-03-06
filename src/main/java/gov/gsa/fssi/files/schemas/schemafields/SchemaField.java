@@ -72,7 +72,7 @@ public class SchemaField {
 	 * value of field may be any type
 	 */
 	public static final String TYPE_ANY = "any";
-
+	
 	/**
 	 * @param alias
 	 */
@@ -173,6 +173,31 @@ public class SchemaField {
 	// year & month � http://www.w3.org/2001/XMLSchema#gYearMonth
 	// time � http://www.w3.org/2001/XMLSchema#time
 
+	
+	public SchemaField(){
+		
+	}
+
+	/**
+	 * Copy constructor
+	 * @param schemaField
+	 */
+	public SchemaField(SchemaField schemaField){
+		if(schemaField.alias != null){
+			for(String newAlias:schemaField.alias) this.alias.add(new String(newAlias));
+		}
+		
+		if(schemaField.constraints != null){
+			for(FieldConstraint constraint:schemaField.constraints) this.constraints.add(new FieldConstraint(constraint));			
+		}
+		
+		if(schemaField.description != null) this.description = new String(schemaField.description);
+		if(schemaField.format != null) this.format = new String(schemaField.format);
+		if(schemaField.name != null) this.name = new String(schemaField.name);
+		if(schemaField.title != null) this.title = new String(schemaField.title);
+		if(schemaField.type != null) this.type = new String(schemaField.type);
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -288,5 +313,20 @@ public class SchemaField {
 	public void setType(String type) {
 		this.type = type;
 	}
-
+	
+	
+	
+	
+	/**
+	 * Checks to see if string matches the fields name or any of its aliass
+	 * @param fieldName
+	 * @return true or false
+	 */
+	public boolean isField(String fieldName){
+		if(fieldName.equalsIgnoreCase(getName())) return true;
+		for(String aliass:getAlias()){
+			if(fieldName.equalsIgnoreCase(aliass)) return true;
+		}
+		return false;
+	}
 }

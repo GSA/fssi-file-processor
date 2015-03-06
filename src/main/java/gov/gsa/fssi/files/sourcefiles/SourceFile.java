@@ -6,20 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import main.java.gov.gsa.fssi.config.Config;
 import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.providers.Provider;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.SourceFileRecord;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.SourceFileValidator;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.contexts.SourceFileExporterContext;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.contexts.SourceFileLoaderContext;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.contexts.SourceFileOrganizerContext;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.exporters.CSVSourceFileExporterStrategy;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.exporters.ExcelSourceFileExporterStrategy;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.loaders.CSVSourceFileLoaderStrategy;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.organizers.ExplodeSourceFileOrganizerStrategy;
-import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.organizers.ImplodeSourceFileOrganizerStrategy;
 import main.java.gov.gsa.fssi.helpers.DateHelper;
 
 import org.slf4j.Logger;
@@ -35,8 +25,8 @@ import org.slf4j.LoggerFactory;
 public class SourceFile extends File {
 	private static final Logger logger = LoggerFactory
 			.getLogger(SourceFile.class);
-	private Schema schema = null;
-	private Provider provider = null;
+	private Schema schema = new Schema();
+	private Provider provider = new Provider();
 	private Date reportingPeriod = null;
 	private Integer totalRecords = 0;
 	private Integer totalProcessedRecords = 0;
@@ -79,49 +69,6 @@ public class SourceFile extends File {
 	 */
 	public void addSourceHeader(Integer key, String value) {
 		this.sourceHeaders.put(key, value);
-	}
-
-	public void export(String directory) {
-		SourceFileExporterContext context = new SourceFileExporterContext();
-		if (this.getRecords() != null) {
-			if(this.getProvider() != null){
-				logger.info("Attempting to export file '{}' in '{}' format",this.getFileName(), this.getProvider().getFileOutputType());
-				if (this.getProvider().getFileOutputType()
-						.equalsIgnoreCase(File.FILETYPE_CSV)) {
-					
-					context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
-				} else if (this.getProvider().getFileOutputType()
-						.equalsIgnoreCase(File.FILETYPE_XLS)) {
-					context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
-				} else if (this.getProvider().getFileOutputType()
-						.equalsIgnoreCase(File.FILETYPE_XLSX)) {
-					context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
-				}else if (this.getProvider().getFileOutputType() != null || "".equals(this.getProvider().getFileOutputType())){
-					logger.warn(
-							"Provider identifier '{}' does not have a file output type, defauting to '{}'",
-							this.getProvider().getProviderIdentifier(),
-							File.FILETYPE_CSV);
-					context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());					
-				} else {
-					logger.warn(
-							"We cannot currently export to a '{}'. defaulting to '{}'",
-							this.getProvider().getFileOutputType(),
-							File.FILETYPE_CSV);
-					context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
-				}
-			}else{
-				logger.warn("No provider found for file, defaulting output to '{}'",File.FILETYPE_CSV);	
-				context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
-				this.addExportStatusMessages("No provider found or file Output Type found, defaulting to '" + File.FILETYPE_CSV + "'");
-			}
-			
-			context.export(directory, this);	
-			
-		} else {
-			logger.error("Cannot export sourceFile '{}'. No data found",
-					this.getFileName());
-			this.addExportStatusMessages("Cannot export file. No data found");
-		}
 	}
 
 	/**
@@ -263,48 +210,6 @@ public class SourceFile extends File {
 	 */
 	public void incrementTotalWarningRecords() {
 		this.totalWarningRecords++;
-	}
-
-	/**
-	 * @param sourceFile
-	 */
-	public void load(String directory) {
-		SourceFileLoaderContext context = new SourceFileLoaderContext();
-		if (this.getFileExtension().equalsIgnoreCase(FILETYPE_CSV)) {
-			logger.info("Loading file {} as a '{}'", this.getFileName(),
-					this.getFileExtension());
-			context.setSourceFileLoaderStrategy(new CSVSourceFileLoaderStrategy());
-		} else {
-			logger.warn("Could not load file '{}' as a '{}'",
-					this.getFileName(), this.getFileExtension());
-			this.setStatus(false);
-		}
-
-		context.load(directory, this.getFileName(), this);
-	}
-
-	/**
-	 * This method processes a file against its schema
-	 */
-	public void organize(String exportMode) {
-		SourceFileOrganizerContext context = new SourceFileOrganizerContext();
-		if (this.getSchema() != null) {
-			if (exportMode.equals(Config.EXPORT_MODE_EXPLODE)) {
-				context.setSourceFileOrganizerStrategy(new ExplodeSourceFileOrganizerStrategy());
-			}
-			if (exportMode.equals(Config.EXPORT_MODE_IMPLODE)) {
-				context.setSourceFileOrganizerStrategy(new ImplodeSourceFileOrganizerStrategy());
-			} else {
-				logger.warn("No Export Mode provided, defaulting to Implode");
-				context.setSourceFileOrganizerStrategy(new ImplodeSourceFileOrganizerStrategy());
-			}
-
-			context.organize(this);
-		} else {
-			logger.info(
-					"No schema was found for file {}. Ignoring sourceFile schema organizing",
-					this.getFileName());
-		}
 	}
 
 	/**
@@ -518,11 +423,6 @@ public class SourceFile extends File {
 	 */
 	public void setTotalWarningRecords(Integer totalWarningRecords) {
 		this.totalWarningRecords = totalWarningRecords;
-	}
-
-	public void validate() {
-		SourceFileValidator validator = new SourceFileValidator();
-		validator.validate(this);
 	}
 
 	public void logError(int errorLevel) {

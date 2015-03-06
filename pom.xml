@@ -192,7 +192,7 @@
       Check would check that there are no local changes. 
       Update would update it 
      -->
-     <docheck>false</docheck>
+     <docheck>true</docheck>
      <doupdate>false</doupdate>
      <!-- 
       This ensures that even if we are not connected to scm than also

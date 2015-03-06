@@ -96,6 +96,34 @@ public class FieldConstraint {
 	// TODO:Add support for option "IgnoreCase" that will ignore case during
 	// validation
 
+	
+	/**
+	 * Default Constructor
+	 */
+	public FieldConstraint(){
+		
+	}
+	
+	
+	/**
+	 * Copy Constructor
+	 * @param fieldConstraint
+	 */
+	public FieldConstraint(FieldConstraint fieldConstraint) {
+		if(fieldConstraint.effectiveDate != null) this.effectiveDate = new Date(fieldConstraint.effectiveDate.getTime());
+
+		this.level = fieldConstraint.level;
+		if(fieldConstraint.levelName != null) this.levelName = new String(fieldConstraint.levelName);
+		
+		if(fieldConstraint.type != null) this.type = new String(fieldConstraint.type);
+		if(fieldConstraint.validatorStatusLevel != null) this.validatorStatusLevel = new String(fieldConstraint.validatorStatusLevel);
+		if(fieldConstraint.value != null) this.value = new String(fieldConstraint.value);
+		
+		if(fieldConstraint.options != null){
+			this.options.putAll(new HashMap<String, String>(fieldConstraint.options));		
+		}
+	}
+
 	public void addOption(String key, String value) {
 		this.options.put(key, value);
 	}

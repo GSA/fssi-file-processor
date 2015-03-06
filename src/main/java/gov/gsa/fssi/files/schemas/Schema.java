@@ -32,6 +32,31 @@ public class Schema extends File {
 		super();
 	}
 
+	public Schema(Schema schema){
+		super(schema);
+		
+		setExportStatus(schema.getExportStatus());
+		setValidatorStatus(schema.getValidatorStatus());
+		setStatus(schema.getStatus());
+		setMaxErrorLevel(schema.getMaxErrorLevel());
+		
+		
+		if(schema.fields != null){
+			for(SchemaField field:schema.fields) this.fields.add(new SchemaField(field));
+		}
+		if(schema.name != null) this.name = new String(schema.name);
+		if(schema.providerName != null) this.providerName = new String(schema.providerName);
+		
+		if(schema.foreignKeys != null){
+			for(String foreignKey:schema.foreignKeys) this.foreignKeys.add(new String(foreignKey));
+		}
+		if(schema.primaryKeys != null){
+			for(String primaryKey:schema.primaryKeys) this.primaryKeys.add(new String(primaryKey));
+		}
+		
+		if(schema.version != null) this.version = new String(schema.version);
+	}
+	
 	/**
 	 * @param fileName
 	 * @see File#File(String)
@@ -245,4 +270,23 @@ public class Schema extends File {
 		this.version = version;
 	}
 
+	public SchemaField getSchemaFieldFromName(String fieldName){
+		for(SchemaField field:getFields()){
+			if(field.isField(fieldName)) return field;
+		}
+		return null;
+	}
+	
+	public boolean isSchemaFieldFromName(String fieldName){
+		for(SchemaField field:getFields()){
+			if(field.isField(fieldName)) return true;
+		}
+		return false;
+	}	
+	
+	
+    @Override
+	public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

@@ -35,10 +35,10 @@ public class SourceFileValidator {
 					sourceFile.getFileName(),
 					File.getErrorLevelName(sourceFile.getMaxErrorLevel()));
 		} else {
+			
 			for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
 				for (SchemaField field : sourceFile.getSchema().getFields()) {
-					Data data = sourceFileRecord.getDataByHeaderIndex(field
-							.getHeaderIndex());
+					Data data = sourceFileRecord.getDataByHeaderIndex(field.getHeaderIndex());
 					if (data != null) {
 						TypeValidationContext typeContext = new TypeValidationContext();
 						typeContext.validate(field, data);
@@ -47,14 +47,13 @@ public class SourceFileValidator {
 							for (FieldConstraint constraint : field
 									.getConstraints()) {
 								ConstraintValidationContext context = new ConstraintValidationContext();
-								context.validate(field, constraint, data); // Validate
-																			// Constraint
+								context.validate(field, constraint, data);
 								if (logger.isDebugEnabled()
 										&& data.getMaxErrorLevel() > 0) {
 									logger.debug(
 											"Row {} - Field '{}' validation {}: '{}' = {}, Value = '{}'",
 											sourceFileRecord.getRowIndex(),
-											field.getName(),
+											sourceFile.getSourceHeaderName(field.getHeaderIndex()),
 											constraint.getLevelName(),
 											constraint.getType(),
 											constraint.getValue(),

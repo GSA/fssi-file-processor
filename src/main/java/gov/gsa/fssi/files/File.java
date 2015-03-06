@@ -104,7 +104,7 @@ public class File {
 	private int maxErrorLevel = 0;
 	private boolean loadStatus = true;
 	private boolean validatorStatus = true;
-	private boolean exportStatus = false;
+	private boolean exportStatus = true;
 	private List<String> loadStatusMessages = new ArrayList<String>();
 	private List<String> validatorStatusMessages = new ArrayList<String>();
 	private List<String> exportStatusMessages = new ArrayList<String>();
@@ -114,7 +114,48 @@ public class File {
 	 */
 	public File() {
 	}
+	
+	public File(File file){
+		this.exportStatus = file.exportStatus;
+		
+		if(file.exportStatusMessages != null){
+			for(String exportStatusMessage: file.exportStatusMessages){
+				this.exportStatusMessages.add(new String(exportStatusMessage));
+			}
+		}
+		
+		if(file.fileExtension != null) this.fileExtension = new String(file.fileExtension);
+		
+		if(file.fileName != null) this.fileName = new String(file.fileName);
+		
+		if(file.fileNameParts != null){
+			for(String fileNamePart: file.fileNameParts){
+				this.fileNameParts.add(new String(fileNamePart));
+			}
+		}		
+		
+		if(file.loadStage != null) this.loadStage = new String(file.loadStage);
+		
+		this.loadStatus = file.loadStatus;
+		
+		if(file.loadStatusMessages != null){
+			for(String loadStatusMessage: file.loadStatusMessages){
+				this.loadStatusMessages.add(new String(loadStatusMessage));
+			}
+		}
+		
+		this.maxErrorLevel = file.maxErrorLevel;
+		this.status = file.status;
+		this.validatorStatus = file.validatorStatus;
 
+		if(file.validatorStatusMessages != null){
+			for(String validatorStatusMessage: file.validatorStatusMessages){
+				this.validatorStatusMessages.add(new String(validatorStatusMessage));
+			}
+		}		
+	}
+	
+	
 	/**
 	 * This constructor class takes a file name and uses it to initialize the
 	 * basic elements of a SourceFile
@@ -247,7 +288,7 @@ public class File {
 	 * @param exportStatusLevel
 	 *            String exportStatusLevel to set
 	 */
-	public void setExportStatusLevel(boolean exportStatus) {
+	public void setExportStatus(boolean exportStatus) {
 		this.setStatus(exportStatus);
 		if (this.getExportStatus())
 			this.exportStatus = exportStatus;
