@@ -16,29 +16,35 @@ public class SourceFileExporter {
 		SourceFileExporterContext context = new SourceFileExporterContext();
 		if (sourceFile.getRecords() != null) {
 			if(sourceFile.getProvider() != null){
-				logger.info("Attempting to export file '{}' in '{}' format",sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType());
-				if (sourceFile.getProvider().getFileOutputType()
-						.equalsIgnoreCase(File.FILETYPE_CSV)) {
-					
+				if(sourceFile.getProvider().getFileOutputType() != null){
+					logger.info("Attempting to export file '{}' in '{}' format",sourceFile.getFileName(), sourceFile.getProvider().getFileOutputType());
+					if (sourceFile.getProvider().getFileOutputType()
+							.equalsIgnoreCase(File.FILETYPE_CSV)) {
+						
+						context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
+					} else if (sourceFile.getProvider().getFileOutputType()
+							.equalsIgnoreCase(File.FILETYPE_XLS)) {
+						context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
+					} else if (sourceFile.getProvider().getFileOutputType()
+							.equalsIgnoreCase(File.FILETYPE_XLSX)) {
+						context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
+					}else if (sourceFile.getProvider().getFileOutputType() != null || "".equals(sourceFile.getProvider().getFileOutputType())){
+						logger.warn(
+								"Provider identifier '{}' does not have a file output type, defauting to '{}'",
+								sourceFile.getProvider().getProviderIdentifier(),
+								File.FILETYPE_CSV);
+						context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());					
+					} else {
+						logger.warn(
+								"We cannot currently export to a '{}'. defaulting to '{}'",
+								sourceFile.getProvider().getFileOutputType(),
+								File.FILETYPE_CSV);
+						context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
+					}	
+				}else{
+					logger.warn("No file output type found for provider identifier '{}', defaulting output to '{}'",sourceFile.getProvider().getProviderIdentifier(), File.FILETYPE_CSV);	
 					context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
-				} else if (sourceFile.getProvider().getFileOutputType()
-						.equalsIgnoreCase(File.FILETYPE_XLS)) {
-					context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
-				} else if (sourceFile.getProvider().getFileOutputType()
-						.equalsIgnoreCase(File.FILETYPE_XLSX)) {
-					context.setSourceFileExporterStrategy(new ExcelSourceFileExporterStrategy());
-				}else if (sourceFile.getProvider().getFileOutputType() != null || "".equals(sourceFile.getProvider().getFileOutputType())){
-					logger.warn(
-							"Provider identifier '{}' does not have a file output type, defauting to '{}'",
-							sourceFile.getProvider().getProviderIdentifier(),
-							File.FILETYPE_CSV);
-					context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());					
-				} else {
-					logger.warn(
-							"We cannot currently export to a '{}'. defaulting to '{}'",
-							sourceFile.getProvider().getFileOutputType(),
-							File.FILETYPE_CSV);
-					context.setSourceFileExporterStrategy(new CSVSourceFileExporterStrategy());
+					sourceFile.addExportStatusMessages("No file output type found for provider identifier '" + sourceFile.getProvider().getProviderIdentifier() + "'. defaulting to '" + File.FILETYPE_CSV + "'");					
 				}
 			}else{
 				logger.warn("No provider found for file, defaulting output to '{}'",File.FILETYPE_CSV);	

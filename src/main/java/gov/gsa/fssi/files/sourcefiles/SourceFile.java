@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 public class SourceFile extends File {
 	private static final Logger logger = LoggerFactory
 			.getLogger(SourceFile.class);
-	private Schema schema = new Schema();
-	private Provider provider = new Provider();
+	private Schema schema = null;
+	private Provider provider = null;
 	private Date reportingPeriod = null;
 	private Integer totalRecords = 0;
 	private Integer totalProcessedRecords = 0;

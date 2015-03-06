@@ -53,6 +53,14 @@ public class Provider extends File {
 		super(fileName);
 	}
 
+	public Provider(Provider provider) {
+		if(provider.fileOutputType != null) this.fileOutputType = new String(provider.fileOutputType);
+		if(provider.providerEmail != null) this.providerEmail = new String(provider.providerEmail);		
+		if(provider.providerIdentifier != null) this.providerIdentifier = new String(provider.providerIdentifier);	
+		if(provider.providerName != null) this.providerName = new String(provider.providerName);
+		if(provider.schemaName != null) this.schemaName = new String(provider.schemaName);
+	}
+
 	/**
 	 * @return current fileOutputType
 	 */

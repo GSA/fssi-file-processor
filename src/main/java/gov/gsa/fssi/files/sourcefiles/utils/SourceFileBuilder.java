@@ -147,26 +147,21 @@ public class SourceFileBuilder {
 	 * @param providers
 	 * @param sourceFile
 	 */
-	public void mapProviderToSourceFile(List<Provider> providers,
-			SourceFile sourceFile) {
+	public void mapProviderToSourceFile(List<Provider> providers,SourceFile sourceFile) {
 		if (sourceFile.getStatus()) {
-			logger.info("Attempting to map Provider to file {}",
-					sourceFile.getFileName());
+			logger.info("Attempting to map Provider to file {}", sourceFile.getFileName());
 			for (Provider provider : providers) {
 				for (String fileNamePart : sourceFile.getFileNameParts()) {
-
-					if (provider
-							.getProviderIdentifier()
-							.toUpperCase()
-							.matches(
-									fileNamePart.toUpperCase().trim()
-											.toUpperCase())) {
-						sourceFile.setProvider(provider);
-						logger.info("Mapped provider {} - {} to file '{}'",
-								provider.getProviderName(),
-								provider.getProviderIdentifier(),
-								sourceFile.getFileName());
-						break;
+					if(fileNamePart != null && provider.getProviderIdentifier() != null){
+						if (provider.getProviderIdentifier().equalsIgnoreCase(fileNamePart.trim())) {
+							sourceFile.setProvider(new Provider(provider));
+							logger.info("Mapped provider {} - {} to file '{}'. matching file name Part = '{}'",
+									provider.getProviderName(),
+									provider.getProviderIdentifier(),
+									sourceFile.getFileName(),
+									fileNamePart.trim());
+							break;
+						}	
 					}
 				}
 			}
@@ -187,8 +182,7 @@ public class SourceFileBuilder {
 	 * @param sourceFile
 	 */
 	public void mapSchemaToSourceFile(List<Schema> schemas,SourceFile sourceFile) {
-		logger.info("Attempting to map Schema to file {}",
-				sourceFile.getFileName());
+		logger.info("Attempting to map Schema to file {}",sourceFile.getFileName());
 		if (sourceFile.getStatus()) {
 			sourceFile.setSchema(getSourceFileSchema(schemas, sourceFile));
 			if (sourceFile.getSchema() == null) {
@@ -203,7 +197,7 @@ public class SourceFileBuilder {
 		if (sourceFile.getStatus()) {
 			for (Schema schema : schemas) {
 				if (sourceFile.getProvider().getSchemaName().equalsIgnoreCase(schema.getName())) {
-					logger.info("Mapped schema '{}' to sourceFile '{}", sourceFile.getSchema().getName(), sourceFile.getFileName());
+					logger.info("Mapping schema '{}' to sourceFile '{}", schema.getName(), sourceFile.getFileName());
 					return new Schema(schema);
 				}
 			}
