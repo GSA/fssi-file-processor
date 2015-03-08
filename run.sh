@@ -1,2 +1,2 @@
 
-java -jar -Xms512m -Xmx2056m fssi-fileprocessor-*-jar-with-dependencies.jar
+java -jar -Xms512m -Xmx2056m fssi-file-processor-1.3-SNAPSHOT-eba3ce6-jar-with-dependencies.jar

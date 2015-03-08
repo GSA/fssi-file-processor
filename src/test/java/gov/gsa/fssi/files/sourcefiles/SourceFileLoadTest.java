@@ -60,9 +60,15 @@ public class SourceFileLoadTest {
 		SourceFile sourceFile = sourceFileBuilder.build(
 				config.getProperty(Config.SOURCEFILES_DIRECTORY),
 				SOURCEFILENAME, Config.EXPORT_MODE_IMPLODE, Config.PROVIDER_MODE_DEBUG, schemas, providers);
-
+		
+		
+		
 		Assert.assertEquals("failure - loadSourceFile recordCount", 6,sourceFile.recordCount());
-		Assert.assertEquals("failure - loadSourceFile getSourceHeaders", 35,sourceFile.getSourceHeaders().size());
+		/*
+		 * This needs to be 50 because we are performing an implode and there are 35 fields in the source file
+		 * but there are an additional 15 fields that are in the schema.
+		 */
+		Assert.assertEquals("failure - loadSourceFile getSourceHeaders", 50,sourceFile.getSourceHeaders().size());
 
 		int totalDataCount = 0;
 		for (SourceFileRecord record : sourceFile.getRecords()) {
@@ -123,9 +129,8 @@ public class SourceFileLoadTest {
 		sourceFileBuilder.mapSchemaToSourceFile(schemas, sourceFile);
 		sourceFileBuilder.personalizeSourceFileSchema(sourceFile);
 
-		Assert.assertEquals(
-				"failure - mapSourceFileFieldsToSchemaTest recordCount", 35,
-				sourceFile.getSourceHeaders().size());
+		
+		Assert.assertEquals("failure - personalizeSourceFileSchema recordCount", 35, sourceFile.getSourceHeaders().size());
 		sourceFileBuilder.mapSourceFileFieldsToSchema(sourceFile);
 		int totalMatchedSchemaFieldCount = 0;
 		for (SchemaField field : sourceFile.getSchema().getFields()) {

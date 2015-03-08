@@ -56,27 +56,16 @@ public class ImplodeSourceFileOrganizerStrategy implements
 			 *  based upon prior processes, their is probably a match, so lets check!
 			 */
 			if (field.getHeaderIndex() >= 0) {
-				newHeader.put(headerCounter, field.getName());
-				if(sourceFile.getSourceHeaders().containsKey(field.getHeaderIndex())){
-					
-				}
 				Iterator<?> currentHeaderIterator = sourceFile.getSourceHeaders().entrySet().iterator();
-				while (currentHeaderIterator.hasNext()) {
-					Map.Entry<Integer, String> currentHeaderIteratorPairs = (Map.Entry) currentHeaderIterator.next();
-					if (currentHeaderIteratorPairs.getKey() == field.getHeaderIndex()) {
-						if (logger.isDebugEnabled()) logger.debug("Found SourceFile Field '{}' that matched Schema Field!", currentHeaderIteratorPairs.getValue());
-						/*
-						 *  we allways use the source files naming to keep it consistant
-						 */
-						headerTranslationMap.put(currentHeaderIteratorPairs.getKey(),headerCounter);
-						fieldName = currentHeaderIteratorPairs.getValue();
-					}
+				if(sourceFile.getSourceHeaders().containsKey(field.getHeaderIndex())){
+					headerTranslationMap.put(field.getHeaderIndex(),headerCounter);
+					fieldName = sourceFile.getSourceHeaderName(field.getHeaderIndex());
 				}
 			}
-
+			
+			newHeader.put(headerCounter, fieldName);				
 			field.setHeaderIndex(headerCounter);
 			if (logger.isDebugEnabled()) logger.debug("Adding '{} - {}' to newHeader", headerCounter,fieldName);
-			//newHeader.put(headerCounter, fieldName);
 			headerCounter++;
 		}
 

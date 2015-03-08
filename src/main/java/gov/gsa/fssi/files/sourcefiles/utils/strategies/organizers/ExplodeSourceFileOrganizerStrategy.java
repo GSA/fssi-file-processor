@@ -46,23 +46,14 @@ public class ExplodeSourceFileOrganizerStrategy implements
 		// first
 		for (SchemaField field : sourceFile.getSchema().getFields()) {
 			String fieldName = field.getName();
-			// based upon prior processes, their is probably a match, so lets
-			// check!
+			/*
+			 *  based upon prior processes, their is probably a match, so lets check!
+			 */
 			if (field.getHeaderIndex() >= 0) {
-				newHeader.put(headerCounter, field.getName());
-				Iterator<?> currentHeaderIterator = sourceFile
-						.getSourceHeaders().entrySet().iterator();
-				while (currentHeaderIterator.hasNext()) {
-					Map.Entry<Integer, String> currentHeaderIteratorPairs = (Map.Entry) currentHeaderIterator.next();
-					if (currentHeaderIteratorPairs.getKey() == field.getHeaderIndex()) {
-						if (logger.isDebugEnabled()) {
-							logger.debug("Found SourceFile Field '{}' that matched Schema Field!",currentHeaderIteratorPairs.getValue());
-						}
-						// we allways use the source files naming to keep it
-						// consistant
-						headerTranslationMap.put(currentHeaderIteratorPairs.getKey(),headerCounter);
-						fieldName = currentHeaderIteratorPairs.getValue();
-					}
+				Iterator<?> currentHeaderIterator = sourceFile.getSourceHeaders().entrySet().iterator();
+				if(sourceFile.getSourceHeaders().containsKey(field.getHeaderIndex())){
+					headerTranslationMap.put(field.getHeaderIndex(),headerCounter);
+					fieldName = sourceFile.getSourceHeaderName(field.getHeaderIndex());
 				}
 			}
 
