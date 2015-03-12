@@ -87,25 +87,31 @@ public class CSVSourceFileLoaderStrategy implements SourceFileLoaderStrategy {
 			logger.error(
 					"There was an FileNotFoundException error '{}' with file {}",e.getMessage(),
 					sourceFile.getFileName());
-			sourceFile.addLoadStatusMessage(e.getMessage());
+			sourceFile.addLoadStatusMessage("Received FileNotFoundException '" + e.getMessage() + "' error with file '" + sourceFile.getFileName() + "'");
 			sourceFile.setMaxErrorLevel(3);			
 		} catch (IOException e) {
 			logger.error("There was an IOException error '{}' with file {}",e.getMessage(),
 					sourceFile.getFileName());
-			sourceFile.addLoadStatusMessage(e.getMessage());
+			sourceFile.addLoadStatusMessage("Received IOException '" + e.getMessage() + "' error with file '" + sourceFile.getFileName() + "'");
 			sourceFile.setMaxErrorLevel(3);			
 		} catch (IllegalArgumentException e) {
 			logger.error(
 					"There was an IllegalArgumentException '{}' error with file {}",e.getMessage(),
 					sourceFile.getFileName());
-			sourceFile.addLoadStatusMessage(e.getMessage());
+			sourceFile.addLoadStatusMessage("Received IllegalArgumentException '" + e.getMessage() + "' error with file '" + sourceFile.getFileName() + "'");
 			sourceFile.setMaxErrorLevel(3);
 		} catch (NullPointerException e) {
 			logger.error(
 					"Received NullPointerException '{}' while creating log for file '{}'",
 					e.getMessage(), sourceFile.getFileName());
-			sourceFile.addLoadStatusMessage(e.getMessage());
+			sourceFile.addLoadStatusMessage("Received NullPointerException '" + e.getMessage() + "' error with file '" + sourceFile.getFileName() + "'");
 			sourceFile.setMaxErrorLevel(3);			
+		} catch (Exception e){
+			logger.error(
+					"Received Exception '{}' error with file '{}'",
+					e.getMessage(), sourceFile.getFileName());
+			sourceFile.addLoadStatusMessage("Received Exception '" + e.getMessage() + "' error with file '" + sourceFile.getFileName() + "'");
+			sourceFile.setMaxErrorLevel(3);					
 		}
 		if (sourceFile.getStatus()) {
 			sourceFile.setLoadStage(File.STAGE_LOADED);
