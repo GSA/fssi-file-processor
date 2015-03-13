@@ -126,6 +126,21 @@ public class ImplodeSourceFileOrganizerStrategy implements
 		/*
 		 *  now we can process the data by restacking data and filling in the blanks
 		 */
+		fillInBlanks(sourceFile, headerTranslationMap);
+		
+		
+		/*
+		 * Last Step is to remove empty records....
+		 * Situation existed where source files had data in rows, but those rows were not in the schema.
+		 * During the implode process, those rows are removed. We now need to recheck for empty rows
+		 */
+		findAndRemoveEmptyRows(sourceFile);
+		
+	}
+
+
+	private void fillInBlanks(SourceFile sourceFile,
+			Map<Integer, Integer> headerTranslationMap) {
 		for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
 			/*
 			 *  Restacking
@@ -147,5 +162,35 @@ public class ImplodeSourceFileOrganizerStrategy implements
 			}
 		}
 	}
+	
+	
+	
+	/**
+	 * 
+	 * Removes Empty Rows
+	 * @param sourceFile
+	 */
+	private void findAndRemoveEmptyRows(SourceFile sourceFile){
+		List<Integer> rowsToDelete = new ArrayList<Integer>();
+		for (SourceFileRecord sourceFileRecord : sourceFile.getRecords()) {
+			boolean emptyRecord = true;
+			for (Data data : sourceFileRecord.getDatas()) {
+				if(data.getData() != null && !"".equals(data.getData())) emptyRecord = false;
+			}
+			if (emptyRecord == true) rowsToDelete.add(sourceFile.getRecords().indexOf(sourceFileRecord));
+		}	
+		
+		if(rowsToDelete != null && rowsToDelete.size() >= 1){
+			logger.info("After performing implode, we will be removing the following empty Index: '{}'", rowsToDelete);
+			for(Integer index:rowsToDelete){
+				sourceFile.removeRecord(index);
+			}
+		}else{
+			logger.info("After performing implode, there were no rows to delete");
+		}
+		
+	}
+	
+	
 
 }

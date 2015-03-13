@@ -281,12 +281,12 @@ public class SourceFileBuilder {
 			for (SchemaField field : sourceFile.getSchema().getFields()) {
 				logger.info("Personalizing field '{}' to effectiveDate '{}'",
 						field.getName(), sourceFile.getReportingPeriod());
-				SchemaField newField = field;
+				SchemaField newField = new SchemaField(field);
 				List<FieldConstraint> newConstraints = new ArrayList<FieldConstraint>();
 				for (FieldConstraint constraint : newField.getConstraints()) {
-					FieldConstraint newConstraint = constraint;
-					logger.info("Analyzing constraint '{}' - '{}'",
-							newConstraint.getType(),
+					FieldConstraint newConstraint = new FieldConstraint(constraint);
+					logger.info("Analyzing constraint '{}' - '{}': '{}'",
+							newConstraint.getType(), newConstraint.getValue(),
 							newConstraint.getEffectiveDate());
 					boolean addNewConstraint = true;
 					if (newConstraint.getEffectiveDate() == null) {
