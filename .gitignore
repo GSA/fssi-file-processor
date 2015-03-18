@@ -5,5 +5,5 @@ target/
 *config.properties
 samplefiles/staged/*.xlsx
 *.DS_Store
-
+_site/
 samplefiles/staged/postscndryunivsrvy2013dirinfo.xlsx
