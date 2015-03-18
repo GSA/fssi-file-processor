@@ -22,20 +22,15 @@ public class DateHelper {
 	 */
 	public static Date getDate(String string, String dateFormat) {
 		Date date;
-		if (logger.isDebugEnabled())
-			logger.debug(
-					"Attempting to extract date from string: '{}' using format '{}'",
-					string, dateFormat);
 		try {
 			date = parseDate(string, dateFormat);
 		} catch (ParseException e) {
 			date = null;
-			if (logger.isDebugEnabled())
-				logger.debug(
-						"There was an ParseException error '{}' attempting to get date from string: '{}'",
-						e.getMessage(), string);
+			if (logger.isDebugEnabled()) logger.debug("There was an ParseException error '{}' parsing date from string: '{}' using format '{}'", e.getMessage(), string, dateFormat);
 		}
-
+		
+		if (logger.isDebugEnabled() && date != null) logger.debug("Parsed the date '{}' from string '{}' using format '{}'",date ,string, dateFormat);	
+		
 		return date;
 	}
 
@@ -89,6 +84,7 @@ public class DateHelper {
 			throws ParseException {
 		TimeZone timeZone = TimeZone.getTimeZone(TIMEZONE_UTC);
 		DateFormat format = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
+		format.setLenient(false);
 		format.setTimeZone(timeZone);
 		return format.parse(string);
 	}
