@@ -49,7 +49,7 @@ public class DateTypeValidationStrategyTest {
 
 		context.validate(field, data);
 		Assert.assertEquals(
-				"failure - DateTypeValidationStrategy did not catch error", 2,
+				"failure - DateTypeValidationStrategy did not catch error", 3,
 				data.getMaxErrorLevel());
 		Assert.assertEquals(
 				"failure - DateTypeValidationStrategy did not make failure",
@@ -127,7 +127,7 @@ public class DateTypeValidationStrategyTest {
 		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
 
 		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE);
-		Data data = MockData.make("4321-54-123");
+		Data data = MockData.make("2175-11-12");
 
 		context.validate(field, data);
 		Assert.assertEquals(
@@ -147,7 +147,7 @@ public class DateTypeValidationStrategyTest {
 		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
 
 		SchemaField field = MockSchemaField.make("DATE", SchemaField.TYPE_DATE);
-		Data data = MockData.make("1024-54-123");
+		Data data = MockData.make("1924-12-12");
 
 		context.validate(field, data);
 		Assert.assertEquals(
