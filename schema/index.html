@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Schemas</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Schemas</h1>
+        <h2>Learn how to take advantage of the FSSI File Processors powerful "Schemas".</h2>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+<h1>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h1>
+
+<p>Schemas, are one of the most important aspects of the FSSI file processor. To the users, it is an <a target="_blank" href="http://www.w3schools.com/xml/">XML</a> document, but to the FSSI File Processor, it is the instructions on how to organize and validate the file.</p>
+    
+<p>It provides the instructions for several critical functions, including:</p>
+            <ul><li><strong>Organizer</strong>: </li><li><strong>Field Validation</strong>: </li></ul>
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>The FSSI File Processor at its core can accept information from a multitude of different file types, process that data as standard java objects, and then export that data in any format requested (Pretty cool, right?).</p>
+
+<p>The FSSI File Processor has 4 main objects that server as inputs to the process; </p>
+
+<ol>
+<li>
+<a href="/working/providers/"><strong>Providers</strong></a>: Providers tell you how a file should be processed. All Schemas, Source Files, and Data Mappings must be represented by a provider.</li>
+<li>
+<a href="/working/srcfiles/"><strong>Source Files</strong></a>: These are the files that are provided to you by the provider.</li>
+<li>
+<a href="/working/schemas/"><strong>Schemas</strong></a>: are the building blocks for file validation. Regardless of whether you are provided a .csv, .xlsx, .txt, etc... data should be validated based upon its "Schema." Schemas are not required, but are important to the FSSI Data Management team for validating data quality and consistancy.</li>
+</ol>
+
+<h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<p>The FSSI File processor itself is run on files. It uses the above objects to run itself. At a minimum you must have <a href="../working/providers/">Providers</a> and <a href="../working/srcfiles/">Source Files</a>. </p>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>The FSSI File Processor is configured in 2 main ways:</p>
+
+<ol>
+<li>Global configuration via the ##config.properties file</li>
+<li>Local configuration via ##Providers files.</li>
+</ol>
+
+<h2>
+<a id="running-the-fssi-file-processor" class="anchor" href="#running-the-fssi-file-processor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running the FSSI File Processor</h2>
+
+<p>TBD</p>
+
+<h2>
+<a id="point-of-contact" class="anchor" href="#point-of-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Point of Contact</h2>
+
+<p>If you have any questions on this repository, please feel free to contact <a href="mailto:strategicsourcing@gsa.gov">strategicsourcing@gsa.gov</a>.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/GSA/fssi-file-processor/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/GSA/fssi-file-processor/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/GSA/fssi-file-processor">fssi-file-processor</a> is maintained by <a href="https://github.com/GSA">GSA</a>.</p>
+          <p>
+            <h1>Menu</h1>
+            <ul><li><a href="/" target="_self">Home</a></li></ul>  
+            <ul><li><a href="/" target="_self">Home</a></li></ul>
+            <ul><li><a href="/" target="_self">Home</a></li></ul>     
+          </p>
+        </aside>
+      </div>
+    </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-32509064-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
