@@ -198,4 +198,28 @@ public class DateTypeValidationStrategyTest {
 				true, data.getStatus());
 	}
 
+	
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void test2Digitvs1DigitFormats() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("REQUIRED",
+				SchemaField.TYPE_DATE);
+		field.setFormat("Mddyyyy");
+		Data data = MockData.make("01242014");
+
+		context.validate(field, data);
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", 3,data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", false, data.getStatus());
+	}
+	
+	
+	
 }
