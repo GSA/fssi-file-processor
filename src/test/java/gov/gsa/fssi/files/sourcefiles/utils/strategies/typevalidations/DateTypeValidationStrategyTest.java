@@ -4,10 +4,12 @@ import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.sourcefiles.records.datas.Data;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.contexts.TypeValidationContext;
 import main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.typevalidations.DateTypeValidationStrategy;
+import main.java.gov.gsa.fssi.helpers.DateHelper;
 import main.java.gov.gsa.fssi.helpers.mockdata.MockData;
 import main.java.gov.gsa.fssi.helpers.mockdata.MockSchemaField;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class DateTypeValidationStrategyTest {
@@ -204,7 +206,7 @@ public class DateTypeValidationStrategyTest {
 	 * 
 	 */
 	@Test
-	public void test2Digitvs1DigitFormats() {
+	public void testMWhenDataIsMM() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
 
@@ -215,11 +217,130 @@ public class DateTypeValidationStrategyTest {
 
 		context.validate(field, data);
 		Assert.assertEquals(
-				"failure - DateTypeValidationStrategy", 3,data.getMaxErrorLevel());
+				"failure - DateTypeValidationStrategy", 0,data.getMaxErrorLevel());
 		Assert.assertEquals(
-				"failure - DateTypeValidationStrategy", false, data.getStatus());
+				"failure - DateTypeValidationStrategy", true, data.getStatus());	
+		
 	}
 	
 	
+	/**
+	 * 
+	 */
+	@Test
+	public void testMMWhenDataIsM() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("REQUIRED",
+				SchemaField.TYPE_DATE);
+		field.setFormat("MMddyyyy");
+		Data data = MockData.make("1242014");
+
+		context.validate(field, data);
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", 3,data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", false, data.getStatus());
+		
+	}
 	
+
+	/**
+	 * 
+	 */
+	@Test
+	public void testMMWhenDataIsMM() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("REQUIRED",
+				SchemaField.TYPE_DATE);
+		field.setFormat("MMddyyyy");
+		Data data = MockData.make("01242014");
+
+		context.validate(field, data);
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", 0,data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", true, data.getStatus());
+		
+	}	
+	
+	
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testMWhenDataBelow10() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("REQUIRED",
+				SchemaField.TYPE_DATE);
+		field.setFormat("Mddyyyy");
+		Data data = MockData.make("04192010");
+
+		context.validate(field, data);
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", 0,data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", true, data.getStatus());
+	}	
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testDWhenDataBelow10() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("REQUIRED",
+				SchemaField.TYPE_DATE);
+		field.setFormat("dMMyyyy");
+		Data data = MockData.make("09042010");
+
+		context.validate(field, data);
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", 0,data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", true, data.getStatus());
+	}		
+	
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testMWhenDataAbove10() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new DateTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("REQUIRED",
+				SchemaField.TYPE_DATE);
+		field.setFormat("Mddyyyy");
+		Data data = MockData.make("11192010");
+
+		context.validate(field, data);
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", 0,data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", true, data.getStatus());
+	}	
+
+	
+	/*
+	 * 
+	 */
+	@Ignore
+	@Test
+	public void testMakeFormatDelimited(){
+		
+		String format = DateHelper.makeFormatDelimited("mmddyyyy", '-');
+
+		Assert.assertEquals(
+				"failure - DateTypeValidationStrategy", "mm-dd-yyyy",format);	
+	}
 }

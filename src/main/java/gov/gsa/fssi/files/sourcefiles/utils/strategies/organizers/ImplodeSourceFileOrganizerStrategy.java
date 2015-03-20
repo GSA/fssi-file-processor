@@ -1,6 +1,7 @@
 package main.java.gov.gsa.fssi.files.sourcefiles.utils.strategies.organizers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -181,7 +182,18 @@ public class ImplodeSourceFileOrganizerStrategy implements
 		}	
 		
 		if(rowsToDelete != null && rowsToDelete.size() >= 1){
-			logger.info("After performing implode, we will be removing the following empty Index: '{}'", rowsToDelete);
+			logger.info("After performing implode, we will be removing the following '{}' empty rows:", rowsToDelete.size());
+			logger.info("{}", rowsToDelete);
+			
+
+			/*
+			 * we need to reverse the list or else we get out of bound errors as objects pop once deletes occur
+			 */
+			logger.info("reversing delete list");
+			Collections.reverse(rowsToDelete);			
+			logger.info("{}", rowsToDelete);	
+			
+			logger.info("deleting '{}' out of '{}' records", rowsToDelete.size(), sourceFile.getRecords().size());
 			for(Integer index:rowsToDelete){
 				sourceFile.removeRecord(index);
 			}

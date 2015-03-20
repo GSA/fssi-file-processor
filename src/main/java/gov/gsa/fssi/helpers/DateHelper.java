@@ -9,6 +9,9 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,10 +26,13 @@ public class DateHelper {
 	public static Date getDate(String string, String dateFormat) {
 		Date date;
 		try {
-			date = parseDate(string, dateFormat);
+			date = jodaParseDate(string, dateFormat);
 		} catch (ParseException e) {
 			date = null;
 			if (logger.isDebugEnabled()) logger.debug("There was an ParseException error '{}' parsing date from string: '{}' using format '{}'", e.getMessage(), string, dateFormat);
+		} catch(IllegalArgumentException e){
+			date = null;
+			if (logger.isDebugEnabled()) logger.debug("There was an IllegalArgumentException error '{}' parsing date from string: '{}' using format '{}'", e.getMessage(), string, dateFormat);			
 		}
 		
 		if (logger.isDebugEnabled() && date != null) logger.debug("Parsed the date '{}' from string '{}' using format '{}'",date ,string, dateFormat);	
@@ -80,6 +86,13 @@ public class DateHelper {
 		return dateFormat.format(newDate);
 	}
 
+	/**
+	 * @param string
+	 * @param dateFormat
+	 * @return
+	 * @throws ParseException
+	 * @deprecated
+	 */
 	private static Date parseDate(String string, String dateFormat)
 			throws ParseException {
 		TimeZone timeZone = TimeZone.getTimeZone(TIMEZONE_UTC);
@@ -89,6 +102,16 @@ public class DateHelper {
 		return format.parse(string);
 	}
 
+	
+	private static Date jodaParseDate(String string, String dateFormat)throws ParseException, IllegalArgumentException {
+		DateTimeFormatter format = DateTimeFormat.forPattern(dateFormat);
+		DateTimeFormatter umt = format.withLocale(Locale.US);
+		DateTime dateTime = umt.parseDateTime(string);
+		return dateTime.toDate();
+	}	
+	
+	
+	
 	public static Date tomorrowsDate() {
 		Date newDate = new Date();
 		Calendar c = Calendar.getInstance();
@@ -107,6 +130,42 @@ public class DateHelper {
 		return newDate;
 	}
 
+	
+	/**
+	 * This method simply takes a format and adds a delimiter between date elements.
+	 * 
+	 * @param format
+	 * @param delimiter
+	 * @return
+	 */
+	public static String makeFormatDelimited(String format, char delimiter){
+		String newFormat = new String();
+		char thisChar = 'n';		
+		for (int i = 0; i < format.length(); i++) {
+			if(i == 1){
+				thisChar = format.charAt(i);
+				newFormat = String.valueOf(thisChar);
+			}else{
+				if(format.charAt(i) == thisChar){
+					newFormat = newFormat+String.valueOf(thisChar);
+				}else{
+					newFormat = newFormat + delimiter + String.valueOf(thisChar);					
+				}
+			}
+		}
+		return newFormat;
+	}
+	
+	
+	
+	private String makeDateDelimited(String dateString, String format){	
+		
+		return dateString;
+	}
+	
+	
+	
+	
 	private static final Logger logger = LoggerFactory
 			.getLogger(DateHelper.class);
 

@@ -293,15 +293,15 @@ public class SourceFileBuilder {
 						logger.info(
 								"Constraint '{}' does not have an effective date",
 								constraint.getType());
-					} else if (sourceFile.getReportingPeriod().compareTo(
-							newConstraint.getEffectiveDate()) >= 0) {
+					} else if (sourceFile.getReportingPeriod().after(
+							newConstraint.getEffectiveDate())) {
 						logger.warn(
 								"The files effectiveDate '{}' is after the constraint '{}' effectiveDate '{}'",
 								sourceFile.getReportingPeriod(),
 								constraint.getType(),
 								constraint.getEffectiveDate());
-					} else if (sourceFile.getReportingPeriod().compareTo(
-							newConstraint.getEffectiveDate()) < 0) {
+					} else if (sourceFile.getReportingPeriod().before(
+							newConstraint.getEffectiveDate())) {
 						logger.info(
 								"The files effectiveDate '{}' is before or equal to the constraint '{}' effectiveDate '{}'. This can be ignored.",
 								sourceFile.getReportingPeriod(),
@@ -333,9 +333,8 @@ public class SourceFileBuilder {
 									newConstraints.add(newConstraint);
 									addNewConstraint = false;
 								} else if (newConstraint.getEffectiveDate()
-										.compareTo(
-												constraintCheck
-														.getEffectiveDate()) <= 0) {
+										.after(constraintCheck
+														.getEffectiveDate())) {
 									logger.info(
 											"newConstraint is after constraintCheck. switching",
 											constraint.getType());

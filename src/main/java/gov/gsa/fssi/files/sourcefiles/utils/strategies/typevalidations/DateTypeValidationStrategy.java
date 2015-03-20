@@ -34,21 +34,21 @@ public class DateTypeValidationStrategy implements TypeValidationStrategy {
 				if (date == null) {
 					data.addValidationResult(false, 3,
 							"Type(" + field.getType() + "-[" + dateFormatString + "])");
-				} else if (date.compareTo(DateHelper.getMinDate()) < 0) {
+				} else if (date.before(DateHelper.getMinDate())) {
 					if (logger.isDebugEnabled())
 						logger.debug(
-								"Field '{}' Date '{}' is before our accessible threshold ({}) for a date",
-								field.getName(), data.getData(),
+								"Field '{}' Date '{}' was parsed to '{}' which is before our accessible threshold ({}) for a date",
+								field.getName(), data.getData(), date,
 								DateHelper.getMinDate());
 					data.addValidationResult(false, 2,
 							"Type(" + field.getType() + ")"); // Only an error
 																// if out of
 																// bounds
-				} else if (date.compareTo(DateHelper.getMaxDate()) > 0) {
+				} else if (date.after(DateHelper.getMaxDate())) {
 					if (logger.isDebugEnabled())
 						logger.debug(
-								"Field '{}' Date '{}' is past our accessible threshold ({}) for a date",
-								field.getName(), data.getData(),
+								"Field '{}' Date '{}' was parsed to '{}' which is past our accessible threshold ({}) for a date",
+								field.getName(), data.getData(), date,
 								DateHelper.getMaxDate());
 					data.addValidationResult(false, 2,
 							"Type(" + field.getType() + ")"); // Only an error
