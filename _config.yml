@@ -1,2 +1,4 @@
 name: FSSI File Processor
 markdown: redcarpet
+highlighter: pygments
+github: [Repository metadata]
