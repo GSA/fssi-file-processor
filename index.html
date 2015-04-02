@@ -3,16 +3,55 @@ layout: default
 title: FSSI File Processor
 ---
 <div>
-          <p><a href="https://travis-ci.org/GSA/fssi-file-processor"><img src="https://travis-ci.org/GSA/fssi-file-processor.svg?branch=master" alt="Build Status"></a>
+         <p><a href="https://travis-ci.org/GSA/fssi-file-processor"><img src="https://travis-ci.org/GSA/fssi-file-processor.svg?branch=master" alt="Build Status"></a>
 <a href="https://scan.coverity.com/projects/4177">
   <img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/4177/badge.svg">
 </a></p>
-</div>
-<div id="home">
-  <h1>Articles</h1>
-  <ul class="posts">
-    {% for post in site.posts %}
-      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
-    {% endfor %}
-  </ul>
-</div>
+
+<h1>
+<a id="fssi-file-processor" class="anchor" href="#fssi-file-processor" aria-hidden="true"><span class="octicon octicon-link"></span></a>FSSI File Processor</h1>
+
+<p>Traditional Data warehouses and Data Integration platforms provide a great way to manage structured data. But what happens when your data is semi-structured? or unstructured? This application aims to "Assist" with turning semi-structured and unstructured data into structured data.</p>
+
+<p>This J2SE Application, which is used by the FSSI Data Management team, pre-processes Source files for validation and data ingest into the FSSI Data Management Data Warehouse.</p>
+
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>The FSSI File Processor at its core can accept information from a multitude of different file types, process that data as standard java objects, and then export that data in any format requested (Pretty cool, right?).</p>
+
+<p>The FSSI File Processor has 4 main objects that server as inputs to the process; </p>
+
+<ol>
+<li>
+<a href="/working/providers/"><strong>Providers</strong></a>: Providers tell you how a file should be processed. All Schemas, Source Files, and Data Mappings must be represented by a provider.</li>
+<li>
+<a href="/working/srcfiles/"><strong>Source Files</strong></a>: These are the files that are provided to you by the provider.</li>
+<li>
+<a href="/working/schemas/"><strong>Schemas</strong></a>: are the building blocks for file validation. Regardless of whether you are provided a .csv, .xlsx, .txt, etc... data should be validated based upon its "Schema." Schemas are not required, but are important to the FSSI Data Management team for validating data quality and consistancy.</li>
+</ol>
+
+<h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<p>The FSSI File processor itself is run on files. It uses the above objects to run itself. At a minimum you must have <a href="../working/providers/">Providers</a> and <a href="../working/srcfiles/">Source Files</a>. </p>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>The FSSI File Processor is configured in 2 main ways:</p>
+
+<ol>
+<li>Global configuration via the ##config.properties file</li>
+<li>Local configuration via ##Providers files.</li>
+</ol>
+
+<h2>
+<a id="running-the-fssi-file-processor" class="anchor" href="#running-the-fssi-file-processor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running the FSSI File Processor</h2>
+
+<p>TBD</p>
+
+<h2>
+<a id="point-of-contact" class="anchor" href="#point-of-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Point of Contact</h2>
+
+<p>If you have any questions on this repository, please feel free to contact <a href="mailto:strategicsourcing@gsa.gov">strategicsourcing@gsa.gov</a>.</p>
