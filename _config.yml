@@ -3,3 +3,4 @@ markdown: redcarpet
 highlighter: pygments
 github: [Repository metadata]
 url: http://gsa.github.io/fssi-file-processor/
+baseurl: /fssi-file-processor

@@ -2,10 +2,10 @@
           <div id="links">
             <h1>Pages</h1>
             <ul class="menu">
-              <li><a href="{{ site.url }}">Home</a></li>
+              <li><a href="{{ site.baseurl }}/">Home</a></li>
               {% for post in site.posts %}
               <li>
-                <a href="{{ post.url }}">{{ post.title }}</a>
+                <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
               </li>
               {% endfor %}
             </ul>
