@@ -48,7 +48,7 @@ The Schema element is where you put what schema you want to organize and validat
 
 
 ##Sample Providers File
-A sample providers file can be found [Here](https://github.com/GSA/fssi-file-processor/blob/master/samplefiles/providers/providers.xlsx).
+A sample providers file can be found [Here](https://github.com/GSA/fssi-file-processor/blob/master/samplefiles/providers/providers.xlsx?raw=true).
 
 
 
