@@ -13,24 +13,31 @@
                 <xs:complexType>
                   <xs:choice maxOccurs="unbounded" minOccurs="0">
                     <xs:element type="xs:string" name="name">
-                      <xs:annotation>
-                        <xs:documentation></xs:documentation>
-                      </xs:annotation>
                     </xs:element>
                     <xs:element type="xs:string" name="title"/>
-                    <xs:element type="xs:string" name="type"/>
-                    <xs:element type="xs:string" name="format"/>
+                    <xs:element name="type">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="level" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="format">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="level" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
                     <xs:element type="xs:string" name="description"/>
                     <xs:element name="constraints">
-                      <xs:annotation>
-                        <xs:documentation></xs:documentation>
-                      </xs:annotation>
                       <xs:complexType>
                         <xs:sequence>
-                          <xs:element name="required" minOccurs="0">
-                            <xs:annotation>
-                              <xs:documentation></xs:documentation>
-                            </xs:annotation>
+                          <xs:element name="required">
                             <xs:complexType>
                               <xs:simpleContent>
                                 <xs:extension base="xs:string">
