@@ -1,8 +1,11 @@
 package main.java.gov.gsa.fssi.files.schemas.schemafields;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import main.java.gov.gsa.fssi.config.Config;
+import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.fieldconstraints.FieldConstraint;
 
 import org.slf4j.Logger;
@@ -16,7 +19,14 @@ public class SchemaField {
 	private String name = null;
 	private String title = null;
 	private String type = null;
+	private int typeErrorLevel = 3;	//Defaulted to Fatal
+	// List of Options which come from the format attributes
+	public static final String OPTION_EFFECTIVEDATE = "effectiveDate";
+	public static final String OPTION_LEVEL = "level";
+	
+	
 	private String format = null;
+	private HashMap<String, String> typeOptions = new HashMap<String, String>();
 	private String description = null;
 	private List<FieldConstraint> constraints = new ArrayList<FieldConstraint>();
 	private List<String> alias = new ArrayList<String>();
@@ -87,6 +97,43 @@ public class SchemaField {
 		this.constraints.add(constraint);
 	}
 
+	public void addTypeOption(String key, String value) {
+		this.typeOptions.put(key, value);
+	}	
+	
+	public HashMap<String, String> getTypeOptions() {
+		return typeOptions;
+	}
+
+	public String getTypeOptionValue(String key) {
+		return typeOptions.get(key);
+	}
+	
+	public int getTypeErrorLevel() {
+		return typeErrorLevel;
+	}
+	
+	public void setTypeErrorLevel(int typeErrorLevel) {
+		this.typeErrorLevel = typeErrorLevel;
+	}
+
+	public void setTypeErrorLevel(String levelName) {
+		this.typeErrorLevel = getTypeErrorLevel(levelName);
+	}
+
+	public static int getTypeErrorLevel(String levelName) {
+		if (levelName.equalsIgnoreCase(File.STATUS_FATAL)) {
+			return 3;
+		} else if (levelName.equalsIgnoreCase(File.STATUS_ERROR)) {
+			return 2;
+		} else if (levelName.equalsIgnoreCase(File.STATUS_WARNING)) {
+			return 1;
+		}
+		return 0;
+
+	}	
+	
+	
 	/**
 	 * @return
 	 */
@@ -193,6 +240,9 @@ public class SchemaField {
 		
 		if(schemaField.description != null) this.description = new String(schemaField.description);
 		if(schemaField.format != null) this.format = new String(schemaField.format);
+		
+		this.typeErrorLevel = schemaField.typeErrorLevel;
+		
 		if(schemaField.name != null) this.name = new String(schemaField.name);
 		if(schemaField.title != null) this.title = new String(schemaField.title);
 		if(schemaField.type != null) this.type = new String(schemaField.type);
@@ -234,9 +284,9 @@ public class SchemaField {
 	 */
 	public void print() {
 		logger.debug(
-				"     Field Name:'{}' HeaderIndex: '{}' Title:'{}' Type:'{}' Description:'{}' Format:'{}' Alias:{}}",
+				"     Field Name:'{}' HeaderIndex: '{}' Title:'{}' Type:'{}' Description:'{}' Format:'[{}] {}' Alias:{}}",
 				this.getName(), this.getHeaderIndex(), this.getTitle(),
-				this.getType(), this.getDescription(), this.getFormat(),
+				this.getType(), this.getDescription(), File.getErrorLevelInitial(this.getTypeErrorLevel()), this.getFormat(),
 				this.getAlias());
 		printConstraints();
 	}

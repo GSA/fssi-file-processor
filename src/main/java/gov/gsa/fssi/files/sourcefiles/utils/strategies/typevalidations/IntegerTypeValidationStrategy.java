@@ -48,11 +48,11 @@ public class IntegerTypeValidationStrategy implements TypeValidationStrategy {
 					 * then it is just an error....otherwise its a fatal
 					 */
 					if (number == null)
-						data.addValidationResult(false, 3,
-								"Type(" + field.getType() + ")"); // Fatal
+						data.addValidationResult(false, field.getTypeErrorLevel(),
+								"Type(" + field.getType() + ")");
 					else
-						data.addValidationResult(false, 2,
-								"Type(" + field.getType() + ")"); // Error
+						data.addValidationResult(false, field.getTypeErrorLevel(),
+								"Type(" + field.getType() + ")"); 
 				} else
 					data.addValidationResult(true, 0, "Type(" + field.getType()
 							+ ")");

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.gov.gsa.fssi.config.Config;
+import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.fieldconstraints.FieldConstraint;
@@ -105,4 +106,34 @@ public class SchemaValidatorTest {
 		Assert.assertEquals("failure - SchemaValidatorTest", 1, schema.getValidatorStatusMessages().size());		
 	}		
 	
+
+	/**
+	 * 
+	 */
+	@Test
+	public void noSchemaLevelProvided() {
+		SchemaValidator schemaValidator = new SchemaValidator();
+		FieldConstraint constraint = MockFieldConstraint.make("required", "true");
+		SchemaField field = MockSchemaField.make("FIELD_1", "string", constraint);
+		//field.setFormatErrorLevel(2);
+		Schema schema = MockSchema.make("TEST1", field);
+		schemaValidator.validate(schema);
+		Assert.assertEquals("failure - SchemaValidatorTest", SchemaField.getTypeErrorLevel(Config.DEFAULT_DEFAULT_ERROR_LEVEL),schema.getField("FIELD_1").getTypeErrorLevel());			
+	}	
+	
+	
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void schemaLevelProvided() {
+		SchemaValidator schemaValidator = new SchemaValidator();
+		FieldConstraint constraint = MockFieldConstraint.make("required", "true");
+		SchemaField field = MockSchemaField.make("FIELD_1", "string", constraint);
+		field.addTypeOption(SchemaField.OPTION_LEVEL, FieldConstraint.LEVEL_ERROR);
+		Schema schema = MockSchema.make("TEST1", field);
+		schemaValidator.validate(schema);
+		Assert.assertEquals("failure - SchemaValidatorTest", 2,schema.getField("FIELD_1").getTypeErrorLevel());			
+	}	
 }

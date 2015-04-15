@@ -185,11 +185,30 @@ public class XMLSchemaLoaderStrategy implements SchemaLoaderStrategy {
 						field.setTitle(currentNode.getTextContent());
 					} else if ("format".equalsIgnoreCase(currentNode
 							.getNodeName())) {
+						
 						field.setFormat(currentNode.getTextContent());
+						
 					} else if ("type".equalsIgnoreCase(currentNode
 							.getNodeName())) {
 						field.setType(currentNode.getTextContent()
 								.toLowerCase().trim());
+						
+						/**
+						 * Added code to capture level from type field in schema
+						 */
+						Map<String, String> attributeMap = XmlHelper
+								.convertXmlAttributeToHashMap(currentNode.getAttributes());
+						Iterator<?> optionsIterator = attributeMap.entrySet().iterator();
+
+						while (optionsIterator.hasNext()) {
+							Map.Entry<String, String> optionsPair = (Entry<String, String>) optionsIterator
+									.next();
+							field.addTypeOption(optionsPair.getKey(),
+									optionsPair.getValue());
+							logger.info("Adding Attribute {} - {} to field format {}",
+									optionsPair.getKey(), optionsPair.getValue(),
+									currentNode.getNodeName());
+						}
 					} else if ("constraints".equalsIgnoreCase(currentNode
 							.getNodeName())) {
 						logger.info("Processing Constraints");

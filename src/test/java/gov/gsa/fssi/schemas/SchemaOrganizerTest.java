@@ -124,6 +124,7 @@ public class SchemaOrganizerTest {
 		field.setAlias(aliass);
 		field.setDescription("description1");
 		field.setFormat("format1");
+		field.setTypeErrorLevel(2);
 		field.setName("name1");
 		field.setTitle("title1");
 		field.setType(SchemaField.TYPE_ANY);
@@ -134,6 +135,7 @@ public class SchemaOrganizerTest {
 		field.setAlias(aliass);
 		field.setDescription("description2");
 		field.setFormat("format2");
+		field.setTypeErrorLevel(3);
 		field.setName("name2");
 		field.setTitle("title2");
 		field.setType(SchemaField.TYPE_DATE);
@@ -144,13 +146,15 @@ public class SchemaOrganizerTest {
 		Assert.assertEquals("failure - SchemaOrganizerTest", "description2", field.getDescription());	
 		Assert.assertEquals("failure - SchemaOrganizerTest", "title2", field.getTitle());	
 		Assert.assertEquals("failure - SchemaOrganizerTest", 2, field.getAlias().size());	
+		Assert.assertEquals("failure - SchemaOrganizerTest", 3, field.getTypeErrorLevel());
 		
 		Assert.assertEquals("failure - SchemaOrganizerTest", "name1", field2.getName());	
 		Assert.assertEquals("failure - SchemaOrganizerTest", "format1", field2.getFormat());	
 		Assert.assertEquals("failure - SchemaOrganizerTest", SchemaField.TYPE_ANY, field2.getType());	
 		Assert.assertEquals("failure - SchemaOrganizerTest", "description1", field2.getDescription());	
 		Assert.assertEquals("failure - SchemaOrganizerTest", "title1", field2.getTitle());	
-		Assert.assertEquals("failure - SchemaOrganizerTest", 1, field2.getAlias().size());				
+		Assert.assertEquals("failure - SchemaOrganizerTest", 1, field2.getAlias().size());	
+		Assert.assertEquals("failure - SchemaOrganizerTest", 2, field2.getTypeErrorLevel());
 	}	
 		
 	
@@ -167,6 +171,7 @@ public class SchemaOrganizerTest {
 		field.setAlias(aliass);
 		field.setDescription("description1");
 		field.setFormat("format1");
+		field.setTypeErrorLevel(2);		
 		field.setName("name1");
 		field.setTitle("title1");
 		field.setType(SchemaField.TYPE_ANY);
@@ -179,6 +184,7 @@ public class SchemaOrganizerTest {
 		field2.setAlias(aliass2);
 		field2.setDescription("description2");
 		field2.setFormat("format2");
+		field2.setTypeErrorLevel(3);
 		field2.setName("name2");
 		field2.setTitle("title2");
 		field2.setType(SchemaField.TYPE_DATE);
@@ -189,13 +195,15 @@ public class SchemaOrganizerTest {
 		Assert.assertEquals("failure - SchemaOrganizerTest", "description2", field2.getDescription());	
 		Assert.assertEquals("failure - SchemaOrganizerTest", "title2", field2.getTitle());	
 		Assert.assertEquals("failure - SchemaOrganizerTest", 2, field2.getAlias().size());	
+		Assert.assertEquals("failure - SchemaOrganizerTest", 3, field2.getTypeErrorLevel());		
 		
 		Assert.assertEquals("failure - SchemaOrganizerTest", "name1", field.getName());	
 		Assert.assertEquals("failure - SchemaOrganizerTest", "format1", field.getFormat());	
 		Assert.assertEquals("failure - SchemaOrganizerTest", SchemaField.TYPE_ANY, field.getType());	
 		Assert.assertEquals("failure - SchemaOrganizerTest", "description1", field.getDescription());	
 		Assert.assertEquals("failure - SchemaOrganizerTest", "title1", field.getTitle());	
-		Assert.assertEquals("failure - SchemaOrganizerTest", 1, field.getAlias().size());				
+		Assert.assertEquals("failure - SchemaOrganizerTest", 1, field.getAlias().size());	
+		Assert.assertEquals("failure - SchemaOrganizerTest", 2, field.getTypeErrorLevel());		
 	}		
 	
 }

@@ -34,11 +34,12 @@ public class NumberTypeValidationStrategy implements TypeValidationStrategy {
 				}
 
 				if (number == null)
-					data.addValidationResult(false, 3,
-							"Type(" + field.getType() + ")"); // Fatal
-				else
-					data.addValidationResult(true, 0, "Type(" + field.getType()
-							+ ")");
+					if (logger.isDebugEnabled()){
+						logger.debug("FAILED");
+						data.addValidationResult(false, field.getTypeErrorLevel(),"Type(" + field.getType() + ")");
+					}else{
+						data.addValidationResult(true, 0, "Type(" + field.getType() + ")");						
+					}
 			} else
 				data.addValidationResult(true, 0, "Type(" + field.getType()
 						+ ")");

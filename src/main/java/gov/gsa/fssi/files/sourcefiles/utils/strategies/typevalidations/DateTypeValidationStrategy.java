@@ -32,7 +32,7 @@ public class DateTypeValidationStrategy implements TypeValidationStrategy {
 						.getDate(data.getData(), dateFormatString);
 
 				if (date == null) {
-					data.addValidationResult(false, 3,
+					data.addValidationResult(false, field.getTypeErrorLevel(),
 							"Type(" + field.getType() + "-[" + dateFormatString + "])");
 				} else if (date.before(DateHelper.getMinDate())) {
 					if (logger.isDebugEnabled())
@@ -40,7 +40,7 @@ public class DateTypeValidationStrategy implements TypeValidationStrategy {
 								"Field '{}' Date '{}' was parsed to '{}' which is before our accessible threshold ({}) for a date",
 								field.getName(), data.getData(), date,
 								DateHelper.getMinDate());
-					data.addValidationResult(false, 2,
+					data.addValidationResult(false, field.getTypeErrorLevel(),
 							"Type(" + field.getType() + ")"); // Only an error
 																// if out of
 																// bounds
@@ -50,7 +50,7 @@ public class DateTypeValidationStrategy implements TypeValidationStrategy {
 								"Field '{}' Date '{}' was parsed to '{}' which is past our accessible threshold ({}) for a date",
 								field.getName(), data.getData(), date,
 								DateHelper.getMaxDate());
-					data.addValidationResult(false, 2,
+					data.addValidationResult(false, field.getTypeErrorLevel(),
 							"Type(" + field.getType() + ")"); // Only an error
 																// if out of
 																// bounds

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import main.java.gov.gsa.fssi.config.Config;
+import main.java.gov.gsa.fssi.files.File;
 import main.java.gov.gsa.fssi.files.schemas.Schema;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.SchemaField;
 import main.java.gov.gsa.fssi.files.schemas.schemafields.fieldconstraints.FieldConstraint;
@@ -298,7 +300,20 @@ public class SchemaValidator {
 						newField.getName());
 				newField.setType(SchemaField.TYPE_ANY);
 			}
-
+			
+			/**
+			 * Added code to support type error level
+			 */
+			// checking options for valid type level
+			if (newField.getTypeOptionValue(SchemaField.OPTION_LEVEL) != null
+					&& isValidLevel(newField.getTypeOptionValue(SchemaField.OPTION_LEVEL))) {
+				logger.info("Found good level in '{}' options, using that",newField.getName());
+				newField.setTypeErrorLevel(newField.getTypeOptionValue(SchemaField.OPTION_LEVEL));
+			} else {
+				logger.warn("No good level in '{}' options, defaulting to '{}'",newField.getName());
+				newField.setTypeErrorLevel(Config.DEFAULT_DEFAULT_ERROR_LEVEL);
+			}
+	
 			if (newField.getConstraints() != null
 					&& !newField.getConstraints().isEmpty()) {
 				newField.setConstraints(validateFieldConstraints(newField));

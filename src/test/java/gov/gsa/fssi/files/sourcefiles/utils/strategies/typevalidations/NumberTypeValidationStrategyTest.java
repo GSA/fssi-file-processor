@@ -85,11 +85,11 @@ public class NumberTypeValidationStrategyTest {
 	public void testBadNumber() {
 		TypeValidationContext context = new TypeValidationContext();
 		context.setTypeValidationStrategy(new NumberTypeValidationStrategy());
-
+		
 		SchemaField field = MockSchemaField.make("NUMBER",
 				SchemaField.TYPE_NUMBER);
 		Data data = MockData.make("value");
-
+		field.setTypeErrorLevel(3);
 		context.validate(field, data);
 
 		Assert.assertEquals(
@@ -143,4 +143,100 @@ public class NumberTypeValidationStrategyTest {
 				true, data.getStatus());
 	}
 
+	
+	
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testBadNumberWithWarningLevel() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new NumberTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("NUMBER",
+				SchemaField.TYPE_NUMBER);
+		field.setTypeErrorLevel(1);
+		Data data = MockData.make("value");
+		context.validate(field, data);
+
+		Assert.assertEquals(
+				"failure - NumberTypeValidationStrategy did not catch error",
+				1, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - NumberTypeValidationStrategy did not make failure",
+				true, data.getStatus());
+	}	
+	
+	
+	
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testBadNumberWithErrorLevel() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new NumberTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("NUMBER",
+				SchemaField.TYPE_NUMBER);
+		field.setTypeErrorLevel(2);
+		Data data = MockData.make("testBadNumberWithErrorLevel");
+		context.validate(field, data);
+
+		Assert.assertEquals(
+				"failure - NumberTypeValidationStrategy did not catch error",
+				2, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - NumberTypeValidationStrategy did not make failure",
+				false, data.getStatus());
+	}		
+	
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testBadNumberWithErrorLevelWarning() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new NumberTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("NUMBER",
+				SchemaField.TYPE_NUMBER);
+		field.setTypeErrorLevel(1);
+		Data data = MockData.make("testBadNumberWithErrorLevel");
+		context.validate(field, data);
+
+		Assert.assertEquals(
+				"failure - NumberTypeValidationStrategy did not catch error",
+				1, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - NumberTypeValidationStrategy did not make failure",
+				true, data.getStatus());
+	}
+	
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testBadNumberWithFatalLevel() {
+		TypeValidationContext context = new TypeValidationContext();
+		context.setTypeValidationStrategy(new NumberTypeValidationStrategy());
+
+		SchemaField field = MockSchemaField.make("NUMBER",
+				SchemaField.TYPE_NUMBER);
+		field.setTypeErrorLevel(3);
+		Data data = MockData.make("value");
+		context.validate(field, data);
+
+		Assert.assertEquals(
+				"failure - NumberTypeValidationStrategy did not catch error",
+				3, data.getMaxErrorLevel());
+		Assert.assertEquals(
+				"failure - NumberTypeValidationStrategy did not make failure",
+				false, data.getStatus());
+	}		
+	
 }

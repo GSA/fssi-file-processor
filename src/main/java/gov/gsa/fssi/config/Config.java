@@ -31,11 +31,24 @@ public class Config {
 	public static final String LOGGING_LEVEL_ERROR = "error";
 	public static final String LOGGING_LEVEL_FATAL = "fatal";
 
+	public static final String ERROR_LEVEL_WARNING = "warning";
+	public static final String ERROR_LEVEL_ERROR = "error";
+	public static final String ERROR_LEVEL_FATAL = "fatal";	
+	
 	/**
 	 * @deprecated
 	 */
 	@Deprecated
 	public static final String WORKING_DIRECTORY = "working_directory";
+	/**
+	 * The default error sets the default level or all constraint and format validation when none
+	 * is provided by the schema.
+	 */
+	public static final String DEFAULT_ERROR_LEVEL = "DEFAULT_ERROR_LEVEL";
+	/**
+	 * Fail level sets the minimum level in which a constraint or format validation will fail the record/file
+	 */
+	public static final String FAIL_LEVEL = "FAIL_LEVEL";
 	/**
 	 * SourceFiles Directory denotes where all of the "source files" are located
 	 * that you wish to load and process
@@ -111,7 +124,6 @@ public class Config {
 	public static final String PROVIDER_MODE_DEBUG = "debug";	
 	public static final String DEFAULT_PROVIDER_MODE = PROVIDER_MODE_STRICT;
 	
-	
 	public static final String DEFAULT_WORKING_DIRECTORY = "./working/";
 	public static final String DEFAULT_SOURCEFILES_DIRECTORY = "./working/srcfiles/";
 	public static final String DEFAULT_SCHEMAS_DIRECTORY = "./working/schemas/";
@@ -121,8 +133,12 @@ public class Config {
 	public static final String DEFAULT_EXPORT_MODE = "implode";
 	public static final String DEFAULT_VALIDATION_MODE = "";
 	public static final String DEFAULT_PROPFILE_NAME = "config.properties";
-	public static final String DEFAULT_LOGGING_LEVEL = LOGGING_LEVEL_WARNING;
-
+	public static final String DEFAULT_LOGGING_LEVEL = LOGGING_LEVEL_WARNING;	
+	public static final String DEFAULT_DEFAULT_ERROR_LEVEL = "fatal";
+	public static final String DEFAULT_FAIL_LEVEL = "fatal";
+		
+	
+	
 	/**
 	 * Config
 	 */
@@ -167,7 +183,9 @@ public class Config {
 		prop.setProperty(STAGED_DIRECTORY, DEFAULT_STAGED_DIRECTORY);
 		prop.setProperty(EXPORT_MODE, DEFAULT_EXPORT_MODE);
 		prop.setProperty(PROVIDER_MODE, DEFAULT_PROVIDER_MODE);		
-		prop.setProperty(LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);				
+		prop.setProperty(LOGGING_LEVEL, DEFAULT_LOGGING_LEVEL);	
+		prop.setProperty(DEFAULT_ERROR_LEVEL, DEFAULT_ERROR_LEVEL);
+		prop.setProperty(FAIL_LEVEL, DEFAULT_FAIL_LEVEL);
 		this.prop = prop;
 	}
 
@@ -315,10 +333,48 @@ public class Config {
 			prop.put(PROVIDER_MODE, DEFAULT_PROVIDER_MODE);
 		}		
 		
+		
+
+		if (!prop.containsKey(DEFAULT_ERROR_LEVEL)) {
+			logger.info(
+					"No '{}' property found in config file, loading default: '{}'",
+					DEFAULT_ERROR_LEVEL, DEFAULT_DEFAULT_ERROR_LEVEL);
+			prop.put(DEFAULT_ERROR_LEVEL, DEFAULT_DEFAULT_ERROR_LEVEL);
+		} else if (!isValidErrorLevel(prop.getProperty(DEFAULT_ERROR_LEVEL))) {
+			logger.warn(
+					"BAD '{}' property found in config file, loading default: '{}'",
+					DEFAULT_ERROR_LEVEL, DEFAULT_DEFAULT_ERROR_LEVEL);
+			prop.put(DEFAULT_ERROR_LEVEL, DEFAULT_DEFAULT_ERROR_LEVEL);
+		}		
+		
+		
+		if (!prop.containsKey(FAIL_LEVEL)) {
+			logger.info(
+					"No '{}' property found in config file, loading default: '{}'",
+					FAIL_LEVEL, DEFAULT_FAIL_LEVEL);
+			prop.put(FAIL_LEVEL, DEFAULT_FAIL_LEVEL);
+		} else if (!isValidErrorLevel(prop.getProperty(FAIL_LEVEL))) {
+			logger.warn(
+					"BAD '{}' property found in config file, loading default: '{}'",
+					FAIL_LEVEL, DEFAULT_FAIL_LEVEL);
+			prop.put(FAIL_LEVEL, DEFAULT_FAIL_LEVEL);
+		}			
+		
 
 		return prop;
 	}
 
+	public static boolean isValidErrorLevel(String val) {
+		if (val.equalsIgnoreCase(ERROR_LEVEL_WARNING)) {
+			return true;
+		} else if (val.equalsIgnoreCase(ERROR_LEVEL_ERROR)) {
+			return true;
+		} else if (val.equalsIgnoreCase(ERROR_LEVEL_FATAL)) {
+			return true;
+		}
+		return false;
+	}	
+	
 	public static boolean isValidLoggingLevel(String val) {
 		if (val.equalsIgnoreCase(LOGGING_LEVEL_FATAL)) {
 			return true;

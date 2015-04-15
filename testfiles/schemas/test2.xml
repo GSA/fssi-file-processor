@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema>
-	<name>TEST1</name>
+	<name>TEST2</name>
 	<provider>TEST</provider>
 	<version>1.0</version>
 	<title>TEST</title>
@@ -9,7 +9,7 @@
 			<name>ORDER_NUMBER</name>
 			<title>Order Number</title>
 			<type level="warning">string</type>
-			<format></format>
+			<format>any</format>
 			<description>Each order should be identified by a unique order identification number</description>
 			<constraints>
 				<required level="error">true</required>

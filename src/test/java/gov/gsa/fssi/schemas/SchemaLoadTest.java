@@ -37,7 +37,23 @@ public class SchemaLoadTest {
 		List<Schema> schemas = schemasBuilder.build(config
 				.getProperty(Config.SCHEMAS_DIRECTORY));
 
-		Assert.assertEquals("failure - loadSchemas count", 1, schemas.size());
+		Assert.assertEquals("failure - loadSchemas count", 2, schemas.size());
 	}
 
+	
+	
+	
+	/**
+	 * This should test to make sure that we are catching required Fields
+	 */
+	@Test
+	public void getSchemaFormatLevel() {
+		SchemaBuilder schemaBuilder = new SchemaBuilder();
+		Schema schema = schemaBuilder.build(
+				config.getProperty(Config.SCHEMAS_DIRECTORY), "test1.xml");
+
+		Assert.assertEquals("failure - loadSchema getFormatName", schema.getField("ORDER_NUMBER").getTypeOptions().get("level"),
+				"warning");
+	}	
+	
 }
